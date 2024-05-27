@@ -1,7 +1,7 @@
 # Yakit Translated to English 
 ## (With Absolutely No Mercy)
 
-**Yak** is a cool concept ([https://github.com/yaklang/yaklang](https://github.com/yaklang/yaklang)). It's a DSL/scripting language tailored toward (offensive) security, it already has a substantial standard library, and it's VM and general design is usable/powerful and _portable_ in ways that things like NSE/MSF struggled to be. I could praise Yak all day, but go and look through the code yourself, it's already impressive, yet somehow the thing still feels largely unknown outside of its developers and a few intrigued observers.
+**Yak** is a cool concept ([https://github.com/yaklang/yaklang](https://github.com/yaklang/yaklang)). It's a DSL/scripting language tailored toward (offensive) security, it already has a substantial standard library, and it's VM and general design make it usable/powerful and _portable_ in ways that things like NSE/MSF struggled to be. I could praise Yak all day, but go and look through the code yourself, it's already impressive, yet somehow the thing still feels largely unknown outside of its developers and a few intrigued observers.
 
 **Yakit** is part GUI part ICBM and 100% Chinese. The aim appears to be consolidating all security tools ever created into one, with the majority of functionality implemented in Yak. It's quite remarkable. I used [https://github.com/ip-rw/translate_code/](https://github.com/ip-rw/translate_code/) for the translation. The software compiles and runs without immediatly exploding; anything beyond that is a bonus. This readme likely took longer to create than the translation and few repairs, so overall, it's not too shabby.
 
