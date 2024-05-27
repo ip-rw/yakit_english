@@ -1,4 +1,4 @@
 export enum ChatCSGV {
-    /** @name 是否已了解chat-cs功能 */
+    /** @name Understand chat-cs? */
     KnowChatCS = "know-chat-cs"
 }

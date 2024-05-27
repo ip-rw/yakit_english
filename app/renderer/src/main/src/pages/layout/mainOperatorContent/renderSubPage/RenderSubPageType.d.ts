@@ -1,10 +1,10 @@
 import { ComponentParams } from "@/routes/newRoute"
 
 /**
- * @description 页面渲染
- * @property routeKey 路由key
+ * @description Page Rendering
+ * @property routeKey Route Key
  * @property yakScriptId 
- * @property {ComponentParams} params 页面初始渲染的参数
+ * @property {ComponentParams} params Initial Rendering Params
  */
 export interface PageItemProps {
     routeKey: YakitRoute | string

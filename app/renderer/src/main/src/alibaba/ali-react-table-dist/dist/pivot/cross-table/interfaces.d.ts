@@ -5,9 +5,9 @@ export interface CrossTableIndicator extends ArtColumnStaticPart {
     expression?: string;
 }
 export interface CrossTableLeftMetaColumn extends Omit<ArtColumnStaticPart, 'hidden'> {
-    /** 自定义渲染方法 */
+    /** Custom Render Method */
     render?(leftNode: LeftCrossTreeNode, leftDepth: number): ReactNode;
-    /** 自定义的获取单元格 props 的方法 */
+    /** Custom Method for Cell Props */
     getCellProps?(leftNode: LeftCrossTreeNode, leftDepth: number): CellProps;
 }
 export interface CrossTreeNode {
@@ -18,12 +18,12 @@ export interface CrossTreeNode {
     hidden?: boolean;
     children?: CrossTreeNode[];
 }
-/** 交叉表左侧树状结构的树节点 */
+/** Pivot Table Left Tree Node */
 export interface LeftCrossTreeNode extends CrossTreeNode {
     children?: CrossTreeNode[];
 }
-/** 交叉表上方树状结构的树节点
- * 列的名称现由 value 字段提供，故从 ArtColumnStaticPart 移除了 name 字段 */
+/** Pivot Table Top Tree Node
+ * Column Name Now Provided by Value Field, Removed Name Field from ArtColumnStaticPart */
 export interface TopCrossTreeNode extends CrossTreeNode, Omit<ArtColumnStaticPart, 'name'> {
     children?: TopCrossTreeNode[];
 }

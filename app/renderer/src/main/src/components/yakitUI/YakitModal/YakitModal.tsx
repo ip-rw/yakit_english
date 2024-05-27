@@ -14,44 +14,44 @@ export interface YakitModalProp extends Omit<ModalProps, "style" | "cancelButton
     okButtonProps?: YakitButtonProp
     okType?: YakitButtonProp["type"]
 
-    /** @name 副标题 */
+    /** @name Subtitle */
     subTitle?: ReactNode
-    /** @name footer组件左侧操作区域 */
+    /** @name Footer Component Left Operation Area */
     footerExtra?: ReactNode
-    /** 弹框类型 */
+    /** Dialog Type */
     type?: "gray" | "white"
-    /** @name 弹框的尺寸 */
+    /** @name Dialog Size */
     size?: "small" | "large"
     /**
-     * @name 隐藏Header元素
-     * @description 设为true时, headerStyle|title|subTitle|closable|closeIcon都将无效
+     * @name Hide Header Element
+     * @description When set to true, headerStyle|title|subTitle|closable|and closeIcon become ineffective
      */
     hiddenHeader?: boolean
 }
 
-/** 可以用，但是使用的时候考虑部分属性的覆盖重写问题， */
+/** Usable, consider overwrite issues when used， */
 export const YakitModal: React.FC<YakitModalProp> = (props) => {
     const {
         children,
-        /** 样式属性 ↓↓↓ */
+        /** I'm sorry, but it seems there was a misunderstanding. Could you please provide the non-English text that you need translated into English? ↓↓↓ */
         wrapClassName,
         headerStyle,
         bodyStyle,
         footerStyle,
-        /** 原有属性 ↓↓↓ */
+        /** Existing Attributes ↓↓↓ */
         closable = true,
         closeIcon,
         title,
         footer,
         cancelButtonProps,
-        cancelText = "取消",
+        cancelText = "Cancel",
         okButtonProps,
         confirmLoading,
-        okText = "确认",
+        okText = "Confirm",
         okType,
         onCancel,
         onOk,
-        /** 自定义新增属性 ↓↓↓ */
+        /** Custom Added Attributes ↓↓↓ */
         type = "gray",
         size = "small",
         subTitle,

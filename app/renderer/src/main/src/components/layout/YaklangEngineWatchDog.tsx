@@ -17,7 +17,7 @@ export interface YaklangEngineWatchDogCredential {
     Port: number
 
     /**
-     * 高级登陆验证信息
+     * Advanced login authentication.
      * */
     IsTLS?: boolean
     PemBytes?: Uint8Array
@@ -40,19 +40,19 @@ export interface YaklangEngineWatchDogProps {
 
 export const YaklangEngineWatchDog: React.FC<YaklangEngineWatchDogProps> = React.memo(
     (props: YaklangEngineWatchDogProps) => {
-        // 是否自动重启引擎进程
+        // Auto-restart engine process?
         const [autoStartProgress, setAutoStartProgress] = useState(false)
-        // 是否正在重启引擎进程
+        // Restarting engine process?
         const startingUp = useRef<boolean>(false)
         const {dynamicStatus, setDynamicStatus} = yakitDynamicStatus()
         const {userInfo} = useStore()
 
-        /** 引擎信息认证 */
+        /** Engine info authentication. */
         const engineTest = useMemoizedFn((isDynamicControl?: boolean) => {
             outputToPrintLog(
                 `engineTest-start:\nmode:${props.credential.Mode}|port:${props.credential.Port}|isDynamicControl:${isDynamicControl}`
             )
-            // 重置状态
+            // Reset state.
             setAutoStartProgress(false)
             const mode = props.credential.Mode
             if (!mode) {
@@ -60,26 +60,26 @@ export const YaklangEngineWatchDog: React.FC<YaklangEngineWatchDogProps> = React
             }
 
             if (props.credential.Port <= 0) {
-                outputToWelcomeConsole("端口被设置为空，无法连接引擎")
+                outputToWelcomeConsole("Port set to null, cannot connect to engine.")
                 return
             }
 
             /**
-             * 认证要小心做，拿到准确的信息之后，尝试连接一次，确定连接成功之后才可以开始后续步骤
-             * 当然引擎没有启动的时候无法连接成功，要准备根据引擎状态选择合适的方式启动引擎
+             * Be careful with authentication, try connecting once after getting accurate info, proceed only if connection successful.
+             * Unable to connect without engine running, will start engine based on status.
              */
-            outputToWelcomeConsole("开始尝试连接 Yaklang 核心引擎")
+            outputToWelcomeConsole("Attempting to connect to Yaklang core engine.")
             ipcRenderer
                 .invoke("connect-yaklang-engine", props.credential)
                 .then(() => {
                     outputToPrintLog(`engineTest-success: mode:${props.credential.Mode}`)
-                    outputToWelcomeConsole(`连接核心引擎成功！`)
+                    outputToWelcomeConsole(`Connected to core engine successfully.！`)
                     if (props.onKeepaliveShouldChange) {
                         props.onKeepaliveShouldChange(true)
                     }
-                    // 如果为远程控制 则修改私有域为
+                    // If remote control, then change private domain to
                     if (isDynamicControl) {
-                        // 远程控制生效
+                        // Remote control activated.
                         setDynamicStatus({...dynamicStatus, isDynamicStatus: true})
                         remoteOperation(true, dynamicStatus, userInfo)
                         if (dynamicStatus.baseUrl && dynamicStatus.baseUrl.length > 0) {
@@ -89,14 +89,14 @@ export const YaklangEngineWatchDog: React.FC<YaklangEngineWatchDogProps> = React
                 })
                 .catch((e) => {
                     outputToPrintLog(`engineTest-failed: mode:${props.credential.Mode}`)
-                    outputToWelcomeConsole("未连接到引擎，尝试启动引擎进程")
+                    outputToWelcomeConsole("Not connected to engine, trying to start engine process.")
                     switch (mode) {
                         case "local":
-                            outputToWelcomeConsole("尝试启动本地进程")
+                            outputToWelcomeConsole("Try to start local process.")
                             setAutoStartProgress(true)
                             return
                         case "remote":
-                            outputToWelcomeConsole("远程模式不自动启动本地引擎")
+                            outputToWelcomeConsole("Remote mode does not auto-start local engine.")
                             if (isDynamicControl) {
                                 props.failedCallback("control-remote-connect-failed")
                             } else {
@@ -107,11 +107,11 @@ export const YaklangEngineWatchDog: React.FC<YaklangEngineWatchDogProps> = React
                     }
                 })
                 .finally(() => {
-                    outputToWelcomeConsole("连接引擎完成")
+                    outputToWelcomeConsole("Engine connection complete.")
                 })
         })
 
-        /** 接受连接引擎的指令 */
+        /** Accepts engine connection commands. */
         useEffect(() => {
             emiter.on("startAndCreateEngineProcess", (v?: boolean) => {
                 engineTest(!!v)
@@ -121,7 +121,7 @@ export const YaklangEngineWatchDog: React.FC<YaklangEngineWatchDogProps> = React
             }
         }, [])
 
-        // 这个 hook
+        // This hook.
         useDebounceEffect(
             () => {
                 const mode = props.credential.Mode
@@ -138,14 +138,14 @@ export const YaklangEngineWatchDog: React.FC<YaklangEngineWatchDogProps> = React
                 }
 
                 if (!autoStartProgress) {
-                    // 不启动进程的话，就直接退出
+                    // Exit if process not started.
                     return
                 }
 
-                outputToPrintLog(`尝试启动新引擎进程: port:${props.credential.Port}`)
+                outputToPrintLog(`Attempting to start new engine process: port.:${props.credential.Port}`)
 
-                // 只有普通模式才涉及到引擎启动的流程
-                outputToWelcomeConsole(`开始以普通权限启动本地引擎进程，本地端口为: ${props.credential.Port}`)
+                // Only normal mode involves engine start process.
+                outputToWelcomeConsole(`Starting local engine process with normal rights, local port is: ${props.credential.Port}`)
 
                 setTimeout(() => {
                     if (props.onKeepaliveShouldChange) {
@@ -166,13 +166,13 @@ export const YaklangEngineWatchDog: React.FC<YaklangEngineWatchDogProps> = React
                                 isEnpriTraceAgent: isEnpriTraceAgent()
                             })
                             .then(() => {
-                                outputToWelcomeConsole("引擎启动成功！")
-                                outputToPrintLog(`本地新引擎进程启动成功`)
+                                outputToWelcomeConsole("Engine started successfully.！")
+                                outputToPrintLog(`Local new engine process started successfully.`)
                             })
                             .catch((e) => {
                                 console.info(e)
-                                outputToWelcomeConsole("引擎启动失败:" + e)
-                                outputToPrintLog(`本地新引擎进程启动失败: ${e}`)
+                                outputToWelcomeConsole("Engine start failed.:" + e)
+                                outputToPrintLog(`Local new engine process failed to start.: ${e}`)
                             })
                             .finally(() => {
                                 startingUp.current = false
@@ -180,10 +180,10 @@ export const YaklangEngineWatchDog: React.FC<YaklangEngineWatchDogProps> = React
                     })
                     .catch((e) => {
                         outputToWelcomeConsole(
-                            `端口被占用，无法启动本地引擎（${EngineModeVerbose(mode as YaklangEngineMode)}）`
+                            `Port in use, cannot start local engine.（${EngineModeVerbose(mode as YaklangEngineMode)}）`
                         )
-                        outputToWelcomeConsole(`错误原因为: ${e}`)
-                        outputToPrintLog(`端口被占用: ${e}`)
+                        outputToWelcomeConsole(`Reason for error.: ${e}`)
+                        outputToPrintLog(`Port in use.: ${e}`)
                     })
             },
             [autoStartProgress, props.onKeepaliveShouldChange, props.credential],
@@ -194,14 +194,14 @@ export const YaklangEngineWatchDog: React.FC<YaklangEngineWatchDogProps> = React
             if (!props.engineLink) setAutoStartProgress(false)
         }, [props.engineLink])
 
-        /** 未连接引擎前, 每隔1秒尝试连接一次, 连接引擎后, 每隔5秒尝试连接一次 */
+        /** Before connecting to the engine, try connecting every 1 second. After connecting, try every 5 seconds. */
         const attemptConnectTime = useMemoizedFn(() => {
             return props.engineLink ? 5000 : 1000
         })
 
         /**
-         * 引擎连接尝试逻辑
-         * 引擎连接有效尝试次数: 1-20
+         * Engine connection attempt logic.
+         * Engine valid connection attempts: 1-20.
          */
         useEffect(() => {
             const keepalive = props.keepalive
@@ -211,7 +211,7 @@ export const YaklangEngineWatchDog: React.FC<YaklangEngineWatchDogProps> = React
                 }
                 return
             }
-            outputToPrintLog(`开始检测引擎进程是否启动`)
+            outputToPrintLog(`Checking if engine process started.`)
 
             let count = 0
             let failedCount = 0
@@ -220,12 +220,12 @@ export const YaklangEngineWatchDog: React.FC<YaklangEngineWatchDogProps> = React
                 count++
                 isEngineConnectionAlive()
                     .then(() => {
-                        outputToPrintLog(`keepalive状态: ${keepalive}`)
+                        outputToPrintLog(`Keepalive state.: ${keepalive}`)
                         if (!keepalive) {
                             return
                         }
                         if (!notified) {
-                            outputToWelcomeConsole("引擎已准备好，可以进行连接")
+                            outputToWelcomeConsole("Engine ready for connection.")
                             notified = true
                         }
                         failedCount = 0
@@ -236,7 +236,7 @@ export const YaklangEngineWatchDog: React.FC<YaklangEngineWatchDogProps> = React
                     .catch((e) => {
                         failedCount++
                         if (failedCount > 0 && failedCount <= 20) {
-                            outputToWelcomeConsole(`引擎未完全启动，无法连接，失败次数：${failedCount}`)
+                            outputToWelcomeConsole(`Engine not fully started, cannot connect, failed attempts.：${failedCount}`)
                         }
 
                         if (props.onFailed) {

@@ -17,7 +17,7 @@ export const DocumentEditor: React.FC<DocumentEditorProp> = (props) => {
 
     return <div>
         <PageHeader
-            title={"编辑/添加模块文档"} subTitle={props.yakScript.ScriptName + `[${props.yakScript.Id}]`}
+            title={"Edit/Add Mod Doc"} subTitle={props.yakScript.ScriptName + `[${props.yakScript.Id}]`}
             extra={[
                 <Button
                     type={"primary"}
@@ -27,12 +27,12 @@ export const DocumentEditor: React.FC<DocumentEditorProp> = (props) => {
                             YakScriptName: props.yakScript.ScriptName,
                             Markdown: markdown,
                         }).then(() => {
-                            success("保存文档成功")
+                            success("Save Doc Success")
                         }).catch((e: any) => {
                             console.info(e)
                         }).finally()
                     }}
-                >保存 / 创建文档</Button>
+                >Save / Create Doc</Button>
             ]}
         />
         <MDEditor

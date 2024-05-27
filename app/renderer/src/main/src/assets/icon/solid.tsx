@@ -39,7 +39,7 @@ const SolidImport = () => (
     </svg>
 )
 /**
- * @description  Icon/Solid/Solid导入
+ * @description  Icon/Solid/Import
  */
 export const SolidImportIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidImport} {...props} />
@@ -2866,7 +2866,7 @@ const SolidMinusenlargewin = () => (
     </svg>
 )
 /**
- * @description  Icon/Solid/Solidminus-放大窗口
+ * @description  Icon/Solid/Zoom In
  */
 export const SolidMinusenlargewinIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidMinusenlargewin} {...props} />
@@ -2883,7 +2883,7 @@ const SolidMinusnarrowwin = () => (
     </svg>
 )
 /**
- * @description  Icon/Solid/Solidminus-缩小窗口
+ * @description  Icon/Solid/Zoom Out
  */
 export const SolidMinusnarrowwinIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidMinusnarrowwin} {...props} />
@@ -4633,7 +4633,7 @@ const SolidExport = () => (
     </svg>
 )
 /**
- * @description  Icon/Solid/Solid导出
+ * @description  Icon/Solid/Export
  */
 export const SolidExportIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidExport} {...props} />
@@ -4668,7 +4668,7 @@ const SolidDragsort = () => (
     </svg>
 )
 /**
- * @description  Icon/Solid/Solid拖拽排序
+ * @description  Icon/Solid/Drag to Sort
  */
 export const SolidDragsortIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidDragsort} {...props} />
@@ -4694,7 +4694,7 @@ const SolidFloatwin = () => (
     </svg>
 )
 /**
- * @description  Icon/Solid/Solid浮窗
+ * @description  Icon/Solid/Float Window
  */
 export const SolidFloatwinIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidFloatwin} {...props} />
@@ -4711,7 +4711,7 @@ const SolidPort = () => (
     </svg>
 )
 /**
- * @description  Icon/Solid/Solid端口
+ * @description  Icon/Solid/Port
  */
 export const SolidPortIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidPort} {...props} />
@@ -4736,7 +4736,7 @@ const SolidTodown = () => (
     </svg>
 )
 /**
- * @description  Icon/Solid/Solid靠下
+ * @description  Icon/Solid/Align Bottom
  */
 export const SolidTodownIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidTodown} {...props} />
@@ -4761,7 +4761,7 @@ const SolidToright = () => (
     </svg>
 )
 /**
- * @description  Icon/Solid/Solid靠右
+ * @description  Icon/Solid/Align Right
  */
 export const SolidTorightIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidToright} {...props} />
@@ -4786,7 +4786,7 @@ const SolidToleft = () => (
     </svg>
 )
 /**
- * @description  Icon/Solid/Solid靠左
+ * @description  Icon/Solid/Align Left
  */
 export const SolidToleftIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidToleft} {...props} />
@@ -4814,7 +4814,7 @@ const SolidSwitchConfiguration = () => (
 )
 
 /**
- * @description  Icon/Solid/switch 配置
+ * @description  Icon/Solid/Switch Config
  */
 export const SolidSwitchConfigurationIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidSwitchConfiguration} {...props} />
@@ -4832,7 +4832,7 @@ const SolidStore = () => (
 )
 
 /**
- * @description  Icon/Solid/存储
+ * @description  Icon/Solid/Storage
  */
 export const SolidStoreIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidStore} {...props} />

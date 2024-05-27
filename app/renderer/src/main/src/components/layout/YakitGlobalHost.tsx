@@ -13,10 +13,10 @@ export const YakitGlobalHost: React.FC<YakitGlobalHostProp> = (props) => {
     const {isEngineLink} = props
 
     const [host, setHost] = useState<{addr: string; port: string}>({addr: "??", port: "??"})
-    /** 获取连接引擎地址计时器 */
+    /** Get Connection Engine Address Timer */
     const timeRef = useRef<any>(null)
 
-    /** 获取连接引擎的地址参数 */
+    /** Get Connection Engine Address Params */
     const getGlobalHost = useMemoizedFn(() => {
         ipcRenderer
             .invoke("fetch-yaklang-engine-addr")
@@ -29,7 +29,7 @@ export const YakitGlobalHost: React.FC<YakitGlobalHostProp> = (props) => {
             .catch(() => {})
     })
 
-    /** 引擎连接和断开时的展示内容处理 */
+    /** Engine Connect/Disconnect Display Content Handling */
     useEffect(() => {
         if (isEngineLink) {
             if (timeRef.current) clearInterval(timeRef.current)

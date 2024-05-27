@@ -32,8 +32,8 @@ const genY = (client, coordinate, target) => {
 const ContextMenuId = "yakit-right-context"
 
 /**
- * @name 生成一个鼠标所在坐标位置的展示框(props默认为菜单组件，也可自行传递自定义组件)
- * @description x和y参数为可选参数，填写时将以x-y坐标位展示内容
+ * @name Generates a display box at the mouse position (props default to menu component, but can also pass a custom component)
+ * @description x and y parameters are optional, content is displayed at the x-y coordinate when specified
  */
 export const showByRightContext = (props: YakitMenuProp | ReactNode, x?: number, y?: number, isForce?: boolean) => {
     let divExisted = document.getElementById(ContextMenuId)
@@ -45,22 +45,22 @@ export const showByRightContext = (props: YakitMenuProp | ReactNode, x?: number,
 
     const div: HTMLDivElement = divExisted ? (divExisted as HTMLDivElement) : document.createElement("div")
 
-    /** body展示的高度和宽度；表示body在浏览器内显示的区域高度和宽度 */
+    /** body's Display Height and Width; indicates the height and width of the area where the body is displayed in the browser */
     const clientHeight = roundDown(document.body.getBoundingClientRect().height || 0)
     const clientWidth = roundDown(document.body.getBoundingClientRect().width || 0)
-    /** 鼠标坐标 */
+    /** Mouse Coordinate */
     let left = x || coordinate.clientX
     let top = y || coordinate.clientY
-    /** 右键展示元素宽高 */
+    /** Right-Click Display Element Dimensions */
     const divWidth = roundDown(div.getBoundingClientRect().width || 0)
     const divHeight = roundDown(div.getBoundingClientRect().height || 0)
-        /**RightContext 根节点 */
+        /**RightContext Root Node */
         // let rightContextRootDiv
 
     if (divWidth > 0 && divHeight > 0) {
-        // y坐标计算
+        // y Coordinate Calculation
         top = genY(clientHeight, top, divHeight)
-        // x坐标计算
+        // x Coordinate Calculation
         left = genX(clientWidth, left, divWidth)
         div.style.left = `${left}px`
         div.style.top = `${top}px`
@@ -86,9 +86,9 @@ export const showByRightContext = (props: YakitMenuProp | ReactNode, x?: number,
     }
 
     const offsetPosition = (width: number, height: number) => {
-        // y坐标计算
+        // y Coordinate Calculation
         top = genY(clientHeight, top, height)
-        // x坐标计算
+        // x Coordinate Calculation
         left = genX(clientWidth, left, width)
         div.style.left = `${left}px`
         div.style.top = `${top}px`
@@ -108,7 +108,7 @@ export const showByRightContext = (props: YakitMenuProp | ReactNode, x?: number,
             //     rightContextRootDiv = createRoot(div)
             // }
             // rightContextRootDiv.render(<RightContext data={props} callback={offsetPosition} />)
-            // 上面注释内容为react 18新特性写法，但在antd menu下会有二级菜单多个同时打开问题
+            // The above comment is a new syntax in react 18, but under the antd menu, there is a problem with multiple sub-menus opening at the same time
             ReactDOM.render(<RightContext data={props} callback={offsetPosition} />, div)
         })
     }

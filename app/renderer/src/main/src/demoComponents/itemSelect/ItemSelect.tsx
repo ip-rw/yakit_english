@@ -5,7 +5,7 @@ import {YakitSelect} from "@/components/yakitUI/YakitSelect/YakitSelect"
 
 const {Item} = Form
 
-/** @name 表单项-单选下拉表 */
+/** @name Form-SingleDropdown */
 export const DemoItemSelectOne: React.FC<ItemSelectOneProps> = memo((p) => {
     const {label, help, formItemStyle, required, disabled, placeholder, size, allowClear, value, setValue, data} = p
 
@@ -24,7 +24,7 @@ export const DemoItemSelectOne: React.FC<ItemSelectOneProps> = memo((p) => {
     )
 })
 
-/** @name 表单项-多选下拉表 */
+/** @name Form-MultiDropdown */
 export const DemoItemSelectMultiForString: React.FC<ItemSelectMultiForStringProps> = memo((p) => {
     const {
         label,

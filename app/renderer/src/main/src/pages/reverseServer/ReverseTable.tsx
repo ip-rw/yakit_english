@@ -16,8 +16,8 @@ import {YakitEditor} from "@/components/yakitUI/YakitEditor/YakitEditor"
 import { YakitCopyText } from "@/components/yakitUI/YakitCopyText/YakitCopyText"
 
 const DefaultType: {label: string; value: string}[] = [
-    {value: "rmi", label: "RMI连接"},
-    {value: "rmi-handshake", label: "RMI握手"},
+    {value: "rmi", label: "RMI Connection"},
+    {value: "rmi-handshake", label: "RMI Handshake"},
     {value: "http", label: "HTTP"},
     {value: "https", label: "HTTPS"},
     {value: "tcp", label: "TCP"},
@@ -152,7 +152,7 @@ export const ReverseTable: React.FC<ReverseTableProps> = (props) => {
                                         <YakitSpin spinning={!!loading}>
                                             <div className='header-extra'>
                                                 <div className='extra-opt'>
-                                                    <div className='opt-title'>只看 Token</div>
+                                                    <div className='opt-title'>View Token Only</div>
                                                     <YakitSwitch
                                                         checked={hasToken}
                                                         onChange={(check) => {
@@ -164,7 +164,7 @@ export const ReverseTable: React.FC<ReverseTableProps> = (props) => {
 
                                                 {/* <div className='extra-opt'>
                                                     <div className='opt-title' style={{width: 35}}>
-                                                        类型
+                                                        Type
                                                     </div>
                                                     <YakitSelect
                                                         size='small'
@@ -189,7 +189,7 @@ export const ReverseTable: React.FC<ReverseTableProps> = (props) => {
                                                         clearData()
                                                     }}
                                                 >
-                                                    清空
+                                                    Clear
                                                 </YakitButton>
                                                 {isShowExtra && (
                                                     <YakitButton
@@ -216,7 +216,7 @@ export const ReverseTable: React.FC<ReverseTableProps> = (props) => {
                             renderKey='uuid'
                             columns={[
                                 {
-                                    title: "反连类型",
+                                    title: "Callback Type",
                                     dataKey: "type",
                                     render: (text) => {
                                         const selectTag = DefaultType.filter((item) => item.value === text)
@@ -239,7 +239,7 @@ export const ReverseTable: React.FC<ReverseTableProps> = (props) => {
                                     }
                                 },
                                 {
-                                    title: "连接来源",
+                                    title: "Source Connection",
                                     dataKey: "remote_addr",
                                     render: (text) => <YakitCopyText showText={text} />
                                 },
@@ -249,7 +249,7 @@ export const ReverseTable: React.FC<ReverseTableProps> = (props) => {
                                     render: (text) => <YakitCopyText showText={text} />
                                 },
                                 {
-                                    title: "响应",
+                                    title: "Response",
                                     dataKey: "response_info"
                                 }
                             ]}

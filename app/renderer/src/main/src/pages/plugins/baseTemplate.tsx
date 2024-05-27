@@ -58,12 +58,12 @@ import classNames from "classnames"
 import {YakitSelectProps} from "@/components/yakitUI/YakitSelect/YakitSelectType"
 
 
-/** @name 插件列表大框架组件 */
+/** @name Plugin Frame Component */
 export const PluginsLayout: React.FC<PluginsLayoutProps> = memo((props) => {
     const {pageWrapId, title, subTitle, extraHeader, hidden, children} = props
 
     const titleNode = useMemo(() => {
-        if (!title) return <div className={styles["title-style"]}>插件商店</div>
+        if (!title) return <div className={styles["title-style"]}>Plugin Store</div>
 
         if (typeof title === "string") return <div className={styles["title-style"]}>{title}</div>
         else return title
@@ -89,7 +89,7 @@ export const PluginsLayout: React.FC<PluginsLayoutProps> = memo((props) => {
         </div>
     )
 })
-/** @name 插件列表组件(带侧边搜索栏)  */
+/** @name Plugin List Component with Side Search Bar)  */
 export const PluginsContainer: React.FC<PluginsContainerProps> = memo((props) => {
     const {loading, visible, setVisible, selecteds, onSelect, groupList, children, filterClassName} = props
     return (
@@ -112,7 +112,7 @@ export const PluginsContainer: React.FC<PluginsContainerProps> = memo((props) =>
     )
 })
 
-/** @name 插件详情大框架组件(带左侧插件列表) */
+/** @name Plugin Details Frame Component with Side Plugin List) */
 export const PluginDetails: <T>(props: PluginDetailsProps<T>) => any = memo((props) => {
     const {
         pageWrapId = "",
@@ -135,7 +135,7 @@ export const PluginDetails: <T>(props: PluginDetailsProps<T>) => any = memo((pro
         bodyClassName
     } = props
 
-    // 隐藏插件列表
+    // Hide Plugin List
     const [hidden, setHidden] = useControllableValue<boolean>(props, {
         defaultValue: false,
         defaultValuePropName: "hidden",
@@ -143,7 +143,7 @@ export const PluginDetails: <T>(props: PluginDetailsProps<T>) => any = memo((pro
         trigger: "setHidden"
     })
 
-    // 关键词|用户搜索
+    // Keywords|User Search
     const onSearch = useDebounceFn(
         (value: PluginSearchParams) => {
             onsearch(value)
@@ -151,7 +151,7 @@ export const PluginDetails: <T>(props: PluginDetailsProps<T>) => any = memo((pro
         {wait: 300, leading: true}
     )
 
-    /** 全选框是否为半选状态 */
+    /** Indeterminate State Checkbox */
     const checkIndeterminate = useMemo(() => {
         if (checked) return false
         if (!checked && selected > 0) return true
@@ -178,7 +178,7 @@ export const PluginDetails: <T>(props: PluginDetailsProps<T>) => any = memo((pro
                                     checked={checked}
                                     onChange={(e) => onCheck(e.target.checked)}
                                 />
-                                全选
+                                Fixes failure to iterate load_content on missing older version data
                             </div>
                             <div className={styles["count-num"]}>
                                 Total <span className={styles["num-style"]}>{total}</span>
@@ -202,12 +202,12 @@ export const PluginDetails: <T>(props: PluginDetailsProps<T>) => any = memo((pro
                 ) : (
                     <div className={styles["details-header"]}>
                         <div className={styles["header-title"]}>
-                            插件详情
-                            <span className={styles["subtitle-style"]}>线上数据需要下载到本地才可执行</span>
+                            Plugin Details
+                            <span className={styles["subtitle-style"]}>Online Data Must Be Downloaded to Local to Execute</span>
                         </div>
                         <div className={styles["header-btn"]}>
                             <YakitButton type='text2' icon={<OutlineReplyIcon />} onClick={onBack}>
-                                返回列表
+                                Return to List
                             </YakitButton>
                             <div className={styles["divider-style"]}></div>
                             <YakitButton
@@ -223,7 +223,7 @@ export const PluginDetails: <T>(props: PluginDetailsProps<T>) => any = memo((pro
         </div>
     )
 })
-/** @name 插件详情-头部信息 */
+/** @name Plugin Details - Header Info */
 export const PluginDetailHeader: React.FC<PluginDetailHeaderProps> = memo((props) => {
     const {
         pluginName,
@@ -253,9 +253,9 @@ export const PluginDetailHeader: React.FC<PluginDetailHeaderProps> = memo((props
     }, [tags])
 
     const [prShow, setPrShow] = useState<boolean>(false)
-    /** 贡献者数据 */
+    /** Contributor Data */
     const contributes: {arr: CollaboratorInfoProps[]; length: number} = useMemo(() => {
-        // 这是第二版需要的数据
+        // Data Needed for V2
         if (prImgs.length <= 5) return {arr: prImgs, length: prImgs.length}
         else {
             return {arr: prImgs.slice(0, 5), length: prImgs.length - 5}
@@ -330,7 +330,7 @@ export const PluginDetailHeader: React.FC<PluginDetailHeaderProps> = memo((props
                                     onVisibleChange={setPrShow}
                                 >
                                     <YakitButton type='text2' isActive={prShow}>
-                                        {`${contributes.length}位协作者`}
+                                        {`${contributes.length}Co-Author`}
                                         {prShow ? <SolidChevronupIcon /> : <SolidChevrondownIcon />}
                                     </YakitButton>
                                 </YakitPopover>
@@ -350,9 +350,9 @@ export const PluginDetailHeader: React.FC<PluginDetailHeaderProps> = memo((props
                                         styles["text-style"],
                                         "yakit-content-single-ellipsis"
                                     )}
-                                    title={`插件ID : ${pluginId}`}
+                                    title={`Plugin ID : ${pluginId}`}
                                 >
-                                    {`插件ID : ${pluginId}`}
+                                    {`Plugin ID : ${pluginId}`}
                                 </div>
                                 <CopyComponents className={classNames(styles["copy-icon-style"])} copyText={pluginId} />
                             </div>
@@ -362,12 +362,12 @@ export const PluginDetailHeader: React.FC<PluginDetailHeaderProps> = memo((props
                         <>
                             <div className={styles["divider-style"]} />
                             <div className={styles["copy-wrapper"]}>
-                                <span>来源:</span>
+                                <span>Source:</span>
                                 <Tooltip
-                                    title={`复制插件 “${basePluginName}” 为 “${pluginName}”`}
+                                    title={`Copy Plugin “${basePluginName}” For “${pluginName}”`}
                                     overlayClassName='plugins-tooltip'
                                 >
-                                    <YakitTag style={{marginRight: 0, cursor: "pointer"}}>复制</YakitTag>
+                                    <YakitTag style={{marginRight: 0, cursor: "pointer"}}>Copy</YakitTag>
                                 </Tooltip>
                             </div>
                         </>
@@ -375,7 +375,7 @@ export const PluginDetailHeader: React.FC<PluginDetailHeaderProps> = memo((props
                 </div>
 
                 <div className={styles["divider-style"]}></div>
-                <div className={classNames(styles["constant-wrapper"], styles["text-style"])}>{`更新时间 : ${formatDate(
+                <div className={classNames(styles["constant-wrapper"], styles["text-style"])}>{`Update Time : ${formatDate(
                     updated_at
                 )}`}</div>
             </div>
@@ -383,7 +383,7 @@ export const PluginDetailHeader: React.FC<PluginDetailHeaderProps> = memo((props
     )
 })
 
-/** @name 插件基本信息 */
+/** @name Basic Plugin Info */
 export const PluginModifyInfo: React.FC<PluginModifyInfoProps> = memo(
     React.forwardRef((props, ref) => {
         const {isEdit = false, data, tagsCallback} = props
@@ -410,7 +410,7 @@ export const PluginModifyInfo: React.FC<PluginModifyInfoProps> = memo(
             }
         }, [data])
 
-        // 获取当前表单的内容
+        // Fetch Form Content
         const getValues = useMemoizedFn(() => {
             const obj = form.getFieldsValue()
             const data: PluginBaseParamProps = {
@@ -421,7 +421,7 @@ export const PluginModifyInfo: React.FC<PluginModifyInfoProps> = memo(
             }
             return data
         })
-        // 验证是否可以进行信息的提交
+        // Verify Data Submission Possible
         const onFinish: () => Promise<PluginBaseParamProps | undefined> = useMemoizedFn(() => {
             return new Promise((resolve, reject) => {
                 form.validateFields()
@@ -462,7 +462,7 @@ export const PluginModifyInfo: React.FC<PluginModifyInfoProps> = memo(
                 <Form.Item
                     label={
                         <>
-                            插件名称<span className='plugins-item-required'>*</span>:
+                            Plugin name<span className='plugins-item-required'>*</span>:
                         </>
                     }
                     name='ScriptName'
@@ -470,15 +470,15 @@ export const PluginModifyInfo: React.FC<PluginModifyInfoProps> = memo(
                     rules={[
                         {
                             validator: async (_, value) => {
-                                if (!value || !value.trim()) return Promise.reject(new Error("插件名称必填"))
-                                if (value.trim().length > 100) return Promise.reject(new Error("名称最长100位"))
+                                if (!value || !value.trim()) return Promise.reject(new Error("Plugin Name Required"))
+                                if (value.trim().length > 100) return Promise.reject(new Error("Max Name Length 100 Characters"))
                             }
                         }
                     ]}
                 >
                     <YakitInput
                         wrapperClassName={styles["modify-input"]}
-                        placeholder='请输入...'
+                        placeholder='Please Enter...'
                         size='large'
                         prefix={<OutlineIdentificationIcon />}
                         maxLength={100}
@@ -489,7 +489,7 @@ export const PluginModifyInfo: React.FC<PluginModifyInfoProps> = memo(
                 <Form.Item
                     label={
                         <>
-                            描述<span className='plugins-item-required'>*</span>:
+                            Description<span className='plugins-item-required'>*</span>:
                         </>
                     }
                     name='Help'
@@ -497,14 +497,14 @@ export const PluginModifyInfo: React.FC<PluginModifyInfoProps> = memo(
                     rules={[
                         {
                             validator: async (_, value) => {
-                                if (!value || !value.trim()) return Promise.reject(new Error("插件描述必填"))
+                                if (!value || !value.trim()) return Promise.reject(new Error("Plugin Description Required"))
                             }
                         }
                     ]}
                 >
                     <YakitInput.TextArea
                         autoSize={{minRows: 2, maxRows: 2}}
-                        placeholder='请输入...'
+                        placeholder='Please Enter...'
                         onKeyDown={(e) => {
                             const keyCode = e.keyCode ? e.keyCode : e.key
                             if (keyCode === 13) {
@@ -532,17 +532,17 @@ export const PluginModifyInfo: React.FC<PluginModifyInfoProps> = memo(
                                 </YakitTag>
                             </div>
                             <div className={styles["info-content"]}>
-                                <div className={styles["header-style"]}>漏洞描述</div>
-                                <div className={styles["content-style"]}>{bugInfo[0]?.Description || "暂无描述"}</div>
+                                <div className={styles["header-style"]}>Vulnerability Description</div>
+                                <div className={styles["content-style"]}>{bugInfo[0]?.Description || "No Description"}</div>
                             </div>
                             <div className={styles["info-content"]}>
-                                <div className={styles["header-style"]}>修复建议</div>
-                                <div className={styles["content-style"]}>{bugInfo[0]?.Solution || "暂无修复建议"}</div>
+                                <div className={styles["header-style"]}>Repair Suggestion</div>
+                                <div className={styles["content-style"]}>{bugInfo[0]?.Solution || "No Repair Suggestions"}</div>
                             </div>
                             {riskLength > 1 && (
                                 <div>
                                     <YakitButton type='outline1' onClick={onOpenRisk}>
-                                        更多
+                                        More
                                     </YakitButton>
                                 </div>
                             )}
@@ -557,7 +557,7 @@ export const PluginModifyInfo: React.FC<PluginModifyInfoProps> = memo(
                         </>
                     }
                 >
-                    <Form.Item noStyle name='Tags' rules={[{required: true, message: "Tags必填"}]}>
+                    <Form.Item noStyle name='Tags' rules={[{required: true, message: "Tags Required"}]}>
                         <YakitSelect
                             wrapperClassName={styles["multiple-modify-select"]}
                             mode='tags'
@@ -580,7 +580,7 @@ export const PluginModifyInfo: React.FC<PluginModifyInfoProps> = memo(
                 </Form.Item>
 
                 <YakitModal
-                    title='漏洞描述'
+                    title='Vulnerability Description'
                     type='white'
                     closable={true}
                     footer={null}
@@ -611,15 +611,15 @@ export const PluginModifyInfo: React.FC<PluginModifyInfoProps> = memo(
                                             </YakitTag>
                                         </div>
                                         <div className={styles["info-content"]}>
-                                            <div className={styles["header-style"]}>漏洞描述</div>
+                                            <div className={styles["header-style"]}>Vulnerability Description</div>
                                             <div className={styles["content-style"]}>
-                                                {item?.Description || "暂无描述"}
+                                                {item?.Description || "No Description"}
                                             </div>
                                         </div>
                                         <div className={styles["info-content"]}>
-                                            <div className={styles["header-style"]}>修复建议</div>
+                                            <div className={styles["header-style"]}>Repair Suggestion</div>
                                             <div className={styles["content-style"]}>
-                                                {item?.Solution || "暂无修复建议"}
+                                                {item?.Solution || "No Repair Suggestions"}
                                             </div>
                                         </div>
                                     </div>
@@ -633,7 +633,7 @@ export const PluginModifyInfo: React.FC<PluginModifyInfoProps> = memo(
     })
 )
 
-/** @name 插件编辑项-参数、联动、DNSLOG */
+/** @name Plugin Edit Items - Parameters, Linkage, DNSLOG */
 export const PluginModifySetting: React.FC<PluginModifySettingProps> = memo(
     React.forwardRef((props, ref) => {
         const {type, tags, setTags, data: oldData} = props
@@ -646,11 +646,11 @@ export const PluginModifySetting: React.FC<PluginModifySettingProps> = memo(
 
         const [selectStatus, setSelectStatus] = useState<YakitSelectProps["status"]>()
 
-        // 获取当前表单的内容
+        // Fetch Form Content
         const getValues = useMemoizedFn(() => {
             return {...getData()}
         })
-        // 验证是否可以进行信息的提交
+        // Verify Data Submission Possible
         const onFinish: () => Promise<PluginSettingParamProps | undefined> = useMemoizedFn(() => {
             return new Promise((resolve, reject) => {
                 if (onValidateFields()) {
@@ -699,12 +699,12 @@ export const PluginModifySetting: React.FC<PluginModifySettingProps> = memo(
                                     checked={data.EnablePluginSelector}
                                     onChange={(check) => setData({...data, EnablePluginSelector: check})}
                                 />
-                                启用插件联动 UI
+                                Enable Plugin UI Linkage
                             </div>
                             {data.EnablePluginSelector && (
                                 <div className={classNames(styles["switch-wrapper"], styles["switch-type-wrapper"])}>
                                     <span className={styles["switch-text"]}>
-                                        联动插件类型<span className='plugins-item-required'>*</span> :
+                                        Plugin Linkage Type<span className='plugins-item-required'>*</span> :
                                     </span>
                                     <div className={styles["select-wrapper"]}>
                                         <YakitSelect
@@ -720,10 +720,10 @@ export const PluginModifySetting: React.FC<PluginModifySettingProps> = memo(
                                             status={selectStatus}
                                         >
                                             <YakitSelect.Option value='mitm'>MITM</YakitSelect.Option>
-                                            <YakitSelect.Option value='port-scan'>端口扫描</YakitSelect.Option>
+                                            <YakitSelect.Option value='port-scan'>Port Scan</YakitSelect.Option>
                                         </YakitSelect>
                                         {selectStatus === "error" && (
-                                            <span className={styles["switch-text-error"]}>联动插件类型必填</span>
+                                            <span className={styles["switch-text-error"]}>Linked Plugin Type Required</span>
                                         )}
                                     </div>
                                 </div>
@@ -743,7 +743,7 @@ export const PluginModifySetting: React.FC<PluginModifySettingProps> = memo(
                                         }
                                     }}
                                 />
-                                用于自定义 DNSLOG 平台
+                                For Custom DNSLOG Platform
                             </div>
                         </div>
                     </>
@@ -763,7 +763,7 @@ export const PluginModifySetting: React.FC<PluginModifySettingProps> = memo(
                                     }
                                 }}
                             />
-                            用于自定义HTTP数据包变形
+                            Custom HTTP Packet Transformation
                         </div>
                     </div>
                 )}
@@ -784,7 +784,7 @@ export const PluginModifySetting: React.FC<PluginModifySettingProps> = memo(
                                     }
                                 }}
                             />
-                            用于自定义右键菜单执行
+                            For Custom Context Menu Action
                         </div>
                     </div>
                 )}
@@ -793,11 +793,11 @@ export const PluginModifySetting: React.FC<PluginModifySettingProps> = memo(
     })
 )
 
-/** @name 插件源码 */
+/** @name Plugin Source Code */
 export const PluginEditorDiff: React.FC<PluginEditorDiffProps> = memo((props) => {
     const {isDiff, newCode, oldCode = "", setCode, language, triggerUpdate} = props
 
-    // 更新对比器内容
+    // Update Comparator
     const [update, setUpdate] = useState<boolean>(!!triggerUpdate)
 
     useUpdateEffect(() => {
@@ -822,7 +822,7 @@ export const PluginEditorDiff: React.FC<PluginEditorDiffProps> = memo((props) =>
     return (
         <div className={styles["plugin-edtior-diff-wrapper"]}>
             <div className={styles["edit-diff-title"]}>
-                {isDiff ? "代码对比" : "源码"}
+                {isDiff ? "Code Comparison" : "Source Code"}
                 <YakitButton
                     size='small'
                     type='text2'
@@ -834,12 +834,12 @@ export const PluginEditorDiff: React.FC<PluginEditorDiffProps> = memo((props) =>
                 <>
                     <div className={styles["edit-diff-header"]}>
                         <div className={styles["header-body"]}>
-                            <span className={styles["body-title"]}>插件源码</span>
+                            <span className={styles["body-title"]}>Plugin Source Code</span>
                             <span className={styles["body-sub-title"]}></span>
                         </div>
                         <div className={classNames(styles["header-body"], styles["header-right-body"])}>
                             <span className={styles["body-sub-title"]}></span>
-                            <span className={styles["body-title"]}>申请人提交源码</span>
+                            <span className={styles["body-title"]}>Submitter Supplied Source Code</span>
                         </div>
                     </div>
                     {oldCode && newCode && (
@@ -873,7 +873,7 @@ export const PluginEditorDiff: React.FC<PluginEditorDiffProps> = memo((props) =>
     )
 })
 
-/**@name 插件详情中列表的item */
+/**@name Plugin Details List Item */
 export const PluginDetailsListItem: <T>(props: PluginDetailsListItemProps<T>) => any = React.memo((props) => {
     const {
         order,
@@ -906,7 +906,7 @@ export const PluginDetailsListItem: <T>(props: PluginDetailsListItemProps<T>) =>
     const onClick = useMemoizedFn((e) => {
         if (enableClick) onPluginClick(plugin, order)
     })
-    // 副标题组件
+    // Subheading Component
     const extraNode = useMemoizedFn(() => {
         if (extra) return extra(plugin)
         return null
@@ -963,7 +963,7 @@ export const PluginDetailsListItem: <T>(props: PluginDetailsListItemProps<T>) =>
         </div>
     )
 })
-/**@name 插件详情中协作者展示item */
+/**@name Plugin Details Collaborator Item */
 export const PluginContributesListItem: React.FC<PluginContributesListItemProps> = React.memo((props) => {
     const {contributesHeadImg, contributesName} = props
     return (
@@ -974,8 +974,8 @@ export const PluginContributesListItem: React.FC<PluginContributesListItemProps>
     )
 })
 
-/** ---------- 以下为对应关系字段和插件页面共用图标 ---------- */
-/** 审核状态标签 */
+/** ---------- Below are Icon Shared Field and Plugin Page ---------- */
+/** Review Status Tag */
 export const statusTag: {[key: string]: ReactNode} = {
     "0": (
         <div className={classNames(styles["audit-status-tag"], styles["audit-status-tag-pending"])}>

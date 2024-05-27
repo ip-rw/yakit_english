@@ -12,7 +12,7 @@ import styles from "./uiOperate.module.scss"
 const {ipcRenderer} = window.require("electron")
 
 export interface WinUIOpProp {
-    currentProjectId: string // 当前项目id
+    currentProjectId: string // Current project id
     pageChildrenShow: boolean
 }
 
@@ -56,16 +56,16 @@ export const WinUIOp: React.FC<WinUIOpProp> = React.memo((props) => {
     const handleCloseSoft = async () => {
         if (props.pageChildrenShow) {
             /**
-             * 当关闭按钮出现在项目里面时，点关闭给弹窗的情况
-             * 临时项目的弹窗需要放到最后一个弹窗弹出
+             * When the close button appears inside a project, the situation prompting a popup
+             * Popups for temporary projects should appear last.
              */
-            // 如果运行节点存在
+            // If running nodes exist
             if (Array.from(runNodeList).length) {
                 setCloseRunNodeItemVerifyVisible(true)
                 return
             }
 
-            // 如果打开得是临时项目
+            // If a temporary project is open
             if (
                 lastTemporaryProjectIdRef.current &&
                 props.currentProjectId &&
@@ -120,11 +120,11 @@ export const WinUIOp: React.FC<WinUIOpProp> = React.memo((props) => {
                 <div className={styles["op-btn"]} onClick={handleCloseSoft}>
                     <WinUIOpCloseSvgIcon className={styles["icon-style"]} />
                 </div>
-                {/* 关闭运行节点确认弹框 */}
+                {/* Confirm node shutdown dialog */}
                 <YakitHint
                     visible={closeRunNodeItemVerifyVisible}
-                    title='是否确认关闭节点'
-                    content='关闭Yakit会默认关掉所有启用的节点'
+                    title='Confirm node shutdown?'
+                    content='Shutting down Yakit defaults to turning off all active nodes.'
                     onOk={async () => {
                         await handleKillAllRunNode()
                         setCloseRunNodeItemVerifyVisible(false)
@@ -135,11 +135,11 @@ export const WinUIOp: React.FC<WinUIOpProp> = React.memo((props) => {
                     }}
                 />
 
-                {/* 退出临时项目确认弹框 */}
+                {/* Confirm exit temporary project dialog */}
                 {closeTemporaryProjectVisible && (
                     <TemporaryProjectPop
-                        title='关闭Yakit'
-                        content='关闭Yakit会自动退出临时项目，临时项目所有数据都不会保存。退出前可在设置-项目管理中导出数据'
+                        title='Shut down Yakit'
+                        content='Yakit will automatically exit temporary projects, not saving any data. Export data via Settings > Project Management before exiting.'
                         onOk={async () => {
                             setCloseTemporaryProjectVisible(false)
                             operate("close")
@@ -174,13 +174,13 @@ export const TemporaryProjectPop: React.FC<TemporaryProjectPopProp> = (props) =>
     return (
         <YakitHint
             visible={true}
-            title={props.title || "退出临时项目"}
+            title={props.title || "Exit Temp Project"}
             footerExtra={
                 <YakitCheckbox
                     value={temporaryProjectNoPrompt}
                     onChange={(e) => setTemporaryProjectNoPrompt(e.target.checked)}
                 >
-                    下次不再提醒
+                    Do Not Remind Again
                 </YakitCheckbox>
             }
             content={
@@ -189,9 +189,9 @@ export const TemporaryProjectPop: React.FC<TemporaryProjectPopProp> = (props) =>
                 ) : (
                     <>
                         <div>
-                            确认退出后，临时项目所有数据都不会保存，包括流量数据、端口数据、域名数据和漏洞数据等。
+                            Confirm Exit, Temporary Project Data Will Not Be Saved, Including Traffic, Ports, Domains, and Vulnerability Data。
                         </div>
-                        <div>退出前可在设置-项目管理中导出数据</div>
+                        <div>Export data in Settings-Project Management before exiting</div>
                     </>
                 )
             }

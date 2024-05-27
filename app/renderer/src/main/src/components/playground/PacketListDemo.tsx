@@ -80,14 +80,14 @@ export const PacketListDemo: React.FC<PacketListProp> = (props) => {
         [showData]
     )
     const parseData = useMemoizedFn((data: TrafficPacket | TrafficSession | TrafficTCPReassembled) => {
-        // 反选
+        // Inverse Select
         if (selectIdRef.current === data.Id) {
             setShow(false)
             selectIdRef.current = undefined
         } else {
             selectIdRef.current = data.Id
             setShow(true)
-            // 选中
+            // Select
             let typ: string = ""
             if ("DeviceName" in data) {
                 typ = "session"
@@ -185,9 +185,9 @@ export const PacketListDemo: React.FC<PacketListProp> = (props) => {
                         <Form layout={"inline"} onSubmitCapture={(e) => e.preventDefault()}>
                             <DemoItemRadioButton
                                 data={[
-                                    {value: "packet", label: "数据包"},
-                                    // {value: "session", label: "会话"},
-                                    {value: "tcp-reassembled", label: "TCP数据帧"}
+                                    {value: "packet", label: "Packet"},
+                                    // {value: "session", label: "Session"},
+                                    {value: "tcp-reassembled", label: "TCP Frame"}
                                 ]}
                                 value={viewer}
                                 setValue={setViewer}
@@ -197,11 +197,11 @@ export const PacketListDemo: React.FC<PacketListProp> = (props) => {
                     extra={
                         <Form layout={"inline"} size={"small"}>
                             <Form.Item>
-                                <YakitInput size='small' placeholder='请输入...' />
+                                <YakitInput size='small' placeholder='Please Enter...' />
                             </Form.Item>
-                            <DemoItemSwitch label={"实时"} value={realtime} setValue={setRealtime} />
+                            <DemoItemSwitch label={"Real-Time"} value={realtime} setValue={setRealtime} />
                             <YakitButton danger={true} onClick={clear}>
-                                清空
+                                Clear
                             </YakitButton>
                         </Form>
                     }

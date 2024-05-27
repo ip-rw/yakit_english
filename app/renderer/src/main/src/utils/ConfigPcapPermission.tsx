@@ -16,15 +16,15 @@ export const ConfigPcapPermissionForm: React.FC<ConfigPcapPermissionFormProp> = 
         IsPrivileged: boolean
         Advice: string,
         AdviceVerbose: string,
-    }>({Advice: "unknown", AdviceVerbose: "无法获取 PCAP 支持信息", IsPrivileged: false});
+    }>({Advice: "unknown", AdviceVerbose: "PCAP support info unavailable", IsPrivileged: false});
     const [platform, setPlatform] = useState("");
 
     useEffect(() => {
         ipcRenderer.invoke("IsPrivilegedForNetRaw", {}).then(setResponse).catch(e => {
-            failed(`获取 Pcap 权限状态失败：${e}`)
+            failed(`Failed to obtain Pcap permission status：${e}`)
         }).finally(() => {
             ipcRenderer.invoke("fetch-system-and-arch").then((e: string) => setPlatform(e)).catch(e => {
-                failed(`获取 ${getReleaseEditionName()} 操作系统失败：${e}`)
+                failed(`Fetch. ${getReleaseEditionName()} OS failure：${e}`)
             })
         })
     }, [])
@@ -41,7 +41,7 @@ export const ConfigPcapPermissionForm: React.FC<ConfigPcapPermissionFormProp> = 
                     props.onClose()
                 }
             }).catch(e => {
-                failed(`提升 Pcap 用户权限失败：${e}`)
+                failed(`Failed to elevate PCAP user permissions：${e}`)
             })
         }}
     >
@@ -50,32 +50,32 @@ export const ConfigPcapPermissionForm: React.FC<ConfigPcapPermissionFormProp> = 
             // <Button type={"link"} icon={<QuestionCircleTwoTone/>}/>
             help={
                 <>
-                    <Tooltip title={"原理：MacOS 通过设置 /dev/bpf* 权限组，可参考 Wireshark ChmodBPF 相关配置，Linux 可通过 setcap 命令设置 pcap 权限，Windows 推荐直接以 UAC 提升管理员权限启动"}>
+                    <Tooltip title={"Principle: MacOS sets by /dev/bpf* For permissions, see Wireshark ChmodBPF config. Use setcap for Linux Pcap permissions, launch as admin with UAC on Windows"}>
                         <Button type={"link"} icon={<QuestionCircleTwoTone/>}/>
                     </Tooltip>
-                    {isWindows ? `Windows 可用管理员权限启动 ${getReleaseEditionName()} 以获取对 Pcap 的使用权限` : "Linux 与 MacOS 可通过设置权限与组为用户态赋予网卡完全权限"}
+                    {isWindows ? `Launch with admin rights on Windows ${getReleaseEditionName()} To gain Pcap usage rights` : "Linux & MacOS can grant full network card access by setting permissions"}
                 </>
             }
         >
             {
                 response.IsPrivileged
                     ?
-                    <Alert type={"success"} message={`您可以正常试用 SYN 扫描等功能，无需修复`}/>
+                    <Alert type={"success"} message={`Normal SYN scan available, no fix needed`}/>
                     :
-                    <Alert type={"warning"} message={`当前引擎不具有网卡操作权限`}/>
+                    <Alert type={"warning"} message={`Lacks network card permissions`}/>
             }
         </Form.Item>
         {
             response.IsPrivileged ? <Form.Item label={" "} colon={false}>
                 {props?.onClose && <Button onClick={() => {
                     props.onClose()
-                }}>知道了～</Button>}
+                }}>Got It～</Button>}
             </Form.Item> : <Form.Item
                 label={" "} colon={false}
             >
-                <Button htmlType={"submit"} type={"primary"}>开启 PCAP 权限</Button>
+                <Button htmlType={"submit"} type={"primary"}>Enable PC’AP permissions</Button>
                 <Tooltip title={`${response.AdviceVerbose}: ${response.Advice}`}>
-                    <Button type={"link"}>手动修复</Button>
+                    <Button type={"link"}>Manual repair</Button>
                 </Tooltip>
             </Form.Item>
         }
@@ -84,7 +84,7 @@ export const ConfigPcapPermissionForm: React.FC<ConfigPcapPermissionFormProp> = 
 
 export const showPcapPermission = () => {
     const m = showModal({
-        title: "修复 Pcap 权限",
+        title: "Fix Pcap permissions",
         width: "70%",
         content: (
             <ConfigPcapPermissionForm onClose={() => {

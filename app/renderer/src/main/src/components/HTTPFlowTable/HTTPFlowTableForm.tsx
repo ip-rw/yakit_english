@@ -48,18 +48,18 @@ export const HTTPFlowTableFormConfiguration: React.FC<HTTPFlowTableFormConfigura
     const [fileSuffixDef, setFileSuffixDef] = useState<string[]>([])
     const [searchContentTypeDef, setSearchContentTypeDef] = useState<string[]>()
     const [form] = Form.useForm()
-    // 获取默认值
+    // Get Default
     useEffect(() => {
         if(!visible) return
-        // 筛选模式
+        // Filter Mode
         setFilterModeDef(filterMode)
         // HostName
         setHostNameDef(hostName)
-        // URL路径
+        // URL Path
         setUrlPathDef(urlPath)
-        // 文件后缀
+        // File Suffix
         setFileSuffixDef(fileSuffix)
-        // 响应类型
+        // Response Type
         const contentType: string = searchContentType
         const searchType: string[] = contentType.length === 0 ? [] : contentType.split(",")
         setSearchContentTypeDef(searchType)
@@ -68,7 +68,7 @@ export const HTTPFlowTableFormConfiguration: React.FC<HTTPFlowTableFormConfigura
     }, [visible])
 
     /**
-     * @description 保存高级配置
+     * @Save Advanced Settings
      */
     const onSaveSetting = useMemoizedFn(() => {
         form.validateFields().then((formValue) => {
@@ -103,11 +103,11 @@ export const HTTPFlowTableFormConfiguration: React.FC<HTTPFlowTableFormConfigura
         }
         if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
             Modal.confirm({
-                title: "温馨提示",
+                title: "Kind Reminder",
                 icon: <ExclamationCircleOutlined />,
-                content: "请问是否要保存高级配置并关闭弹框？",
-                okText: "保存",
-                cancelText: "不保存",
+                content: "Confirm Save Advanced Settings & Close Dialog？",
+                okText: "Save",
+                cancelText: "Don't Save",
                 closable: true,
                 closeIcon: (
                     <div
@@ -145,7 +145,7 @@ export const HTTPFlowTableFormConfiguration: React.FC<HTTPFlowTableFormConfigura
             onClose={() => onClose()}
             title={
                 <div className={styles["advanced-configuration-drawer-title"]}>
-                    <div className={styles["advanced-configuration-drawer-title-text"]}>高级筛选</div>
+                    <div className={styles["advanced-configuration-drawer-title-text"]}>Advanced Filter</div>
                     <div className={styles["advanced-configuration-drawer-title-btns"]}>
                         <YakitButton
                             type='outline2'
@@ -153,10 +153,10 @@ export const HTTPFlowTableFormConfiguration: React.FC<HTTPFlowTableFormConfigura
                                 setVisible(false)
                             }}
                         >
-                            取消
+                            Cancel
                         </YakitButton>
                         <YakitButton type='primary' onClick={() => onSaveSetting()}>
-                            保存
+                            Save
                         </YakitButton>
                     </div>
                 </div>
@@ -164,17 +164,17 @@ export const HTTPFlowTableFormConfiguration: React.FC<HTTPFlowTableFormConfigura
             maskClosable={false}
         >
             <Form form={form} labelCol={{span: 6}} wrapperCol={{span: 16}} className={styles["mitm-filters-form"]}>
-                <Form.Item label='筛选模式' name='filterMode' initialValue={"shield"}>
+                <Form.Item label='Filter Mode' name='filterMode' initialValue={"shield"}>
                     <YakitRadioButtons
                         buttonStyle='solid'
                         options={[
                             {
                                 value: "shield",
-                                label: "屏蔽内容"
+                                label: "Block Content"
                             },
                             {
                                 value: "show",
-                                label: "只展示"
+                                label: "Display Only"
                             }
                         ]}
                     />
@@ -183,21 +183,21 @@ export const HTTPFlowTableFormConfiguration: React.FC<HTTPFlowTableFormConfigura
                     <YakitSelect mode='tags'></YakitSelect>
                 </Form.Item>
                 <Form.Item
-                    label='URL路径'
+                    label='URL Path'
                     name='urlPath'
-                    help={"可理解为 URI 匹配，例如 /main/index.php?a=123 或者 /*/index 或 /admin* "}
+                    help={"Understood as URI Matching, e.g. /main/index.php?a=123 or /*/index or /admin* "}
                 >
                     <YakitSelect mode='tags'></YakitSelect>
                 </Form.Item>
-                <Form.Item label={"文件后缀"} name='fileSuffix'>
+                <Form.Item label={"File Suffix"} name='fileSuffix'>
                     <YakitSelect mode='tags'></YakitSelect>
                 </Form.Item>
-                <Form.Item label={"响应类型"} name='searchContentType'>
+                <Form.Item label={"Response Type"} name='searchContentType'>
                     <YakitSelect mode='tags' options={responseType}></YakitSelect>
                 </Form.Item>
                 <Form.Item label={" "} colon={false}>
                     <YakitButton type='text' onClick={reset}>
-                        重置
+                        Reset
                     </YakitButton>
                 </Form.Item>
             </Form>

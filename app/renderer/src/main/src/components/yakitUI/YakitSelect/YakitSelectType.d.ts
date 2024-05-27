@@ -9,13 +9,13 @@ import {type} from "os"
 
 /**
  * @description: YakitSelectProps
- * @augments YakitSelectProps 继承antd的 SelectProps 默认属性
- * @param {string} wrapperClassName 装饰div的className
- * @param {CSSProperties} wrapperStyle 装饰div的style
- * @param {string} cacheHistoryDataKey 缓存数据 key值
- * @param {number} cacheHistoryListLength 缓存数据 list长度
+ * @Inherits SelectProps Default props
+ * @param {string} wrapperClassName Decorator div className
+ * @param {CSSProperties} wrapperStyle Decorator div style
+ * @param {string} cacheHistoryDataKey Cache data key value
+ * @param {number} cacheHistoryListLength Cache data list length
  * @param {OptionType} defaultOptions 
- * @param {boolean} isCacheDefaultValue false会缓存默认值，但是不会将默认值显示到页面上
+ * @param {boolean} isCacheDefaultValue false caches default, not shown on page
  */
 
 export interface YakitSelectProps<
@@ -25,12 +25,12 @@ export interface YakitSelectProps<
     wrapperClassName?: string
     wrapperStyle?: CSSProperties
     size?: YakitSizeType
-    /**@name 缓存数据 key键 */
+    /**@name Cache data key */
     cacheHistoryDataKey?: string
-    /**@name 缓存数据  list长度*/
+    /**@name Cache data list length*/
     cacheHistoryListLength?: number
     defaultOptions?: OptionType
-    /** false会缓存默认值，但是不会将默认值显示到页面上 */
+    /** false caches default value, not shown on page */
     isCacheDefaultValue?: boolean
 }
 export interface YakitSelectOptionProps extends OptionProps {}

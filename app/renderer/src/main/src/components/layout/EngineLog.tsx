@@ -19,7 +19,7 @@ export const EngineLog: React.FC<EngineLogProps> = React.memo((props) => {
 
     const xtermRef = useRef<any>(null)
 
-    /** 日志输出 */
+    /** Log Output */
     const writeToConsole = (i: string) => {
         if (!xtermRef) return
         xtermRef.current.terminal.write(i)
@@ -34,7 +34,7 @@ export const EngineLog: React.FC<EngineLogProps> = React.memo((props) => {
             return
         }
 
-        writeToConsole(`欢迎使用 ${getReleaseEditionName()}!\n`)
+        writeToConsole(`Welcome ${getReleaseEditionName()}!\n`)
 
         ipcRenderer.on("live-engine-stdio", (e, stdout) => {
             writeToConsole(stdout)
@@ -55,7 +55,7 @@ export const EngineLog: React.FC<EngineLogProps> = React.memo((props) => {
     return (
         <div className={styles["engine-log-wrapper"]}>
             <div className={styles["engine-log-header"]}>
-                <div className={styles["header-title"]}>连接日志</div>
+                <div className={styles["header-title"]}>Connection Log</div>
                 <div className={styles["header-close"]} onClick={onCancel}>
                     <EngineLogCloseSvgIcon />
                 </div>

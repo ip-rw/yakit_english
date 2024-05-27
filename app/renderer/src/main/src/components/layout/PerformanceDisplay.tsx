@@ -27,7 +27,7 @@ interface PerformanceDisplayProps {
 }
 
 export const PerformanceDisplay: React.FC<PerformanceDisplayProps> = React.memo((props) => {
-    // cpu和内存可视图数据
+    // CPU and Memory Visualization
     const [cpu, setCpu] = useState<number[]>([])
 
     const [showLine, setShowLine] = useState<boolean>(true)
@@ -102,7 +102,7 @@ interface UIEngineListProp {
     typeCallback: (type: "break") => any
 }
 
-/** @name 已启动引擎列表 */
+/** @Active Engines List */
 const UIEngineList: React.FC<UIEngineListProp> = React.memo((props) => {
     const {engineMode, typeCallback} = props
 
@@ -124,7 +124,7 @@ const UIEngineList: React.FC<UIEngineListProp> = React.memo((props) => {
             .invoke("ps-yak-grpc")
             .then((i: yakProcess[]) => {
                 const valuesArray = Array.from(runNodeList.values())
-                // 过滤掉运行节点
+                // Filter running nodes
                 setProcess(
                     i
                         .filter((item) => !valuesArray.includes(item.pid.toString()))
@@ -180,7 +180,7 @@ const UIEngineList: React.FC<UIEngineListProp> = React.memo((props) => {
                 }
             })
         })
-        setTimeout(() => success("引擎进程关闭中..."), 1000)
+        setTimeout(() => success("Engine Process Shutting Down..."), 1000)
     })
 
     const isLocal = useMemo(() => {
@@ -198,9 +198,9 @@ const UIEngineList: React.FC<UIEngineListProp> = React.memo((props) => {
                 <div ref={listRef} className={styles["ui-engine-list-wrapper"]}>
                     <div className={styles["ui-engine-list-body"]}>
                         <div className={styles["engine-list-header"]}>
-                            本地 Yak 进程管理
+                            Local Yak Process Mgmt
                             <Popconfirm
-                                title={"重置引擎版本会恢复最初引擎出厂版本，同时强制重启"}
+                                title={"Resetting engine version reverts to factory settings and forces restart"}
                                 onConfirm={async () => {
                                     await delTemporaryProject()
                                     process.map((i) => {
@@ -209,15 +209,15 @@ const UIEngineList: React.FC<UIEngineListProp> = React.memo((props) => {
                                     ipcRenderer
                                         .invoke("RestoreEngineAndPlugin", {})
                                         .finally(() => {
-                                            info("恢复引擎成功")
+                                            info("Engine restored successfully")
                                             ipcRenderer.invoke("relaunch")
                                         })
                                         .catch((e) => {
-                                            failed(`恢复引擎失败：${e}`)
+                                            failed(`Engine Restore Failed：${e}`)
                                         })
                                 }}
                             >
-                                <YakitButton style={{marginLeft: 8}}>重置引擎版本</YakitButton>
+                                <YakitButton style={{marginLeft: 8}}>Reset Engine Version</YakitButton>
                             </Popconfirm>
                             {psLoading && <LoadingOutlined className={styles["loading-icon"]} />}
                         </div>
@@ -233,10 +233,10 @@ const UIEngineList: React.FC<UIEngineListProp> = React.memo((props) => {
                                                 )}
                                             </YakitTag>
                                             <div className={styles["engine-ps-info"]}>
-                                                {`yak grpc --port ${i.port === 0 ? "获取中" : i.port}`}
+                                                {`yak grpc --port ${i.port === 0 ? "Retrieving" : i.port}`}
                                                 &nbsp;
                                                 {isLocal && +i.port === port && (
-                                                    <span className={styles["current-ps-info"]}>{"(当前)"}</span>
+                                                    <span className={styles["current-ps-info"]}>{"(Current)"}</span>
                                                 )}
                                             </div>
                                         </div>
@@ -246,7 +246,7 @@ const UIEngineList: React.FC<UIEngineListProp> = React.memo((props) => {
                                                 onClick={() => {
                                                     setShow(false)
                                                     showYakitModal({
-                                                        title: "YakProcess 详情",
+                                                        title: "YakProcess Details",
                                                         content: <div style={{padding: 8}}>{JSON.stringify(i)}</div>,
                                                         footer: null
                                                     })
@@ -256,7 +256,7 @@ const UIEngineList: React.FC<UIEngineListProp> = React.memo((props) => {
                                             </YakitButton>
 
                                             <Popconfirm
-                                                title={<>确定是否切换连接的引擎,</>}
+                                                title={<>Confirm engine switch,</>}
                                                 onConfirm={async () => {
                                                     if (+i.port !== port) {
                                                         await delTemporaryProject()
@@ -271,7 +271,7 @@ const UIEngineList: React.FC<UIEngineListProp> = React.memo((props) => {
                                                         .invoke("connect-yaklang-engine", switchEngine)
                                                         .then(() => {
                                                             setTimeout(() => {
-                                                                success(`切换核心引擎成功！`)
+                                                                success(`Switch Core Engine Successful！`)
                                                                 if (!isEnpriTraceAgent() && +i.port !== port) {
                                                                     emiter.emit("onSwitchEngine")
                                                                 }
@@ -288,18 +288,18 @@ const UIEngineList: React.FC<UIEngineListProp> = React.memo((props) => {
                                                     colors='success'
                                                     disabled={+i.port === 0 || (isLocal && +i.port === port)}
                                                 >
-                                                    切换引擎
+                                                    Switch Engine
                                                 </YakitButton>
                                             </Popconfirm>
 
                                             <Popconfirm
                                                 title={
                                                     <>
-                                                        确定关闭将会强制关闭进程,
+                                                        Confirm close will force process termination,
                                                         <br />
-                                                        如为当前连接引擎,未关闭Yakit再次连接引擎,
+                                                        If connecting again without closing Yakit for the current engine,
                                                         <br />
-                                                        则需在加载页点击"其他连接模式-手动启动引擎"
+                                                        Then click on the loading page"Other Modes - Manually Start Engine"
                                                     </>
                                                 }
                                                 onConfirm={async () => {
@@ -312,7 +312,7 @@ const UIEngineList: React.FC<UIEngineListProp> = React.memo((props) => {
                                                         .then((val) => {
                                                             if (!val) {
                                                                 isLocal && +i.port === port && typeCallback("break")
-                                                                success("引擎进程关闭中...")
+                                                                success("Engine Process Shutting Down...")
                                                             }
                                                         })
                                                         .catch((e: any) => {})
@@ -320,7 +320,7 @@ const UIEngineList: React.FC<UIEngineListProp> = React.memo((props) => {
                                                 }}
                                             >
                                                 <YakitButton type='outline1' colors='danger'>
-                                                    关闭引擎
+                                                    Close Engine
                                                 </YakitButton>
                                             </Popconfirm>
                                         </div>
@@ -333,16 +333,16 @@ const UIEngineList: React.FC<UIEngineListProp> = React.memo((props) => {
                             <Popconfirm
                                 title={
                                     <div style={{width: 330}}>
-                                        确定关闭将会强制关闭进程,
+                                        Confirm close will force process termination,
                                         <br />
-                                        如为当前连接引擎,未关闭Yakit再次连接引擎,
+                                        If connecting again without closing Yakit for the current engine,
                                         <br />
-                                        则需在加载页点击"其他连接模式-手动启动引擎"
+                                        Then click on the loading page"Other Modes - Manually Start Engine"
                                     </div>
                                 }
                                 onConfirm={() => allClose()}
                             >
-                                <div className={styles["engine-list-footer-btn"]}>全部关闭</div>
+                                <div className={styles["engine-list-footer-btn"]}>Close All</div>
                             </Popconfirm>
                         </div>
                     </div>

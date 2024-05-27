@@ -1,12 +1,12 @@
 import { TablePipeline } from '../pipeline';
 export interface ColumnHoverFeatureOptions {
-    /** 鼠标悬停的颜色，默认为 'var(--hover-bgcolor)' */
+    /** Hover color, defaults to 'var(--hover-bgcolor)' */
     hoverColor?: string;
-    /** 非受控用法：默认的 colIndex */
+    /** Uncontrolled: Default colIndex */
     defaultHoverColIndex?: number;
-    /** 受控用法：当前鼠标悬停列的下标（colIndex) */
+    /** Controlled: Current hovered column index (colIndex) */
     hoverColIndex?: number;
-    /** 受控用法：colIndex 改变的回调 */
+    /** Controlled: Callback on colIndex change */
     onChangeHoverColIndex?(nextColIndex: number): void;
 }
 export declare function columnHover(opts?: ColumnHoverFeatureOptions): (pipeline: TablePipeline) => TablePipeline;

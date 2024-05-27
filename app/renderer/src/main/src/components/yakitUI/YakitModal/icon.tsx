@@ -12,7 +12,7 @@ const YakitCloseSvg = () => (
         />
     </svg>
 )
-/** @name 关闭图标 */
+/** @name Close Icon */
 export const YakitCloseSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={YakitCloseSvg} {...props} />
 }

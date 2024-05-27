@@ -19,7 +19,7 @@ export const ResizeLine: React.FC<ResizeLineProps> = (props) => {
     const {isVer = false, minSize, maxSize, bodyRef, resizeRef, onStart, onEnd, onChangeSize} = props
 
     let min, max
-    // 判断最小值和最大值是什么类型的值，只支持纯数字和像素
+    // Determine value type for min and max, supporting only pure numbers and pixels
     if (minSize) {
         min = +minSize.toString().split(/px/g)[0] ? +minSize.toString().split(/px/g)[0] : 100
     } else {
@@ -46,7 +46,7 @@ export const ResizeLine: React.FC<ResizeLineProps> = (props) => {
     //     line: HTMLDivElement
     // ) => {
     //     const bodyRect = body.getBoundingClientRect()
-    //     // 计算分割线距离body开始边框和结束边框的距离
+    //     // Calculate distance of divider from body's start and end borders
     //     const distance = [
     //         isver ? event.clientY - bodyRect.top : event.clientX - bodyRect.left,
     //         isver ? body.clientHeight - event.clientY + bodyRect.top : body.clientWidth - event.clientX + bodyRect.left
@@ -96,7 +96,7 @@ export const ResizeLine: React.FC<ResizeLineProps> = (props) => {
             let isMove = true
             const start = isVer ? e.layerY : e.layerX
             const first = isVer ? e.clientY : e.clientX
-            // 生成移动分割线的初始坐标
+            // Generate initial coordinates for moving divider
             if (isVer) line.style.top = `${start}px`
             else line.style.left = `${start}px`
             line.style.display = "inline-block"
@@ -104,7 +104,7 @@ export const ResizeLine: React.FC<ResizeLineProps> = (props) => {
             body.onmousemove = (event: any) => {
                 let isVer = getIsVer()
                 const bodyRect = body.getBoundingClientRect()
-                // 计算分割线距离body开始边框和结束边框的距离
+                // Calculate distance of divider from body's start and end borders
                 const distance = [
                     isVer ? event.clientY - bodyRect.top : event.clientX - bodyRect.left,
                     isVer

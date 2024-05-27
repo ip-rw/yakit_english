@@ -31,23 +31,23 @@ export interface CreateReportProps {
 export const CreateReport: React.FC<CreateReportProps> = memo((props) => {
     const {loading, infoState, runPluginCount, targets, allowDownloadReport, nowUUID, setAllowDownloadReport} = props
 
-    // 下载报告Modal
+    // Download Report Modal
     const [reportModalVisible, setReportModalVisible] = useState<boolean>(false)
-    const [reportName, setReportName] = useState<string>("默认报告名称")
+    const [reportName, setReportName] = useState<string>("Default Report Name")
     const [reportLoading, setReportLoading] = useState<boolean>(false)
     const [_, setReportId, getReportId] = useGetState<number>()
-    // 是否允许更改TaskName
+    // Allow TaskName Change?
     const isSetTaskName = useRef<boolean>(true)
-    // 报告生成进度
+    // Report Gen. Progress
     const [reportPercent, setReportPercent] = useState(0)
-    // 报告token
+    // Report Token
     const [reportToken, setReportToken] = useState(randomString(40))
-    // 是否展示报告生成进度
+    // Show Report Gen. Progress?
     const [showReportPercent, setShowReportPercent] = useState<boolean>(false)
 
     useEffect(() => {
         if (isSetTaskName.current) {
-            const defaultReportName = `${targets.split(",")[0].split(/\n/)[0]}风险评估报告`
+            const defaultReportName = `${targets.split(",")[0].split(/\n/)[0]}Risk Assessment Report`
             setReportName(defaultReportName)
         }
     }, [targets])
@@ -59,16 +59,16 @@ export const CreateReport: React.FC<CreateReportProps> = memo((props) => {
             ipcRenderer.invoke("cancel-ExecYakCode", reportToken)
         }
     }, [reportModalVisible])
-    /** 通知生成报告 */
+    /** Notify Report Gen. */
     const creatReport = () => {
         setReportId(undefined)
         setReportModalVisible(true)
     }
-    /** 获取生成报告返回结果 */
+    /** Fetch Report Gen. Result */
     useEffect(() => {
         ipcRenderer.on(`${reportToken}-data`, (e, data: ExecResult) => {
             if (data.IsMessage) {
-                // console.log("获取生成报告返回结果", new Buffer(data.Message).toString())
+                // console.log("Fetch Report Gen. Result", new Buffer(data.Message).toString())
                 const obj = JSON.parse(new Buffer(data.Message).toString())
                 console.log(obj)
                 if (obj?.type === "progress") {
@@ -84,7 +84,7 @@ export const CreateReport: React.FC<CreateReportProps> = memo((props) => {
     }, [reportToken])
 
     useEffect(() => {
-        // 报告生成成功
+        // Report Gen. Successful
         if (getReportId()) {
             setReportLoading(false)
             setShowReportPercent(false)
@@ -98,7 +98,7 @@ export const CreateReport: React.FC<CreateReportProps> = memo((props) => {
         }
     }, [getReportId()])
 
-    /** 获取扫描主机数 扫描端口数 */
+    /** Fetch Scanned Hosts & Ports Count */
     const getCardForId = (id: string) => {
         const item = infoState.statusState.filter((item) => item.tag === id)
         if (item.length > 0) {
@@ -106,9 +106,9 @@ export const CreateReport: React.FC<CreateReportProps> = memo((props) => {
         }
         return null
     }
-    /** 下载报告 */
+    /** Download Report */
     const downloadReport = () => {
-        // 脚本数据
+        // Script Data
         const scriptData = CreatReportScript
         const runTaskNameEx = reportName + "-" + nowUUID
         let Params = [
@@ -116,9 +116,9 @@ export const CreateReport: React.FC<CreateReportProps> = memo((props) => {
             {Key: "runtime_id", Value: getCardForId("RuntimeIDFromRisks")},
             {Key: "report_name", Value: reportName},
             {Key: "plugins", Value: runPluginCount},
-            {Key: "host_total", Value: getCardForId("扫描主机数")},
-            {Key: "ping_alive_host_total", Value: getCardForId("Ping存活主机数")},
-            {Key: "port_total", Value: getCardForId("扫描端口数")}
+            {Key: "host_total", Value: getCardForId("Scanned Hosts Count")},
+            {Key: "ping_alive_host_total", Value: getCardForId("Alive Hosts Count")},
+            {Key: "port_total", Value: getCardForId("Scanned Ports Count")}
         ]
         const reqParams = {
             Script: scriptData,
@@ -130,19 +130,19 @@ export const CreateReport: React.FC<CreateReportProps> = memo((props) => {
         <div>
             {!loading && allowDownloadReport ? (
                 <div className={styles["hole-text"]} onClick={creatReport}>
-                    生成报告
+                    Generate Report
                 </div>
             ) : (
-                <div className={styles["disable-hole-text"]}>生成报告</div>
+                <div className={styles["disable-hole-text"]}>Generate Report</div>
             )}
             <Modal
-                title='下载报告'
+                title='Download Report'
                 visible={reportModalVisible}
                 footer={null}
                 onCancel={() => {
                     setReportModalVisible(false)
                     if (reportPercent < 1 && reportPercent > 0) {
-                        warn("取消生成报告")
+                        warn("Cancel Report Gen.")
                     }
                 }}
             >
@@ -150,7 +150,7 @@ export const CreateReport: React.FC<CreateReportProps> = memo((props) => {
                     <div style={{textAlign: "center"}}>
                         <Input
                             style={{width: 400}}
-                            placeholder='请输入任务名称'
+                            placeholder='Enter Task Name'
                             allowClear
                             value={reportName}
                             onChange={(e) => {
@@ -173,11 +173,11 @@ export const CreateReport: React.FC<CreateReportProps> = memo((props) => {
                             onClick={() => {
                                 setReportModalVisible(false)
                                 if (reportPercent < 1 && reportPercent > 0) {
-                                    warn("取消生成报告")
+                                    warn("Cancel Report Gen.")
                                 }
                             }}
                         >
-                            取消
+                            Cancel
                         </Button>
                         <Button
                             loading={reportLoading}
@@ -188,7 +188,7 @@ export const CreateReport: React.FC<CreateReportProps> = memo((props) => {
                                 setShowReportPercent(true)
                             }}
                         >
-                            确定
+                            Confirm
                         </Button>
                     </div>
                 </div>
@@ -199,7 +199,7 @@ export const CreateReport: React.FC<CreateReportProps> = memo((props) => {
 
 export const onCreateReportModal = (createReportContent: CreateReportContentProps) => {
     const m = showYakitModal({
-        title: "下载报告",
+        title: "Download Report",
         footer: null,
         content: <CreateReportContent onCancel={() => m.destroy()} {...createReportContent} />,
         onCancel: () => {
@@ -215,17 +215,17 @@ export interface CreateReportContentProps {
 }
 const CreateReportContent: React.FC<CreateReportContentProps> = React.memo((props) => {
     const {onCancel, runtimeId} = props
-    const [reportName, setReportName] = useState<string>(props.reportName || "默认报告名称")
-    // 是否展示报告生成进度
+    const [reportName, setReportName] = useState<string>(props.reportName || "Default Report Name")
+    // Show Report Gen. Progress?
     const [showReportPercent, setShowReportPercent] = useState<boolean>(false)
-    // 报告生成进度
+    // Report Gen. Progress
     const [reportPercent, setReportPercent] = useState<number>(0)
     const [reportLoading, setReportLoading] = useState<boolean>(false)
 
     const tokenRef = useRef<string>(randomString(40))
     const reportIdRef = useRef<number>()
 
-    /** 下载报告 */
+    /** Download Report */
     const downloadReport = () => {
         const reqParams: CreatReportRequest = {
             ReportName: reportName,
@@ -233,7 +233,7 @@ const CreateReportContent: React.FC<CreateReportContentProps> = React.memo((prop
         }
         apiSimpleDetectCreatReport(reqParams, tokenRef.current)
     }
-    /** 获取生成报告返回结果 */
+    /** Fetch Report Gen. Result */
     useEffect(() => {
         ipcRenderer.on(`${tokenRef.current}-data`, (e, data: ExecResult) => {
             if (data.IsMessage) {
@@ -274,7 +274,7 @@ const CreateReportContent: React.FC<CreateReportContentProps> = React.memo((prop
         <div>
             <div style={{textAlign: "center"}}>
                 <YakitInput
-                    placeholder='请输入任务名称'
+                    placeholder='Enter Task Name'
                     allowClear
                     value={reportName}
                     onChange={(e) => {
@@ -300,7 +300,7 @@ const CreateReportContent: React.FC<CreateReportContentProps> = React.memo((prop
                     }}
                     type='outline2'
                 >
-                    取消
+                    Cancel
                 </YakitButton>
                 <YakitButton
                     loading={reportLoading}
@@ -311,7 +311,7 @@ const CreateReportContent: React.FC<CreateReportContentProps> = React.memo((prop
                         setShowReportPercent(true)
                     }}
                 >
-                    确定
+                    Confirm
                 </YakitButton>
             </div>
         </div>

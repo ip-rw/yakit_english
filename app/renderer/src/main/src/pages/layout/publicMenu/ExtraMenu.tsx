@@ -49,17 +49,17 @@ export const ExtraMenu: React.FC<ExtraMenuProps> = React.memo((props) => {
                 data={[
                     {
                         key: "import-plugin",
-                        label: "导入插件",
+                        label: "Import Plugin",
                         children: [
-                            { key: 'local', label: "本地插件" },
-                            { key: 'uploadId', label: "插件 ID" },
-                            { key: 'giturl', label: "线上 Nuclei" },
-                            { key: 'local-nuclei', label: "本地 Nuclei" },
+                            { key: 'local', label: "Local Plugins" },
+                            { key: 'uploadId', label: "Plugin ID" },
+                            { key: 'giturl', label: "Online Nuclei" },
+                            { key: 'local-nuclei', label: "Local Nuclei" },
                         ]
                     },
                     {
                         key: "import-share",
-                        label: "导入分享数据"
+                        label: "Import Shared Data"
                     }
                 ]}
                 onClick={({key}) => importMenuSelect(key)}
@@ -85,7 +85,7 @@ export const ExtraMenu: React.FC<ExtraMenuProps> = React.memo((props) => {
                     onClick={(e) => e.preventDefault()}
                     icon={<OutlineSaveIcon />}
                 >
-                    导入资源
+                    Import Assets
                 </YakitButton>
             </YakitPopover>
             <YakitButton

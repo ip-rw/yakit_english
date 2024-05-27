@@ -100,7 +100,7 @@ export const MITMPluginLocalList: React.FC<MITMPluginLocalListProps> = React.mem
     } = props
 
     const [vlistHeigth, setVListHeight] = useState(0)
-    const [initialTotal, setInitialTotal] = useState<number>(0) //初始插件总数
+    const [initialTotal, setInitialTotal] = useState<number>(0) //Initial Plugin Count
 
     const [refresh, setRefresh] = useState<boolean>(true)
     const [visibleImport, setVisibleImport] = useState<boolean>(false)
@@ -153,24 +153,24 @@ export const MITMPluginLocalList: React.FC<MITMPluginLocalListProps> = React.mem
         if (Number(total) === 0 && (tags.length > 0 || searchKeyword || groupNames.length > 0)) {
             return (
                 <div className={style["mitm-plugin-empty"]}>
-                    <YakitEmpty title={null} description='搜索结果“空”' />
+                    <YakitEmpty title={null} description='Search Results“Empty”' />
                 </div>
             )
         }
         if (Number(initialTotal) === 0) {
             return (
                 <div className={style["mitm-plugin-empty"]}>
-                    <YakitEmpty description='可一键获取官方云端插件，或导入外部插件源' />
+                    <YakitEmpty description='Fetch official/cloud plugins or import from external sources' />
                     <div className={style["mitm-plugin-buttons"]}>
                         <YakitButton
                             type='outline1'
                             icon={<CloudDownloadIcon />}
                             onClick={() => setVisibleOnline(true)}
                         >
-                            获取云端插件
+                            Fetch Cloud Plugins
                         </YakitButton>
                         <YakitButton type='outline1' icon={<ImportIcon />} onClick={() => setVisibleImport(true)}>
-                            导入插件源
+                            Import Plugin Source
                         </YakitButton>
                     </div>
                 </div>
@@ -225,7 +225,7 @@ export const MITMPluginLocalList: React.FC<MITMPluginLocalListProps> = React.mem
                                 status={status}
                                 script={i}
                                 maxWidth={maxWidth}
-                                // 劫持启动后
+                                // Post-Launch Hook
                                 hooks={hooks}
                                 onSendToPatch={onSendToPatch}
                                 onSubmitYakScriptId={props.onSubmitYakScriptId}
@@ -234,7 +234,7 @@ export const MITMPluginLocalList: React.FC<MITMPluginLocalListProps> = React.mem
                                         setIsSelectAll(false)
                                     }
                                 }}
-                                // 劫持启动前
+                                // Pre-Launch Hook
                                 defaultPlugins={checkList}
                                 setDefaultPlugins={setCheckList}
                             />
@@ -263,14 +263,14 @@ export const MITMPluginLocalList: React.FC<MITMPluginLocalListProps> = React.mem
 })
 
 export interface YakitGetOnlinePluginProps {
-    /**@name 'online'默认首页 mine 个人, recycle 回收站 check 审核页面" */
+    /**@name 'online'Default Home mine Personal, recycle Recycle Bin, check Review Page" */
     listType?: "online" | "mine" | "recycle" | "check"
     visible: boolean
     setVisible: (b: boolean) => void
 }
 /**
- * 一键下载插件
- * @param listType 'online'默认首页 mine 个人, recycle 回收站 check 审核页面"
+ * Download Plugins One-click
+ * @param listType 'online'Default Home mine Personal, recycle Recycle Bin, check Review Page"
  */
 export const YakitGetOnlinePlugin: React.FC<YakitGetOnlinePluginProps> = React.memo((props) => {
     const {listType = "online", visible, setVisible} = props
@@ -295,7 +295,7 @@ export const YakitGetOnlinePlugin: React.FC<YakitGetOnlinePluginProps> = React.m
         })
         ipcRenderer.on(`${taskToken}-error`, (_, e) => {
             onRefLocalPluginList()
-            yakitNotify("error", "下载失败:" + e)
+            yakitNotify("error", "Download Failed:" + e)
         })
         return () => {
             ipcRenderer.removeAllListeners(`${taskToken}-data`)
@@ -310,24 +310,24 @@ export const YakitGetOnlinePlugin: React.FC<YakitGetOnlinePluginProps> = React.m
                 .invoke("DownloadOnlinePlugins", addParams, taskToken)
                 .then(() => {})
                 .catch((e) => {
-                    failed(`下载失败:${e}`)
+                    failed(`Download Failed:${e}`)
                 })
         }
     }, [visible])
     const StopAllPlugin = () => {
         ipcRenderer.invoke("cancel-DownloadOnlinePlugins", taskToken).catch((e) => {
-            failed(`停止下载:${e}`)
+            failed(`Stop Download:${e}`)
             onRefLocalPluginList()
         })
     }
-    /**下载插件后需要更新 本地插件列表 */
+    /**Update Local Plugin List after downloading */
     const onRefLocalPluginList = useMemoizedFn(() => {
         emiter.emit("onRefLocalPluginList", "")
     })
     return (
         <YakitHint
             visible={visible}
-            title={`${getReleaseEditionName()} 云端插件下载中...`}
+            title={`${getReleaseEditionName()} Cloud Plugin Downloading...`}
             heardIcon={<SolidCloudDownloadIcon style={{color: "var(--yakit-warning-5)"}} />}
             onCancel={() => {
                 StopAllPlugin()
@@ -342,7 +342,7 @@ export const YakitGetOnlinePlugin: React.FC<YakitGetOnlinePluginProps> = React.m
                     strokeColor='#F28B44'
                     trailColor='#F0F2F5'
                     percent={percent}
-                    format={(percent) => `已下载 ${percent}%`}
+                    format={(percent) => `Downloaded ${percent}%`}
                 />
             </div>
         </YakitHint>
@@ -371,7 +371,7 @@ export const YakModuleListHeard: React.FC<YakModuleListHeardProps> = React.memo(
                     onChange={(e) => onSelectAll(e.target.checked)}
                     disabled={loading}
                 />
-                <span className={style["mitm-plugin-list-check-text"]}>全选</span>
+                <span className={style["mitm-plugin-list-check-text"]}>Fixes failure to iterate load_content on missing older version data</span>
             </div>
             <div className={style["mitm-plugin-list-tip"]}>
                 <div>
@@ -470,7 +470,7 @@ export const PluginGroup: React.FC<PluginGroupProps> = React.memo((props) => {
 
     const [visible, setVisible] = useState<boolean>(false)
     /**
-     * @description 插件组
+     * @description Plugin Group
      */
     const [pugGroup, setPlugGroup] = useState<YakFilterRemoteObj[]>([])
 
@@ -483,7 +483,7 @@ export const PluginGroup: React.FC<PluginGroupProps> = React.memo((props) => {
     useDebounceEffect(
         () => {
             if (inViewport) {
-                // 获取插件组
+                // Fetch Plugin Group
                 if (isOnline) {
                     apiFetchQueryYakScriptGroupOnlineNotLoggedIn().then((res: API.GroupResponse) => {
                         const copyGroup = structuredClone(res.data)
@@ -547,7 +547,7 @@ export const PluginGroup: React.FC<PluginGroupProps> = React.memo((props) => {
                     })}
                 >
                     <FolderOpenIcon />
-                    <span>插件组</span>
+                    <span>Plugin Group</span>
                     <div className={style["mitm-plugin-group-number"]}>{pugGroup.length}</div>
                     {(visible && <ChevronUpIcon className={style["chevron-down"]} />) || (
                         <ChevronDownIcon className={style["chevron-down"]} />
@@ -561,7 +561,7 @@ export const PluginGroup: React.FC<PluginGroupProps> = React.memo((props) => {
                         emiter.emit("menuOpenPage", JSON.stringify({route: YakitRoute.Plugin_Groups}))
                     }}
                 >
-                    管理分组
+                    Manage Groups
                 </YakitButton>
             )}
         </div>
@@ -589,7 +589,7 @@ export const PluginSearch: React.FC<PluginSearchProps> = React.memo((props) => {
     const [allTag, setAllTag] = useState<TagValue[]>([])
 
     /**
-     * @description 获取Tags
+     * @description Get Tags
      */
     useEffect(() => {
         if (searchType === "Tags") {
@@ -598,7 +598,7 @@ export const PluginSearch: React.FC<PluginSearchProps> = React.memo((props) => {
                 .then((res) => {
                     setAllTag(res.Tag.map((item) => ({Name: item.Value, Total: item.Total})))
                 })
-                .catch((e) => failed("获取插件组失败:" + e))
+                .catch((e) => failed("Failed to Fetch Plugin Group:" + e))
                 .finally(() => {})
         }
     }, [searchType])
@@ -619,7 +619,7 @@ export const PluginSearch: React.FC<PluginSearchProps> = React.memo((props) => {
             }}
             addonBeforeOption={[
                 {
-                    label: "关键字",
+                    label: "Keyword",
                     value: "Keyword"
                 },
                 {
@@ -697,7 +697,7 @@ const PluginGroupList: React.FC<PluginGroupListProps> = React.memo((props) => {
 
     return (
         <div className={style["plugin-group-list"]}>
-            {pugGroup.length === 0 && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='暂无数据' />}
+            {pugGroup.length === 0 && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='No Data Available' />}
             {pugGroup.map((item) => (
                 <div
                     className={classNames(style["plugin-group-item"], {

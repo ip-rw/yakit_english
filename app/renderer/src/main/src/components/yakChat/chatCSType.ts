@@ -1,45 +1,45 @@
 import {StreamResult} from "@/hook/useHoldGRPCStream/useHoldGRPCStreamType"
 import {YakScript} from "@/pages/invoker/schema"
 
-/** @name chat-cs聊天对话框信息 */
+/** @msgInfo - chat-cs Dialog */
 export interface CacheChatCSProps {
-    /** 唯一标识符 */
+    /** Unique ID */
     token: string
-    /** 对话名称 */
+    /** Chat Name */
     name: string
-    /** 对话名是否已经修改（自动修改/手动修改） */
+    /** Chat Name Modified (Auto)/Manual Edit） */
     isRename: boolean
-    /** 搜索引擎增强 */
+    /** Search Engine Enhancement */
     is_bing: boolean
-    /** 插件调试执行 */
+    /** Plugin Debug Execution */
     is_plugin: boolean
-    /** 对话内容历史 */
+    /** Chat History */
     history: ChatInfoProps[]
-    /** 对话最新时间 */
+    /** Latest Chat Time */
     time: string
 }
-/** @name chat-cs单条聊天信息 */
+/** @SingleMsg - chat-cs */
 export interface ChatInfoProps {
     token: string
     isMe: boolean
     time: string
     info: ChatMeInfoProps | ChatCSMultipleInfoProps | ChatPluginListProps
-    // 渲染类型
+    // Render Type
     renderType?: "plugin-list"
 }
-/** 用户信息属性 */
+/** User Info Attrs */
 export interface ChatMeInfoProps {
     content: string
     is_bing: boolean
     is_plugin: boolean
 }
-/** 服务器信息属性 */
+/** Server Info Attrs */
 export interface ChatCSMultipleInfoProps {
     likeType: string
     content: ChatCSSingleInfoProps[]
 }
 
-/** 服务器插件列表属性 */
+/** Server Plugin List Attrs */
 export interface ChatPluginListProps {
     input: string
     data: YakScript[]
@@ -49,25 +49,25 @@ export interface ChatCSSingleInfoProps {
     is_bing: boolean
     is_plugin: boolean
     content: string
-    /** 对话服务器唯一标识符 */
+    /** Chat Server Unique ID */
     id: string
 
-    /** 缓存插件执行结果 */
+    /** Cache Plugin Results */
     status?: "succee" | "fail" | "info"
     runtimeId?: string
     riskState?: StreamResult.Risk[]
-    /** 响应中的展示内容 */
+    /** Content in Response */
     load_content: LoadObjProps[]
-    /** 接口响应是否结束 */
+    /** API Response Finished */
     end: boolean
 }
 
-/** 后端返回的数据结构 */
+/** Data Struct from Backend */
 export interface ChatCSAnswerProps {
     id: string
     role: string
     result: string
-    // 加载中的字符
+    // Loading Text
     loadResult?: LoadObjProps[]
 }
 
@@ -80,24 +80,24 @@ export interface ChatCSPluginProps {
     id: string
     role: string
     script: PluginListItemProps
-    // 加载中的字符
+    // Loading Text
     loadResult?: LoadObjProps[]
 }
-/** 后端返回Plugin的数据结构 */
+/** Data Struct for Plugin from Backend */
 export interface ChatCSPluginAnswerProps {
     id: string
     role: string
-    // 插件数组
+    // Plugin Array
     script: string[]
-    // 目标
+    // Target
     input: string
-    // 加载中的字符
+    // Loading Text
     loadResult?: LoadObjProps[]
 }
 
 
 
-/** 后端返回的响应中数据结构 */
+/** Data Struct in Backend Response */
 export interface LoadObjProps {
     result: string
     id: string

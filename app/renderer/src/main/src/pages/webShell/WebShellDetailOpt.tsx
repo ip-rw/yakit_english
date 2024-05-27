@@ -40,7 +40,7 @@ export const WebShellDetailOpt: React.FC<WebShellDetailOptProps> = (props) => {
     const [godzillaBaseInfo, setGodzillaBaseInfo] = useState<string>("")
     const [activeKey, setActiveKey] = useState<string>("basicInfo")
     const [shellType, setShellType] = useState<"Behinder" | "Godzilla">("Behinder")
-    /** 日志输出 */
+    /** Log Output */
 
     useEffect(() => {
         if (!xtermRef) {
@@ -56,9 +56,9 @@ export const WebShellDetailOpt: React.FC<WebShellDetailOptProps> = (props) => {
         }
     }, [activeKey])
 
-    // 定义排序函数
+    // Define sort function
     const sortByPriority = (a, b) => {
-        // 将此三项放在最前面
+        // Place these three items at the top
         const priorityValues = ["OsInfo", "OS", "CurrentDir"];
         const priorityA = priorityValues.indexOf(a.key);
         const priorityB = priorityValues.indexOf(b.key);
@@ -67,7 +67,7 @@ export const WebShellDetailOpt: React.FC<WebShellDetailOptProps> = (props) => {
 
     useEffect(() => {
         const {Id, ShellType} = props.webshellInfo
-        // 定义一个异步函数来获取基本信息
+        // Define async function to get Basic Info
         ipcRenderer
             .invoke("GetBasicInfo", {Id})
             .then((r) => {
@@ -104,7 +104,7 @@ ${msg.currentPath}`
 ${obj.CurrentDir}`
 
                         setDefaultXterm(helloMsg + ">")
-                        const resultString = Object.entries(obj) // 直接获取键值对数组
+                        const resultString = Object.entries(obj) // Get key-value pair array directly
                             .sort(([keyA, valueA], [keyB, valueB]) => sortByPriority(valueA, valueB))
                             .reduce((resultString, [key, content]) => {
                                 return `${resultString}${key}: ${content}\n`;
@@ -121,7 +121,7 @@ ${obj.CurrentDir}`
     }, [props.webshellInfo])
 
     const commandExec = useMemoizedFn((cmd: string) => {
-        // 去掉 cmd 字符串中的 defaultXterm 前缀
+        // Remove defaultXterm prefix from cmd string
         if (cmd.startsWith(defaultXterm)) {
             cmd = cmd.replace(defaultXterm, "")
         }
@@ -143,13 +143,13 @@ ${obj.CurrentDir}`
         }
         requestYakURLList({url, method: "POST"})
             .then((res) => {
-                // 遍历响应中的 Resources 数组
+                // Iterate Resources array in response
                 res.Resources.forEach((resource) => {
-                    // 遍历每个资源的 Extra 数组
+                    // Iterate Extra array of each resource
                     const cp = resource.Path
                     setLinePath(cp)
                     resource.Extra.forEach((item) => {
-                        // 检查键是否匹配 'content'
+                        // Check key match 'content'
                         if (item.Key === "content") {
                             writeXTerm(xtermRef, item.Value)
                             writeXTerm(xtermRef, "\n")
@@ -161,7 +161,7 @@ ${obj.CurrentDir}`
                 })
             })
             .catch((error) => {
-                console.error("Failed to load data:", error) // 处理任何可能发生的错误
+                console.error("Failed to load data:", error) // Handle any possible errors
             })
     })
 
@@ -173,7 +173,7 @@ ${obj.CurrentDir}`
                 className='scan-port-tabs no-theme-tabs'
                 tabBarStyle={{marginBottom: 5}}
             >
-                <YakitTabs.YakitTabPane tab={"基本信息"} key={"basicInfo"}>
+                <YakitTabs.YakitTabPane tab={"Basic Info"} key={"basicInfo"}>
                     <div style={{overflow: "auto", height: "100%"}}>
                         {shellType === "Behinder" ? (
                             <>
@@ -191,7 +191,7 @@ ${obj.CurrentDir}`
                         )}
                     </div>
                 </YakitTabs.YakitTabPane>
-                <YakitTabs.YakitTabPane tab={"虚拟终端"} key={"vcmd"}>
+                <YakitTabs.YakitTabPane tab={"Virtual Terminal"} key={"vcmd"}>
                     <div style={{height: "100%", width: "100%"}}>
                         <ReactResizeDetector
                             onResize={(width, height) => {
@@ -215,27 +215,27 @@ ${obj.CurrentDir}`
                             onData={(data) => {
                                 if (data.replace(/[\x7F]/g, "").length > 0) {
                                     writeXTerm(xtermRef, data)
-                                    // 处理用户输入的数据
+                                    // Process user input data
                                     setInputValue((prevInput) => prevInput + data)
                                 }
                             }}
                             onKey={(e) => {
                                 const {key} = e
                                 const {keyCode} = e.domEvent
-                                // 删除
+                                // Delete
                                 if (keyCode === TERMINAL_INPUT_KEY.BACK && xtermRef?.current) {
-                                    // 如只剩初始值则不删除
+                                    // Don't delete if only initial value remains
                                     if (inputValue === defaultXterm) {
                                         return
                                     }
                                     setInputValue((prevInput) => prevInput.replace(/.$/, "").replace(/[\x7F]/g, ""))
-                                    // 发送 backspace 字符
+                                    // Send backspace character
                                     xtermRef.current.terminal.write("\b \b")
                                     return
                                 }
-                                // 回车
+                                // Enter
                                 if (keyCode === TERMINAL_INPUT_KEY.ENTER && xtermRef?.current) {
-                                    // 此处调用接口
+                                    // Call API here
                                     commandExec(inputValue)
                                     xtermRef.current.terminal.write("\n")
                                     setInputValue("")
@@ -245,14 +245,14 @@ ${obj.CurrentDir}`
                         />
                     </div>
                 </YakitTabs.YakitTabPane>
-                <YakitTabs.YakitTabPane tab={"文件管理"} key={"fileOpt"}>
+                <YakitTabs.YakitTabPane tab={"File Mgmt"} key={"fileOpt"}>
                     <WebShellURLTreeAndTable
                         Id={props.webshellInfo.Id}
                         CurrentPath={defaultPath}
                         shellType={props.webshellInfo.ShellType as ShellType}
                     />
                 </YakitTabs.YakitTabPane>
-                <YakitTabs.YakitTabPane tab={"数据库管理"} key={"databaseOpt"}>
+                <YakitTabs.YakitTabPane tab={"Database Mgmt"} key={"databaseOpt"}>
                     {props.webshellInfo.Url}
                     {props.webshellInfo.ShellType}
                 </YakitTabs.YakitTabPane>

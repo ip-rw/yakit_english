@@ -4,7 +4,7 @@ import classNames from "classnames"
 import styles from "./YakitRoundCornerTag.module.scss"
 
 /**
- * @name 圆角无边框-tag
+ * @name RoundedNoBorder-tag
  */
 export const YakitRoundCornerTag: React.FC<YakitRoundCornerTagProps> = (props) => {
     const {wrapperClassName, color = "primary", children} = props

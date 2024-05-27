@@ -1,13 +1,13 @@
 export type MainOperatorEventProps = {
-    /** 远程打开一个页面 */
+    /** Remote Open Page */
     openPage: string
-    /** 远程关闭一个页面 */
+    /** Remote Close Page */
     closePage: string
-    /** 从顶部菜单打开一个页面 */
+    /** Open Page from Top Menu */
     menuOpenPage: string
 
-    /** 菜单展开收起状态切换 */
+    /** Toggle Menu Expansion */
     menuExpandSwitch: string
-    /**二级路由Tab数据变化 */
+    /**Sub-route Tab Data Change */
     secondMenuTabDataChange: string
 }

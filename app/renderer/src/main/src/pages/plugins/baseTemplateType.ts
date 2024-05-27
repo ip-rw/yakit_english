@@ -5,140 +5,140 @@ import {PluginBaseParamProps, PluginSettingParamProps} from "./pluginsType"
 import {API} from "@/services/swagger/resposeType"
 
 export interface PluginsLayoutProps {
-    /** 页面id */
+    /** Page ID */
     pageWrapId?: string
-    /** 页面标题 */
+    /** Page Title */
     title?: ReactNode | string
-    /** 页面副标题，在标题右边 */
+    /** Subtitle (next to title) */
     subTitle?: ReactNode
-    /** 头部拓展区域 */
+    /** Header Extension Area */
     extraHeader?: ReactNode
-    /** 展示/隐藏 */
+    /** Show/Hide */
     hidden?: boolean
     children: ReactNode
 }
 
 export interface PluginsContainerProps {
     children: ReactNode
-    /** 加载状态 */
+    /** Loading Status */
     loading?: boolean
-    /** 是否可见 */
+    /** Is Visible */
     visible: boolean
-    /** 设置是否可见 */
+    /** Set Visibility */
     setVisible: (show: boolean) => any
-    /** 选中数据 */
+    /** Selected Data */
     selecteds: Record<string, API.PluginsSearchData[]>
-    /** 选中数据回调 */
+    /** Selected Data Callback */
     onSelect: (value: Record<string, API.PluginsSearchData[]>) => any
-    /** 数据展示列表 */
+    /** Data Display List */
     groupList: FilterPanelGroupItem[]
     /** ClassName */
     filterClassName?: string
 }
 
 export interface PluginDetailsProps<T> {
-    /** 组件的id */
+    /** Component ID */
     pageWrapId?: string
     title: string | ReactNode
-    /**搜索内容 */
+    /**Search Content */
     search: PluginSearchParams
-    /** 设置搜索内容 */
+    /** Set Search Content */
     setSearch: (s: PluginSearchParams) => void
-    /** 搜索内容功能回调(自带防抖功能) */
+    /** Search Function Callback (with debounce)) */
     onSearch: (value: PluginSearchParams) => any
-    /** 搜索栏额外操作元素 */
+    /** Search Bar Extra Actions */
     filterNode?: ReactNode
-    /** 搜索条件下边操作元素 */
+    /** Actions Below Search Conditions */
     filterBodyBottomNode?: ReactNode
-    /** 搜索栏额外过滤组件 */
+    /** Search Bar Extra Filter Component */
     filterExtra?: ReactNode
-    /** 全选框状态 */
+    /** Select All Status */
     checked: boolean
-    /** 设置全选框 */
+    /** Set Select All */
     onCheck: (value: boolean) => any
-    /** 插件总数 */
+    /** Total Plugins */
     total: number
-    /** 已勾选插件数量 */
+    /** Selected Plugin Count */
     selected: number
-    /** 搜索列表属性 */
+    /** Search List Attributes */
     listProps: RollingLoadListProps<T>
-    /** 返回事件 */
+    /** Back Event */
     onBack: () => any
     children: ReactNode
-    /** 查询第一页的loading */
+    /** First Page Loading Query */
     spinLoading?: boolean
-    /**右边头部组件 */
+    /**Right Header Components */
     rightHeardNode?: ReactNode
-    /**隐藏右边的部分 */
+    /**Hide Right Section */
     hidden?: boolean
     setHidden?: (value: boolean) => void
-    /**内容的class */
+    /**Content Class */
     bodyClassName?: string
 }
 
 export interface PluginDetailHeaderProps {
-    /** 插件名称 */
+    /** Plugin Name */
     pluginName: string
-    /** 插件help信息 */
+    /** Plugin Help Info */
     help?: string
-    /** title元素额外节点 */
+    /** Title Extra Nodes */
     titleNode?: ReactNode
-    /** tag(type+标签内容)最小宽度 */
+    /** Tag (type+content) Min Width */
     tagMinWidth?: number
-    /** 插件标签组 */
+    /** Plugin Tag Group */
     tags?: string
-    /** 右侧拓展元素 */
+    /** Right Extension Elements */
     extraNode?: ReactNode
-    /** 作者头像 */
+    /** Author Avatar */
     img: string
-    /** 作者名称 */
+    /** Author Name */
     user: string
-    /** 插件ID(线上和本地都用此字段) */
+    /** Plugin ID (Used Online & Locally)) */
     pluginId: string
-    /** 更新时间 */
+    /** Update Time */
     updated_at: number
-    /**协作者信息 */
+    /**Collaborator Info */
     prImgs?: CollaboratorInfoProps[]
-    /**插件类型 */
+    /**Plugin Type */
     type: string
-    /** 复制源插件 */
+    /** Copy Source Plugin */
     basePluginName?: string
     /** wrapper classname */
     wrapperClassName?: string
 }
-/**协作者信息 */
+/**Collaborator Info */
 export interface CollaboratorInfoProps {
     headImg: string
     userName: string
 }
 
-// 插件基础信息组件
+// Plugin Base Info Component
 export interface PluginModifyInfoProps {
     ref?: any
-    /** 是否为编辑状态 */
+    /** Is Edit Mode */
     isEdit?: boolean
-    /** 插件基础信息 */
+    /** Plugin Base Info */
     data?: PluginBaseParamProps
-    /** tags改变时的回调事件 */
+    /** Tags Change Callback */
     tagsCallback?: (v: string[]) => any
 }
-// 插件基础信息ref可用方法
+// Plugin Base Info ref Methods
 export interface PluginInfoRefProps {
     onGetValue: () => PluginBaseParamProps
     onSubmit: () => Promise<PluginBaseParamProps | undefined>
 }
 
-// 插件配置信息组件
+// Plugin Config Info Component
 export interface PluginModifySettingProps {
     ref?: any
-    /** 不同类型控制不同展示字段(例如: yak类型下有插件联动开关) */
+    /** Different Type Control for Different Display Fields (e.g., Plugin Link Switch under yak type)) */
     type: string
-    /** DNSLog 和 HTTP数据包变形 的实质是增减tag */
+    /** The essence of DNSLog and HTTP packet transformation is adding/decreasing tags */
     tags: string[]
     setTags: (arr: string[]) => any
     data?: PluginSettingParamProps
 }
-// 插件配置信息ref可用方法
+// Plugin Config Info ref Methods
 export interface PluginSettingRefProps {
     onGetValue: () => PluginSettingParamProps
     onSubmit: () => Promise<PluginSettingParamProps | undefined>
@@ -153,43 +153,43 @@ export interface PluginEditorDiffProps {
     triggerUpdate?: boolean
 }
 
-/** ---------- 插件列表相关 start ---------- */
-/** 插件通用过滤条件 */
+/** ---------- Plugin List Related start ---------- */
+/** Plugin Universal Filter Conditions */
 export interface PluginFilterParams {
-    /** 插件类型 */
+    /** Plugin Type */
     plugin_type?: API.PluginsSearchData[]
-    /** 审核状态 */
+    /** Review Status */
     status?: API.PluginsSearchData[]
-    /** 标签 */
+    /** Tags */
     tags?: API.PluginsSearchData[]
-    /** 插件组 */
+    /** Plugin Group */
     plugin_group?: API.PluginsSearchData[]
-    /** 插件状态(公开 0 /私密 1) */
+    /** Plugin Status (Public 0 /Private 1) */
     plugin_private?: API.PluginsSearchData[]
 }
-/** 插件搜索条件 */
+/** Plugin Search Conditions */
 export interface PluginSearchParams {
-    /** 关键词 */
+    /** Keyword */
     keyword: string
-    /** 用户名 */
+    /** Username */
     userName: string
-    /** 搜索类型 */
+    /** Search Type */
     type: "keyword" | "userName"
-    /**时间类型搜索 默认 为所有时间, 当天 day, 本周 week, 本月 month, 年 year */
+    /**Time Type Search Default All, Today day, This Week week, This Month month, This Year year */
     time_search?: "day" | "week" | "month" | "year"
 }
-/** 插件列表页码条件 */
+/** Plugin List Page Conditions */
 export interface PluginListPageMeta {
     page: number
     limit: number
     order?: "asc" | "desc"
     order_by?: string
 }
-/** ---------- 插件列表相关 end ---------- */
+/** ---------- Plugin List Related end ---------- */
 
-/**插件详情中列表的item */
+/**Item in Plugin Details List */
 export interface PluginDetailsListItemProps<T> {
-    /** 插件在列表里的索引 */
+    /** Plugin Index in List */
     order: number
     plugin: T
     selectUUId: string
@@ -201,20 +201,20 @@ export interface PluginDetailsListItemProps<T> {
     content: string
     official: boolean
     pluginType: string
-    /** @name 是否内置 */
+    /** @name Is Built-in */
     isCorePlugin: boolean
     optCheck: (data: T, value: boolean) => any
     extra?: (data: T) => ReactNode
     onPluginClick: (plugin: T, index: number) => void
-    /**是否可以勾选 */
+    /**Is Selectable */
     enableCheck?: boolean
-    /**是否可以点击 */
+    /**Is Clickable */
     enableClick?: boolean
 }
 
 export interface PluginContributesListItemProps {
-    /**协作者头像 */
+    /**Collaborator Avatar */
     contributesHeadImg: string
-    /**协作者名字 */
+    /**Collaborator Name */
     contributesName: string
 }

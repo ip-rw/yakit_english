@@ -61,34 +61,34 @@ import {PluginGroupList} from "../local/PluginsLocalType"
 interface PluginManageProps {}
 
 export const PluginManage: React.FC<PluginManageProps> = (props) => {
-    // 判断该页面-用户是否可见状态
+    // Check if page is visible to user
     const layoutRef = useRef<HTMLDivElement>(null)
     const [inViewPort = true] = useInViewport(layoutRef)
-    // 初始时，数据是否为空，为空展示空数据时的UI
+    // Search filters
     const [initTotal, setInitTotal] = useState<number>(0)
     const getInitTotal = useMemoizedFn(() => {
         apiFetchCheckList({page: 1, limit: 50}).then((res) => {
             setInitTotal(+res.pagemeta.total)
         })
     })
-    // 由不可见变为可见时，刷新总数统计和筛选条件数据
+    // Refresh counts & filters when visible
     useUpdateEffect(() => {
         getInitTotal()
         onInit(true)
     }, [inViewPort])
 
-    // 用户信息
+    // User Info
     const {userInfo} = useStore()
 
-    // 获取插件列表数据-相关逻辑
-    /** 是否为加载更多 */
+    // Get plugin list data logic
+    /** Is load more */
     const [loading, setLoading] = useGetState<boolean>(false)
     const latestLoadingRef = useLatest(loading)
-    /** 是否为首屏加载 */
+    /** Is initial load */
     const isLoadingRef = useRef<boolean>(true)
 
     const [showFilter, setShowFilter] = useState<boolean>(true)
-    // 获取筛选栏展示状态
+    // Get filter bar visibility
     useEffect(() => {
         getRemoteValue(PluginGV.AuditFilterCloseStatus).then((value: string) => {
             if (value === "true") setShowFilter(true)
@@ -106,7 +106,7 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
         tags: [],
         plugin_group: []
     })
-    /** 首页顶部的审核状态组件选中情况 */
+    /** Homepage review status selection */
     const pluginStatusSelect: TypeSelectOpt[] = useMemo(() => {
         return (
             filters.status?.map((ele) => ({
@@ -119,10 +119,10 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
     const [response, dispatch] = useReducer(pluginOnlineReducer, initialOnlineState)
     const [hasMore, setHasMore] = useState<boolean>(true)
 
-    // 获取插件列表数据
+    // Fetch plugin list data
     const fetchList = useDebounceFn(
         useMemoizedFn((reset?: boolean) => {
-            // 从详情页返回不进行搜索
+            // Skip search on detail page return
             if (isDetailBack.current) {
                 isDetailBack.current = false
                 return
@@ -142,7 +142,7 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
                       page: response.pagemeta.page + 1,
                       limit: response.pagemeta.limit || 20
                   }
-            // api接口请求参数
+            // API request parameters
             const query: PluginsQueryProps = {...convertPluginsRequestParams({...filters}, searchs, params)}
 
             apiFetchCheckList(query)
@@ -171,7 +171,7 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
     ).run
 
     const [pluginFilters, setPluginFilters] = useState<PluginGroupList[]>([])
-    // 获取所有过滤条件统计数据
+    // Get all filter stats
     const fetchPluginFilters = useMemoizedFn(() => {
         apiFetchGroupStatisticsCheck().then((res) => {
             setPluginFilters(res.data)
@@ -179,30 +179,30 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
     })
 
     /**
-     * @name 数据初始化
-     * @param noRefresh 初始化时不刷新列表数据
+     * @name init data
+     * @param noRefresh do not refresh list on init
      */
     const onInit = useMemoizedFn((noRefresh?: boolean) => {
         fetchPluginFilters()
         if (!noRefresh) fetchList(true)
     })
 
-    // 页面初始化的首次列表请求
+    // Initial list request on page load
     useEffect(() => {
         getInitTotal()
         onInit()
     }, [])
-    // 滚动更多加载
+    // Scroll for More Loading
     const onUpdateList = useMemoizedFn((reset?: boolean) => {
         fetchList()
     })
 
-    // 关键词|作者搜索
+    // Keywords|Author search
     const onKeywordAndUser = useMemoizedFn((value: PluginSearchParams) => {
         fetchList(true)
     })
 
-    // 当filters过滤条件被其他页面或者意外删掉，插件列表却带了该过滤条件的情况，切换到该页面时需要把被删掉的过滤条件排除
+    // Selected plugin UUID collection
     useEffect(() => {
         const {realFilter, updateFilterFlag} = excludeNoExistfilter(filters, pluginFilters)
         if (updateFilterFlag) {
@@ -210,7 +210,7 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
         }
     }, [filters, pluginFilters])
 
-    // 过滤条件搜索
+    // Group management visibility
     useUpdateEffect(() => {
         fetchList(true)
     }, [filters])
@@ -226,32 +226,32 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
         setFilters({...filters, status: newStatus})
     })
 
-    // ----- 选中插件 -----
+    // ----- Selected plugins -----
     const [allCheck, setAllcheck] = useState<boolean>(false)
     const [selectList, setSelectList, getSelectList] = useGetState<YakitPluginOnlineDetail[]>([])
-    // 选中插件的uuid集合
+    // Selected Plugin UUIDs
     const selectUUIDs = useMemo(() => {
         return getSelectList().map((item) => item.uuid)
     }, [selectList])
-    // 选中插件的数量
+    // Selected Plugin Count
     const selectNum = useMemo(() => {
         if (allCheck) return response.pagemeta.total
         else return selectList.length
     }, [allCheck, selectList])
-    // 全选|取消全选
+    // Fixes failure to iterate load_content on missing older version data|Deselect all
     const onCheck = useMemoizedFn((value: boolean) => {
         setSelectList([])
         setAllcheck(value)
     })
 
-    // 清空选中并刷新列表
+    // Clear selection & refresh list
     const onClearSelecteds = useMemoizedFn(() => {
         if (allCheck) setAllcheck(false)
         setSelectList([])
         onInit()
     })
 
-    /** 修改作者按钮展示状态 */
+    /** Get info for individual plugin delete */
     const showAuthState = useMemo(() => {
         if (userInfo.role === "superAdmin") {
             if (isCommunityEdition()) return true
@@ -265,7 +265,7 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
         }
         return false
     }, [userInfo.role])
-    /** 批量修改插件作者 */
+    /** Batch modify plugin authors */
     const [showModifyAuthor, setShowModifyAuthor] = useState<boolean>(false)
     const onShowModifyAuthor = useMemoizedFn(() => {
         setShowModifyAuthor(true)
@@ -276,18 +276,18 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
         fetchList(true)
     })
 
-    /** 批量下载插件 */
+    /** Batch download plugins */
     const [showBatchDownload, setShowBatchDownload] = useState<boolean>(false)
     const [downloadLoading, setDownloadLoading] = useState<boolean>(false)
-    // 批量下载(首页批量下载和详情批量下载共用一个方法)
+    // Batch download (method shared by homepage & detail page))
     const onBatchDownload = useMemoizedFn((newParams?: BackInfoProps) => {
-        // 选中插件数量
+        // Selected plugin count
         let selectTotal: number = selectNum
-        // 选中插件UUID
+        // Selected plugin UUIDs
         let selectUuids: string[] = [...selectUUIDs]
-        // 搜索内容
+        // Search Content
         let downloadSearch: PluginSearchParams = {...searchs}
-        // 搜索筛选条件
+        // Selected total
         let downloadFilter: PluginFilterParams = {...filters}
 
         if (newParams) {
@@ -298,10 +298,10 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
         }
 
         if (selectTotal === 0) {
-            // 全部下载
+            // Download all
             setShowBatchDownload(true)
         } else {
-            // 批量下载
+            // Batch download
             let downloadRequest: DownloadOnlinePluginsRequest = {}
             if (allCheck) {
                 downloadRequest = {...convertDownloadOnlinePluginBatchRequestParams(downloadFilter, downloadSearch)}
@@ -323,7 +323,7 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
                 })
         }
     })
-    /** 单个插件下载 */
+    /** Home page, individual delete */
     const onDownload = useLockFn(async (value: YakitPluginOnlineDetail) => {
         let downloadRequest: DownloadOnlinePluginsRequest = {
             UUID: [value.uuid]
@@ -332,13 +332,13 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
         apiDownloadPluginCheck(downloadRequest).then(() => {})
     })
 
-    /** 批量删除插件 */
-    // 原因窗口(删除|不通过)
+    /** Batch delete plugins */
+    // Reason window (delete|Rejected)
     const [showReason, setShowReason] = useState<{visible: boolean; type: "nopass" | "del"}>({
         visible: false,
         type: "nopass"
     })
-    // 单项插件删除
+    // Single plugin delete
     const activeDelPlugin = useRef<YakitPluginOnlineDetail>()
     const onShowDelPlugin = useMemoizedFn(() => {
         setShowReason({visible: true, type: "del"})
@@ -348,7 +348,7 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
         activeDetailData.current = undefined
         setShowReason({visible: false, type: "nopass"})
     })
-    // 删除插件集合接口
+    // Search content
     const apiDelPlugins = useMemoizedFn(
         (params?: API.PluginsWhereDeleteRequest, thenCallback?: () => any, catchCallback?: () => any) => {
             apiDeletePluginCheck(params)
@@ -363,22 +363,22 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
                 })
         }
     )
-    // 删除插件(首页批量|清空|单个|详情内删除共用一个方法)
+    // Filter condition search|Clear|Single|Shared delete method in detail)
     const onReasonCallback = useMemoizedFn((reason: string) => {
         const type = showReason.type
 
-        // 是否全选
+        // Is all selected
         let delAllCheck: boolean = allCheck
-        // 选中插件数量
+        // Selected plugin count
         let selectTotal: number = selectNum
-        // 选中插件UUID
+        // Selected plugin UUIDs
         let selectUuids: string[] = [...selectUUIDs]
-        // 搜索内容
+        // Search Content
         let delSearch: PluginSearchParams = {...searchs}
-        // 搜索筛选条件
+        // Selected total
         let delFilter: PluginFilterParams = {...filters}
 
-        // 如果是从详情页过来的回调事件
+        // If from detail page callback
         if (activeDetailData.current) {
             delAllCheck = activeDetailData.current.allCheck
             selectTotal = activeDetailData.current.allCheck
@@ -389,13 +389,13 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
             delFilter = {...activeDetailData.current.filter}
         }
 
-        // 获取单个删除插件的信息
+        // Fetch Plugin Info
         const onlyPlugin: YakitPluginOnlineDetail | undefined = activeDelPlugin.current
         onCancelReason()
 
-        // 删除插件逻辑
+        // Remove plugin logic
         if (type === "del") {
-            // 清空操作(无视搜索条件)
+            // Clear action (ignores search conditions))
             if (selectTotal === 0 && !onlyPlugin) {
                 apiDelPlugins({description: reason}, () => {
                     setSearchs({...delSearch})
@@ -404,11 +404,11 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
                     if (!!plugin) setPlugin(undefined)
                 })
             }
-            // 单个删除
+            // Delete single
             else if (!!onlyPlugin) {
                 let delRequest: API.PluginsWhereDeleteRequest = {uuid: [onlyPlugin.uuid]}
                 apiDelPlugins({...delRequest, description: reason}, () => {
-                    // 当前
+                    // Current
 
                     const next: YakitPluginOnlineDetail = response.data[showPluginIndex.current + 1]
                     dispatch({
@@ -419,13 +419,13 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
                     })
 
                     if (!!plugin) {
-                        // 将删除结果回传到详情页
+                        // Send delete result back to detail page
                         if (detailRef && detailRef.current) {
                             detailRef.current.onDelCallback([onlyPlugin], true)
                         }
                         setPlugin({...next})
                     } else {
-                        // 首页的单独删除
+                        // Plugin delete collection API
                         const index = selectUUIDs.findIndex((item) => item === onlyPlugin?.uuid)
                         if (index > -1) {
                             optCheck(onlyPlugin, false)
@@ -434,8 +434,8 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
                     onInit(true)
                 })
             }
-            // 批量删除
-            // 详情的批量删除成功后自动返回首页
+            // Batch delete
+            // Exclude accidentally deleted filters when switched to page
             else if (!activeDelPlugin.current) {
                 let delRequest: API.PluginsWhereDeleteRequest = {}
                 if (delAllCheck) {
@@ -447,23 +447,23 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
                     setSearchs({...delSearch})
                     setFilters({...delFilter})
                     onClearSelecteds()
-                    // 以前详情页的逻辑
+                    // Previous detail page logic
                     if (!!plugin) setPlugin(undefined)
                 })
             }
         }
     })
 
-    /** 插件展示(列表|网格) */
+    /** Plugin Display (List)|Grid) */
     const [isList, setIsList] = useState<boolean>(false)
 
-    // 当前展示的插件序列
+    // Current plugin display sequence
     const showPluginIndex = useRef<number>(0)
     const setShowPluginIndex = useMemoizedFn((index: number) => {
         showPluginIndex.current = index
     })
 
-    /** 管理分组展示状态 */
+    /** Group Display Management */
     const magGroupState = useMemo(() => {
         if (["admin", "superAdmin"].includes(userInfo.role || "")) return true
         else return false
@@ -471,24 +471,24 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
 
     const [plugin, setPlugin] = useState<YakitPluginOnlineDetail | undefined>()
 
-    // 单项组件-相关操作和展示组件逻辑
-    /** 单项勾选|取消勾选 */
+    // Single item operations & display logic
+    /** Single-Select|Deselect */
     const optCheck = useMemoizedFn((data: YakitPluginOnlineDetail, value: boolean) => {
-        // 全选情况时的取消勾选
+        // Fetch loading char with regex
         if (allCheck) {
             setSelectList(response.data.filter((item) => item.uuid !== data.uuid))
             setAllcheck(false)
             return
         }
-        // 单项勾选回调
+        // No history fetched if CS or vuln unselected by user
         if (value) setSelectList([...getSelectList(), data])
         else setSelectList(getSelectList().filter((item) => item.uuid !== data.uuid))
     })
-    /** 单项副标题组件 */
+    /** Extra Params Modal */
     const optSubTitle = useMemoizedFn((data: YakitPluginOnlineDetail) => {
         return statusTag[`${data.status}`]
     })
-    /** 单项额外操作组件 */
+    /** Single item extra operations */
     const optExtraNode = useMemoizedFn((data: YakitPluginOnlineDetail) => {
         return (
             <FuncFilterPopover
@@ -497,13 +497,13 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
                     data: [
                         {
                             key: "download",
-                            label: "下载",
+                            label: "Download",
                             itemIcon: <OutlineClouddownloadIcon />
                         },
                         {type: "divider"},
                         {
                             key: "del",
-                            label: "删除",
+                            label: "Delete",
                             type: "danger",
                             itemIcon: <OutlineTrashIcon />
                         }
@@ -530,17 +530,17 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
             />
         )
     })
-    /** 单项点击回调 */
+    /** Single Item Callback */
     const optClick = useMemoizedFn((data: YakitPluginOnlineDetail, index: number) => {
         setPlugin({...data})
         setShowPluginIndex(index)
     })
 
-    // 详情页-相关回调逻辑
+    // Detail page callback logic
     const detailRef = useRef<DetailRefProps>(null)
-    // 是否从详情页返回的
+    // Auto-return to homepage after successful batch delete in details
     const isDetailBack = useRef<boolean>(false)
-    /** 返回事件 */
+    /** Back event */
     const onBack = useMemoizedFn((data: BackInfoProps) => {
         isDetailBack.current = true
         setPlugin(undefined)
@@ -549,22 +549,22 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
         setSearchs(data.search)
         setFilters(data.filter)
     })
-    /** 搜索事件 */
+    /** Search event */
     const onDetailSearch = useMemoizedFn((detailSearch: PluginSearchParams, detailFilter: PluginFilterParams) => {
         setSearchs({...detailSearch})
-        // 延时是防止同时赋值后的搜索拿不到最新的搜索条件数据
+        // Delay to ensure search gets latest conditions
         setTimeout(() => {
             setFilters({...detailFilter})
         }, 100)
     })
-    /** 删除插件事件 */
+    /** Modify author button visibility */
     const activeDetailData = useRef<BackInfoProps>()
     const onDetailDel = useMemoizedFn((detail: YakitPluginOnlineDetail | undefined, data: BackInfoProps) => {
         activeDelPlugin.current = detail
         activeDetailData.current = {...data}
         onShowDelPlugin()
     })
-    /**初始数据为空的时候,刷新按钮,刷新列表和初始total,以及分组数据 */
+    /**Refresh button on empty initial data, refresh list & init total and group data */
     const onRefListAndTotalAndGroup = useMemoizedFn(() => {
         getInitTotal()
         fetchList(true)
@@ -596,7 +596,7 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
             )}
 
             <PluginsLayout
-                title='插件管理'
+                title='Plugin Mgmt'
                 hidden={!!plugin}
                 subTitle={<TypeSelect active={pluginStatusSelect} list={DefaultStatusList} setActive={onSetActive} />}
                 extraHeader={
@@ -611,7 +611,7 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
                                     disabled={selectNum === 0 && !allCheck}
                                     type='outline2'
                                     size='large'
-                                    name={"修改作者"}
+                                    name={"Modify author"}
                                     onClick={onShowModifyAuthor}
                                 />
                             )}
@@ -621,7 +621,7 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
                                 type='outline2'
                                 size='large'
                                 loading={downloadLoading}
-                                name={selectNum > 0 ? "下载" : "一键下载"}
+                                name={selectNum > 0 ? "Download" : "One-click download"}
                                 onClick={() => onBatchDownload()}
                                 disabled={initTotal === 0}
                             />
@@ -630,7 +630,7 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
                                 icon={<OutlineTrashIcon />}
                                 type='outline2'
                                 size='large'
-                                name={selectNum > 0 ? "删除" : "清空"}
+                                name={selectNum > 0 ? "Delete" : "Clear"}
                                 onClick={onShowDelPlugin}
                                 disabled={initTotal === 0}
                             />
@@ -660,7 +660,7 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
                                             )
                                         }
                                     >
-                                        管理分组
+                                        Manage Groups
                                     </YakitButton>
                                     <div className={styles["divider-style"]} />
                                 </>
@@ -746,7 +746,7 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
                             />
                         ) : (
                             <div className={styles["plugin-manage-empty"]}>
-                                <YakitEmpty title='暂无数据' />
+                                <YakitEmpty title='No Data Available' />
 
                                 <div className={styles["plugin-manage-buttons"]}>
                                     <YakitButton
@@ -754,7 +754,7 @@ export const PluginManage: React.FC<PluginManageProps> = (props) => {
                                         icon={<OutlineRefreshIcon />}
                                         onClick={onRefListAndTotalAndGroup}
                                     >
-                                        刷新
+                                        Refresh
                                     </YakitButton>
                                 </div>
                             </div>
@@ -795,7 +795,7 @@ interface ModifyAuthorModalProps {
     plugins: string[]
     onOK: () => any
 }
-/** @name 批量修改插件作者 */
+/** @name batch modify plugin authors */
 const ModifyAuthorModal: React.FC<ModifyAuthorModalProps> = memo((props) => {
     const {visible, setVisible, plugins, onOK} = props
 
@@ -820,7 +820,7 @@ const ModifyAuthorModal: React.FC<ModifyAuthorModalProps> = memo((props) => {
                     setList(res?.data || [])
                 })
                 .catch((err) => {
-                    yakitNotify("error", "获取普通用户失败：" + err)
+                    yakitNotify("error", "Get Ordinary User Failed：" + err)
                 })
                 .finally(() => {
                     setTimeout(() => setLoading(false), 200)
@@ -849,7 +849,7 @@ const ModifyAuthorModal: React.FC<ModifyAuthorModalProps> = memo((props) => {
                 onOK()
             })
             .catch((err) => {
-                yakitNotify("error", "批量修改失败，原因:" + err)
+                yakitNotify("error", "Batch modify failed, reason:" + err)
             })
             .finally(() => {
                 setTimeout(() => setSubmitLoading(false), 200)
@@ -871,7 +871,7 @@ const ModifyAuthorModal: React.FC<ModifyAuthorModalProps> = memo((props) => {
 
     return (
         <YakitModal
-            title='批量修改插件作者'
+            title='Batch modify plugin authors'
             width={448}
             type='white'
             centered={true}
@@ -887,17 +887,17 @@ const ModifyAuthorModal: React.FC<ModifyAuthorModalProps> = memo((props) => {
             <div className={styles["modify-author-modal-body"]}>
                 <Form.Item
                     labelCol={{span: 24}}
-                    label={<>作者：</>}
+                    label={<>Author：</>}
                     help={
                         <>
-                            共选择了 <span className={styles["modify-author-hint-span"]}>{plugins.length || 0}</span>{" "}
-                            个插件
+                            Total Selected <span className={styles["modify-author-hint-span"]}>{plugins.length || 0}</span>{" "}
+                            plugins
                         </>
                     }
                     validateStatus={status}
                 >
                     <YakitSelect
-                        placeholder='请输入用户名进行搜索'
+                        placeholder='Enter username to search'
                         showArrow={false}
                         showSearch={true}
                         filterOption={false}
@@ -932,14 +932,14 @@ interface ReasonModalProps {
     total?: number
     onOK: (reason: string) => any
 }
-/** @name 原因说明 */
+/** @name reason */
 export const ReasonModal: React.FC<ReasonModalProps> = memo((props) => {
     const {visible, setVisible, type = "nopass", total, onOK} = props
 
     const title = useMemo(() => {
-        if (type === "nopass") return "不通过原因"
-        if (type === "del") return "删除原因"
-        return "未知错误窗口,请关闭重试!"
+        if (type === "nopass") return "Rejection reason"
+        if (type === "del") return "Delete reason"
+        return "Unknown error window, please close and retry!"
     }, [type])
 
     useEffect(() => {
@@ -949,7 +949,7 @@ export const ReasonModal: React.FC<ReasonModalProps> = memo((props) => {
     const [value, setValue] = useState<string>("")
     const onSubmit = useMemoizedFn(() => {
         if (!value) {
-            yakitNotify("error", "请输入删除原因!")
+            yakitNotify("error", "Enter deletion reason!")
             return
         }
         onOK(value)
@@ -979,7 +979,7 @@ export const ReasonModal: React.FC<ReasonModalProps> = memo((props) => {
                 />
                 {total && (
                     <div className={styles["hint-wrapper"]}>
-                        共选择了 <span className={styles["total-num"]}>{total || 0}</span> 个插件
+                        Total Selected <span className={styles["total-num"]}>{total || 0}</span> plugins
                     </div>
                 )}
             </div>

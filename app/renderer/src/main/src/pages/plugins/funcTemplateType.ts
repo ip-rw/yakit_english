@@ -8,235 +8,235 @@ import {OnlinePluginAppAction} from "./pluginReducer"
 import {API} from "@/services/swagger/resposeType"
 
 export interface TypeSelectOpt {
-    /** 唯一标识符 */
+    /** Unique Identifier */
     key: string
-    /** 类型名称 */
+    /** Type Name */
     name: string
-    /** 类型icon */
+    /** Type Icon */
     icon?: ReactNode
 }
 export interface TypeSelectProps {
-    /** 已选中的类型数组 */
+    /** Selected Types Array */
     active: TypeSelectOpt[]
-    /** 所有类型的列表 */
+    /** All Types List */
     list: TypeSelectOpt[]
-    /** 设置选中的类型 */
+    /** Set Selected Type */
     setActive: (value: TypeSelectOpt[]) => any
 }
 
 export interface FuncBtnProps extends YakitButtonProp {
-    /** 按钮展示名称 */
+    /** Button Display Name */
     name: string
-    /** 切换纯图标按钮的宽度界限 */
+    /** Icon Button Width Threshold */
     maxWidth?: number
 }
 
 export interface FuncSearchProps {
-    /** 切换纯图标按钮的宽度界限 */
+    /** Icon Button Width Threshold */
     maxWidth?: number
-    /** 值 */
+    /** Value */
     value?: PluginSearchParams
     /** */
     onChange: (v: PluginSearchParams) => void
-    /** 搜索回调 */
+    /** Search Callback */
     onSearch: (value: PluginSearchParams) => any
 }
 
 export interface FuncFilterPopoverProps {
-    /** 切换纯图标按钮的宽度界限 */
+    /** Icon Button Width Threshold */
     maxWidth?: number
-    /** 展示icon */
+    /** Display Icon */
     icon: ReactNode
-    /** 展示名称 */
+    /** Display Name */
     name?: string
-    /** 下拉菜单组件属性 */
+    /** Dropdown Props */
     menu: YakitMenuProp
-    /** 弹框放置位置 */
+    /** Popup Position */
     placement?: DropDownProps["placement"]
-    /**菜单是否禁用 */
+    /**Menu Disabled */
     disabled?: boolean
-    /**button属性 */
+    /**Button Attributes */
     button?: YakitButtonProp
 }
 
 export interface PluginsListProps {
-    /** 全选框状态 */
+    /** Checkbox State */
     checked: boolean
-    /** 设置全选框 */
+    /** Set Checkbox */
     onCheck: (value: boolean) => any
-    /** 插件展示(列表|网格) */
+    /** Plugin Display (List)|Grid) */
     isList: boolean
-    /** 设置插件展示(列表|网格) */
+    /** Set Display (List)|Grid) */
     setIsList: (value: boolean) => any
-    /** 插件总数 */
+    /** Total Plugins */
     total: number
-    /** 已勾选插件数量 */
+    /** Selected Plugin Count */
     selected: number
-    /** 搜索条件(左侧已选item) */
+    /** Search Conditions (selected items on left)) */
     filters: PluginFilterParams
-    /** 删除搜索条件(已选tag) */
+    /** Remove Search Condition (selected tag)) */
     setFilters: (filters: PluginFilterParams) => void
 
-    /** 表头拓展元素 */
+    /** Table Header Extensions */
     extraHeader?: ReactNode
     children: ReactNode
 
-    /** 是否可见 */
+    /** Visible */
     visible: boolean
-    /** 设置是否可见 */
+    /** Set Visible */
     setVisible: (show: boolean) => any
 }
 
 export interface ListShowContainerProps<T> {
-    /** 插件展示(列表|网格) */
+    /** Plugin Display (List)|Grid) */
     isList: boolean
-    /** 插件列表数据 */
+    /** Plugin List Data */
     data: T[]
-    /** 布局-item组件-key的字段名 */
+    /** Layout Key */
     keyName?: string
-    /** 网格布局-item组件 */
+    /** Grid Item Component */
     gridNode: (info: {index: number; data: T}) => ReactNode
-    /** 网格布局-行高 */
+    /** Grid Row Height */
     gridHeight: number
-    /** 列表布局-item组件 */
+    /** List Item Component */
     listNode: (info: {index: number; data: T}) => ReactNode
-    /** 列表布局-行高 */
+    /** List Row Height */
     listHeight: number
-    /** 列表是否在加载状态 */
+    /** List Loading */
     loading: boolean
-    /** 是否还有数据可以加载 */
+    /** More Data to Load */
     hasMore: boolean
-    /** 更新列表数据 */
+    /** Update List Data */
     updateList: (reset?: boolean) => any
-    /**列表/宫格id */
+    /**List/Grid ID */
     id?: string
-    /**列表className */
+    /**List className */
     listClassName?: string
-    /**宫格className */
+    /**Grid className */
     gridClassName?: string
-    /** 当前展示的插件index */
+    /** Current Displayed Plugin Index */
     showIndex?: number
-    /** 修改当前展示的插件index */
+    /** Change Displayed Plugin Index */
     setShowIndex?: (i: number) => any
-    /**是否显示搜索结果为空 */
+    /**No Search Results Visible */
     isShowSearchResultEmpty?: boolean
 }
 
 export interface ListListProps<T> {
-    /** 插件展示(列表|网格) */
+    /** Plugin Display (List)|Grid) */
     isList: boolean
-    /** 插件列表数据 */
+    /** Plugin List Data */
     data: T[]
-    /** 列表布局-item组件 */
+    /** List Item Component */
     render: (info: {index: number; data: T}) => ReactNode
-    /** 列表布局-item组件-key的字段名 */
+    /** List Layout - Item Component Key */
     keyName: string
-    /** 列表布局-行高 */
+    /** List Row Height */
     optHeight: number
-    /** 列表是否在加载状态 */
+    /** List Loading */
     loading: boolean
-    /** 是否还有数据可以加载 */
+    /** More Data to Load */
     hasMore: boolean
-    /** 更新列表数据 */
+    /** Update List Data */
     updateList: (reset?: boolean) => any
-    /**列表id */
+    /**List ID */
     id?: string
-    /**列表className */
+    /**List className */
     listClassName?: string
-    /** 当前展示的插件index */
+    /** Current Displayed Plugin Index */
     showIndex?: number
-    /** 修改当前展示的插件index */
+    /** Change Displayed Plugin Index */
     setShowIndex?: (i: number) => any
 }
 export interface ListLayoutOptProps {
-    /** 插件在列表中的索引 */
+    /** Plugin List Index */
     order: number
-    /** 插件详细信息 */
+    /** Plugin Details */
     data: any
-    /** 是否选中 */
+    /** Selected */
     checked: boolean
-    /** 勾选的回调 */
+    /** Check Callback */
     onCheck: (data: any, value: boolean) => any
-    /** 插件作者头像 */
+    /** Author Avatar */
     img: string
-    /** 插件名 */
+    /** Plugin Name */
     title: string
-    /** 插件解释信息 */
+    /** Plugin Explanation */
     help: string
-    /** 插件更新时间 */
+    /** Plugin Update Time */
     time: number
-    /** 插件类型 */
+    /** Plugin Type */
     type: string
-    /** 是否为内置插件 */
+    /** Built-in Plugin */
     isCorePlugin: boolean
-    /** 是否为官方插件 */
+    /** Official Plugin */
     official: boolean
-    /** 插件相关拓展节点 */
+    /** Plugin Extension Nodes */
     subTitle?: (data: any) => ReactNode
     extraNode?: (data: any) => ReactNode
-    /** 点击该展示项的回调 */
+    /** Click Callback */
     onClick?: (data: any, index: number, value: boolean) => any
 }
 
 export interface GridListProps<T> {
-    /** 插件展示(列表|网格) */
+    /** Plugin Display (List)|Grid) */
     isList: boolean
-    /** 插件列表数据 */
+    /** Plugin List Data */
     data: T[]
-    /** 网格布局-item组件 */
+    /** Grid Item Component */
     render: (info: {index: number; data: T}) => ReactNode
-    /** 网格布局-item组件-key的字段名 */
+    /** Grid Layout - Item Key */
     keyName: string
-    /** 网格布局-行高 */
+    /** Grid Row Height */
     optHeight: number
-    /** 列表是否在加载状态 */
+    /** List Loading */
     loading: boolean
-    /** 是否还有数据可以加载 */
+    /** More Data to Load */
     hasMore: boolean
-    /** 更新列表数据 */
+    /** Update List Data */
     updateList: (reset?: boolean) => any
-    /**宫格id */
+    /**Grid ID */
     id?: string
-    /**宫格className */
+    /**Grid className */
     gridClassName?: string
-    /** 当前展示的插件index */
+    /** Current Displayed Plugin Index */
     showIndex?: number
-    /** 修改当前展示的插件index */
+    /** Change Displayed Plugin Index */
     setShowIndex?: (i: number) => any
 }
 export interface GridLayoutOptProps {
-    /** 插件在列表中的索引 */
+    /** Plugin List Index */
     order: number
-    /** 插件详细信息 */
+    /** Plugin Details */
     data: any
-    /** 是否选中 */
+    /** Selected */
     checked: boolean
-    /** 勾选的回调 */
+    /** Check Callback */
     onCheck: (data: any, value: boolean) => any
-    /** 插件名 */
+    /** Plugin Name */
     title: string
-    /** 插件类型 */
+    /** Plugin Type */
     type: string
-    /** 插件标签 */
+    /** Plugin Tags */
     tags: string
-    /** 插件解释信息 */
+    /** Plugin Explanation */
     help: string
-    /** 插件作者头像 */
+    /** Author Avatar */
     img: string
-    /** 插件作者 */
+    /** Plugin Author */
     user: string
-    /** 贡献者头像 */
+    /** Contributor Avatar */
     prImgs?: string[]
-    /** 插件更新时间 */
+    /** Plugin Update Time */
     time: number
-    /** 是否为内置插件 */
+    /** Built-in Plugin */
     isCorePlugin: boolean
-    /** 是否为官方插件 */
+    /** Official Plugin */
     official: boolean
-    /** 插件相关拓展节点 */
+    /** Plugin Extension Nodes */
     subTitle?: (data: any) => ReactNode
     extraFooter?: (data: any) => ReactNode
-    /** 点击该展示项的回调 */
+    /** Click Callback */
     onClick?: (data: any, index: number, value: boolean) => any
 }
 
@@ -246,23 +246,23 @@ export interface TagsListShowProps {
 
 type AuthorImgType = "official" | "yakit" | "mitm" | "port" | "sparkles" | "documentSearch" | "collection"
 export interface AuthorImgProps {
-    /** 图片展示直径尺寸 */
+    /** Image Diameter */
     size?: "middle" | "small" | "large"
-    /** 图片src */
+    /** Image Src */
     src?: string
-    /** 右下角icon,传AuthorImgType类型为内置的icon */
+    /** Corner Built-in Icon */
     builtInIcon?: AuthorImgType
-    /** 右下角icon 自己传组件 */
+    /** Corner Icon Component */
     icon?: ReactNode
 }
 /**
- * @description 插件商店列表的额外操作
+ * @Extra Actions in Store
  * @property data
- * @property isLogin 登录状态
- * @property likeProps 点赞的props,包括激活状态和数量
- * @property commentProps 评论的props,包括激活状态和数量
- * @property downloadProps 下载的props,包括激活状态和数量
- * @property dispatch 用于列表操作的
+ * @Login Status
+ * @Like Props
+ * @Comment Props
+ * @Download Props
+ * @List Ops Dispatch
  */
 export interface OnlineExtraOperateProps {
     data: YakitPluginOnlineDetail
@@ -284,20 +284,20 @@ export interface OnlineExtraOperateProps {
 }
 
 export interface TagShowOpt {
-    /** 组的标识符 */
+    /** Group Identifier */
     tagType: string
-    /** 名称 */
+    /** Name */
     label: string
-    /** 值 */
+    /** Value */
     value: string
 }
 
 /**
  * @property {YakitPluginOnlineDetail} data
  * @property {boolean} isLogin
- * @property {boolean} pluginRemoveCheck 插件删除是否提示的记录字段
- * @function onRemoveClick 删除回调
- * @function onReductionClick 删除回调
+ * @property {boolean} Plugin Removal Confirmation
+ * @Delete Callback
+ * @Delete Callback
  * @function onRemoveOrReductionBefore
  */
 export interface OnlineRecycleExtraOperateProps {
@@ -309,57 +309,57 @@ export interface OnlineRecycleExtraOperateProps {
     onRemoveOrReductionBefore: (data: YakitPluginOnlineDetail, type: "remove" | "reduction") => void
 }
 
-/** 详情页-筛选条件的 */
+/** Detail Page - Filter Conditions */
 export interface FilterPopoverBtnProps {
-    /** 初始选中的筛选条件 */
+    /** Initial Filter Condition */
     defaultFilter: PluginFilterParams
-    /** 搜索回调 */
+    /** Search Callback */
     onFilter: (value: PluginFilterParams) => any
-    /** 触发筛选列表的刷新 */
+    /** Refresh Filter List */
     refresh?: boolean
-    /** 筛选组件的类型-商店|审核|我的 */
+    /** Filter Type - Store|Review|Mine */
     type?: "check" | "online" | "user" | "local"
-    /**固定的过滤条件，有的话就不去请求接口获取,传了该参数后type无效 */
+    /**Fixed Filter, Skip Request if Set */
     fixFilterList?: API.PluginsSearch[]
 }
 
-/** 插件源码评分模块 */
+/** Plugin Rating Module */
 export interface CodeScoreModuleProps {
-    /** 插件类型 */
+    /** Plugin Type */
     type: string
-    /** 插件源码 */
+    /** Plugin Source */
     code: string
-    /** 是否开始评分 */
+    /** Start Rating */
     isStart: boolean
-    /** 执行完后的成功结果回调延时(默认:1000) */
+    /** Post-Execution Success Callback Delay (default:1000)) */
     successWait?: number
-    /** 评分合格的提示语(默认: "（表现良好，开始上传插件中...）") */
+    /** Passing Grade Notice (default): "（Good Performance, Start Uploading Plugin...）") */
     successHint?: string
-    /** 评分合格的提示语(默认: "（上传失败，请修复后再上传）") */
+    /** Passing Grade Notice (default): "（Upload Failed, Fix Before Reuploading）") */
     failedHint?: string
-    /** 执行完后的回调(合格给ture，不合格给false) */
+    /** Post-Execution Callback (true if pass)) */
     callback: (value: boolean) => any
 }
 
-/** 插件源码评分弹窗 */
+/** Plugin Rating Popup */
 export interface CodeScoreModalProps {
-    /** 插件类型 */
+    /** Plugin Type */
     type: string
-    /** 插件源码 */
+    /** Plugin Source */
     code: string
     visible: boolean
-    /** 关闭弹窗(true:合格|false:不合格) */
+    /** Close Popup (true: Qualified)|Fail: Disqualified) */
     onCancel: (value: boolean) => any
 }
 
-/** 插件源码评分返回信息 */
+/** Rating Return Info */
 export interface CodeScoreSmokingEvaluateResponseProps {
     Score: number
     Results: CodeScoreSmokingEvaluateResultProps[]
 }
-/** 插件源码评分返回Results详细信息 */
+/** Rating Results Detail */
 export interface CodeScoreSmokingEvaluateResultProps {
-    /**前端循环key使用 */
+    /**Frontend Loop Key */
     IdKey: string
     Item: string
     Suggestion: string
@@ -367,7 +367,7 @@ export interface CodeScoreSmokingEvaluateResultProps {
     Range: GRPCRange
     Severity: string
 }
-/** 源码位置信息 */
+/** Source Location */
 export interface GRPCRange {
     Code: string
     StartLine: number
@@ -376,7 +376,7 @@ export interface GRPCRange {
     EndColumn: number
 }
 
-/** 类型标签 */
+/** Type Tags */
 export interface PluginTypeTagProps {
     checked: boolean
     setCheck: () => any
@@ -386,22 +386,22 @@ export interface PluginTypeTagProps {
     description: string
 }
 
-/** 源码放大版编辑器 */
+/** Source Zoom Editor */
 export interface PluginEditorModalProps {
-    /** 源码语言 */
+    /** Source Language */
     language?: string
     visible: boolean
     setVisible: (content: string) => any
     code: string
 }
 
-/** 对比器放大版编辑器 */
+/** Compare Zoom Editor */
 export interface PluginDiffEditorModalProps {
-    /** 源码语言 */
+    /** Source Language */
     language?: string
-    /** 原代码 */
+    /** Original Code */
     oldCode: string
-    /** 对比代码 */
+    /** Compare Code */
     newCode: string
     visible: boolean
     setVisible: (content: string) => any

@@ -30,7 +30,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 保存到常用Fuzzer标签
+    // Save to Common Fuzzer Tags
     ipcMain.handle("SaveFuzzerLabel", async (e, params) => {
         return await asyncSaveFuzzerLabel(params)
     })
@@ -46,7 +46,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 查询所有Fuzzer标签
+    // Query All Fuzzer Tags
     ipcMain.handle("QueryFuzzerLabel", async (e, params) => {
         return await asyncQueryFuzzerLabel(params)
     })
@@ -62,7 +62,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 删除Fuzzer标签
+    // Delete Fuzzer Tag
     ipcMain.handle("DeleteFuzzerLabel", async (e, params) => {
         return await asyncDeleteFuzzerLabel(params)
     })
@@ -304,7 +304,7 @@ module.exports = (win, getClient) => {
     })
 
     /*
-    * WebsocketFuzzer 套件
+    * WebsocketFuzzer Suite
     * */
     const streamCreateWebsocketFuzzerMap = new Map();
     ipcMain.handle("cancel-CreateWebsocketFuzzer", handlerHelper.cancelHandler(streamCreateWebsocketFuzzerMap));
@@ -400,7 +400,7 @@ module.exports = (win, getClient) => {
         stream.write(params)
     })
 
-    // 提取数据发送表中展示
+    // Display Extraction in Send Table
     ipcMain.handle("send-extracted-to-table", async (e, params) => {
         win.webContents.send("fetch-extracted-to-table", params)
     })
@@ -476,7 +476,7 @@ module.exports = (win, getClient) => {
         handlerHelper.registerHandler(win, stream, streamDebugPluginMap, token)
     })
 
-    // 导出
+    // Export
     const asyncExportHTTPFuzzerTaskToYaml = (params) => {
         return new Promise((resolve, reject) => {
             getClient().ExportHTTPFuzzerTaskToYaml(params, (err, data) => {
@@ -492,7 +492,7 @@ module.exports = (win, getClient) => {
         return await asyncExportHTTPFuzzerTaskToYaml(params)
     })
 
-    // 导入
+    // Import
     const asyncImportHTTPFuzzerTaskFromYaml = (params) => {
         return new Promise((resolve, reject) => {
             getClient().ImportHTTPFuzzerTaskFromYaml(params, (err, data) => {

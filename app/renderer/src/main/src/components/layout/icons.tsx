@@ -1,7 +1,7 @@
 import Icon from "@ant-design/icons"
 import type {CustomIconComponentProps} from "@ant-design/icons/lib/components/Icon"
 
-/** --------------------UI核心图标---------------------- **/
+/** --------------------UI Core Icon---------------------- **/
 const YakitThemeSvg = () => (
     <svg width='1em' height='1em' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'>
         <path
@@ -23,7 +23,7 @@ const YakitThemeSvg = () => (
         </defs>
     </svg>
 )
-/** @name yakit主题色图标 */
+/** @Yakit Theme Icon */
 export const YakitThemeSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={YakitThemeSvg} {...props} />
 }
@@ -35,7 +35,7 @@ const YakitWhiteSvg = () => (
         />
     </svg>
 )
-/** @name yakit白底图标(可以改svg代码进行大小) */
+/** @Yakit Icon on White (Resizable SVG)) */
 export const YakitWhiteSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={YakitWhiteSvg} {...props} />
 }
@@ -47,7 +47,7 @@ const YakitGraySvg = () => (
         />
     </svg>
 )
-/** @name yakit灰底图标(可以改svg代码进行大小) */
+/** @Yakit Icon on Gray (Resizable SVG)) */
 export const YakitGraySvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={YakitGraySvg} {...props} />
 }
@@ -81,7 +81,7 @@ const YaklangSvg = () => (
         </defs>
     </svg>
 )
-/** @name yaklang图标 */
+/** @Yaklang Icon */
 export const YaklangSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={YaklangSvg} {...props} />
 }
@@ -95,7 +95,7 @@ const YakitStoreGraySvg = () => (
         />
     </svg>
 )
-/** @name 插件商店灰底图标 */
+/** @Plugin Store Gray Icon */
 export const YakitStoreGraySvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={YakitStoreGraySvg} {...props} />
 }
@@ -122,7 +122,7 @@ const YakitStoreThemeSvg = () => (
         </defs>
     </svg>
 )
-/** @name 插件商店主题色图标 */
+/** @Plugin Store Theme Icon */
 export const YakitStoreThemeSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={YakitStoreThemeSvg} {...props} />
 }
@@ -144,12 +144,12 @@ const EngineLogCloseSvg = () => (
         />
     </svg>
 )
-/** @name 引擎日志关闭图标 */
+/** @Engine Log Close Icon */
 export const EngineLogCloseSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={EngineLogCloseSvg} {...props} />
 }
 
-/** --------------------引擎未安装弹窗内相关图标---------------------- **/
+/** --------------------Engine Not Installed Icon---------------------- **/
 const YaklangInstallHintSvg = () => (
     <svg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'>
         <path
@@ -160,7 +160,7 @@ const YaklangInstallHintSvg = () => (
         />
     </svg>
 )
-/** @name 安装引擎提示图标 */
+/** @Engine Install Prompt Icon */
 export const YaklangInstallHintSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={YaklangInstallHintSvg} {...props} />
 }
@@ -174,12 +174,12 @@ const YakitCopySvg = () => (
         />
     </svg>
 )
-/** @name 复制图标 */
+/** @Copy Icon */
 export const YakitCopySvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={YakitCopySvg} {...props} />
 }
 
-/** --------------------MAC系统UI操作图标---------------------- **/
+/** --------------------MAC UI Operation Icons---------------------- **/
 const MacUIOpCloseSvg = () => (
     <svg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'>
         <path
@@ -195,7 +195,7 @@ const MacUIOpCloseSvg = () => (
         />
     </svg>
 )
-/** @name MAC-关闭图标 */
+/** @MAC-Close Icon */
 export const MacUIOpCloseSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={MacUIOpCloseSvg} {...props} />
 }
@@ -214,7 +214,7 @@ const MacUIOpMinSvg = () => (
         />
     </svg>
 )
-/** @name MAC-最小化图标 */
+/** @MAC-Minimize Icon */
 export const MacUIOpMinSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={MacUIOpMinSvg} {...props} />
 }
@@ -233,7 +233,7 @@ const MacUIOpMaxSvg = () => (
         />
     </svg>
 )
-/** @name MAC-最大化图标 */
+/** @MAC-Maximize Icon */
 export const MacUIOpMaxSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={MacUIOpMaxSvg} {...props} />
 }
@@ -252,12 +252,12 @@ const MacUIOpRestoreSvg = () => (
         />
     </svg>
 )
-/** @name MAC-恢复图标-显示 */
+/** @MAC-Restore Icon-Visible */
 export const MacUIOpRestoreSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={MacUIOpRestoreSvg} {...props} />
 }
 
-/** --------------------WIN系统UI操作图标(暂linux系统共用win系统同套图标)---------------------- **/
+/** --------------------WIN UI Operation Icons (Temporarily Shared with Linux))---------------------- **/
 const WinUIOpCloseSvg = () => (
     <svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'>
         <path
@@ -269,7 +269,7 @@ const WinUIOpCloseSvg = () => (
         />
     </svg>
 )
-/** @name WIN-关闭图标 */
+/** @WIN-Close Icon */
 export const WinUIOpCloseSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={WinUIOpCloseSvg} {...props} />
 }
@@ -284,7 +284,7 @@ const WinUIOpMinSvg = () => (
         />
     </svg>
 )
-/** @name WIN-最小化图标 */
+/** @WIN-Minimize Icon */
 export const WinUIOpMinSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={WinUIOpMinSvg} {...props} />
 }
@@ -303,7 +303,7 @@ const WinUIOpMaxSvg = () => (
         />
     </svg>
 )
-/** @name WIN-最大化图标 */
+/** @WIN-Maximize Icon */
 export const WinUIOpMaxSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={WinUIOpMaxSvg} {...props} />
 }
@@ -318,12 +318,12 @@ const WinUIOpRestoreSvg = () => (
         />
     </svg>
 )
-/** @name WIN-恢复图标 */
+/** @WIN-Restore Icon */
 export const WinUIOpRestoreSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={WinUIOpRestoreSvg} {...props} />
 }
 
-/** --------------------导航栏状态&功能图标---------------------- **/
+/** --------------------Navbar State & Function Icons---------------------- **/
 const GooglePhotosLogoSvg = () => (
     <svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'>
         <path
@@ -364,7 +364,7 @@ const GooglePhotosLogoSvg = () => (
         />
     </svg>
 )
-/** @name 小风车图标(引擎进程列表) */
+/** @Mini Windmill Icon (Engine Process List)) */
 export const GooglePhotosLogoSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={GooglePhotosLogoSvg} {...props} />
 }
@@ -385,7 +385,7 @@ const ScreensHotSvg = () => (
         </defs>
     </svg>
 )
-/** @name 截图图标 */
+/** @Screenshot Icon */
 export const ScreensHotSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={ScreensHotSvg} {...props} />
 }
@@ -460,7 +460,7 @@ const RiskStateSvg = () => (
         </g>
     </svg>
 )
-/** @name 风险状态提示图标 */
+/** @Risk Status Icon */
 export const RiskStateSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={RiskStateSvg} {...props} />
 }
@@ -475,7 +475,7 @@ const VersionUpdateSvg = () => (
         />
     </svg>
 )
-/** @name 版本更新状态图标 */
+/** @Update Status Icon */
 export const VersionUpdateSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={VersionUpdateSvg} {...props} />
 }
@@ -497,7 +497,7 @@ const UISettingSvg = () => (
         />
     </svg>
 )
-/** @name 设置图标 */
+/** @Settings Icon */
 export const UISettingSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={UISettingSvg} {...props} />
 }
@@ -511,7 +511,7 @@ const UnLoginSvg = () => (
         />
     </svg>
 )
-/** @name 未登录图标 */
+/** @Unlogged Icon */
 export const UnLoginSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={UnLoginSvg} {...props} />
 }
@@ -550,7 +550,7 @@ const ReverseLinkSvg = () => (
         </g>
     </svg>
 )
-/** @name 反连连接状态图标-打开 */
+/** @Reverse Connection Open Icon */
 export const ReverseLinkSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={ReverseLinkSvg} {...props} />
 }
@@ -607,7 +607,7 @@ const ReverseUnlinkSvg = () => (
         </g>
     </svg>
 )
-/** @name 反连连接状态图标-关闭 */
+/** @Reverse Connection Close Icon */
 export const ReverseUnlinkSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={ReverseUnlinkSvg} {...props} />
 }
@@ -622,7 +622,7 @@ const UpdateSvg = () => (
         />
     </svg>
 )
-/** @name 火箭图标 */
+/** @Rocket Icon */
 export const RocketSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={RocketSvg} {...props} />
 }
@@ -662,7 +662,7 @@ const RocketSvg = () => (
         />
     </svg>
 )
-/** @name 更新图标 */
+/** @Update Icon */
 export const UpdateSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={UpdateSvg} {...props} />
 }
@@ -675,7 +675,7 @@ const BellSvg = () => (
         <path d='M10 18C8.34315 18 7 16.6569 7 15H13C13 16.6569 11.6569 18 10 18Z' fill='#F28B44' />
     </svg>
 )
-/** @name 系统用户图标 */
+/** @System User Icon */
 export const BellSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={BellSvg} {...props} />
 }
@@ -689,7 +689,7 @@ const ChevronDownSvg = () => (
         />
     </svg>
 )
-/** @name V型向下图标 */
+/** @Downward V Icon */
 export const ChevronDownSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={ChevronDownSvg} {...props} />
 }
@@ -704,7 +704,7 @@ const ArrowRightSvg = () => (
         />
     </svg>
 )
-/** @name 箭头向右图标 */
+/** @Right Arrow Icon */
 export const ArrowRightSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={ArrowRightSvg} {...props} />
 }
@@ -713,7 +713,7 @@ const CheckedSvg = () => (
         <path d='M2.5 6.5L4.5 8.5L9.5 3.5' stroke='#56C991' strokeLinecap='round' strokeLinejoin='round' />
     </svg>
 )
-/** @name 勾选中图标 */
+/** @Checked Icon */
 export const CheckedSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={CheckedSvg} {...props} />
 }

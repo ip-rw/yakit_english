@@ -30,10 +30,10 @@ export const DemoTCPReassembled: React.FC<DemoTCPReassembledProp> = (props) => {
                 // {headerTitle: "ID", key: "Id", width: 80, colRender: i => i.Id},
                 // {headerTitle: "SeqId", key: "Id", width: 80, colRender: i => i.Seq},
                 {headerTitle: "ID", key: "id", width: 80, colRender: (i) => i.Id},
-                {headerTitle: "来源", key: "source", width: 160, colRender: (i) => i.Source},
-                {headerTitle: "目标", key: "destination", width: 160, colRender: (i) => i.Destination},
-                {headerTitle: "协议", key: "protocol", width: 160, colRender: (i) => i.Protocol},
-                {headerTitle: "长度", key: "length", width: 80, colRender: (i) => (i.Raw || []).length}
+                {headerTitle: "Source", key: "source", width: 160, colRender: (i) => i.Source},
+                {headerTitle: "Target", key: "destination", width: 160, colRender: (i) => i.Destination},
+                {headerTitle: "Protocol", key: "protocol", width: 160, colRender: (i) => i.Protocol},
+                {headerTitle: "Length", key: "length", width: 80, colRender: (i) => (i.Raw || []).length}
             ]}
             rowClick={(data) => {
                 setSelected(data)
@@ -41,7 +41,7 @@ export const DemoTCPReassembled: React.FC<DemoTCPReassembledProp> = (props) => {
             loadMore={(data: TrafficTCPReassembled | undefined) => {
                 return new Promise((resolve, reject) => {
                     if (!data) {
-                        // info("加载初始化数据")
+                        // info("Load Init Data")
                         ipcRenderer
                             .invoke("QueryTrafficTCPReassembled", {
                                 TimestampNow: props.fromTimestamp,

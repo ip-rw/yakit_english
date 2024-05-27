@@ -45,11 +45,11 @@ export declare namespace API {
         user_id: number
         uid?: string
         /**
-         * 判断是否首次登录
+         * Check First Login
          */
         loginTime?: number
         /**
-         * 企业版用户是否有审核权限
+         * Enterprise User Review Permission
          */
         checkPlugin: boolean
     }
@@ -113,21 +113,21 @@ export declare namespace API {
     }
     export interface TouristIncrDetail {
         /**
-         * 图表纵坐标
+         * Chart Y-Axis
          */
         count: number
         /**
-         * 图表横坐标
+         * Chart X-Axis
          */
         searchTime: string
     }
     export interface TouristCityResponse {
         /**
-         * 总数
+         * Total
          */
         total: number
         /**
-         * 日期
+         * Date
          */
         date: number
         data: TouristCityCount[]
@@ -138,110 +138,110 @@ export declare namespace API {
     }
     export interface TouristAndUserResponse {
         /**
-         * 总游客数
+         * Total Visitors
          */
         touristTotal: number
         /**
-         * 总登录用户数
+         * Total Login Users
          */
         loginTotal: number
         /**
-         * 日增量
+         * Daily Increment
          */
         dayNew: number
         /**
-         * 日增率
+         * Daily Increase Rate
          */
         dayGain: string
         /**
-         * up 增 down 减
+         * up Increase down Decrease
          */
         dayGainUpOrDown?: string
         /**
-         * 日活
+         * Daily Active
          */
         dayActive: number
         /**
-         * 日活增率
+         * Daily Active Increase Rate
          */
         dayActiveGain: string
         /**
-         * up 增 down 减
+         * up Increase down Decrease
          */
         dayActiveGainUpOrDown: string
         /**
-         * 周增量
+         * Weekly Increment
          */
         weekNew: number
         /**
-         * 周增率
+         * Weekly Increase Rate
          */
         weekGain: string
         /**
-         * up 增 down 减
+         * up Increase down Decrease
          */
         weekGainUpOrDown?: string
         /**
-         * 周活
+         * Weekly Active
          */
         weekActive: number
         /**
-         * 周活增率
+         * Weekly Active Increase Rate
          */
         weekActiveGain: string
         /**
-         * up 增 down 减
+         * up Increase down Decrease
          */
         weekActiveGainUpOrDown: string
         /**
-         * 月增量
+         * Monthly Increment
          */
         monthNew: number
         /**
-         * 月增率
+         * Monthly Increase Rate
          */
         monthGain: string
         /**
-         * up 增 down 减
+         * up Increase down Decrease
          */
         monthGainUpOrDown?: string
         /**
-         * 月活
+         * Monthly Active
          */
         monthActive: number
         /**
-         * 月活增率
+         * Monthly Active Increase Rate
          */
         monthActiveGain: string
         /**
-         * up 增 down 减
+         * up Increase down Decrease
          */
         monthActiveGainUpOrDown: string
         dayTimes: number
         /**
-         * 当天时长增率
+         * Today's Duration Increase Rate
          */
         dayTimesGain: string
         /**
-         * up 增 down 减
+         * up Increase down Decrease
          */
         dayTimesGainUpOrDown: string
         weekTimes: number
         /**
-         * 本周时长增率
+         * Weekly Duration Increase Rate
          */
         weekTimesGain: string
         /**
-         * up 增 down 减
+         * up Increase down Decrease
          */
         weekTimesGainUpOrDown: string
         monthTimes: number
         /**
-         * 本月时长增率
+         * Monthly Duration Increase Rate
          */
         monthTimesGain: string
         /**
-         * up 增 down 减
+         * up Increase down Decrease
          */
         monthTimesGainUpOrDown: string
     }
@@ -250,11 +250,11 @@ export declare namespace API {
     }
     export interface TouristActiveDetail {
         /**
-         * 图表纵坐标
+         * Chart Y-Axis
          */
         count: number
         /**
-         * 图表横坐标
+         * Chart X-Axis
          */
         searchTime: string
     }
@@ -356,7 +356,7 @@ export declare namespace API {
     export interface RemoteStatusResponse {
         status: boolean
         /**
-         * 控制端人员
+         * Control Personnel
          */
         user_name: string
     }
@@ -379,7 +379,7 @@ export declare namespace API {
         auth: string
         note: string
         /**
-         * true 连接, false 断开连接
+         * true Connect, false Disconnect
          */
         status: boolean
     }
@@ -430,7 +430,7 @@ export declare namespace API {
     export interface PluginsWhereDownloadRequest extends PluginsWhere, PluginsWhereDownload {}
     export interface PluginsWhereDownload {
         /**
-         * 勾选删除
+         * Select to Delete
          */
         uuid?: string[]
         page?: number
@@ -440,18 +440,18 @@ export declare namespace API {
     export interface PluginsWhereDeleteRequest extends PluginsWhere, PluginsWhereDelete {}
     export interface PluginsWhereDelete {
         /**
-         * 删除原因
+         * Delete Reason
          */
         description?: string
         /**
-         * 勾选删除
+         * Select to Delete
          */
         uuid?: string[]
     }
     export interface PluginsWhere {
-        /** 这个其实是一个boolean类型的数组，
-         * 但是后端没法表达boolean数组，
-         * 所以每次更新时，需要将后端的转换定义名改成《boolean》
+        /** This is actually a boolean array，
+         * But backend can't express boolean array，
+         * So with each update, backend conversion name changed to《boolean》
          */
         is_private?: boolean[]
         keywords?: string
@@ -460,19 +460,19 @@ export declare namespace API {
         user_name?: string
         user_id?: number
         /**
-         * 默认 为所有时间, 当天 day, 本周 week, 本月 month, 年 year
+         * Default All Time, Today day, This Week week, This Month month, This Year year
          */
         time_search?: string
         /**
-         * 默认首页, mine 个人, recycle 回收站 check 审核页面, other 其他情况(针对yakit下载所以不区分私密公开)
+         * Default Home, mine:Personal, recycle:Recycle Bin, check:Review Page, other:Other Cases (for yakit download so private/public not distinguished)
          */
         listType?: string
         /**
-         * 审核状态,0待审核，1通过审核，2审核不通过
+         * Review Status,0 Pending Review,1 Approved,2 Rejected
          */
         status?: number[]
         /**
-         * 根据插件名批量搜索
+         * Batch Search by Plugin Name
          */
         script_name?: string[]
         pluginGroup?: PluginsWherePluginGroup
@@ -488,7 +488,7 @@ export declare namespace API {
     }
     export interface PluginsSearchRequest {
         /**
-         * 默认首页 mine 个人, recycle 回收站 check 审核页面
+         * Default Home mine:Personal recycle:Recycle Bin check:Review Page
          */
         listType?: string
         token?: string
@@ -509,11 +509,11 @@ export declare namespace API {
         typeVerbose: string
         cve: string
         /**
-         * 漏洞描述
+         * Vulnerability Description
          */
         description: string
         /**
-         * 修复建议
+         * Repair Suggestion
          */
         solution: string
     }
@@ -540,11 +540,11 @@ export declare namespace API {
     export interface PluginsRecycleRequest extends PluginsWhere, PluginsRecycle {}
     export interface PluginsRecycle {
         /**
-         * 勾选删除
+         * Select to Delete
          */
         uuid?: string[]
         /**
-         * 必传, true 彻底删除, false还原
+         * Mandatory, true delete, false restore
          */
         dumpType: string
     }
@@ -553,35 +553,35 @@ export declare namespace API {
     }
     export interface PluginsLogsDetail extends GormBaseModel {
         /**
-         * 操作人名称
+         * Operator Name
          */
         userName: string
         /**
-         * 操作人头像
+         * Operator Avatar
          */
         headImg: string
         /**
-         * 作者权限 admin:管理员 trusted:信任用户 ordinary:普通用户 auditor:审核员
+         * Author Role admin:Admin trusted:Trusted ordinary:User auditor:Auditor
          */
         userRole: string
         /**
-         * 操作人是否是作者 true 是   false否
+         * Operator Is Author true Yes   false No
          */
         isAuthors: boolean
         /**
-         * 审核状态
+         * Review Status
          */
         checkStatus: number
         /**
-         * 日志类型 submit:新增 delete:删除  update:修改  check:审核 recover:恢复 applyMerge: 合并申请
+         * Log Type submit:Add delete:Delete update:Edit check:Review recover:Recover applyMerge:Merge Request
          */
         logType: string
         /**
-         * 描述
+         * Description
          */
         description: string
         /**
-         * 登陆用户是否是插件作者
+         * Login User is Plugin Author
          */
         loginIsPluginUser: boolean
     }
@@ -604,11 +604,11 @@ export declare namespace API {
     export interface PluginsEditRequest extends PluginsRequest, PluginsEdit {}
     export interface PluginsEdit {
         /**
-         * 为空时默认走新建 不为空时默认走修改
+         * Default to Create if empty, Default to Edit if not
          */
         uuid?: string
         /**
-         * 修改必传描述(我这没写成必传是因为新增和修改是一个按钮)
+         * Edit Desc Mandatory (not set as mandatory for both add and edit are one button))
          */
         logDescription?: string
     }
@@ -622,24 +622,24 @@ export declare namespace API {
         user_id?: number
         head_img: string
         /**
-         * 插件发布的时间
+         * Plugin Release Time
          */
         published_at: number
         /**
-         * 下载次数
+         * Download Count
          */
         downloaded_total: number
         /**
-         * 获得推荐的次数
+         * Recommended Times
          */
         stars: number
         /**
-         * 审核状态
+         * Review Status
          */
         status: number
         official: boolean
         /**
-         * 当前用户是否已点赞
+         * Current User Liked
          */
         is_stars: boolean
         help?: string
@@ -651,21 +651,21 @@ export declare namespace API {
         uuid: string
         is_private: boolean
         /**
-         * 复制源插件
+         * Copy Source Plugin
          */
         base_plugin_id?: number
         /**
-         * 复制源插件名
+         * Copy Source Plugin Name
          */
         base_script_name?: string
         group?: string
         riskInfo?: PluginsRiskDetail[]
         /**
-         * 是否为内置插件
+         * Is Built-in Plugin
          */
         isCorePlugin?: boolean
         /**
-         * 协作者
+         * Collaborator
          */
         collaborator?: CollaboratorInfo[]
     }
@@ -674,34 +674,34 @@ export declare namespace API {
     export interface PluginsAuditDetailRequest {
         uuid: string
         /**
-         * 请求页面 默认(check) 审核详情页 log 日志详情页
+         * Request Page Default(check) Review Detail Page log Log Detail Page
          */
         list_type?: string
         /**
-         * 日志页跳转到详情页必传
+         * Log page to detail page mandatory
          */
         up_log_id?: number
     }
     export interface PluginsAuditDetail {
         /**
-         * 修改人
+         * Modifier
          */
         apply_user_name?: string
         /**
-         * 修改人
+         * Modifier
          */
         apply_user_id?: number
         /**
-         * 描述
+         * Description
          */
         logDescription?: string
         apply_user_head_img?: string
         /**
-         * 处理状态 0 待处理  1合并  2拒绝
+         * Processing Status 0 Pending  1Merge  2Reject
          */
         merge_status?: number
         /**
-         * 日志id
+         * Log ID
          */
         up_log_id?: number
         merge_before_plugins?: PluginsAuditDetailMergeBeforePlugins
@@ -713,7 +713,7 @@ export declare namespace API {
         content?: string
         params?: YakitPluginParam[]
         /**
-         * 审核状态
+         * Review Status
          */
         status?: number
         official?: boolean
@@ -728,30 +728,30 @@ export declare namespace API {
         group?: string
         riskInfo?: PluginsRiskDetail[]
         /**
-         * 是否为内置插件
+         * Is Built-in Plugin
          */
         isCorePlugin?: boolean
     }
     export interface PluginsAudit {
         pageType?: string
         /**
-         * 审核 'true' 通过 'false' 不通过
+         * Review 'true' Approved 'false' Not Approved
          */
         status: string
         /**
-         * 必传
+         * Mandatory
          */
         uuid: string
         /**
-         * 不通过时必传
+         * Mandatory when not approved
          */
         logDescription?: string
         /**
-         * 默认不传为管理审核页面， 'log' 为日志审核页面
+         * Default to Management Review Page if not passed， 'log' For Log Review Page
          */
         listType?: string
         /**
-         * 有对比的审核页 必传此id
+         * Audit Page with Comparison Mandatory this ID
          */
         upPluginLogId?: number
     }
@@ -766,19 +766,19 @@ export declare namespace API {
     }
     export interface PageMeta {
         /**
-         * 页面索引
+         * Page Index
          */
         page: number
         /**
-         * 页面数据条数限制
+         * Page Data Limit
          */
         limit: number
         /**
-         * 总共数据条数
+         * Total Data Count
          */
         total: number
         /**
-         * 总页数
+         * Total Pages
          */
         total_page: number
     }
@@ -890,7 +890,7 @@ export declare namespace API {
         name: string
         userNum: number
         /**
-         * 是否有二级分组
+         * Has Subgroups
          */
         exist_group?: boolean
     }
@@ -904,7 +904,7 @@ export declare namespace API {
         csrf_token?: string
         file_name: string[]
         /**
-         * 删除图片传'img' 视频传 'video'
+         * Delete Image Upload'img' Video Upload 'video'
          */
         file_type: string
     }
@@ -917,7 +917,7 @@ export declare namespace API {
     export interface CopyPluginsRequest extends PluginsRequest, CopyPlugins {}
     export interface CopyPlugins {
         /**
-         * 复制插件id
+         * Copy Plugin ID
          */
         base_plugin_id: number
     }
@@ -962,21 +962,21 @@ export declare namespace API {
     }
     export interface ActionSucceeded {
         /**
-         * 来源于哪个 API
+         * From which API
          */
         from: string
         /**
-         * 执行状态
+         * Execution Status
          */
         ok: boolean
     }
     export interface ActionFailed {
         /**
-         * 来源于哪个 API
+         * From which API
          */
         from: string
         /**
-         * 执行状态
+         * Execution Status
          */
         ok: boolean
         reason: string

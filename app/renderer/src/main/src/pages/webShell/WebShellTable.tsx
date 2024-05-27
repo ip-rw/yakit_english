@@ -56,7 +56,7 @@ import { showByRightContext } from '@/components/yakitUI/YakitMenu/showByRightCo
 export interface WebShellManagerProp {
     available: boolean
     filter?: QueryWebShellRequest
-    advancedQuery: boolean //是否开启高级查询
+    advancedQuery: boolean //Enable Advanced Search?
     setAdvancedQuery: (b: boolean) => void
 }
 
@@ -113,7 +113,7 @@ interface WebShellTableListProps {
     filter?: QueryWebShellRequest
     selected: WebShellDetail
     setSelected: (s: WebShellDetail) => void
-    advancedQuery: boolean //是否开启高级查询
+    advancedQuery: boolean //Enable Advanced Search?
     setAdvancedQuery: (b: boolean) => void
     // WebShell: WebShellDetail
     // setWebShell: (shell: WebShellDetail) => void
@@ -132,9 +132,9 @@ const WebShellTableList: React.FC<WebShellTableListProps> = React.memo((props) =
 
     const [searchType, setSearchType] = useState<string>("")
 
-    const [isRefresh, setIsRefresh] = useState<boolean>(false) // 刷新表格，滚动至0
+    const [isRefresh, setIsRefresh] = useState<boolean>(false) // Refresh Table, Scroll to 0
     const [loading, setLoading] = useState(false)
-// 抽屉
+// Drawer
 const cvePageRef = useRef<any>()
 const [inViewport] = useInViewport(cvePageRef)
 const [visible,setVisible] = useState<boolean>(false)
@@ -159,7 +159,7 @@ const onClose = useMemoizedFn(()=>{
                 )
             },
             {
-                title: "状态",
+                title: "Status",
                 dataKey: "Status",
                 width: 55,
                 render: (_, i: WebShellDetail) => (
@@ -205,7 +205,7 @@ const onClose = useMemoizedFn(()=>{
                         </YakitTag> : null
             },
             {
-                title: "备注",
+                title: "Note",
                 dataKey: "Remark",
                 width: 120,
                 render: (_, i: WebShellDetail) => (
@@ -218,7 +218,7 @@ const onClose = useMemoizedFn(()=>{
                                 type='primary'
                                 onClick={() => {
                                     let m = showModal({
-                                        title: "备注",
+                                        title: "Note",
                                         width: "60%",
                                         content: <RemarkDetail remark={i.Remark}/>,
                                         modalAfterClose: () => m && m.destroy(),
@@ -226,14 +226,14 @@ const onClose = useMemoizedFn(()=>{
                                 }}
                                 size={"small"}
                             >
-                                详情
+                                Details
                             </YakitButton>
                         )}
                     </div>
                 )
             },
             {
-                title: "添加时间",
+                title: "Add Time",
                 dataKey: "CreatedAt",
                 render: (v) => (v ? formatTimestamp(v) : "-"),
                 sorterProps: {
@@ -242,7 +242,7 @@ const onClose = useMemoizedFn(()=>{
                 }
             },
             {
-                title: "操作",
+                title: "Action",
                 dataKey: "action",
                 width: 80,
                 fixed: "right",
@@ -276,7 +276,7 @@ const onClose = useMemoizedFn(()=>{
         ]
     }, [])
     const onRowClick = useMemoizedFn((record: WebShellDetail) => {
-        setSelected(record) // 更新当前选中的行
+        setSelected(record) // Update Selected Row
         // setWebShell(record)
     })
     const [pagination, setPagination] = useState<PaginationSchema>({
@@ -385,24 +385,24 @@ const onClose = useMemoizedFn(()=>{
 
     const wsmMenuData = [
         {
-            key: "webshell-curd", label: "Shell 操作",
+            key: "webshell-curd", label: "Shell Operations",
             children: [
-                {key: "webshell-curd-edit", label: "编辑"},
-                {key: "webshell-curd-copy", label: "复制 URL"},
-                {key: "webshell-curd-share", label: "分享"},
-                {key: "webshell-curd-delete", label: "删除", itemIcon: <TrashIcon/>},
+                {key: "webshell-curd-edit", label: "Edit"},
+                {key: "webshell-curd-copy", label: "Copy URL"},
+                {key: "webshell-curd-share", label: "Share"},
+                {key: "webshell-curd-delete", label: "Delete", itemIcon: <TrashIcon/>},
             ]
         },
         {type: "divider"},
-        {key: "webshell-feature-ping", label: "验证存活"},
-        {key: "webshell-feature-file_tree", label: "验证存活"},
+        {key: "webshell-feature-ping", label: "Verify Alive"},
+        {key: "webshell-feature-file_tree", label: "Verify Alive"},
     ]
     const wsmMenuSelect = useMemoizedFn((key: string) => {
         if (!selected) return
         switch (key) {
             case "webshell-curd-edit":
                 const edit = showModal({
-                    title: "编辑 Shell",
+                    title: "Edit Shell",
                     width: "60%",
                     content: <WebShellCreatorForm
                         closeModal={() => {
@@ -432,7 +432,7 @@ const onClose = useMemoizedFn(()=>{
         if (rowData) {
             setSelected(rowData)
         }
-        // showByCustom已废弃，删除，更换为 showByRightContext
+        // showByCustom deprecated, remove, replace with showByRightContext
         // showByCustom(
         //     {
         //         reactNode: (
@@ -480,13 +480,13 @@ const onClose = useMemoizedFn(()=>{
                                     <div className={cveStyles["cve-list-title-left"]}>
                                         {!advancedQuery && (
                                             <div className={cveStyles["cve-list-title-query"]}>
-                                                <span className={cveStyles["cve-list-title-query-text"]}>高级设置</span>
+                                                <span className={cveStyles["cve-list-title-query-text"]}>Advanced settings</span>
                                                 <YakitSwitch checked={advancedQuery} onChange={setAdvancedQuery}/>
                                             </div>
                                         )}
-                                        <div className={cveStyles["cve-list-title"]}>网站管理</div>
+                                        <div className={cveStyles["cve-list-title"]}>Website Mgmt</div>
                                         <Space>
-                                            <Tooltip title='刷新会重置所有查询条件'>
+                                            <Tooltip title='Refresh will reset all search conditions'>
                                                 <Button
                                                     size={"small"}
                                                     type={"link"}
@@ -504,7 +504,7 @@ const onClose = useMemoizedFn(()=>{
                                             onClick={() => {
                                                 // setDataBaseUpdateVisible(true)
                                                 let m = showModal({
-                                                    title: "添加网站",
+                                                    title: "Add Website",
                                                     width: "60%",
                                                     content: <WebShellCreatorForm
                                                         closeModal={() => {
@@ -518,7 +518,7 @@ const onClose = useMemoizedFn(()=>{
                                             }}
                                         >
                                             <SMViewGridAddIcon/>
-                                            添加网站
+                                            Add Website
                                         </YakitButton>
                                     </div>
                                 </div>

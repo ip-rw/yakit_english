@@ -76,11 +76,11 @@ const {ipcRenderer} = window.require("electron")
 
 export const mePluginTypeList = [
     {
-        label: "我的云端插件",
+        label: "My Plugins",
         value: "myOnlinePlugin"
     },
     {
-        label: "回收站",
+        label: "Recycle Bin",
         value: "recycle"
     }
 ]
@@ -94,8 +94,8 @@ export const PluginUser: React.FC<PluginUserProps> = React.memo((props) => {
 
     const [plugin, setPlugin] = useState<YakitPluginOnlineDetail>()
 
-    const [isSelectUserNum, setIsSelectUserNum] = useState<boolean>(false) // 我的插件是否有勾选
-    const [isSelectRecycleNum, setIsSelectRecycleNum] = useState<boolean>(false) // 回收站是否有勾选
+    const [isSelectUserNum, setIsSelectUserNum] = useState<boolean>(false) // Checks on my plugins
+    const [isSelectRecycleNum, setIsSelectRecycleNum] = useState<boolean>(false) // Checks in Recycle Bin
 
     const [search, setSearch] = useState<PluginSearchParams>(cloneDeep(defaultSearch))
     const [filters, setFilters] = useState<PluginFilterParams>({
@@ -110,13 +110,13 @@ export const PluginUser: React.FC<PluginUserProps> = React.memo((props) => {
     const [visibleOnline, setVisibleOnline] = useState<boolean>(false)
     const [userPluginType, setUserPluginType] = useState<MePluginType>("myOnlinePlugin")
 
-    const [downloadLoading, setDownloadLoading] = useState<boolean>(false) // 我的插件批量下载
-    const [removeLoading, setRemoveLoading] = useState<boolean>(false) // 我的插件批量删除
+    const [downloadLoading, setDownloadLoading] = useState<boolean>(false) // Batch download my plugins
+    const [removeLoading, setRemoveLoading] = useState<boolean>(false) // Batch delete my plugins
 
-    const [initTotalUser, setInitTotalUser] = useState<number>(0) //我的插件total总数,不带任何条件
-    const [initTotalRecycle, setInitTotalRecycle] = useState<number>(0) //回收站total总数,不带任何条件
+    const [initTotalUser, setInitTotalUser] = useState<number>(0) //Total count of my plugins, unfiltered
+    const [initTotalRecycle, setInitTotalRecycle] = useState<number>(0) //Recycle Bin total, unfiltered
 
-    // 当前展示的插件序列
+    // Current plugin display sequence
     const showUserPluginIndex = useRef<number>(0)
 
     const pluginUserListRef = useRef<PluginUserListRefProps>({
@@ -166,14 +166,14 @@ export const PluginUser: React.FC<PluginUserProps> = React.memo((props) => {
         }),
         {wait: 200, leading: true}
     ).run
-    /**新建插件 */
+    /**Create Plugin */
     const onNewAddPlugin = useMemoizedFn(() => {
         emiter.emit(
             "openPage",
             JSON.stringify({route: YakitRoute.AddYakitScript, params: {source: YakitRoute.Plugin_Owner}})
         )
     })
-    /**下载 */
+    /**Download */
     const onDownload = useMemoizedFn(() => {
         if (isSelectUserNum) {
             if (pluginUserListRef.current.onDownloadBatch) pluginUserListRef.current.onDownloadBatch()
@@ -214,21 +214,21 @@ export const PluginUser: React.FC<PluginUserProps> = React.memo((props) => {
             })) || []
         )
     }, [filters.plugin_private])
-    /**刷新我的插件 */
+    /**Refresh my plugins */
     const onRefreshUserList = useDebounceFn(
         useMemoizedFn(() => {
             setRefreshUser(!refreshUser)
         }),
         {wait: 500, leading: true}
     ).run
-    /**刷新回收站 */
+    /**Refresh Recycle Bin */
     const onRefreshRecycleList = useDebounceFn(
         useMemoizedFn(() => {
             setRefreshRecycle(!refreshRecycle)
         }),
         {wait: 500, leading: true}
     ).run
-    /**详情批量下载 */
+    /**Batch download in details */
     const onBatchDownload = useMemoizedFn(async (newParams: UserBackInfoProps) => {
         setAllCheckUser(newParams.allCheck)
         setFilters(newParams.filter)
@@ -297,7 +297,7 @@ export const PluginUser: React.FC<PluginUserProps> = React.memo((props) => {
                                         icon={<OutlineClouddownloadIcon />}
                                         type='outline2'
                                         size='large'
-                                        name={isSelectUserNum ? "下载" : "一键下载"}
+                                        name={isSelectUserNum ? "Download" : "One-click download"}
                                         onClick={onDownload}
                                         loading={downloadLoading}
                                         disabled={initTotalUser === 0}
@@ -307,7 +307,7 @@ export const PluginUser: React.FC<PluginUserProps> = React.memo((props) => {
                                         icon={<OutlineTrashIcon />}
                                         type='outline2'
                                         size='large'
-                                        name={isSelectUserNum ? "删除" : "清空"}
+                                        name={isSelectUserNum ? "Delete" : "Clear"}
                                         onClick={onRemove}
                                         loading={removeLoading}
                                         disabled={initTotalUser === 0}
@@ -316,7 +316,7 @@ export const PluginUser: React.FC<PluginUserProps> = React.memo((props) => {
                                         maxWidth={1050}
                                         icon={<SolidPluscircleIcon />}
                                         size='large'
-                                        name='新建插件'
+                                        name='Create Plugin'
                                         onClick={onNewAddPlugin}
                                     />
                                 </>
@@ -327,7 +327,7 @@ export const PluginUser: React.FC<PluginUserProps> = React.memo((props) => {
                                         icon={<OutlineTrashIcon />}
                                         type='outline2'
                                         size='large'
-                                        name={isSelectRecycleNum ? "删除" : "清空"}
+                                        name={isSelectRecycleNum ? "Delete" : "Clear"}
                                         onClick={onRecycleRemove}
                                         disabled={initTotalRecycle === 0}
                                     />
@@ -335,7 +335,7 @@ export const PluginUser: React.FC<PluginUserProps> = React.memo((props) => {
                                         maxWidth={1050}
                                         icon={<OutlineDatabasebackupIcon />}
                                         size='large'
-                                        name='还原'
+                                        name='Restore'
                                         onClick={onRecycleReduction}
                                         disabled={initTotalRecycle === 0}
                                     />
@@ -429,10 +429,10 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
             onRecalculationUserDetail,
             setInitTotalUser
         } = props
-        /** 是否为加载更多 */
+        /** Is load more */
         const [loading, setLoading] = useState<boolean>(false)
 
-        /** 是否为初次加载 */
+        /** Is First Load */
         const isLoadingRef = useRef<boolean>(true)
         const [allCheck, setAllCheck] = useState<boolean>(defaultAllCheck)
 
@@ -463,13 +463,13 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
         const removePluginRef = useRef<YakitPluginOnlineDetail>()
         const removePluginDetailRef = useRef<YakitPluginOnlineDetail>()
 
-        const filtersDetailRef = useRef<PluginFilterParams>() // 详情中的filter条件
-        const searchDetailRef = useRef<PluginSearchParams>() // 详情中的search条件
+        const filtersDetailRef = useRef<PluginFilterParams>() // Filter condition in details
+        const searchDetailRef = useRef<PluginSearchParams>() // Search condition in details
 
         const latestLoadingRef = useLatest(loading)
         const userInfo = useStore((s) => s.userInfo)
 
-        // 选中插件的数量
+        // Selected Plugin Count
         const selectNum = useMemo(() => {
             if (allCheck) return response.pagemeta.total
             else return selectList.length
@@ -494,7 +494,7 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
                 emiter.off("onRefUserPluginList", onRefreshUserList)
             }
         }, [])
-        // 获取筛选栏展示状态
+        // Get filter bar visibility
         useEffect(() => {
             getRemoteValue(PluginGV.OwnerFilterCloseStatus).then((value: string) => {
                 if (value === "true") setShowFilter(true)
@@ -502,7 +502,7 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
             })
         }, [])
         useEffect(() => {
-            /** 返回到列表页中需要清除详情页中的search和filter条件 */
+            /** Clear search/filter in details when returning to list */
             if (!plugin) {
                 searchDetailRef.current = undefined
                 filtersDetailRef.current = undefined
@@ -530,7 +530,7 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
             setIsSelectUserNum(selectList.length > 0 || allCheck)
         }, [selectList.length, allCheck])
 
-        /**详情中的批量删除 */
+        /**Batch delete in details */
         // const onDetailsBatchRemove = useMemoizedFn((newParams: UserBackInfoProps) => {
         //     setAllCheck(newParams.allCheck)
         //     setFilters(newParams.filter)
@@ -560,7 +560,7 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
 
         const fetchList = useDebounceFn(
             useMemoizedFn(async (reset?: boolean) => {
-                // if (latestLoadingRef.current) return //先注释，有影响
+                // if (latestLoadingRef.current) return //Comment out, affects
                 if (reset) {
                     isLoadingRef.current = true
                     setCurrentIndex(0)
@@ -599,27 +599,27 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
             }),
             {wait: 200, leading: true}
         ).run
-        /**获取插件删除的提醒记录状态 */
+        /**Get Plugin Deletion Reminder State */
         const getPluginRemoveCheck = useMemoizedFn(() => {
             getRemoteValue(PluginGV.UserPluginRemoveCheck).then((data) => {
                 setPluginRemoveCheck(data === "true" ? true : false)
             })
         })
-        /**获取分组统计列表 */
+        /**Fetch group statistics list */
         const getPluginGroupList = useMemoizedFn(() => {
             apiFetchGroupStatisticsMine().then((res) => {
                 setPluginUserGroupList(res.data)
             })
         })
-        /** 单项勾选|取消勾选 */
+        /** Single-Select|Deselect */
         const optCheck = useMemoizedFn((data: YakitPluginOnlineDetail, value: boolean) => {
-            // 全选情况时的取消勾选
+            // Fetch loading char with regex
             if (allCheck) {
                 setSelectList(response.data.map((item) => item.uuid).filter((item) => item !== data.uuid))
                 setAllCheck(false)
                 return
             }
-            // 单项勾选回调
+            // No history fetched if CS or vuln unselected by user
             if (value) {
                 setSelectList([...selectList, data.uuid])
             } else {
@@ -627,11 +627,11 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
                 setSelectList(newSelectList)
             }
         })
-        // 滚动更多加载
+        // Scroll for More Loading
         const onUpdateList = useMemoizedFn((reset?: boolean) => {
             fetchList()
         })
-        /** 单项额外操作组件 */
+        /** Single item extra operations */
         const optExtraNode = useMemoizedFn((data: YakitPluginOnlineDetail) => {
             return (
                 <div className={styles["plugin-user-extra-node"]}>
@@ -644,11 +644,11 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
                 </div>
             )
         })
-        /** 单项副标题组件 */
+        /** Extra Params Modal */
         const optSubTitle = useMemoizedFn((data: YakitPluginOnlineDetail) => {
             return <>{data.is_private ? <SolidPrivatepluginIcon /> : statusTag[`${data.status}`]}</>
         })
-        /** 单项点击回调 */
+        /** Single Item Callback */
         const optClick = useMemoizedFn((data: YakitPluginOnlineDetail, index: number) => {
             setPlugin(data)
             setCurrentIndex(index)
@@ -663,7 +663,7 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
             }
         })
 
-        /**批量下载 */
+        /**Batch download */
         const onDownloadBatch = useMemoizedFn(() => {
             let downloadParams: DownloadOnlinePluginsRequest = {}
             if (allCheck) {
@@ -683,7 +683,7 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
                 }, 200)
             )
         })
-        /**详情中调用删除之前操作 */
+        /**Call operation before deletion in details */
         const onRemovePluginDetailSingleBefore = useMemoizedFn((data) => {
             removePluginDetailRef.current = data
             if (pluginRemoveCheck) {
@@ -692,22 +692,22 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
                 setRemoveCheckVisible(true)
             }
         })
-        /**详情中调用删除操作 */
+        /**Delete called in details */
         const onRemovePluginDetailSingle = useMemoizedFn((data) => {
             onRemovePluginSingleBase(data).then(() => {
                 if (response.data.length === 1) {
-                    // 如果删除是最后一个，就回到列表中得空页面
+                    // If last item deleted, return to empty list page
                     setPlugin(undefined)
                 } else {
                     const index = response.data.findIndex((ele) => ele.uuid === data.uuid)
                     if (index === -1) return
                     if (index === Number(response.pagemeta.total) - 1) {
-                        // 选中得item为最后一个，删除后选中倒数第二个
+                        // If selected item is last, select second to last after deletion
                         setPlugin({
                             ...response.data[index - 1]
                         })
                     } else {
-                        //选择下一个
+                        //Select Next
                         setPlugin({
                             ...response.data[index + 1]
                         })
@@ -721,7 +721,7 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
                 })
             })
         })
-        /**单个删除之前操作 */
+        /**Operation before individual deletion */
         const onRemovePluginSingleBefore = useMemoizedFn((data: YakitPluginOnlineDetail) => {
             removePluginRef.current = data
             if (pluginRemoveCheck) {
@@ -730,7 +730,7 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
                 setRemoveCheckVisible(true)
             }
         })
-        /** 批量删除插件之前操作 */
+        /** Pre-Operation for Bulk Plugin Deletion */
         const onRemovePluginBatchBefore = useMemoizedFn(() => {
             if (pluginRemoveCheck) {
                 onRemovePluginBatch()
@@ -738,7 +738,7 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
                 setRemoveCheckVisible(true)
             }
         })
-        /** 列表页面 单个删除 */
+        /** List page individual delete */
         const onRemovePluginSingle = useMemoizedFn(async (data: YakitPluginOnlineDetail) => {
             onRemovePluginSingleBase(data).then(() => {
                 dispatch({
@@ -749,7 +749,7 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
                 })
             })
         })
-        /**单个删除基础版 */
+        /**Basic individual delete */
         const onRemovePluginSingleBase = useMemoizedFn((data: YakitPluginOnlineDetail) => {
             let deleteParams: API.PluginsWhereDeleteRequest = {
                 uuid: [data.uuid]
@@ -768,21 +768,21 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
                         getInitTotal()
                         getPluginGroupList()
                         onRefreshRecycleList()
-                        // 再做单独处理
+                        // Handle separately
                         resolve()
                     })
                     .catch(reject)
             })
         })
-        /**批量删除 */
+        /**Batch delete */
         const onRemovePluginBatch = useMemoizedFn(async () => {
             setRemoveLoading(true)
             try {
                 if (!allCheck && selectList.length === 0) {
-                    // 删除全部，清空
+                    // Delete all, clear
                     await apiDeletePluginMine()
                 } else {
-                    // 批量删除
+                    // Batch delete
                     let deleteParams: API.PluginsWhereDeleteRequest = {}
 
                     if (allCheck) {
@@ -812,13 +812,13 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
             fetchList(true)
         })
 
-        /**全选 */
+        /**Fixes failure to iterate load_content on missing older version data */
         const onCheck = useMemoizedFn((value: boolean) => {
             setSelectList([])
             setAllCheck(value)
             setIsSelectUserNum(value)
         })
-        /**新建插件 */
+        /**Create Plugin */
         const onAddPlugin = useMemoizedFn(() => {
             emiter.emit(
                 "openPage",
@@ -836,7 +836,7 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
             }
             onRemovePluginBatch()
         })
-        /** 详情搜索事件 */
+        /** Detail Search Event */
         const onDetailSearch = useMemoizedFn(
             async (detailSearch: PluginSearchParams, detailFilter: PluginFilterParams) => {
                 searchDetailRef.current = detailSearch
@@ -850,7 +850,7 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
             setRemoteValue(PluginGV.OwnerFilterCloseStatus, `${v}`)
             setShowFilter(v)
         })
-        /**初始数据为空的时候,刷新按钮,刷新列表和初始total,分组数据 */
+        /**On empty initial data, refresh button reloads list and initial total, group data */
         const onRefListAndTotalAndGroup = useMemoizedFn(() => {
             getInitTotal()
             fetchList(true)
@@ -940,17 +940,17 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
                             />
                         ) : (
                             <div className={styles["plugin-user-empty"]}>
-                                <YakitEmpty title='暂无数据' description='可新建插件同步至云端，创建属于自己的插件' />
+                                <YakitEmpty title='No Data Available' description='Create new plugin to sync with cloud, make your own' />
                                 <div className={styles["plugin-user-buttons"]}>
                                     <YakitButton type='outline1' icon={<OutlinePlusIcon />} onClick={onAddPlugin}>
-                                        新建插件
+                                        Create Plugin
                                     </YakitButton>
                                     <YakitButton
                                         type='outline1'
                                         icon={<OutlineRefreshIcon />}
                                         onClick={onRefListAndTotalAndGroup}
                                     >
-                                        刷新
+                                        Refresh
                                     </YakitButton>
                                 </div>
                             </div>
@@ -959,8 +959,8 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
                 </PluginsContainer>
                 <YakitHint
                     visible={removeCheckVisible}
-                    title='是否要删除插件'
-                    content='确认删除插件后，插件将会放在回收站'
+                    title='Confirm Plugin Deletion?'
+                    content='Confirm deletion to move plugin to Recycle Bin'
                     onOk={onPluginRemoveCheckOk}
                     onCancel={() => setRemoveCheckVisible(false)}
                     footerExtra={
@@ -968,7 +968,7 @@ const PluginUserList: React.FC<PluginUserListProps> = React.memo(
                             checked={pluginRemoveCheck}
                             onChange={(e) => setPluginRemoveCheck(e.target.checked)}
                         >
-                            下次不再提醒
+                            Do not remind again
                         </YakitCheckbox>
                     }
                 />
@@ -981,27 +981,27 @@ export const OnlineUserExtraOperate: React.FC<OnlineUserExtraOperateProps> = Rea
     const {plugin, onSelect, dispatch, userInfoRole} = props
     const onShare = useMemoizedFn((uuid: string) => {
         ipcRenderer.invoke("copy-clipboard", uuid).then(() => {
-            yakitNotify("success", "分享ID复制成功")
+            yakitNotify("success", "Share ID Copied")
         })
     })
-    /**下载 */
+    /**Download */
     const onDownloadClick = useMemoizedFn((data: YakitPluginOnlineDetail) => {
         let downloadParams: DownloadOnlinePluginsRequest = {
             UUID: [data.uuid]
         }
         apiDownloadPluginMine(downloadParams)
     })
-    /**更改私有状态之前 */
+    /**Before changing private status */
     const onUpdatePrivateBefore = useMemoizedFn((data: YakitPluginOnlineDetail) => {
         if (data.is_private) {
-            // 当前插件为私密；私密更改为公开需要自动检测评分
+            // Private plugin to public requires auto-rating
             onPluginTest(data)
         } else {
-            // 当前插件为公开，公开改为私密不需要自动评分
+            // Public plugin to private doesn't require auto-rating
             onUpdatePrivate(data)
         }
     })
-    /**私密改公开，需要走自动评分，评分通过后才可以修改状态 */
+    /**Private to public requires auto-rating, change status after passing */
     const onPluginTest = useMemoizedFn((data: YakitPluginOnlineDetail) => {
         const m = showYakitModal({
             title: null,
@@ -1028,7 +1028,7 @@ export const OnlineUserExtraOperate: React.FC<OnlineUserExtraOperateProps> = Rea
             )
         })
     })
-    /**更改私有状态 */
+    /**Change private status */
     const onUpdatePrivate = useMemoizedFn((data: YakitPluginOnlineDetail) => {
         const updateItem: API.UpPluginsPrivateRequest = {
             uuid: data.uuid,
@@ -1038,10 +1038,10 @@ export const OnlineUserExtraOperate: React.FC<OnlineUserExtraOperateProps> = Rea
             const isPrivate: boolean = !data.is_private
             let status: number = 0
             if (userInfoRole === "ordinary") {
-                // 为待审核
+                // Pending review
                 status = 0
             } else {
-                // 为审核通过
+                // Review approved
                 if (!isPrivate) status = 1
             }
             dispatch({
@@ -1054,7 +1054,7 @@ export const OnlineUserExtraOperate: React.FC<OnlineUserExtraOperateProps> = Rea
                     }
                 }
             })
-            // 我的插件详情修改私密公开状态，需要使用回调
+            // Modify private/public status in my plugin details with callback
             onSelect("editState", plugin)
         })
     })
@@ -1082,17 +1082,17 @@ export const OnlineUserExtraOperate: React.FC<OnlineUserExtraOperateProps> = Rea
                 data: [
                     {
                         key: "share",
-                        label: "分享",
+                        label: "Share",
                         itemIcon: <OutlineShareIcon className={styles["plugin-user-extra-node-icon"]} />
                     },
                     {
                         key: "download",
-                        label: "下载",
+                        label: "Download",
                         itemIcon: <OutlineClouddownloadIcon className={styles["plugin-user-extra-node-icon"]} />
                     },
                     {
                         key: "editState",
-                        label: plugin.is_private ? "改为公开" : "改为私密",
+                        label: plugin.is_private ? "Switch to public" : "Switch to private",
                         itemIcon: plugin.is_private ? (
                             <OutlineLockopenIcon className={styles["plugin-user-extra-node-icon"]} />
                         ) : (
@@ -1103,7 +1103,7 @@ export const OnlineUserExtraOperate: React.FC<OnlineUserExtraOperateProps> = Rea
                     {
                         key: "remove",
                         itemIcon: <OutlineTrashIcon className={styles["plugin-user-extra-node-icon"]} />,
-                        label: "删除",
+                        label: "Delete",
                         type: "danger"
                     }
                 ],

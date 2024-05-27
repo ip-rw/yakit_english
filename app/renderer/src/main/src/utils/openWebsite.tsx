@@ -25,7 +25,7 @@ export const saveABSFileToOpen = (name: string, data?: Uint8Array | string) => {
                 data: isArr ? new Buffer((data || []) as Uint8Array).toString() : data || ""
             })
             .then(() => {
-                success("下载完成")
+                success("Download Complete")
                 ipcRenderer.invoke("open-specified-file", res.filePath)
             })
     })
@@ -38,7 +38,7 @@ export const saveABSFileAnotherOpen = async (params: {
     errorMsg: string
     isOpenSpecifiedFile?: boolean
 }) => {
-    const {name, data, successMsg = "下载完成", errorMsg = "下载失败", isOpenSpecifiedFile = false} = params
+    const {name, data, successMsg = "Download Complete", errorMsg = "Download Failed", isOpenSpecifiedFile = false} = params
     const isArr = Array.isArray(data)
     const showSaveDialogRes = await ipcRenderer.invoke("show-save-dialog", name)
     if (showSaveDialogRes.canceled) return

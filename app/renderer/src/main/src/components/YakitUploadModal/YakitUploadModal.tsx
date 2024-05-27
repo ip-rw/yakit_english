@@ -26,7 +26,7 @@ export interface ImportAndExportStatusInfo {
     title: string
     streamData: SaveProgressStream
     logListInfo: LogListInfo[]
-    showDownloadDetail: boolean // 是否显示-下载详细信息
+    showDownloadDetail: boolean // Show Download Details?
 }
 
 export const ImportAndExportStatusInfo: React.FC<ImportAndExportStatusInfo> = memo((props) => {
@@ -65,7 +65,7 @@ export const ImportAndExportStatusInfo: React.FC<ImportAndExportStatusInfo> = me
                             percent={Math.floor((streamData.Progress || 0) * 100)}
                             showInfo={false}
                         />
-                        <div className={styles["progress-title"]}>进度 {Math.round(streamData.Progress * 100)}%</div>
+                        <div className={styles["progress-title"]}>Progress {Math.round(streamData.Progress * 100)}%</div>
                     </div>
                     {showDownloadDetail && (
                         <div className={styles["download-info-wrapper"]}>
@@ -73,7 +73,7 @@ export const ImportAndExportStatusInfo: React.FC<ImportAndExportStatusInfo> = me
                                 {streamData.RestDurationVerbose && (
                                     <>
                                         <div>
-                                            剩余时间 :{" "}
+                                            Remaining Time :{" "}
                                             {streamData.Progress === 1 ? "0s" : streamData.RestDurationVerbose}
                                         </div>
                                         <div className={styles["divider-wrapper"]}>
@@ -85,7 +85,7 @@ export const ImportAndExportStatusInfo: React.FC<ImportAndExportStatusInfo> = me
                             <>
                                 {streamData.CostDurationVerbose && (
                                     <>
-                                        <div>耗时 : {streamData.CostDurationVerbose}</div>
+                                        <div>Duration : {streamData.CostDurationVerbose}</div>
                                         <div className={styles["divider-wrapper"]}>
                                             <div className={styles["divider-style"]}></div>
                                         </div>
@@ -95,7 +95,7 @@ export const ImportAndExportStatusInfo: React.FC<ImportAndExportStatusInfo> = me
                             <>
                                 {streamData.Speed && (
                                     <>
-                                        <div>下载速度 : {streamData.Speed}M/s</div>
+                                        <div>Download Speed : {streamData.Speed}M/s</div>
                                         <div className={styles["divider-wrapper"]}>
                                             <div className={styles["divider-style"]}></div>
                                         </div>
@@ -133,27 +133,27 @@ export interface UploadList {
 }
 
 interface FileRegexInfo {
-    fileType?: string[] // 上传文件后缀类型
+    fileType?: string[] // Upload File Extension Type
     fileTypeErrorMsg?: string
-    fileNameRegex?: RegExp // 文件名正则
+    fileNameRegex?: RegExp // Filename Regex
     fileNameErrorMsg?: string
 }
 
 export interface YakitUploadComponentProps {
-    step: 1 | 2 // 步骤1或2 步骤1为上传 步骤2为进度条显示
-    stepOneSubTitle: React.ReactElement | string // 步骤1-子标题
-    fileRegexInfo?: FileRegexInfo // 文件校验相关信息
-    directory?: boolean // 是否上传文件夹 默认文件夹
-    uploadList: UploadList[] // 上传列表
+    step: 1 | 2 // Step 1 or 2, Step 1 Uploads, Step 2 Shows Progress
+    stepOneSubTitle: React.ReactElement | string // Step 1 - Subtitle
+    fileRegexInfo?: FileRegexInfo // File Verification Info
+    directory?: boolean // Upload Folder? Default is Folder
+    uploadList: UploadList[] // Upload List
     onUploadList: (uploadList: UploadList[]) => void
-    nextTitle?: string // 步骤2-标题
-    showDownloadDetail?: boolean // 步骤2-显示进度条-剩余时间-耗时-下载速度
-    streamData?: SaveProgressStream // 步骤2-导入流数据
-    logListInfo?: LogListInfo[] // 步骤2-导入中的日志信息
+    nextTitle?: string // Step 2 - Title
+    showDownloadDetail?: boolean // Step 2 - Show Progress Bar - Remaining Time - Duration - Download Speed
+    streamData?: SaveProgressStream // Step 2 - Import Stream Data
+    logListInfo?: LogListInfo[] // Step 2 - Log During Import
 }
 
 /**
- * 暂不支持同时传文件或文件夹
+ * Concurrent File/Folder Uploads Not Supported
  */
 export const YakitUploadComponent: React.FC<YakitUploadComponentProps> = (props) => {
     const {
@@ -163,7 +163,7 @@ export const YakitUploadComponent: React.FC<YakitUploadComponentProps> = (props)
         directory = true,
         uploadList = [],
         onUploadList,
-        nextTitle = "导入中",
+        nextTitle = "Importing",
         showDownloadDetail = false,
         streamData,
         logListInfo
@@ -180,18 +180,18 @@ export const YakitUploadComponent: React.FC<YakitUploadComponentProps> = (props)
                     const {
                         fileType = [],
                         fileNameRegex,
-                        fileTypeErrorMsg = "不符合上传要求，请上传正确格式文件",
-                        fileNameErrorMsg = "不符合上传要求，请上传正确格式文件"
+                        fileTypeErrorMsg = "Invalid Upload Format, Please Upload Correct File Type",
+                        fileNameErrorMsg = "Invalid Upload Format, Please Upload Correct File Type"
                     } = fileRegexInfo
 
                     if (!directory) {
                         const index = f.name.indexOf('.')
                         
                         if (index === -1) {
-                            failed("请误上传文件夹")
+                            failed("Do Not Upload Folders")
                             return false
                         } else {
-                            // 校验文件名后缀
+                            // Verify Filename Extension
                             const extname = f.name.split('.').pop()
                             if (fileType.length && !fileType.includes('.' + extname)) {
                                 failed(`${f.name}${fileTypeErrorMsg}`)
@@ -200,7 +200,7 @@ export const YakitUploadComponent: React.FC<YakitUploadComponentProps> = (props)
                         }
                     }
 
-                    // 校验文件名或文件夹名
+                    // Verify Filename/Folder Name
                     if (fileNameRegex && !fileNameRegex.test(f.name)) {
                         failed(`${f.name}${fileNameErrorMsg}`)
                         return
@@ -208,7 +208,7 @@ export const YakitUploadComponent: React.FC<YakitUploadComponentProps> = (props)
                 }
 
                 if (uploadList.map((item) => item.path).includes(f.path)) {
-                    warn(`${f.path}已选择`)
+                    warn(`${f.path}Selected`)
                     return
                 }
                 let name = f.name.split(".")[0]
@@ -227,7 +227,7 @@ export const YakitUploadComponent: React.FC<YakitUploadComponentProps> = (props)
     const onUploadFolder = useMemoizedFn(async () => {
         try {
             const data: {filePaths: string[]} = await ipcRenderer.invoke("openDialog", {
-                title: "请选择文件夹",
+                title: "Choose Folder",
                 properties: ["openDirectory", "multiSelections"]
             })
             if (data.filePaths.length) {
@@ -241,7 +241,7 @@ export const YakitUploadComponent: React.FC<YakitUploadComponentProps> = (props)
                 absolutePath.forEach((path) => {
                     const name = path.split("\\").pop() || ""
                     if (fileRegexInfo && name) {
-                        const {fileNameRegex, fileNameErrorMsg = "不符合上传要求，请上传正确格式文件"} = fileRegexInfo
+                        const {fileNameRegex, fileNameErrorMsg = "Invalid Upload Format, Please Upload Correct File Type"} = fileRegexInfo
 
                         if (fileNameRegex && !fileNameRegex.test(name)) {
                             failed(`${name}${fileNameErrorMsg}`)
@@ -250,7 +250,7 @@ export const YakitUploadComponent: React.FC<YakitUploadComponentProps> = (props)
                     }
 
                     if (setAllPath.has(path)) {
-                        warn(`${path}已选择`)
+                        warn(`${path}Selected`)
                         return
                     }
 
@@ -275,10 +275,10 @@ export const YakitUploadComponent: React.FC<YakitUploadComponentProps> = (props)
                         <div className={styles["card-box"]}>
                             <>
                                 <div className={styles["upload-dragger-box"]}>
-                                    {/* 不要设置directory属性 会导致前端很卡 */}
+                                    {/* Do Not Set "directory" Attribute, Causes Frontend Lag */}
                                     <Dragger
                                         className={styles["upload-dragger"]}
-                                        // accept={fileRegexInfo?.fileType?.join(',')} 不在这里给限制 由于前端需要给msg提示
+                                        // accept={fileRegexInfo?.fileType?.join(',')} No Limits Here, Needs Frontend Msg
                                         multiple={true}
                                         showUploadList={false}
                                         beforeUpload={(f: any, fileList: any) => {
@@ -292,7 +292,7 @@ export const YakitUploadComponent: React.FC<YakitUploadComponentProps> = (props)
                                             </div>
                                             <div className={styles["content"]}>
                                                 <div className={styles["title"]}>
-                                                    可将文件拖入框内，或
+                                                    Drag Files Here, or
                                                     <span
                                                         className={styles["hight-light"]}
                                                         onClick={(e) => {
@@ -302,7 +302,7 @@ export const YakitUploadComponent: React.FC<YakitUploadComponentProps> = (props)
                                                             }
                                                         }}
                                                     >
-                                                        点击此处导入
+                                                        Click to Import
                                                     </span>
                                                 </div>
                                                 <div className={styles["sub-title"]}>{stepOneSubTitle}</div>

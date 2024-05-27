@@ -14,7 +14,7 @@ export interface ThirdPartyApplicationConfigProp {
     data?: ThirdPartyApplicationConfig
     onAdd: (i: ThirdPartyApplicationConfig) => void
     onCancel: () => void
-    /**是否可输入 @default true */
+    /**Input Allowed @default true */
     isCanInput?: boolean
 }
 
@@ -24,9 +24,9 @@ export function getThirdPartyAppExtraParams(type: string) {
         case "chatglm":
         case "moonshot":
             return [
-                {label: "模型名称", key: "model"},
-                {label: "第三方加速域名", key: "domain"},
-                {label: "代理地址", key: "proxy"}
+                {label: "Model Name", key: "model"},
+                {label: "3rd Party Accel Domain", key: "domain"},
+                {label: "Proxy Addr", key: "proxy"}
             ]
         default:
             return []
@@ -83,7 +83,7 @@ export const ThirdPartyApplicationConfigForm: React.FC<ThirdPartyApplicationConf
             }}
         >
             {isCanInput ? (
-                <Form.Item label={"类型"} required={true}>
+                <Form.Item label={"Type"} required={true}>
                     <YakitAutoComplete
                         options={options}
                         value={params.Type}
@@ -93,7 +93,7 @@ export const ThirdPartyApplicationConfigForm: React.FC<ThirdPartyApplicationConf
                 </Form.Item>
             ) : (
                 <DemoItemSelectOne
-                    label={"类型"}
+                    label={"Type"}
                     data={options as SelectOptionsProps[]}
                     value={params.Type}
                     disabled={existed}
@@ -109,13 +109,13 @@ export const ThirdPartyApplicationConfigForm: React.FC<ThirdPartyApplicationConf
                 required={true}
             />
             <InputItem
-                label={"用户信息"}
+                label={"User Info"}
                 value={params.UserIdentifier}
                 setValue={(val) => setParams({...params, UserIdentifier: val})}
                 help={"email / username"}
             />
             {getThirdPartyAppExtraParams(params.Type).length > 0 && (
-                <DemoItemSwitch label={"其他信息"} value={advanced} setValue={setAdvanced} />
+                <DemoItemSwitch label={"Other Info"} value={advanced} setValue={setAdvanced} />
             )}
 
             {advanced &&
@@ -132,10 +132,10 @@ export const ThirdPartyApplicationConfigForm: React.FC<ThirdPartyApplicationConf
                 })}
             <div style={{display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 12}}>
                 <YakitButton type='outline2' loading={false} onClick={() => props.onCancel()}>
-                    取消
+                    Cancel
                 </YakitButton>
                 <YakitButton type={"primary"} loading={false} onClick={() => props.onAdd(params)}>
-                    确定添加
+                    Confirm Add
                 </YakitButton>
             </div>
         </Form>

@@ -94,10 +94,10 @@ export const BatchExecuteByFilter: React.FC<BatchExecuteByFilterProp> = React.me
     const [executing, setExecuting] = useState(false);
     const [percent, setPercent] = useState(0);
 
-    // 执行任务历史列表
+    // Task Execution History
     // const [taskHistory, setTaskHistory] = useState<NewTaskHistoryProps[]>([])
 
-    // 计算插件数量
+    // Calculate Plugin Count
     useEffect(() => {
         if ((props?.total || 0) > 0) {
             setTotal(props.total as number)
@@ -122,7 +122,7 @@ export const BatchExecuteByFilter: React.FC<BatchExecuteByFilterProp> = React.me
         }
     }, [props.baseProgress])
 
-    // // 回复缓存
+    // // Refresh Cache
     // useEffect(() => {
     //     setLoading(true)
     //     ipcRenderer
@@ -137,7 +137,7 @@ export const BatchExecuteByFilter: React.FC<BatchExecuteByFilterProp> = React.me
     //         })
     // }, [])
 
-    // 执行批量任务
+    // Execute Batch Task
     const run = useMemoizedFn((t: TargetRequest) => {
         setPercent(0)
 
@@ -151,7 +151,7 @@ export const BatchExecuteByFilter: React.FC<BatchExecuteByFilterProp> = React.me
         ).then(() => {
             setExecuting(true)
         }).catch(e => {
-            failed(`启动批量执行插件失败：${e}`)
+            failed(`Failed to Launch Batch Plugin：${e}`)
         })
     });
 
@@ -182,7 +182,7 @@ export const BatchExecuteByFilter: React.FC<BatchExecuteByFilterProp> = React.me
 
     return <AutoCard
         title={<Space>
-            {"已选插件"}
+            {"Selected Plugin"}
             <Tag>{`${total}`}</Tag>
         </Space>}
         size={"small"} bordered={false}
@@ -243,7 +243,7 @@ export const BatchExecutorResultByFilter: React.FC<BatchExecutorResultByFilterPr
                 return
             }
             console.info("call exception")
-            failed(`批量执行失败：${exception}`)
+            failed(`Batch Execution Failed：${exception}`)
             console.info(exception)
         })
 
@@ -252,17 +252,17 @@ export const BatchExecutorResultByFilter: React.FC<BatchExecutorResultByFilterPr
         let removed = false;
 
         ipcRenderer.on(`${props.token}-data`, async (e, data: ExecBatchYakScriptResult) => {
-            // 移除旧的任务进度
+            // Remove Old Task Progress
             if (!removed && !!props.recoverUid) {
                 removed = true
                 ipcRenderer.invoke("PopExecBatchYakScriptUnfinishedTaskByUid", {Uid: props.recoverUid}).then(e => {
-                    info("未完成任务进度信息已更新")
+                    info("Unfinished Task Progress Updated")
                 }).catch(e => {
-                    failed("删除旧任务进度失败")
+                    failed("Failed to Delete Old Task Progress")
                 })
             }
 
-            // 处理进度信息
+            // Processing Progress Info
             if (data.ProgressMessage) {
                 setProgressTotal(data.ProgressTotal || 0)
                 setProgressRunning(data.ProgressRunning || 0)
@@ -327,17 +327,17 @@ export const BatchExecutorResultByFilter: React.FC<BatchExecutorResultByFilterPr
     return <div className="batch-executor-result">
         <div className="result-notice-body">
             <div className="notice-body">
-                <div className="notice-body-header notice-font-in-progress">执行中状态</div>
-                <div className="notice-body-counter">{progressRunning}进程 / {scanTaskExecutingCount}任务</div>
+                <div className="notice-body-header notice-font-in-progress">Executing</div>
+                <div className="notice-body-counter">{progressRunning}Process / {scanTaskExecutingCount}Task</div>
             </div>
             <Divider type="vertical" className="notice-divider"/>
             <div className="notice-body">
-                <div className="notice-body-header notice-font-completed">已结束/总进程</div>
+                <div className="notice-body-header notice-font-completed">Ended/Total Processes</div>
                 <div className="notice-body-counter">{progressFinished}/{progressTotal}</div>
             </div>
             <Divider type="vertical" className="notice-divider"/>
             <div className="notice-body">
-                <div className="notice-body-header notice-font-vuln">命中风险/漏洞</div>
+                <div className="notice-body-header notice-font-vuln">Risk Detected/Vulnerability</div>
                 <div className="notice-body-counter">{jsonRisks.length}</div>
             </div>
         </div>
@@ -346,10 +346,10 @@ export const BatchExecutorResultByFilter: React.FC<BatchExecutorResultByFilterPr
         <div className="result-table-body">
             <Tabs className="div-width-height-100 no-theme-tabs" activeKey={activeKey} onChange={setActiveKey} tabBarExtraContent={<div style={{textAlign: "right"}}>
                 <div className={"notice-hole-text"} onClick={openMenu}>
-                    查看完整漏洞
+                    View Full Vulnerability
                 </div>
             </div>}>
-                <Tabs.TabPane tab="任务日志" key={"executing"}>
+                <Tabs.TabPane tab="Task Log" key={"executing"}>
                     <div className="div-width-height-100" style={{overflow: "hidden"}}>
                         <Timeline className="body-time-line" pending={props.executing} reverse={true}>
                             {taskLog.map(item => {
@@ -363,7 +363,7 @@ export const BatchExecutorResultByFilter: React.FC<BatchExecutorResultByFilterPr
                         </Timeline>
                     </div>
                 </Tabs.TabPane>
-                <Tabs.TabPane tab="命中风险与漏洞" key={"hitTable"}>
+                <Tabs.TabPane tab="Risk and Vulnerability Detected" key={"hitTable"}>
                     <div style={{width: "100%", height: "100%"}}>
                         <ReactResizeDetector
                             onResize={(width, height) => {

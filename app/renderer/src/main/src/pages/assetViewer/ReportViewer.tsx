@@ -74,19 +74,19 @@ export const ReportViewer: React.FC<ReportViewerProp> = (props) => {
         }
     }, [report])
 
-    // 下载报告
+    // Download Report
     const exportToWord = async () => {
         const contentHTML = divRef.current
 
         if (isEchartsToImg.current) {
             isEchartsToImg.current = false
-            // 使用html2canvas将ECharts图表转换为图像
+            // Convert ECharts to Image with html2canvas
             const echartsElements = contentHTML.querySelectorAll('[data-type="echarts-box"]')
             const promises = Array.from(echartsElements).map(async (element) => {
                 // @ts-ignore
                 const echartType: string = element.getAttribute("echart-type")
                 let options = {}
-                // 适配各种图表
+                // Adapt Various Charts
                 if (echartType === "vertical-bar") {
                     options = {scale: 1, windowWidth: 1000,x:150,y:0}
                 } else if (echartType === "hollow-pie") {
@@ -105,7 +105,7 @@ export const ReportViewer: React.FC<ReportViewerProp> = (props) => {
 
             const echartsImages = await Promise.all(promises)
 
-            // 将图像插入到contentHTML中
+            // Insert Image into contentHTML
             echartsImages.forEach((imageDataUrl, index) => {
                 const img = document.createElement("img")
                 img.src = imageDataUrl
@@ -113,9 +113,9 @@ export const ReportViewer: React.FC<ReportViewerProp> = (props) => {
                 echartsElements[index].appendChild(img)
             })
         }
-        // word报告不要附录 table添加边框 移除南丁格尔玫瑰图点击详情(图像中已含)
+        // Omit Appendix in Word Report, Add Table Borders, Remove Pie Chart Details (Included in Images)
         const wordStr: string = contentHTML.outerHTML
-            .substring(0, contentHTML.outerHTML.indexOf("附录："))
+            .substring(0, contentHTML.outerHTML.indexOf("Appendix："))
             .replace(/<table(.*?)>/g, '<table$1 border="1">')
             .replace(/<th(.*?)>/g, '<th$1 style="width: 10%">')
             .replace(/<div[^>]*id=("nightingle-rose-title"|"nightingle-rose-content")[^>]*>[\s\S]*?<\/div>/g, "")
@@ -123,8 +123,8 @@ export const ReportViewer: React.FC<ReportViewerProp> = (props) => {
         // console.log("wordStr---", wordStr)
 
         saveAs(
-            //保存文件到本地
-            htmlDocx.asBlob(wordStr), //将html转为docx
+            //Save File Locally
+            htmlDocx.asBlob(wordStr), //Convert HTML to DOCX
             `${report.Title}.doc`
         )
         setWordSpinLoading(false)
@@ -133,7 +133,7 @@ export const ReportViewer: React.FC<ReportViewerProp> = (props) => {
     if (report.Id <= 0) {
         return (
             <AutoCard loading={loading}>
-                <Empty>{"选择报告以在此查看内容"}</Empty>
+                <Empty>{"Select Report for Content"}</Empty>
             </AutoCard>
         )
     }
@@ -148,13 +148,13 @@ export const ReportViewer: React.FC<ReportViewerProp> = (props) => {
             scale: 2
         },
         pagebreak: {
-            // 自动分页控制属性
+            // Auto Pagination Attributes
             // mode: 'avoid-all',
             after: "#cover"
         }
     }
 
-    // 下载PDF
+    // Download PDF
     const downloadPdf = () => {
         setSpinLoading(true)
         setTimeout(() => {
@@ -166,15 +166,15 @@ export const ReportViewer: React.FC<ReportViewerProp> = (props) => {
                 .save()
                 .then(() => {
                     setSpinLoading(false)
-                }) // 导出
+                }) // Export
         }, 50)
     }
 
-    // 下载HTML
+    // Download HTML
     const downloadHtml = () => {
         ipcRenderer
             .invoke("openDialog", {
-                title: "请选择文件夹",
+                title: "Choose Folder",
                 properties: ["openDirectory"]
             })
             .then((data: any) => {
@@ -190,7 +190,7 @@ export const ReportViewer: React.FC<ReportViewerProp> = (props) => {
                         .then((r) => {
                             console.log(r)
                             if (r?.ok) {
-                                success("报告导出成功")
+                                success("Export Report Succeeded")
                                 r?.outputDir && openABSFileLocated(r.outputDir)
                             }
                         })
@@ -202,13 +202,13 @@ export const ReportViewer: React.FC<ReportViewerProp> = (props) => {
             })
     }
 
-    // 下载Word
+    // Download Word
     const downloadWord = () => {
         if (!divRef || !divRef.current) return
 
         setWordSpinLoading(true)
 
-        // 此处定时器为了确保已处理其余任务
+        // Timer to Ensure Remaining Tasks Processed
         setTimeout(() => {
             exportToWord()
         }, 300)
@@ -293,7 +293,7 @@ export const ReportViewer: React.FC<ReportViewerProp> = (props) => {
                                 visible={show}
                                 onVisibleChange={(visible) => setShow(visible)}
                             >
-                                <YakitButton size='small'>下载</YakitButton>
+                                <YakitButton size='small'>Download</YakitButton>
                             </YakitPopover>
                         </Space>
                     }

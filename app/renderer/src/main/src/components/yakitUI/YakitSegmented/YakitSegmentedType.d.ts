@@ -2,9 +2,9 @@ import {SegmentedProps} from "antd"
 import {SizeType} from "antd/lib/config-provider/SizeContext"
 
 /**
- * @description: 分段器 Props
+ * @description: Segmenter Props
  * @property {string} wrapperClassName
- * @property {SizeType} size  尺寸
+ * @property {SizeType} size: Size
  */
 interface YakitSegmentedProps extends SegmentedProps {
     wrapClassName?: string

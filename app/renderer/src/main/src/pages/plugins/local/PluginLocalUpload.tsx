@@ -33,7 +33,7 @@ export const PluginLocalUpload: React.FC<PluginLocalUploadProps> = React.memo((p
 
     const onPrivateSelectionPrev = useMemoizedFn((v) => {
         if (v) {
-            // true 选择的私密，私密会跳过检测，直接上传
+            // true Selected as Private, Skipping Scan, Directly Uploading
             setCurrent(current + 2)
             setSuccessPluginNames(pluginNames)
         } else {
@@ -48,11 +48,11 @@ export const PluginLocalUpload: React.FC<PluginLocalUploadProps> = React.memo((p
     const steps = useMemo(() => {
         return [
             {
-                title: "选私密/公开",
+                title: "Selective Privacy/Public",
                 content: <PluginIsPrivateSelection onNext={onPrivateSelectionPrev} />
             },
             {
-                title: "自动检测",
+                title: "Auto Scan",
                 content: (
                     <PluginAutoTest
                         show={current === 1}
@@ -63,7 +63,7 @@ export const PluginLocalUpload: React.FC<PluginLocalUploadProps> = React.memo((p
                 )
             },
             {
-                title: "上传中",
+                title: "Uploading",
                 content: (
                     <PluginUpload
                         show={current === 2 && successPluginNames.length > 0}
@@ -84,11 +84,11 @@ export const PluginLocalUpload: React.FC<PluginLocalUploadProps> = React.memo((p
                 ))}
             </YakitSteps>
             <div className={styles["header-wrapper"]}>
-                <div className={styles["title-style"]}>提示：</div>
+                <div className={styles["title-style"]}>Notice：</div>
                 <div className={styles["header-body"]}>
                     <div className={styles["opt-content"]}>
                         <div className={styles["content-order"]}>1</div>
-                        批量上传只支持新增，更新插件请点击编辑逐个进行更新
+                        Batch Upload Supports Only New Additions, Update Plugins via Edit One By One
                     </div>
                 </div>
             </div>
@@ -98,7 +98,7 @@ export const PluginLocalUpload: React.FC<PluginLocalUploadProps> = React.memo((p
 })
 
 interface PluginIsPrivateSelectionProps {
-    /**下一步 */
+    /**Next Step */
     onNext: (b: boolean) => void
 }
 const PluginIsPrivateSelection: React.FC<PluginIsPrivateSelectionProps> = React.memo((props) => {
@@ -117,7 +117,7 @@ const PluginIsPrivateSelection: React.FC<PluginIsPrivateSelectionProps> = React.
                         setIsPrivate(true)
                     }}
                 >
-                    私密(仅自己可见)
+                    Private (Viewable By Self Only)
                 </Radio>
                 <Radio
                     className='plugins-radio-wrapper'
@@ -126,24 +126,24 @@ const PluginIsPrivateSelection: React.FC<PluginIsPrivateSelectionProps> = React.
                         setIsPrivate(false)
                     }}
                 >
-                    公开(审核通过后，将上架到插件商店)
+                    Public (Post-Review, Listed on Plugin Store)
                 </Radio>
             </div>
             <div className={styles["plugin-local-upload-steps-action"]}>
-                <YakitButton onClick={onClickNext}>下一步</YakitButton>
+                <YakitButton onClick={onClickNext}>Next Step</YakitButton>
             </div>
         </>
     )
 })
 interface PluginAutoTestProps {
-    /**是否显示 */
+    /**Display Status */
     show: boolean
-    /**选择的插件 */
+    /**Selected Plugins */
     pluginNames: string[]
-    /**取消 */
+    /**Cancel */
     onCancel: () => void
     /**
-     * 下一步
+     * Next Step
      */
     onNext: (names: string[]) => void
 }
@@ -177,7 +177,7 @@ const PluginAutoTest: React.FC<PluginAutoTestProps> = React.memo((props) => {
         ipcRenderer.on(`${taskToken}-end`, () => {})
         ipcRenderer.on(`${taskToken}-error`, (_, e) => {
             setIsShowRetry(true)
-            yakitNotify("error", "自动评分异常，请重试")
+            yakitNotify("error", "Auto-Score Exception, Please Retry")
         })
         return () => {
             ipcRenderer.invoke("cancel-SmokingEvaluatePluginBatch", taskToken)
@@ -192,7 +192,7 @@ const PluginAutoTest: React.FC<PluginAutoTestProps> = React.memo((props) => {
             onReset()
         }
     }, [show])
-    /**重置数据 */
+    /**Reset Data */
     const onReset = useMemoizedFn(() => {
         setPercent(0)
         setMessageList([])
@@ -205,12 +205,12 @@ const PluginAutoTest: React.FC<PluginAutoTestProps> = React.memo((props) => {
                 const pluginNameList: string[] = JSON.parse(data.Message || "[]") || []
                 setSuccessPluginNames(pluginNameList)
                 if (pluginNameList.length === pluginNames.length) {
-                    yakitNotify("success", "检测完毕,全部成功,自动进入下一步上传")
+                    yakitNotify("success", "Scan Complete, All Successful, Proceeding to Next Step Upload Automatically")
                     setTimeout(() => {
                         onNext(pluginNameList)
                     }, 200)
                 } else if (pluginNameList.length === 0) {
-                    yakitNotify("error", "检测完毕,全部失败,不能进行上传操作")
+                    yakitNotify("error", "Scan Complete, All Failed, Cannot Proceed with Upload")
                 } else {
                     setIsHaveError(true)
                 }
@@ -235,7 +235,7 @@ const PluginAutoTest: React.FC<PluginAutoTestProps> = React.memo((props) => {
             .invoke("SmokingEvaluatePluginBatch", params, taskTokenRef.current)
             .then(() => {})
             .catch((e) => {
-                failed(`开始检测失败:${e}`)
+                failed(`Start Scan Failed:${e}`)
             })
     })
     const onClickNext = useMemoizedFn(() => {
@@ -256,7 +256,7 @@ const PluginAutoTest: React.FC<PluginAutoTestProps> = React.memo((props) => {
                     strokeColor='#F28B44'
                     trailColor='#F0F2F5'
                     percent={percent}
-                    format={(percent) => `已检测 ${percent}%`}
+                    format={(percent) => `Scanned ${percent}%`}
                 />
                 {messageList.length > 0 && (
                     <div className={styles["plugin-message-list"]}>
@@ -276,30 +276,30 @@ const PluginAutoTest: React.FC<PluginAutoTestProps> = React.memo((props) => {
             </div>
             <div className={styles["plugin-local-upload-steps-action"]}>
                 <YakitButton type='outline2' onClick={onClickCancel}>
-                    取消
+                    Cancel
                 </YakitButton>
-                {isShowRetry && <YakitButton onClick={onClickRetry}>重试</YakitButton>}
-                {isHaveError && <YakitButton onClick={onClickNext}>下一步</YakitButton>}
+                {isShowRetry && <YakitButton onClick={onClickRetry}>Retry</YakitButton>}
+                {isHaveError && <YakitButton onClick={onClickNext}>Next Step</YakitButton>}
             </div>
         </>
     )
 })
 interface PluginUploadProps {
-    /**是否一键上传所有本地插件 */
+    /**Upload All Local Plugins with One Click? */
     isUploadAll?: boolean
-    /**插件选择的私密/公开状态 */
+    /**Selected Plugin as Private/Public Status */
     isPrivate: boolean
-    /**是否显示 */
+    /**Display Status */
     show: boolean
-    /**选择的插件 */
+    /**Selected Plugins */
     pluginNames: string[]
-    /**取消 */
+    /**Cancel */
     onCancel: () => void
     /**
-     * 下一步
+     * Next Step
      */
     onSave: () => void
-    /**底部按钮className */
+    /**Bottom Button ClassName */
     footerClassName?: string
 }
 export const PluginUpload: React.FC<PluginUploadProps> = React.memo((props) => {
@@ -316,7 +316,7 @@ export const PluginUpload: React.FC<PluginUploadProps> = React.memo((props) => {
             onReset()
         }
     }, [show])
-    /**重置数据 */
+    /**Reset Data */
     const onReset = useMemoizedFn(() => {
         setPercent(0)
         setMessageList([])
@@ -378,7 +378,7 @@ export const PluginUpload: React.FC<PluginUploadProps> = React.memo((props) => {
                     strokeColor='#F28B44'
                     trailColor='#F0F2F5'
                     percent={percent}
-                    format={(percent) => `已上传 ${percent}%`}
+                    format={(percent) => `Uploaded ${percent}%`}
                 />
                 {messageList.length > 0 && (
                     <div className={styles["plugin-message-list"]}>
@@ -398,10 +398,10 @@ export const PluginUpload: React.FC<PluginUploadProps> = React.memo((props) => {
             </div>
             <div className={classNames(styles["plugin-local-upload-steps-action"], footerClassName)}>
                 <YakitButton type='outline2' onClick={onClickCancel}>
-                    取消
+                    Cancel
                 </YakitButton>
-                {isShowRetry && <YakitButton onClick={onClickRetry}>重试</YakitButton>}
-                {isHaveError && <YakitButton onClick={onClickNext}>完成</YakitButton>}
+                {isShowRetry && <YakitButton onClick={onClickRetry}>Retry</YakitButton>}
+                {isHaveError && <YakitButton onClick={onClickNext}>Complete</YakitButton>}
             </div>
         </>
     )
@@ -409,7 +409,7 @@ export const PluginUpload: React.FC<PluginUploadProps> = React.memo((props) => {
 
 interface PluginLocalUploadSingleProps {
     onClose: () => void
-    /**上传成功的回调 */
+    /**Upload Success Callback */
     onUploadSuccess: () => void
     plugin: YakScript
 }
@@ -441,7 +441,7 @@ export const PluginLocalUploadSingle: React.FC<PluginLocalUploadSingleProps> = R
         setCurrent(current + 1)
         setIsPrivate(v)
     })
-    /**检测后上传 */
+    /**Scan Then Upload */
     const onUpload = useMemoizedFn(() => {
         const params: SaveYakScriptToOnlineRequest = {
             ScriptNames: [plugin.ScriptName],
@@ -454,7 +454,7 @@ export const PluginLocalUploadSingle: React.FC<PluginLocalUploadSingleProps> = R
     const steps = useMemo(() => {
         return [
             {
-                title: "选私密/公开",
+                title: "Selective Privacy/Public",
                 content: (
                     <PluginIsPrivateSelectionSingle
                         onUpload={onUpload}
@@ -464,7 +464,7 @@ export const PluginLocalUploadSingle: React.FC<PluginLocalUploadSingleProps> = R
                 )
             },
             {
-                title: "自动检测",
+                title: "Auto Scan",
                 content: <PluginAutoTestSingle plugin={plugin} onNext={onUpload} />
             }
         ]
@@ -478,7 +478,7 @@ export const PluginLocalUploadSingle: React.FC<PluginLocalUploadSingleProps> = R
 
 interface PluginAutoTestSingleProps {
     plugin: YakScript
-    /**下一步 */
+    /**Next Step */
     onNext: () => void
 }
 const PluginAutoTestSingle: React.FC<PluginAutoTestSingleProps> = React.memo((props) => {
@@ -497,9 +497,9 @@ const PluginAutoTestSingle: React.FC<PluginAutoTestSingleProps> = React.memo((pr
 
 interface PluginIsPrivateSelectionSingleProps {
     uploadLoading: boolean
-    /**下一步 */
+    /**Next Step */
     onNext: (b: boolean) => void
-    /**上传 */
+    /**Upload */
     onUpload: (b: boolean) => void
 }
 const PluginIsPrivateSelectionSingle: React.FC<PluginIsPrivateSelectionSingleProps> = React.memo((props) => {
@@ -515,15 +515,15 @@ const PluginIsPrivateSelectionSingle: React.FC<PluginIsPrivateSelectionSinglePro
     return (
         <div className={styles["plugin-private-select-single"]}>
             <div className={styles["header-wrapper"]}>
-                <div className={styles["title-style"]}>提示：</div>
+                <div className={styles["title-style"]}>Notice：</div>
                 <div className={styles["header-body"]}>
                     <div className={styles["opt-content"]}>
                         <div className={styles["content-order"]}>1</div>
-                        私密插件不用进行自动检测
+                        No Need for Auto Scan for Private Plugins
                     </div>
                     <div className={styles["opt-content"]}>
                         <div className={styles["content-order"]}>2</div>
-                        公开插件检测成功后会自动上传
+                        Public Plugin Automatically Uploads After Successful Scan
                     </div>
                 </div>
             </div>
@@ -536,7 +536,7 @@ const PluginIsPrivateSelectionSingle: React.FC<PluginIsPrivateSelectionSinglePro
                         setIsPrivate(true)
                     }}
                 >
-                    私密(仅自己可见)
+                    Private (Viewable By Self Only)
                 </Radio>
                 <Radio
                     className='plugins-radio-wrapper'
@@ -545,16 +545,16 @@ const PluginIsPrivateSelectionSingle: React.FC<PluginIsPrivateSelectionSinglePro
                         setIsPrivate(false)
                     }}
                 >
-                    公开(审核通过后，将上架到插件商店)
+                    Public (Post-Review, Listed on Plugin Store)
                 </Radio>
             </div>
             <div className={styles["plugin-local-upload-steps-action"]}>
                 {isPrivate ? (
                     <YakitButton onClick={onClickUpload} loading={uploadLoading}>
-                        上传
+                        Upload
                     </YakitButton>
                 ) : (
-                    <YakitButton onClick={onClickNext}>检测并上传</YakitButton>
+                    <YakitButton onClick={onClickNext}>Scan and Upload</YakitButton>
                 )}
             </div>
         </div>

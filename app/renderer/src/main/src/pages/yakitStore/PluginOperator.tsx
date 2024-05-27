@@ -36,7 +36,7 @@ export const AddToMenuActionForm: React.FC<AddToMenuActionFormProp> = (props) =>
 
     useEffect(() => {
         form.setFieldsValue({
-            // Group: "社区组件",
+            // Group: "Community Components",
             Group: "",
             Verbose: props.script.ScriptName
         })
@@ -49,7 +49,7 @@ export const AddToMenuActionForm: React.FC<AddToMenuActionFormProp> = (props) =>
         })
     }, [visible])
     /**
-     * @description:获取一级菜单
+     * @description: Get Top-Level Menu
      */
     const init = useMemoizedFn((menuMode: string, updateSubMenu?: boolean) => {
         ipcRenderer
@@ -63,7 +63,7 @@ export const AddToMenuActionForm: React.FC<AddToMenuActionFormProp> = (props) =>
                 })
             })
             .catch((err) => {
-                failed("获取菜单失败：" + err)
+                failed("Menu retrieval failed：" + err)
             })
     })
     return (
@@ -81,7 +81,7 @@ export const AddToMenuActionForm: React.FC<AddToMenuActionFormProp> = (props) =>
 
                     if (index === -1) {
                         if (menuData.length >= 50) {
-                            yakitNotify("error", "最多添加50个一级菜单")
+                            yakitNotify("error", "Max 50 Top-Level Menus")
                             return
                         }
                         params = {
@@ -97,7 +97,7 @@ export const AddToMenuActionForm: React.FC<AddToMenuActionFormProp> = (props) =>
                         }
                     } else {
                         if (menuData[index].Items.length >= 50) {
-                            yakitNotify("error", "同一个一级菜单最多添加50个二级菜单")
+                            yakitNotify("error", "Max 50 Submenus Per Top-Level Menu")
                             return
                         }
                         const groupInfo = menuData[index]
@@ -126,7 +126,7 @@ export const AddToMenuActionForm: React.FC<AddToMenuActionFormProp> = (props) =>
                             else ipcRenderer.invoke("change-main-menu")
                             updateGroups()
                             setVisible(false)
-                            success("添加成功")
+                            success("Add Success")
                         })
                         .catch((e: any) => {
                             failed(`${e}`)
@@ -134,13 +134,13 @@ export const AddToMenuActionForm: React.FC<AddToMenuActionFormProp> = (props) =>
                 }}
             >
                 <Form.Item
-                    label={"菜单选项名(展示名称)"}
+                    label={"Menu Option Name (Display Name))"}
                     name='Verbose'
-                    rules={[{required: true, message: "该项为必填"}]}
+                    rules={[{required: true, message: "Required Field"}]}
                 >
                     <YakitInput />
                 </Form.Item>
-                <Form.Item label={"菜单分组"} name='Group' rules={[{required: true, message: "该项为必填"}]}>
+                <Form.Item label={"Menu Group"} name='Group' rules={[{required: true, message: "Required Field"}]}>
                     <YakitAutoComplete options={option} />
                 </Form.Item>
                 <div className='add-to-menu-action-form-footer'>
@@ -151,12 +151,12 @@ export const AddToMenuActionForm: React.FC<AddToMenuActionFormProp> = (props) =>
                                 setVisible(false)
                             }}
                         >
-                            取消
+                            Cancel
                         </YakitButton>
                     </Form.Item>
                     <Form.Item colon={false} noStyle>
                         <YakitButton type='primary' htmlType='submit'>
-                            添加
+                            Add
                         </YakitButton>
                     </Form.Item>
                 </div>

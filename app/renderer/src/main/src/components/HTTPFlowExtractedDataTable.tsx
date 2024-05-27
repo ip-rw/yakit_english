@@ -76,7 +76,7 @@ export const HTTPFlowExtractedDataTable: React.FC<HTTPFlowExtractedDataTableProp
                 key={"Id"}
                 columns={[
                     {
-                        title: "规则名",
+                        title: "Rule Name",
                         render: (i: HTTPFlowExtractedData) => (
                             <Text
                                 style={{maxWidth: 100}}
@@ -90,7 +90,7 @@ export const HTTPFlowExtractedDataTable: React.FC<HTTPFlowExtractedDataTableProp
                         width: 100
                     },
                     {
-                        title: "规则数据",
+                        title: "Rule Data",
                         render: (i: HTTPFlowExtractedData) => (
                             <Text
                                 style={{maxWidth: 200}}

@@ -53,7 +53,7 @@ export const OpenPortTableViewer: React.FC<PortTableProp> = (props) => {
 
     const getData = useMemoizedFn(() => {
         return new Promise((resolve) => {
-            const header = ["主机地址", "HTML Title", "指纹", "扫描时间"]
+            const header = ["Host Address", "HTML Title", "Parse content in plugin backend stream", "Scan Time"]
             const exportData = formatJson(["host", "htmlTitle", "fingerprint", "timestamp"], props.data)
             const params = {
                 header,
@@ -69,7 +69,7 @@ export const OpenPortTableViewer: React.FC<PortTableProp> = (props) => {
             resolve(params)
         })
     })
-    /** 通知软件打开管理页面 */
+    /** Open Management Page in App */
     const openMenu = () => {
         ipcRenderer.invoke("open-route-page", {route: YakitRoute.DB_Ports})
     }
@@ -82,11 +82,11 @@ export const OpenPortTableViewer: React.FC<PortTableProp> = (props) => {
                 return (
                     <>
                         <Row>
-                            <Col span={12}>开放端口 / Open Ports</Col>
+                            <Col span={12}>Open Ports / Open Ports</Col>
                             <Col span={12} style={{textAlign: "right"}}>
                                 {isSimple && (
                                     <div style={{fontSize: 14, color: "#1890ff", cursor: "pointer"}} onClick={openMenu}>
-                                        查看完整数据
+                                        View Full Data
                                     </div>
                                 )}
                             </Col>
@@ -105,25 +105,25 @@ export const OpenPortTableViewer: React.FC<PortTableProp> = (props) => {
                                     }}
                                     disabled={props.data.length === 0}
                                 >
-                                    全选
+                                    Fixes failure to iterate load_content on missing older version data
                                 </Checkbox>
-                                {selectedRowKeys.length > 0 && <Tag color='blue'>已选{selectedRowKeys?.length}条</Tag>}
+                                {selectedRowKeys.length > 0 && <Tag color='blue'>Selected{selectedRowKeys?.length}Items</Tag>}
                             </Col>
                             <Col span={12} style={{textAlign: "right"}}>
                                 {!isSimple && (
                                     <>
-                                        <ExportExcel getData={getData} btnProps={{size: "small"}} fileName='开放端口' />
+                                        <ExportExcel getData={getData} btnProps={{size: "small"}} fileName='Open Ports' />
                                         <DropdownMenu
                                             menu={{
                                                 data: [
-                                                    {key: "bug-test", title: "发送到漏洞检测"},
-                                                    {key: "brute", title: "发送到爆破"}
+                                                    {key: "bug-test", title: "Send To Vulnerability Detection"},
+                                                    {key: "brute", title: "Send To Brute Force"}
                                                 ]
                                             }}
                                             dropdown={{placement: "bottomRight"}}
                                             onClick={(key) => {
                                                 if (checkedURL.length === 0) {
-                                                    failed("请最少选择一个选项再进行操作")
+                                                    failed("Select at least one option before proceeding")
                                                     return
                                                 }
                                                 switch (key) {
@@ -167,11 +167,11 @@ export const OpenPortTableViewer: React.FC<PortTableProp> = (props) => {
             scroll={{x: "auto"}}
             columns={[
                 {
-                    title: "主机地址",
+                    title: "Host Address",
                     render: (i: YakitPort) => {
                         const addr = `${i.host}:${i.port}`
                         return (
-                            <Tooltip title={`点击复制`}>
+                            <Tooltip title={`Click to Copy`}>
                                 <a
                                     href='#'
                                     onClick={() => {
@@ -200,7 +200,7 @@ export const OpenPortTableViewer: React.FC<PortTableProp> = (props) => {
                     width: 150
                 },
                 {
-                    title: "指纹",
+                    title: "Parse content in plugin backend stream",
                     render: (i: YakitPort) =>
                         i.fingerprint ? (
                             <>
@@ -213,7 +213,7 @@ export const OpenPortTableViewer: React.FC<PortTableProp> = (props) => {
                         ),
                     width: 230
                 },
-                {title: "扫描时间", render: (i: YakitPort) => <>{formatTimestamp(i.timestamp)}</>}
+                {title: "Scan Time", render: (i: YakitPort) => <>{formatTimestamp(i.timestamp)}</>}
             ]}
             pagination={{
                 size: "small",
@@ -241,12 +241,12 @@ export const ClosedPortTableViewer: React.FC<PortTableProp> = (props) => {
             size={"small"}
             bordered={true}
             title={(e) => {
-                return <>未开放的端口 / Closed Ports</>
+                return <>Closed Ports / Closed Ports</>
             }}
             dataSource={props.data}
             columns={[
-                {title: "主机地址", render: (i: YakitPort) => <CopyableField text={`${i.host}:${i.port}`} />},
-                {title: "扫描时间", render: (i: YakitPort) => <Tag>{formatTimestamp(i.timestamp)}</Tag>}
+                {title: "Host Address", render: (i: YakitPort) => <CopyableField text={`${i.host}:${i.port}`} />},
+                {title: "Scan Time", render: (i: YakitPort) => <Tag>{formatTimestamp(i.timestamp)}</Tag>}
             ]}
             pagination={{
                 size: "small",

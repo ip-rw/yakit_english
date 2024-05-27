@@ -73,21 +73,21 @@ export const HTTPPacketYakitEditor: React.FC<HTTPPacketYakitEditor> = React.memo
                     {type: "divider"},
                     {
                         key: "csrfpoc",
-                        label: "复制为 CSRF PoC"
+                        label: "Copy as CSRF PoC"
                     }
                 ],
                 onRun: (editor: YakitIMonacoEditor, key: string) => {
                     try {
                         const text = editor.getModel()?.getValue() || ""
                         if (!text) {
-                            info("数据包为空")
+                            info("Packet Empty")
                             return
                         }
                         generateCSRFPocByRequest(StringToUint8Array(text, "utf8"),defaultHttps, (code) => {
                             callCopyToClipboard(code)
                         })
                     } catch (e) {
-                        failed("自动生成 CSRF 失败")
+                        failed("Auto CSRF Generation Failed")
                     }
                 }
             },
@@ -95,7 +95,7 @@ export const HTTPPacketYakitEditor: React.FC<HTTPPacketYakitEditor> = React.memo
                 menu: [
                     {
                         key: "open-in-browser",
-                        label: "浏览器中打开"
+                        label: "Open in Browser"
                     }
                 ],
                 onRun: (editor: YakitIMonacoEditor, key: string) => {
@@ -106,7 +106,7 @@ export const HTTPPacketYakitEditor: React.FC<HTTPPacketYakitEditor> = React.memo
                         }
                         const text = editor.getModel()?.getValue()
                         if (!text) {
-                            failed("无法获取数据包内容")
+                            failed("Cannot Retrieve Packet Content")
                             return
                         }
                         showResponseViaResponseRaw(originValue)
@@ -119,7 +119,7 @@ export const HTTPPacketYakitEditor: React.FC<HTTPPacketYakitEditor> = React.memo
                 menu: [
                     {
                         key: "download-body",
-                        label: "下载 Body"
+                        label: "Download Body"
                     }
                 ],
                 onRun: (editor: YakitIMonacoEditor, key: string) => {
@@ -131,15 +131,15 @@ export const HTTPPacketYakitEditor: React.FC<HTTPPacketYakitEditor> = React.memo
                                     saveABSFileToOpen("packet-body.txt", bytes.Raw)
                                 })
                                 .catch((e) => {
-                                    info(`保存失败：${e}`)
+                                    info(`Save Failed：${e}`)
                                 })
                             return
                         }
                         const text = editor.getModel()?.getValue()
                         if (!text) {
                             Modal.info({
-                                title: "下载 Body 失败",
-                                content: <>{"无数据包-无法下载 Body"}</>
+                                title: "Download Body Failed",
+                                content: <>{"No Packet - Cannot Download Body"}</>
                             })
                             return
                         }
@@ -155,7 +155,7 @@ export const HTTPPacketYakitEditor: React.FC<HTTPPacketYakitEditor> = React.memo
                 menu: [
                     {
                         key: "auto-decode",
-                        label: "智能自动解码（Inspector）"
+                        label: "Smart AutoDecode (Inspector）"
                     }
                 ],
                 onRun: (editor: YakitIMonacoEditor, key: string) => {
@@ -163,8 +163,8 @@ export const HTTPPacketYakitEditor: React.FC<HTTPPacketYakitEditor> = React.memo
                         const text = editor.getModel()?.getValueInRange(editor.getSelection() as any) || ""
                         if (!text) {
                             Modal.info({
-                                title: "自动解码失败",
-                                content: <>{"文本为空，请选择文本再自动解码"}</>
+                                title: "AutoDecode Failed",
+                                content: <>{"Text Empty, Select Text to AutoDecode"}</>
                             })
                             return
                         }
@@ -180,16 +180,16 @@ export const HTTPPacketYakitEditor: React.FC<HTTPPacketYakitEditor> = React.memo
                 menu: [
                     {
                         key: "new-web-socket-tab",
-                        label: "发送到WS Fuzzer",
+                        label: "Send to WS Fuzzer",
                         children: [
                             {
-                                key: "发送并跳转",
-                                label: "发送并跳转",
+                                key: "Send & Redirect",
+                                label: "Send & Redirect",
                                 keybindings: [YakitEditorKeyCode.Control, YakitEditorKeyCode.KEY_R]
                             },
                             {
-                                key: "仅发送",
-                                label: "仅发送",
+                                key: "Send Only",
+                                label: "Send Only",
                                 keybindings: [
                                     YakitEditorKeyCode.Control,
                                     YakitEditorKeyCode.Shift,
@@ -203,12 +203,12 @@ export const HTTPPacketYakitEditor: React.FC<HTTPPacketYakitEditor> = React.memo
                     try {
                         const text = webSocketValue || editor.getModel()?.getValue() || ""
                         if (!text) {
-                            info("数据包为空")
+                            info("Packet Empty")
                             return
                         }
-                        if (key === "发送并跳转") {
+                        if (key === "Send & Redirect") {
                             newWebsocketFuzzerTab(defaultHttps || false, StringToUint8Array(text), true, StringToUint8Array(webSocketToServer || ""))
-                        } else if (key === "仅发送") {
+                        } else if (key === "Send Only") {
                             newWebsocketFuzzerTab(defaultHttps || false, StringToUint8Array(text), false, StringToUint8Array(webSocketToServer || ""))
                         }
                     } catch (e) {
@@ -221,16 +221,16 @@ export const HTTPPacketYakitEditor: React.FC<HTTPPacketYakitEditor> = React.memo
                 menu: [
                     {
                         key: "new-web-fuzzer-tab",
-                        label: "发送到 WebFuzzer",
+                        label: "Send to WebFuzzer",
                         children: [
                             {
-                                key: "发送并跳转",
-                                label: "发送并跳转",
+                                key: "Send & Redirect",
+                                label: "Send & Redirect",
                                 keybindings: [YakitEditorKeyCode.Control, YakitEditorKeyCode.KEY_R]
                             },
                             {
-                                key: "仅发送",
-                                label: "仅发送",
+                                key: "Send Only",
+                                label: "Send Only",
                                 keybindings: [
                                     YakitEditorKeyCode.Control,
                                     YakitEditorKeyCode.Shift,
@@ -244,14 +244,14 @@ export const HTTPPacketYakitEditor: React.FC<HTTPPacketYakitEditor> = React.memo
                     try {
                         const text = webFuzzerValue || editor.getModel()?.getValue() || ""
                         if (!text) {
-                            info("数据包为空")
+                            info("Packet Empty")
                             return
                         }
-                        if (key === "发送并跳转") {
+                        if (key === "Send & Redirect") {
                             newWebFuzzerTab(defaultHttps || false, text).finally(() => {
                                 webFuzzerCallBack && webFuzzerCallBack()
                             })
-                        } else if (key === "仅发送") {
+                        } else if (key === "Send Only") {
                             newWebFuzzerTab(defaultHttps || false, text, false).finally(() => {
                                 webFuzzerCallBack && webFuzzerCallBack()
                             })

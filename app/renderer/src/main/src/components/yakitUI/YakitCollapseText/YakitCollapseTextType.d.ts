@@ -1,11 +1,11 @@
 export interface YakitCollapseTextProps {
-    /** 内容 */
+    /** Content */
     content: string
-    /** 折叠时展示的行数，默认3行 */
+    /** Lines shown when folded, default 3 */
     rows?: number
-    /** 内容单行行高，默认 16px */
+    /** Single line height, default 16px */
     lineHeight?: number
-    /** 文字大小，默认 12px */
+    /** Text size, default 12px */
     fontSize?: number
     wrapperClassName?: string
 }

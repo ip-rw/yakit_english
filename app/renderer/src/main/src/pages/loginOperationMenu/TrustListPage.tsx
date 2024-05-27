@@ -45,7 +45,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = (props) => {
 
     const onAdd = useMemoizedFn(() => {
         if (!appid) {
-            info("请先选择用户")
+            info("Please Select User First")
             return
         }
         const param = {
@@ -70,7 +70,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = (props) => {
                 })
             })
             .catch((err) => {
-                failed("增加信任用户失败：" + err)
+                failed("Add Trusted User Failed：" + err)
             })
             .finally(() => {
                 setTimeout(() => {
@@ -109,7 +109,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = (props) => {
                     setUserList(res)
                 })
                 .catch((err) => {
-                    failed("获取普通用户失败：" + err)
+                    failed("Get Ordinary User Failed：" + err)
                 })
                 .finally(() => {
                     setTimeout(() => setLoading(false), 200)
@@ -125,7 +125,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = (props) => {
         <div style={{marginTop: 24}} className='trust-list-admin-page-container'>
             <Form {...layout} form={form} onFinish={() => onAdd()}>
                 <div className='add-account-body' style={{marginLeft: 50}}>
-                    <span>添加用户：</span>
+                    <span>Add User：</span>
                     <ItemSelects
                         isItem={false}
                         select={{
@@ -137,7 +137,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = (props) => {
                             optValue: "name",
                             optText: "appid",
                             optKey:"appid",
-                            placeholder: "请输入完整的用户名",
+                            placeholder: "Enter Complete Username",
                             optionLabelProp: "name",
                             value: currentUser,
                             onSelect: (_, option: any) => {
@@ -152,7 +152,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = (props) => {
                 </div>
 
                 <div style={{marginLeft: 50}}>
-                    <span>选择角色：</span>
+                    <span>Select Role：</span>
                     <ItemSelects
                         isItem={false}
                         select={{
@@ -163,24 +163,24 @@ const CreateUserForm: React.FC<CreateUserFormProps> = (props) => {
                             data: [
                                 {
                                     value: "trusted",
-                                    label: "信任用户"
+                                    label: "Trusted User"
                                 },
                                 {
                                     value: "admin",
-                                    label: "管理员"
+                                    label: "Admin"
                                 },
                                 {
                                     value: "licenseAdmin",
-                                    label: "License管理员"
+                                    label: "License Admin"
                                 },
                                 {
                                     value: "operate",
-                                    label: "运营专员"
+                                    label: "Operations Specialist"
                                 }
                             ],
                             optValue: "value",
                             optText: "label",
-                            placeholder: "请选择角色",
+                            placeholder: "Select a Role",
                             optionLabelProp: "title",
                             value: role,
                             onSelect: (_, option: any) => onSelectRole(option),
@@ -190,7 +190,7 @@ const CreateUserForm: React.FC<CreateUserFormProps> = (props) => {
                 </div>
                 <div style={{textAlign: "center", marginTop: 20}}>
                     <Button type='primary' htmlType='submit' loading={loading}>
-                        添加
+                        Add
                     </Button>
                 </div>
             </Form>
@@ -244,7 +244,7 @@ export const TrustListPage: React.FC<TrustListPageProp> = (props) => {
                 setTotal(res.pagemeta.total)
             })
             .catch((err) => {
-                failed("获取账号列表失败：" + err)
+                failed("Get Account List Failed：" + err)
             })
             .finally(() => {
                 setTimeout(() => {
@@ -274,11 +274,11 @@ export const TrustListPage: React.FC<TrustListPageProp> = (props) => {
             }
         })
             .then((res) => {
-                success("删除用户成功")
+                success("User Deletion Successful")
                 update()
             })
             .catch((err) => {
-                failed("删除账号失败：" + err)
+                failed("Account Deletion Failed：" + err)
             })
             .finally(() => {})
     }
@@ -311,7 +311,7 @@ export const TrustListPage: React.FC<TrustListPageProp> = (props) => {
 
     const columns: ColumnsType<API.UserList> = [
         {
-            title: "用户",
+            title: "User",
             dataIndex: "name",
             render: (text: string, record) => (
                 <div style={{display: "flex"}}>
@@ -324,25 +324,25 @@ export const TrustListPage: React.FC<TrustListPageProp> = (props) => {
             )
         },
         {
-            title: "用户角色",
+            title: "User Role",
             dataIndex: "role",
             render: (text) => {
                 let role = text
                 switch (text) {
                     case "admin":
-                        role = "管理员"
+                        role = "Admin"
                         break
                     case "superAdmin":
-                        role = "超级管理员"
+                        role = "Super Admin"
                         break
                     case "licenseAdmin":
-                        role = "License管理员"
+                        role = "License Admin"
                         break
                     case "trusted":
-                        role = "信任用户"
+                        role = "Trusted User"
                         break
                     case "operate":
-                        role = "运营专员"
+                        role = "Operations Specialist"
                         break
                     default:
                         role = "--"
@@ -352,23 +352,23 @@ export const TrustListPage: React.FC<TrustListPageProp> = (props) => {
             }
         },
         {
-            title: "创建时间",
+            title: "Creation Time",
             dataIndex: "created_at",
             render: (text) => <span>{moment.unix(text).format("YYYY-MM-DD HH:mm")}</span>
         },
         {
-            title: "操作",
+            title: "Action",
             render: (i) => (
                 <Space>
                     <Popconfirm
-                        title={"确定移除该用户吗？"}
+                        title={"Confirm Removal of User?？"}
                         onConfirm={() => {
                             onRemove([i.appid])
                         }}
                         placement="right"
                     >
                         <Button size={"small"} danger={true} type="link">
-                            移除
+                            Remove
                         </Button>
                     </Popconfirm>
                 </Space>
@@ -397,7 +397,7 @@ export const TrustListPage: React.FC<TrustListPageProp> = (props) => {
                         <div className='table-title'>
                             <div className='filter'>
                                 <Input.Search
-                                    placeholder={"请输入用户名进行搜索"}
+                                    placeholder={"Enter Username to Search"}
                                     enterButton={true}
                                     size={"small"}
                                     style={{width: 200}}
@@ -414,18 +414,18 @@ export const TrustListPage: React.FC<TrustListPageProp> = (props) => {
                                 <Space>
                                     {!!selectedRowKeys.length ? (
                                         <Popconfirm
-                                            title={"确定删除选择的用户吗？不可恢复"}
+                                            title={"Confirm Deletion of Selected User? Irreversible"}
                                             onConfirm={() => {
                                                 onRemove(selectedRowKeys)
                                             }}
                                         >
                                             <Button type='primary' htmlType='submit' size='small'>
-                                                批量移除
+                                                Batch Removal
                                             </Button>
                                         </Popconfirm>
                                     ) : (
                                         <Button type='primary' size='small' disabled={true}>
-                                            批量移除
+                                            Batch Removal
                                         </Button>
                                     )}
                                     <Button
@@ -434,7 +434,7 @@ export const TrustListPage: React.FC<TrustListPageProp> = (props) => {
                                         size='small'
                                         onClick={() => setCreateUserShow(!createUserShow)}
                                     >
-                                        添加用户
+                                        Add User
                                     </Button>
                                 </Space>
                             </div>
@@ -452,7 +452,7 @@ export const TrustListPage: React.FC<TrustListPageProp> = (props) => {
             />
             <Modal
                 visible={createUserShow}
-                title={"添加用户"}
+                title={"Add User"}
                 destroyOnClose={true}
                 maskClosable={false}
                 bodyStyle={{padding: "10px 24px 24px 24px"}}

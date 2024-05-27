@@ -1,19 +1,19 @@
 const { ipcMain } = require("electron");
 
 module.exports = (win, getClient) => {
-  // 存储多对比页面的token和data
+  // Store Token and Data for Multiple Comparison Pages
   const dataMap = new Map();
-  // 当前token值
+  // Current Token Value
   var token = "";
   /**
-   * 新增页面的入口
+   * Add Page Entry
    * @type {boolean}
-   * true : 其他页面的请求新增
-   * false : 主页新增
+   * true: Add Request from Other Pages
+   * false: Add to Homepage
    */
   var type = false;
 
-  // 接收http-history页面的数据对比请求,生成对映码并转发通知主页新增data-compare页面
+  // Receive Data Comparison Requests from http-history Page, Generate Correspondence Code and Notify Homepage to Add data-compare Page
   ipcMain.handle("add-data-compare", (e, params) => {
     type = true;
     const infoType = ["", "left", "right"][+params.type];
@@ -46,7 +46,7 @@ module.exports = (win, getClient) => {
     type = true;
   });
 
-  // 转发数据
+  // Forward Data
   const sendDataCompare = () => {
     return new Promise((resolve, reject) => {
       if (type) return resolve({ token: token, info: dataMap.get(token) });
@@ -59,7 +59,7 @@ module.exports = (win, getClient) => {
       }
     });
   };
-  // 接收主页收到的对比数据，并传入数据对比页面中
+  // Receive Comparison Data Received by Homepage, and Input into Data Comparison Page
   ipcMain.handle("create-compare-token", async (e) => {
     return await sendDataCompare();
   });

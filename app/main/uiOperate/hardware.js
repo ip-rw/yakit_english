@@ -5,9 +5,9 @@ const process = require("process")
 const {yaklangEngineDir, remoteLinkDir, yakitInstallDir} = require("../filePath")
 
 module.exports = (win, getClient) => {
-    // CPU瞬时使用均值
+    // CPU usage average
     const cpuData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    // CPU监听计时器变量
+    // CPU monitor timer variable
     var time = null
 
     const cpuAverage = () => {
@@ -69,7 +69,7 @@ module.exports = (win, getClient) => {
         })
     }
 
-    // 开始进行CPU和内存使用率计算
+    // Start CPU & memory usage calc
     ipcMain.handle("start-compute-percent", () => {
         if (time) clearInterval(time)
         time = setInterval(() => {
@@ -80,60 +80,60 @@ module.exports = (win, getClient) => {
             })
 
             /**
-             * memory计算方式，纯nodejs无法获取准确的内存使用率
+             * Memory calc method, pure nodejs can't get accurate memory usage
              *
-             * 注：
-             * 可以尝试使用三方库"systeminformation"获取内存详细数据
-             * 但是使用该库将会导致功能明显卡顿(因为该库调用电脑命令或本地文件获取系统信息)
+             * Note：
+             * Consider third-party libraries"systeminformation"Fetch memory details
+             * But this library causes lag (due to system command/local file use for info)
              */
         }, 400)
     })
-    // 获取CPU和内存使用率
+    // Fetch CPU & memory usage
     ipcMain.handle("fetch-compute-percent", () => {
         return cpuData
     })
-    // 销毁计算CPU和内存使用率的计数器
+    // Destroy CPU & memory usage counters
     ipcMain.handle("clear-compute-percent", () => {
         if (time) clearInterval(time)
     })
 
-    /** 获取操作系统类型 */
+    /** Fetch OS type */
     ipcMain.handle("fetch-system-name", () => {
         return OS.type()
     })
 
-    /** 获取CPU架构 */
+    /** Fetch CPU architecture */
     ipcMain.handle("fetch-cpu-arch", () => {
         return `${process.arch}`
     })
 
-    /** 获取<操作系统-CPU架构>信息 */
+    /** Fetch<OS-CPU architecture>Info */
     ipcMain.handle("fetch-system-and-arch", () => {
         /** @return {String} */
         return `${process.platform}-${process.arch}`
     })
 
-    /** 打开 yaklang 或 yakit 文件所在文件夹 (ps:随着yakit下载移动至下载文件夹中，此方法仅打开yaklang)*/
+    /** Open folder for yaklang/yakit files (note: moves with yakit downloads, opens yaklang only)*/
     ipcMain.handle("open-yaklang-path", (e) => {
         return shell.openPath(yaklangEngineDir)
     })
 
-    /** 打开 yakit 文件所在文件夹 */
+    /** Open folder for yakit files */
     ipcMain.handle("open-yakit-path", (e) => {
         return shell.openPath(yakitInstallDir)
     })
 
-    /** 获取远程连接配置信息文件路径 */
+    /** Get remote connection config file path */
     ipcMain.handle("fetch-remote-file-path", (e) => {
         return remoteLinkDir
     })
 
-    /** 打开远程连接配置信息文件夹 */
+    /** Open remote connection config folder */
     ipcMain.handle("open-remote-link", (e) => {
         return shell.openPath(remoteLinkDir)
     })
 
-    /** 获取计算机名 */
+    /** Get computer name */
     ipcMain.handle("fetch-computer-name", () => {
         /** @return {String} */
         return OS.hostname()

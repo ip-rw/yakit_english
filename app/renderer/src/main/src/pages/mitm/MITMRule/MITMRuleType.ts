@@ -3,7 +3,7 @@ import { ReactNode } from "react"
 import { HTTPCookieSetting, HTTPHeader } from "../MITMContentReplacerHeaderOperator"
 
 export interface MITMContentReplacerRule {
-    // 文本字符串，正则/Re2/字符串硬匹配
+    // Text string, regex/Re2/String Hard Match
     Id: number
     Index: number
     Rule: string
@@ -21,7 +21,7 @@ export interface MITMContentReplacerRule {
     Disabled: boolean
     VerboseName: string
 
-    // 设置额外Header
+    // Set Extra Headers
     ExtraHeaders: HTTPHeader[]
     ExtraCookies: HTTPCookieSetting[]
 }
@@ -51,7 +51,7 @@ export interface MITMRuleFromModalProps {
 
 export interface ExtractRegularProps {
     onSave: (s: string) => void
-    /**@name 提取规则的默认code */
+    /**@Default code for name extraction rule */
     defaultCode?:string
 }
 
@@ -96,11 +96,11 @@ export interface CloseTipModalProps {
 
 export interface RuleContentProps {
     ref?: any
-    /**@name 提取规则的默认code */
+    /**@Default code for name extraction rule */
     defaultCode?:string
     getRule: (s: string) => void
     inputProps?: YakitInputProps
-    /**@name  不要传复杂的节点,最好只传一个icon,目前正则Modal触发条件只有:icon和组件默认的共两种情况 */
+    /**@name Avoid passing complex nodes, preferably just an icon, Currently, regex Modal triggers only: icon and default component cases */
     children?: ReactNode
 }
 

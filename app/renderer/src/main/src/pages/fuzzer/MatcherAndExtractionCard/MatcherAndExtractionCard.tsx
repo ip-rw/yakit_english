@@ -172,15 +172,15 @@ export const MatcherAndExtraction: React.FC<MatcherAndExtractionProps> = React.m
                         extractorList: matcherAndExtractor.newExtractorList
                     }
                 }
-                // 没有空的条件，再检测两次的值是否一致,不一致需提示用户
+                // No Empty Condition, Verify Consistency
                 if (_.isEqual(matcherValue, data.matcher) && _.isEqual(extractorValue, data.extractor)) {
                     resolve(data)
                 } else {
                     let m = YakitModalConfirm({
                         width: 420,
                         type: "white",
-                        onCancelText: "不应用",
-                        onOkText: "应用",
+                        onCancelText: "Do Not Apply",
+                        onOkText: "Application",
                         icon: <ExclamationCircleOutlined />,
                         onOk: () => {
                             resolve(data)
@@ -190,7 +190,7 @@ export const MatcherAndExtraction: React.FC<MatcherAndExtractionProps> = React.m
                             reject(false)
                             // m.destroy()
                         },
-                        content: "是否应用修改的内容"
+                        content: "Apply Changes?"
                     })
                 }
             })
@@ -209,7 +209,7 @@ export const MatcherAndExtraction: React.FC<MatcherAndExtractionProps> = React.m
         })
         const onAddMatcher = useMemoizedFn(() => {
             if (matcher.matchersList.filter((i) => isMatcherItemEmpty(i)).length > 0) {
-                yakitNotify("error", "已有空匹配器条件")
+                yakitNotify("error", "Empty Matcher Condition Exists")
                 return
             }
             setMatcher({
@@ -219,7 +219,7 @@ export const MatcherAndExtraction: React.FC<MatcherAndExtractionProps> = React.m
         })
         const onAddExtractors = useMemoizedFn(() => {
             if (extractor.extractorList.filter((i) => isExtractorEmpty(i)).length > 0) {
-                yakitNotify("error", "已有空匹配器条件")
+                yakitNotify("error", "Empty Matcher Condition Exists")
                 return
             }
             setExtractor({
@@ -249,7 +249,7 @@ export const MatcherAndExtraction: React.FC<MatcherAndExtractionProps> = React.m
                 MatcherCondition: matcher.matchersCondition
             }
             if (isEffectiveMatcher) {
-                yakitNotify("error", "所有匹配条件均为空，请先设置条件")
+                yakitNotify("error", "All Conditions Empty, Set Conditions First")
                 return
             }
             setExecuteLoading(true)
@@ -257,13 +257,13 @@ export const MatcherAndExtraction: React.FC<MatcherAndExtractionProps> = React.m
                 .invoke("MatchHTTPResponse", matchHTTPResponseParams)
                 .then((data: {Matched: boolean}) => {
                     if (data.Matched) {
-                        yakitNotify("success", "匹配成功")
+                        yakitNotify("success", "Match Succeeded")
                     } else {
-                        yakitNotify("error", "匹配失败")
+                        yakitNotify("error", "Match Failed")
                     }
                 })
                 .catch((err) => {
-                    yakitNotify("error", "匹配报错:" + err)
+                    yakitNotify("error", "Match Error:" + err)
                 })
                 .finally(() =>
                     setTimeout(() => {
@@ -273,7 +273,7 @@ export const MatcherAndExtraction: React.FC<MatcherAndExtractionProps> = React.m
         })
         const onExecuteExtractors = useMemoizedFn(() => {
             if (isEffectiveExtractor) {
-                yakitNotify("error", "没有有效提取器（都为空）")
+                yakitNotify("error", "No Valid Extractors (All Empty)）")
                 return
             }
             setExecuteLoading(true)
@@ -284,22 +284,22 @@ export const MatcherAndExtraction: React.FC<MatcherAndExtractionProps> = React.m
                 })
                 .then((obj: {Values: {Key: string; Value: string}[]}) => {
                     if (!obj) {
-                        yakitNotify("error", "匹配不到有效结果")
+                        yakitNotify("error", "No Valid Match")
                         return
                     }
                     if ((obj?.Values || []).length <= 0) {
-                        yakitNotify("error", "匹配不到有效结果")
+                        yakitNotify("error", "No Valid Match")
                         return
                     }
                     showYakitModal({
-                        title: "提取结果",
+                        title: "Extraction Result",
                         width: "60%",
                         footer: <></>,
                         content: <ExtractionResultsContent list={obj.Values || []} />
                     })
                 })
                 .catch((err) => {
-                    yakitNotify("error", "数据提取报错:" + err)
+                    yakitNotify("error", "Data Extraction Error:" + err)
                 })
                 .finally(() =>
                     setTimeout(() => {
@@ -317,7 +317,7 @@ export const MatcherAndExtraction: React.FC<MatcherAndExtractionProps> = React.m
             onClose()
         })
         /**
-         * 提取器名称是否重名 并提示
+         * Extractor Name Duplicate?
          * @returns bool
          */
         const onIsDuplicateName = useMemoizedFn((list: HTTPResponseExtractor[]) => {
@@ -332,14 +332,14 @@ export const MatcherAndExtraction: React.FC<MatcherAndExtractionProps> = React.m
                     newNames.push(namesElement)
                 } else {
                     isDuplicateName = true
-                    yakitNotify("error", `【${namesElement}】名称重复，请修改后再应用`)
+                    yakitNotify("error", `【${namesElement}】Name Exists, Please Alter`)
                     break
                 }
             }
             return isDuplicateName
         })
         /**
-         * @returns 返回过滤空值的Group的匹配器和提取器数据
+         * @returns Non-null Group Matcher & Extractor Data
          */
         const onClearEmptyGroups = useMemoizedFn(() => {
             const newMatchersList: HTTPResponseMatcher[] = []
@@ -376,7 +376,7 @@ export const MatcherAndExtraction: React.FC<MatcherAndExtractionProps> = React.m
                     extractorList: matcherAndExtractor.newExtractorList
                 }
             }
-            // 没有空的条件，再检测两次的值是否一致,不一致需提示用户
+            // No Empty Condition, Verify Consistency
             if (_.isEqual(matcherValue, data.matcher) && _.isEqual(extractorValue, data.extractor)) {
                 onClose()
                 return
@@ -384,8 +384,8 @@ export const MatcherAndExtraction: React.FC<MatcherAndExtractionProps> = React.m
                 let m = YakitModalConfirm({
                     width: 420,
                     type: "white",
-                    onCancelText: "不应用",
-                    onOkText: "应用",
+                    onCancelText: "Do Not Apply",
+                    onOkText: "Application",
                     icon: <ExclamationCircleOutlined />,
                     onOk: () => {
                         onApplyConfirm()
@@ -395,7 +395,7 @@ export const MatcherAndExtraction: React.FC<MatcherAndExtractionProps> = React.m
                         onClose()
                         // m.destroy()
                     },
-                    content: "是否应用修改的内容"
+                    content: "Apply Changes?"
                 })
             }
         })
@@ -434,20 +434,20 @@ export const MatcherAndExtraction: React.FC<MatcherAndExtractionProps> = React.m
                                 options={[
                                     {
                                         value: "matchers",
-                                        label: "匹配器"
+                                        label: "Matcher"
                                     },
                                     {
                                         value: "extractors",
-                                        label: "数据提取器"
+                                        label: "Data Extractor"
                                     }
                                 ]}
                             />
                             <span className={styles["matching-extraction-title-tip"]}>
-                                已添加
+                                Added
                                 <span className={styles["primary-number"]}>
                                     {type === "matchers" ? matcher.matchersList.length : extractor.extractorList.length}
                                 </span>
-                                条
+                                Items
                             </span>
                         </div>
                         <div className={styles["matching-extraction-extra"]}>
@@ -457,21 +457,21 @@ export const MatcherAndExtraction: React.FC<MatcherAndExtractionProps> = React.m
                                 onClick={() => onAddCondition()}
                                 size={isSmallMode ? "small" : undefined}
                             >
-                                添加条件
+                                Add Condition
                             </YakitButton>
                             <YakitButton
                                 type='outline1'
                                 onClick={() => onExecute()}
                                 size={isSmallMode ? "small" : undefined}
                             >
-                                调试执行
+                                Debug Execution
                             </YakitButton>
                             <YakitButton
                                 type='primary'
                                 onClick={() => onApplyConfirm()}
                                 size={isSmallMode ? "small" : undefined}
                             >
-                                应用
+                                Application
                             </YakitButton>
                             <RemoveIcon className={styles["remove-icon"]} onClick={() => onCheckClose()} />
                         </div>
@@ -524,7 +524,7 @@ export const MatcherCollapse: React.FC<MatcherCollapseProps> = React.memo((props
         >
             <div className={styles["matching-extraction-condition"]}>
                 <div className={styles["condition-mode"]}>
-                    <span className={styles["condition-mode-text"]}>过滤器模式</span>
+                    <span className={styles["condition-mode-text"]}>Filter Mode</span>
                     <YakitRadioButtons
                         value={matcher.filterMode}
                         onChange={(e) => {
@@ -550,7 +550,7 @@ export const MatcherCollapse: React.FC<MatcherCollapseProps> = React.memo((props
                     )}
                 </div>
                 <div className={styles["condition-mode"]}>
-                    <span className={styles["condition-mode-text"]}>条件关系</span>
+                    <span className={styles["condition-mode-text"]}>Condition Relationship</span>
                     <YakitRadioButtons
                         value={matcher.matchersCondition}
                         onChange={(e) => {
@@ -581,7 +581,7 @@ export const MatcherCollapse: React.FC<MatcherCollapseProps> = React.memo((props
                                     <span className={styles["header-number"]}>{matcherItem.Group.length}</span>
                                 ) : (
                                     <YakitTag color='danger' size='small'>
-                                        暂未设置条件
+                                        Conditions Not Set
                                     </YakitTag>
                                 )}
                             </div>
@@ -632,7 +632,7 @@ export const MatcherItem: React.FC<MatcherItemProps> = React.memo((props) => {
                     [styles["collapse-panel-condition-notEditable"]]: notEditable
                 })}
             >
-                <LabelNodeItem label='匹配类型' column={isSmallMode}>
+                <LabelNodeItem label='Match Type' column={isSmallMode}>
                     <YakitRadioButtons
                         value={matcherItem.MatcherType}
                         onChange={(e) => {
@@ -642,7 +642,7 @@ export const MatcherItem: React.FC<MatcherItemProps> = React.memo((props) => {
                         options={matcherTypeList}
                     />
                 </LabelNodeItem>
-                <LabelNodeItem label='匹配位置' column={isSmallMode}>
+                <LabelNodeItem label='Match Position' column={isSmallMode}>
                     <YakitRadioButtons
                         value={matcherItem.Scope}
                         onChange={(e) => {
@@ -650,14 +650,14 @@ export const MatcherItem: React.FC<MatcherItemProps> = React.memo((props) => {
                         }}
                         buttonStyle='solid'
                         options={[
-                            {label: "状态码", value: "status_code"},
-                            {label: "响应头", value: "all_headers"},
-                            {label: "响应体", value: "body"},
-                            {label: "全部响应", value: "raw"}
+                            {label: "Status Code", value: "status_code"},
+                            {label: "Response Header", value: "all_headers"},
+                            {label: "Response Body", value: "body"},
+                            {label: "All Responses", value: "raw"}
                         ]}
                     />
                 </LabelNodeItem>
-                <LabelNodeItem label='条件关系' column={isSmallMode}>
+                <LabelNodeItem label='Condition Relationship' column={isSmallMode}>
                     <YakitRadioButtons
                         value={matcherItem.Condition}
                         onChange={(e) => {
@@ -670,7 +670,7 @@ export const MatcherItem: React.FC<MatcherItemProps> = React.memo((props) => {
                         ]}
                     />
                 </LabelNodeItem>
-                <LabelNodeItem label='不匹配(取反)' column={isSmallMode}>
+                <LabelNodeItem label='Non-match (Negate))' column={isSmallMode}>
                     <YakitSwitch checked={matcherItem.Negative} onChange={(checked) => onEdit("Negative", checked)} />
                 </LabelNodeItem>
             </div>
@@ -684,7 +684,7 @@ export const MatcherItem: React.FC<MatcherItemProps> = React.memo((props) => {
                 }}
                 onAddGroup={() => {
                     if (isMatcherItemEmpty(matcherItem)) {
-                        yakitNotify("error", "请将已添加条件配置完成后再新增")
+                        yakitNotify("error", "Complete Config Before Adding New")
                         return
                     } else {
                         matcherItem.Group.push("")
@@ -716,7 +716,7 @@ const MatcherAndExtractionValueList: React.FC<MatcherAndExtractionValueListProps
                                     onChange={(e) => {
                                         onChangeGroupItemValue(e.target.value, number)
                                     }}
-                                    placeholder='请输入...'
+                                    placeholder='Please Enter...'
                                     className={styles["matcher-item-textarea"]}
                                 />
                                 <ResizerIcon className={styles["resizer-icon"]} />
@@ -756,7 +756,7 @@ const MatcherAndExtractionValueList: React.FC<MatcherAndExtractionValueListProps
                             style={{justifyContent: "flex-start"}}
                             onClick={() => onAddGroup()}
                         >
-                            添加匹配内容
+                            Add Match Content
                         </YakitButton>
                     </div>
                 </LabelNodeItem>
@@ -790,7 +790,7 @@ export const ExtractorCollapse: React.FC<ExtractorCollapseProps> = React.memo((p
     const onEditName = useMemoizedFn((e: React.ChangeEvent<HTMLInputElement>, index: number) => {
         const {value} = e.target
         if (value.length > 20) {
-            yakitNotify("error", "字符长度不超过20")
+            yakitNotify("error", "Character Limit: 20")
             return
         }
         onEdit("Name", value || `data_${index}`, index)
@@ -824,7 +824,7 @@ export const ExtractorCollapse: React.FC<ExtractorCollapseProps> = React.memo((p
                                                 }}
                                             >
                                                 <div className={styles["edit-name-popover-content-title"]}>
-                                                    修改名称
+                                                    Edit Name
                                                 </div>
                                                 <YakitInput
                                                     defaultValue={extractorItem.Name}
@@ -861,7 +861,7 @@ export const ExtractorCollapse: React.FC<ExtractorCollapseProps> = React.memo((p
                                     </span>
                                 ) : (
                                     <YakitTag color='danger' size='small'>
-                                        暂未设置条件
+                                        Conditions Not Set
                                     </YakitTag>
                                 )}
                             </div>
@@ -908,7 +908,7 @@ export const ExtractorItem: React.FC<ExtractorItemProps> = React.memo((props) =>
         switch (extractorItem.Type) {
             case "regex":
                 return (
-                    <LabelNodeItem label='匹配正则分组'>
+                    <LabelNodeItem label='Regex Group Match'>
                         <YakitInputNumber
                             value={extractorItem.RegexpMatchGroup[0] || 0}
                             onChange={(value) => onEdit("RegexpMatchGroup", [value])}
@@ -920,7 +920,7 @@ export const ExtractorItem: React.FC<ExtractorItemProps> = React.memo((props) =>
                 )
             case "xpath":
                 return (
-                    <LabelNodeItem label='XPath 参数'>
+                    <LabelNodeItem label='XPath Param'>
                         <YakitInput
                             value={extractorItem.XPathAttribute}
                             onChange={(e) => onEdit("XPathAttribute", e.target.value)}
@@ -939,7 +939,7 @@ export const ExtractorItem: React.FC<ExtractorItemProps> = React.memo((props) =>
                     [styles["collapse-panel-condition-notEditable"]]: notEditable
                 })}
             >
-                <LabelNodeItem label='提取类型' column={isSmallMode}>
+                <LabelNodeItem label='Extraction Type' column={isSmallMode}>
                     <YakitRadioButtons
                         value={extractorItem.Type}
                         onChange={(e) => {
@@ -949,7 +949,7 @@ export const ExtractorItem: React.FC<ExtractorItemProps> = React.memo((props) =>
                         options={extractorTypeList}
                     />
                 </LabelNodeItem>
-                <LabelNodeItem label='提取范围' column={isSmallMode}>
+                <LabelNodeItem label='Extraction Range' column={isSmallMode}>
                     <YakitRadioButtons
                         value={extractorItem.Scope}
                         onChange={(e) => {
@@ -957,8 +957,8 @@ export const ExtractorItem: React.FC<ExtractorItemProps> = React.memo((props) =>
                         }}
                         buttonStyle='solid'
                         options={[
-                            {label: "响应头", value: "header"},
-                            {label: "响应体", value: "body"},
+                            {label: "Response Header", value: "header"},
+                            {label: "Response Body", value: "body"},
                             {label: "Raw", value: "raw"}
                         ]}
                     />
@@ -975,7 +975,7 @@ export const ExtractorItem: React.FC<ExtractorItemProps> = React.memo((props) =>
                 }}
                 onAddGroup={() => {
                     if (isExtractorEmpty(extractorItem)) {
-                        yakitNotify("error", "请将已添加条件配置完成后再新增")
+                        yakitNotify("error", "Complete Config Before Adding New")
                         return
                     } else {
                         extractorItem.Groups.push("")
@@ -1007,35 +1007,35 @@ export const LabelNodeItem: React.FC<labelNodeItemProps> = React.memo((props) =>
 const colors = [
     {
         color: "red",
-        title: "红色"
+        title: "Red"
     },
     {
         color: "green",
-        title: "绿色"
+        title: "Green"
     },
     {
         color: "blue",
-        title: "蓝色"
+        title: "Blue"
     },
     {
         color: "yellow",
-        title: "黄色"
+        title: "Yellow"
     },
     {
         color: "orange",
-        title: "橙色"
+        title: "Orange"
     },
     {
         color: "purple",
-        title: "紫色"
+        title: "Purple"
     },
     {
         color: "cyan",
-        title: "天蓝色"
+        title: "Sky Blue"
     },
     {
         color: "grey",
-        title: "灰色"
+        title: "Grey"
     }
 ]
 export const ColorSelect: React.FC<ColorSelectProps> = React.memo((props) => {
@@ -1047,7 +1047,7 @@ export const ColorSelect: React.FC<ColorSelectProps> = React.memo((props) => {
             overlayClassName={styles["color-select-popover"]}
             content={
                 <div className={styles["color-select-content"]}>
-                    <span className={styles["hit-color"]}>命中颜色</span>
+                    <span className={styles["hit-color"]}>Hit Color</span>
                     <div className={styles["color-list"]}>
                         {colors.map((colorItem) => (
                             <div

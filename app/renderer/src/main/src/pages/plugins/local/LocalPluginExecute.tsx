@@ -14,7 +14,7 @@ import {YakitSpin} from "@/components/yakitUI/YakitSpin/YakitSpin"
 
 export const LocalPluginExecute: React.FC<LocalPluginExecuteProps> = React.memo((props) => {
     const {plugin, headExtraNode, linkPluginConfig} = props
-    /**执行状态 */
+    /**Execution Status */
     const [executeStatus, setExecuteStatus] = useState<ExpandAndRetractExcessiveState>("default")
     const [runtimeId, setRuntimeId] = useState<string>("")
     const [downLoading, setDownLoading] = useState<boolean>(false)
@@ -35,7 +35,7 @@ export const LocalPluginExecute: React.FC<LocalPluginExecuteProps> = React.memo(
             }, 300)
         },
         setRuntimeId: (rId) => {
-            yakitNotify("info", `调试任务启动成功，运行时 ID: ${rId}`)
+            yakitNotify("info", `Debug Task ID on Start: ${rId}`)
             setRuntimeId(rId)
         }
     })
@@ -46,7 +46,7 @@ export const LocalPluginExecute: React.FC<LocalPluginExecuteProps> = React.memo(
     const isShowResult = useMemo(() => {
         return isExecuting || runtimeId
     }, [isExecuting, runtimeId])
-    /**更新:下载插件 */
+    /**Update: Download Plugin */
     const onDownPlugin = useMemoizedFn(() => {
         if (!plugin.UUID) return
         setDownLoading(true)
@@ -54,11 +54,11 @@ export const LocalPluginExecute: React.FC<LocalPluginExecuteProps> = React.memo(
             UUID: [plugin.UUID]
         })
             .then(() => {
-                // 刷新本地插件页面
+                // Refresh Plugin Page
                 emiter.emit("onRefLocalDetailSelectPlugin", plugin.UUID)
-                // 刷新单个执行页面中的插件数据
+                // Refresh Plugin Data in Execution Page
                 emiter.emit("onRefSinglePluginExecution", plugin.UUID)
-                yakitNotify("success", "下载完成")
+                yakitNotify("success", "Download Complete")
             })
             .finally(() =>
                 setTimeout(() => {
@@ -86,7 +86,7 @@ export const LocalPluginExecute: React.FC<LocalPluginExecuteProps> = React.memo(
                     streamInfo={streamInfo}
                     runtimeId={runtimeId}
                     loading={isExecuting}
-                    defaultActiveKey={plugin.Type === "yak" ? "日志" : undefined}
+                    defaultActiveKey={plugin.Type === "yak" ? "Logs" : undefined}
                     pluginExecuteResultWrapper={styles["plugin-execute-result-wrapper"]}
                 />
             )}

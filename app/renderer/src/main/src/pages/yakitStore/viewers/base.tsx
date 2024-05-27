@@ -73,7 +73,7 @@ export interface PluginResultUIProp {
     fromPlugin?: string
     defaultActive?: string
 
-    // 外部控制console高度
+    // External Control Console Height
     consoleHeight?: string
 }
 
@@ -88,13 +88,13 @@ export interface TooltipTitleProps {
 const idToColor = (id: string) => {
     switch (true) {
         case id.includes("success"):
-        case id.includes("成功"):
+        case id.includes("Success"):
         case id.includes("succeeded"):
         case id.includes("finished"):
             return "#b7eb8f"
         case id.includes("error"):
-        case id.includes("失败"):
-        case id.includes("错误"):
+        case id.includes("Failed"):
+        case id.includes("Error"):
         case id.includes("fatal"):
         case id.includes("missed"):
         case id.includes("miss"):
@@ -192,7 +192,7 @@ export const PluginResultUI: React.FC<PluginResultUIProp> = React.memo((props) =
         progressBars.push({
             id: v.id,
             node: (
-                <Card size={"small"} hoverable={false} bordered={true} title={`任务进度ID：${v.id}`}>
+                <Card size={"small"} hoverable={false} bordered={true} title={`Task Progress ID：${v.id}`}>
                     <Progress percent={parseInt((v.progress * 100).toFixed(0))} status='active' />
                 </Card>
             )
@@ -230,7 +230,7 @@ export const PluginResultUI: React.FC<PluginResultUIProp> = React.memo((props) =
     const newStatusCards = useMemo(() => {
         if (isEnpriTrace()) {
             let newStatusCards = statusCards.filter((item) =>
-                ["加载插件", "漏洞/风险", "开放端口数/已扫主机数", "存活主机数/扫描主机数", "SYN 扫描"].includes(
+                ["Load Plugins", "Vulnerability/Risk", "Open Ports Count/Scanned Host Count", "Alive Hosts Count/Scanned Hosts Count", "SYN Scan"].includes(
                     item.tag
                 )
             )
@@ -322,7 +322,7 @@ export const PluginResultUI: React.FC<PluginResultUIProp> = React.memo((props) =
                     )
                 })}
                 {!!props.runtimeId && (
-                    <YakitTabs.YakitTabPane tab={"本次执行 HTTP 流量"} key={"current-http-flow"}>
+                    <YakitTabs.YakitTabPane tab={"Current HTTP Traffic"} key={"current-http-flow"}>
                         <CurrentHttpFlow
                             runtimeId={props.runtimeId}
                             isOnlyTable={onlyShowFirstNode}
@@ -331,7 +331,7 @@ export const PluginResultUI: React.FC<PluginResultUIProp> = React.memo((props) =
                     </YakitTabs.YakitTabPane>
                 )}
                 <YakitTabs.YakitTabPane
-                    tab={"基础插件信息 / 日志"}
+                    tab={"Basic Plugin Information / Logs"}
                     key={finalFeatures.length > 0 ? "log" : "feature-0"}
                 >
                     {
@@ -343,7 +343,7 @@ export const PluginResultUI: React.FC<PluginResultUIProp> = React.memo((props) =
                                 bordered={true}
                                 title={
                                     <Space>
-                                        <div>任务额外日志与结果</div>
+                                        <div>Task Extra Log and Result</div>
                                         {(timelineItemProps || []).length > 0
                                             ? formatDate(timelineItemProps[0].timestamp)
                                             : ""}
@@ -377,7 +377,7 @@ export const PluginResultUI: React.FC<PluginResultUIProp> = React.memo((props) =
                     <YakitTabs.YakitTabPane
                         tab={
                             <div>
-                                {`漏洞与风险`}
+                                {`Stop Answering`}
                                 <Tag style={{marginLeft: 4}} color={"red"}>
                                     {props.risks.length}
                                 </Tag>
@@ -405,7 +405,7 @@ export const PluginResultUI: React.FC<PluginResultUIProp> = React.memo((props) =
                         <EngineConsole isMini={true} />
                     </div>
                 </YakitTabs.YakitTabPane>
-                {/*{props.fromPlugin && <YakitTabs.YakitTabPane tab={"插件所有流量"} key={"current-plugin-flow"}>*/}
+                {/*{props.fromPlugin && <YakitTabs.YakitTabPane tab={"All Plugin Traffic"} key={"current-plugin-flow"}>*/}
                 {/*    <div style={{width: "100%", height: "100%"}}>*/}
                 {/*        <HTTPFlowTable*/}
                 {/*            noHeader={true}*/}
@@ -435,27 +435,27 @@ interface CurrentHttpFlowProp {
     httpHistoryTableTitleStyle?:CSSProperties
     containerClassName?:string
 
-    /** 指定搜索url */
+    /** Specified Search URL */
     searchURL?: string
-    /** 指定搜索url参数 */
+    /** Specified Search URL Params */
     includeInUrl?: string | string[]
-    /** 是否只展示表格 */
+    /** Show Table Only */
     isOnlyTable: boolean
-    /** 是否只展示表格 */
+    /** Show Table Only */
     onIsOnlyTable: (value: boolean) => any
-    /** 是否展示详情 */
+    /** Show Details? */
     showDetail?: boolean
-    /** 表格的应用类型(history|MITM) */
+    /** Table App Type (history|MITM) */
     pageType?: HTTPHistorySourcePageType
 
     /** 
-     * 流量表筛选条件回调
-     * @param queryParams 流量表筛选条件JSON
+     * Traffic Table Filter Callback
+     * @param queryParams Traffic Table Filter JSON
      */
     onQueryParams?: (queryParams: string, execFlag?: boolean) => void
-    refresh?: boolean // 是否刷新表格
+    refresh?: boolean // Refresh Table?
 
-    toWebFuzzer?: boolean // 是否是在webFuzzer使用
+    toWebFuzzer?: boolean // Used in webFuzzer?
     showBatchActions?: boolean
 }
 
@@ -492,11 +492,11 @@ export const CurrentHttpFlow: React.FC<CurrentHttpFlowProp> = (props) => {
         setFlowResponse(undefined)
         onIsOnlyTable(false)
 
-        // 是否获取Request
+        // Get Request?
         let isGetRequest: boolean = true
         let isGetResponse: boolean = true
 
-        // 请求不为空直接使用
+        // Use Non-Empty Request Directly
         if (Uint8ArrayToString(rowDate.Request)) {
             isGetRequest = false
             setFlowRequest(rowDate.Request)
@@ -505,7 +505,7 @@ export const CurrentHttpFlow: React.FC<CurrentHttpFlowProp> = (props) => {
             isGetResponse = false
             setFlowResponse(rowDate.Response)
         }
-        // 请求或响应只要有一个为0就走接口拿取数据
+        // Fetch Data if Request or Response is 0
         if (isGetRequest || isGetResponse) {
             isGetRequest && setFlowRequestLoad(true)
             isGetResponse && setFlowResponseLoad(true)
@@ -621,9 +621,9 @@ export interface YakitFeatureRenderProp {
 export const YakitFeatureTabName = (feature: string, params: any) => {
     switch (feature) {
         case "website-trees":
-            return "网站树结构 / Website Map"
+            return "Site Tree Structure / Website Map"
         case "fixed-table":
-            return params["table_name"] || "输出表"
+            return params["table_name"] || "Output Table"
     }
     return feature.toUpperCase
 }
@@ -632,7 +632,7 @@ export const formatJson = (filterVal, jsonData) => {
     return jsonData.map((v) => filterVal.map((j) => v[j]))
 }
 
-// 升序
+// Ascending
 export const compareAsc = (value1: object, value2: object, text: string, isNumber?: boolean) => {
     try {
         if (isNumber || isNumber === undefined) {
@@ -644,7 +644,7 @@ export const compareAsc = (value1: object, value2: object, text: string, isNumbe
                 return 0
             }
         } else {
-            // 按照ASCII码排序
+            // Sort by ASCII
             const b = value2[text] + ""
             const a = value1[text] + ""
             return a.localeCompare(b, undefined, {sensitivity: 'base'})
@@ -654,7 +654,7 @@ export const compareAsc = (value1: object, value2: object, text: string, isNumbe
     }
 }
 
-// 降序
+// Descend
 export const compareDesc = (value1: object, value2: object, text: string, isNumber?: boolean) => {
     try {
         if (isNumber || isNumber === undefined) {
@@ -666,7 +666,7 @@ export const compareDesc = (value1: object, value2: object, text: string, isNumb
                 return 0
             }
         } else {
-            // 按照ASCII码排序
+            // Sort by ASCII
             const b = value2[text] + ""
             const a = value1[text] + ""
             return b.localeCompare(a, undefined, {sensitivity: 'base'})
@@ -679,16 +679,16 @@ export const compareDesc = (value1: object, value2: object, text: string, isNumb
 
 export const YakitFeatureRender: React.FC<YakitFeatureRenderProp> = React.memo(
     (props) => {
-        const [params, setParams] = useState<any>({}) // 设置表头能否排序
+        const [params, setParams] = useState<any>({}) // Enable Sorting for Headers
         const [sorterTable, setSorterTable] = useState<SortProps>()
 
-        const [query, setQuery] = useState<any>({}) // 设置表头查询条件
+        const [query, setQuery] = useState<any>({}) // Set Table Header Query Conditions
         const [loading, setLoading] = useState<boolean>(false)
 
         const [_, setTableData, getTableData] = useGetState<any>([])
-        const tableDataOriginal = useRef<any>([]) // 原始数据用来做搜索和排序
+        const tableDataOriginal = useRef<any>([]) // Raw Data for Search and Sort
         const tableDataPreProps = useRef<any>([])
-        const tableDataExport = useRef<any>([]) // 导出表格数
+        const tableDataExport = useRef<any>([]) // Export Table Count
         useDebounceEffect(
             () => {
                 if (tableDataPreProps.current.length === props.execResultsLog.length) return
@@ -729,7 +729,7 @@ export const YakitFeatureRender: React.FC<YakitFeatureRenderProp> = React.memo(
                 const objQuery = {}
                 ;(props.params["columns"] || []).forEach((ele) => {
                     obj[ele] = {
-                        isFilter: !Number.isNaN(Number(item[ele])) // 只有数字类型才排序
+                        isFilter: !Number.isNaN(Number(item[ele])) // Sort Only Numerical
                     }
                     objQuery[ele] = ""
                 })
@@ -772,7 +772,7 @@ export const YakitFeatureRender: React.FC<YakitFeatureRenderProp> = React.memo(
                     }
                 })
                     .catch((e) => {
-                        yakitFailed("搜索失败:" + e)
+                        yakitFailed("Search failed:" + e)
                     })
                     .finally(() => {
                         setTimeout(() => {
@@ -785,24 +785,24 @@ export const YakitFeatureRender: React.FC<YakitFeatureRenderProp> = React.memo(
             }
         ).run
 
-        // 搜索
+        // Search
         const queryData = useMemoizedFn(() => {
             try {
                 let list: any = []
                 const length = tableDataOriginal.current.length
                 const queryHaveValue = {}
-                // 找出有查询条件
+                // Find Query Conditions
                 for (const key in query) {
                     const objItem = query[key]
                     if (objItem) {
                         queryHaveValue[key] = query[key]
                     }
                 }
-                // 所有查询条件为空时，返回原始数据
+                // When all query conditions are empty, return original data
                 if (Object.getOwnPropertyNames(queryHaveValue).length === 0) {
                     list = [...tableDataOriginal.current]
                 } else {
-                    // 搜索
+                    // Search
                     for (let index = 0; index < length; index++) {
                         const elementArrayItem = tableDataOriginal.current[index]
                         let isAdd: boolean[] = []
@@ -811,7 +811,7 @@ export const YakitFeatureRender: React.FC<YakitFeatureRenderProp> = React.memo(
                             const isHave = `${elementArrayItem[key]}`.includes(objItem)
                             isAdd.push(isHave)
                         }
-                        // 所有条件都满足
+                        // All Conditions Met
                         if (!isAdd.includes(false)) {
                             list.push(elementArrayItem)
                         }
@@ -821,7 +821,7 @@ export const YakitFeatureRender: React.FC<YakitFeatureRenderProp> = React.memo(
                 const newDataTable = sorterTable?.order === "none" ? list : sorterFunction(list, sorterTable, "") || []
                 setTableData(newDataTable)
             } catch (error) {
-                yakitFailed("搜索失败:" + error)
+                yakitFailed("Search failed:" + error)
             }
         })
 
@@ -860,7 +860,7 @@ export const YakitFeatureRender: React.FC<YakitFeatureRenderProp> = React.memo(
                                     <ExportExcel
                                         getData={getData}
                                         btnProps={{size: "small"}}
-                                        fileName={props.excelName || "输出表"}
+                                        fileName={props.excelName || "Output Table"}
                                     />
                                 </div>
                             }

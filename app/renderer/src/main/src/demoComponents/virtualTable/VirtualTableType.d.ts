@@ -1,36 +1,36 @@
 import {ReactNode} from "react"
 
 export interface ColumnProps<T> {
-    /** 展示字段名 */
+    /** Display Field */
     key: string
-    /** 表头标题(不填默认展示key值) */
+    /** Header Title(Default Key) */
     headerTitle?: ReactNode
-    /** 展示内容(不填默认展示数据对应key的value) */
+    /** Display Content(Default Value by Key) */
     colRender?: (info: T) => ReactNode
     width?: number
 }
 
 export interface VirtualTableProps<T> {
-    /** 是否隐藏表格头 */
+    /** Hide Table Header */
     isHideHeader?: boolean
-    /** 是否触顶时自动加载更多(默认触底自动加载更多) */
+    /** Auto-Load on Reach Top(Default Bottom) */
     isTopLoadMore?: boolean
-    /** 是否停止自动加载 */
+    /** Stop Auto-Load */
     isStop?: boolean
     /**
-     * 滚动条是否实时更新(只有触底自动加载生效)
-     * 滚动条不实时更新时，用户需要靠isStop进行自动更新的手动控制
+     * Scrollbar Real-Time Update(Only for Bottom Auto-Load)
+     * Manual Update via isStop if Scrollbar Not Real-Time
      */
     isScrollUpdate?: boolean
-    /** 触发数据清空 */
+    /** Trigger Data Clear */
     triggerClear?: boolean
-    /** 自动加载更多延迟(默认1000ms) */
+    /** Auto-Load Delay(Default 1000ms) */
     wait?: number
-    /** 每行数据的唯一键 */
+    /** Unique Row Key */
     rowKey: string
     loadMore: (fromInfo?: T) => Promise<{data: T[]}>
     columns: ColumnProps<T>[]
-    /** 行点击回调 */
+    /** Row Click Callback */
     rowClick?: (info: T) => any
 
     onTouchTop?: () => any

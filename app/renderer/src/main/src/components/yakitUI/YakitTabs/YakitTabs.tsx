@@ -6,7 +6,7 @@ import styles from "./YakitTabs.module.scss"
 const {TabPane} = Tabs
 
 /**
- * 暂时用在插件商店 其他页面误用
+ * Temporarily used in Plugin Store, misuse on other pages
  */
 
 interface YakitTabsProps extends TabsProps {

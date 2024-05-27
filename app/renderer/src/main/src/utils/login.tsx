@@ -11,7 +11,7 @@ const {ipcRenderer} = window.require("electron")
 
 export const loginOut = async (userInfo: UserInfoProps) => {
     if (!userInfo.isLogin) return
-    // 此处会导致退出接口异常时间调用
+    // Abnormal Logout Call Time Here
     // await aboutLoginUpload(userInfo.token)
     NetWorkApi<null, API.ActionSucceeded>({
         method: "get",
@@ -65,7 +65,7 @@ export const refreshToken = (userInfo: UserInfoProps) => {
         .catch((e) => {})
 }
 
-// 企业/简易版 登录前时调用同步
+// Enterprise/Lite Sync Before Login
 export const aboutLoginUpload = (Token: string) => {
     if ((isEnpriTraceAgent() || isEnpriTrace()) && NowProjectDescription) {
         const {ProjectName} = NowProjectDescription
@@ -80,7 +80,7 @@ export const aboutLoginUpload = (Token: string) => {
     }
 }
 
-// 企业/简易版 登录前时调用同步
+// Enterprise/Lite Sync Before Login
 export const loginHTTPFlowsToOnline = (Token: string) => {
     if ((isEnpriTraceAgent() || isEnpriTrace()) && NowProjectDescription) {
         const {ProjectName} = NowProjectDescription

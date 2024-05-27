@@ -19,12 +19,12 @@ export interface StartBruteParams {
     Targets: string
     TargetFile?: string
     Usernames?: string[]
-    /**前端使用 记录选择的字典种的数据*/
+    /**Frontend Logs Dictionary Data*/
     UsernamesDict?: string[]
     UsernameFile?: string
     ReplaceDefaultUsernameDict?: boolean
     Passwords?: string[]
-    /**前端使用 记录选择的字典种的数据 */
+    /**Frontend Logs Dictionary Data */
     PasswordsDict?: string[]
     PasswordFile?: string
     ReplaceDefaultPasswordDict?: boolean
@@ -122,7 +122,7 @@ export const BrutePage: React.FC<BrutePageProp> = (props) => {
                     bodyStyle={{padding: 8}}
                     title={
                         <div>
-                            可用爆破类型{" "}
+                            Available Types{" "}
                             <Button
                                 type={"link"}
                                 size={"small"}
@@ -157,12 +157,12 @@ export const BrutePage: React.FC<BrutePageProp> = (props) => {
                                 e.preventDefault()
 
                                 if (!params.Targets && !params.TargetFile) {
-                                    failed("请填写爆破目标")
+                                    failed("Enter Target")
                                     return
                                 }
 
                                 if (!params.Type) {
-                                    failed("请至少选择一个爆破类型")
+                                    failed("Select at Least One Type")
                                     return
                                 }
 
@@ -190,14 +190,14 @@ export const BrutePage: React.FC<BrutePageProp> = (props) => {
                                         beforeUpload={(f) => {
                                             const typeArr:string[] = ["text/plain",'.csv', '.xls', '.xlsx',"application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]
                                             if (!typeArr.includes(f.type)) {
-                                                failed(`${f.name}非txt、Excel文件，请上传txt、Excel格式文件！`)
+                                                failed(`${f.name}Non-txt/Excel, Upload txt/Excel！`)
                                                 return false
                                             }
 
                                             setUploadLoading(true)
                                             ipcRenderer.invoke("fetch-file-content", (f as any).path).then((res) => {
                                                 let Targets = res
-                                                // 处理Excel格式文件
+                                                // Process Excel
                                                 if(f.type!=="text/plain"){
                                                     let str = JSON.stringify(res)
                                                     Targets = str.replace(/(\[|\]|\{|\}|\")/g, '')
@@ -209,14 +209,14 @@ export const BrutePage: React.FC<BrutePageProp> = (props) => {
                                         }}
                                         item={{
                                             style: {textAlign: "left"},
-                                            label: "输入目标:",
+                                            label: "Input Target:",
                                         }}
                                         textarea={{
                                             isBubbing: true,
                                             setValue: (Targets) => setParams({...params, Targets}),
                                             value: params.Targets,
                                             rows: 1,
-                                            placeholder: "内容规则 域名(:端口)/IP(:端口)/IP段，如需批量输入请在此框以逗号分割"
+                                            placeholder: "Domain Rules(:Port)/IP(:Port)/IP Range, Separate with Commas"
                                         }}
                                         suffixNode={
                                             loading ? (
@@ -225,11 +225,11 @@ export const BrutePage: React.FC<BrutePageProp> = (props) => {
                                                     danger
                                                     onClick={(e) => ipcRenderer.invoke("cancel-StartBrute", taskToken)}
                                                 >
-                                                    立即停止任务
+                                                    Stop Task Now
                                                 </Button>
                                             ) : (
                                                 <Button type='primary' htmlType='submit'>
-                                                    开始检测
+                                                    Start Detection
                                                 </Button>
                                             )
                                         }
@@ -237,14 +237,14 @@ export const BrutePage: React.FC<BrutePageProp> = (props) => {
                                 </Spin>
                                 <div style={{textAlign: "left", width: "100%", marginLeft: 68}}>
                                     <Space>
-                                        <Tag>目标并发:{params.Concurrent}</Tag>
+                                        <Tag>Target Concurrency:{params.Concurrent}</Tag>
                                         {(params?.TargetTaskConcurrent || 1) > 1 && (
-                                            <Tag>目标内爆破并发:{params.TargetTaskConcurrent}</Tag>
+                                            <Tag>Concurrent Brute-Force in Target:{params.TargetTaskConcurrent}</Tag>
                                         )}
-                                        {params?.OkToStop ? <Tag>爆破成功即停止</Tag> : <Tag>爆破成功后仍继续</Tag>}
+                                        {params?.OkToStop ? <Tag>Stop on Success</Tag> : <Tag>Continue After Success</Tag>}
                                         {(params?.DelayMax || 0) > 0 && (
                                             <Tag>
-                                                随机暂停:{params.DelayMin}-{params.DelayMax}s
+                                                Random Pause:{params.DelayMin}-{params.DelayMax}s
                                             </Tag>
                                         )}
                                         <Button
@@ -252,7 +252,7 @@ export const BrutePage: React.FC<BrutePageProp> = (props) => {
                                             size={"small"}
                                             onClick={(e) => {
                                                 showModal({
-                                                    title: "设置高级参数",
+                                                    title: "Advanced Settings",
                                                     width: "50%",
                                                     content: (
                                                         <>
@@ -265,7 +265,7 @@ export const BrutePage: React.FC<BrutePageProp> = (props) => {
                                                 })
                                             }}
                                         >
-                                            更多参数
+                                            More Params
                                         </Button>
                                     </Space>
                                 </div>
@@ -277,37 +277,37 @@ export const BrutePage: React.FC<BrutePageProp> = (props) => {
                                             layout={"inline"}
                                         >
                                             <SwitchItem
-                                                label={"自动字典"}
+                                                label={"Auto Dictionary"}
                                                 setValue={() => {
                                                 }}
                                                 formItemStyle={{marginBottom: 0}}
                                             />
                                             <InputItem
-                                                label={"爆破用户"}
+                                                label={"Brute-Force Users"}
                                                 style={{marginBottom: 0}}
                                                 suffix={
                                                     <Button size={"small"} type={"link"}>
-                                                        导入文件
+                                                        Import File
                                                     </Button>
                                                 }
                                             />
                                             <InputItem
-                                                label={"爆破密码"}
+                                                label={"Brute-Force Passwords"}
                                                 style={{marginBottom: 0}}
                                                 suffix={
                                                     <Button size={"small"} type={"link"}>
-                                                        导入文件
+                                                        Import File
                                                     </Button>
                                                 }
                                             />
                                             <InputInteger
-                                                label={"并发目标"}
+                                                label={"Concurrent Targets"}
                                                 setValue={() => {
                                                 }}
                                                 formItemStyle={{marginBottom: 0}}
                                             />
                                             <InputInteger
-                                                label={"随机延时"}
+                                                label={"Random Delay"}
                                                 setValue={() => {
                                                 }}
                                                 formItemStyle={{marginBottom: 0}}
@@ -370,7 +370,7 @@ export const BruteParamsForm: React.FC<BruteParamsFormProp> = (props) => {
         >
             <SelectItem
                 style={{marginBottom: 10}}
-                label={"爆破用户字典"}
+                label={"User Dictionary"}
                 value={params.usernameValue || ""}
                 onChange={(value, dict) => {
                     if (!dict && (params.Usernames || []).length === 0) {
@@ -392,7 +392,7 @@ export const BruteParamsForm: React.FC<BruteParamsFormProp> = (props) => {
 
             <InputItem
                 style={{marginBottom: 5}}
-                label={"爆破用户"}
+                label={"Brute-Force Users"}
                 setValue={(Usernames) => {
                     if ((params.UsernamesDict || []).length === 0 && !Usernames) {
                         setParams({
@@ -417,7 +417,7 @@ export const BruteParamsForm: React.FC<BruteParamsFormProp> = (props) => {
                     checked={!params.ReplaceDefaultUsernameDict}
                     onChange={(e) => {
                         if ((params.UsernamesDict || []).length === 0 && (params.Usernames || []).length === 0) {
-                            warn("在内容未填时此项必须勾选")
+                            warn("Check if Blank")
                             setParams({
                                 ...params,
                                 ReplaceDefaultUsernameDict: false
@@ -431,12 +431,12 @@ export const BruteParamsForm: React.FC<BruteParamsFormProp> = (props) => {
                     }}
                 ></Checkbox>
                 &nbsp;
-                <span style={{color: "rgb(100,100,100)"}}>同时使用默认用户字典</span>
+                <span style={{color: "rgb(100,100,100)"}}>Use Default User Dict</span>
             </Form.Item>
 
             <SelectItem
                 style={{marginBottom: 10}}
-                label={"爆破密码字典"}
+                label={"Password Dictionary"}
                 value={params.passwordValue || ""}
                 onChange={(value, dict) => {
                     if (!dict && (params.Passwords || []).length === 0) {
@@ -457,7 +457,7 @@ export const BruteParamsForm: React.FC<BruteParamsFormProp> = (props) => {
             />
             <InputItem
                 style={{marginBottom: 5}}
-                label={"爆破密码"}
+                label={"Brute-Force Passwords"}
                 setValue={(item) => {
                     if ((params.PasswordsDict || []).length === 0 && !item) {
                         setParams({
@@ -479,7 +479,7 @@ export const BruteParamsForm: React.FC<BruteParamsFormProp> = (props) => {
                     checked={!params.ReplaceDefaultPasswordDict}
                     onChange={(e) => {
                         if ((params.PasswordsDict || []).length === 0 && (params.Passwords || []).length === 0) {
-                            warn("在内容未填时此项必须勾选")
+                            warn("Check if Blank")
                             setParams({
                                 ...params,
                                 ReplaceDefaultPasswordDict: false
@@ -493,36 +493,36 @@ export const BruteParamsForm: React.FC<BruteParamsFormProp> = (props) => {
                     }}
                 ></Checkbox>
                 &nbsp;
-                <span style={{color: "rgb(100,100,100)"}}>同时使用默认密码字典</span>
+                <span style={{color: "rgb(100,100,100)"}}>Use Default Password Dict</span>
             </Form.Item>
 
             <InputInteger
-                label={"目标并发"}
-                help={"同时爆破 n 个目标"}
+                label={"Target Concurrency"}
+                help={"Concurrent n Targets"}
                 value={params.Concurrent}
                 setValue={(e) => setParams({...params, Concurrent: e})}
             />
             <InputInteger
-                label={"目标内并发"}
-                help={"每个目标同时执行多少爆破任务"}
+                label={"Concurrent in Target"}
+                help={"Concurrent Tasks per Target"}
                 value={params.TargetTaskConcurrent}
                 setValue={(e) => setParams({...params, TargetTaskConcurrent: e})}
             />
             <SwitchItem
-                label={"自动停止"}
-                help={"遇到第一个爆破结果时终止任务"}
+                label={"Auto-Stop"}
+                help={"Stop at First Result"}
                 setValue={(OkToStop) => setParams({...params, OkToStop})}
                 value={params.OkToStop}
             />
             <InputInteger
-                label={"最小延迟"}
+                label={"Min Delay"}
                 max={params.DelayMax}
                 min={0}
                 setValue={(DelayMin) => setParams({...params, DelayMin})}
                 value={params.DelayMin}
             />
             <InputInteger
-                label={"最大延迟"}
+                label={"Max Delay"}
                 setValue={(DelayMax) => setParams({...params, DelayMax})}
                 value={params.DelayMax}
                 min={params.DelayMin}

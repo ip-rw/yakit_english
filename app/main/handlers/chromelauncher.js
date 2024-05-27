@@ -56,17 +56,17 @@ const manifestStr = `
 }
 `
 
-// 生成临时文件夹
+// Generate Temp Folder
 const tempFile = "yakit-proxy"
-// 生成临时文件名
+// Generate Temp Filename
 const exceptFileName = "background.js"
 const manifestFileName = "manifest.json"
-// 创建临时文件的完整路径
+// Full Path for Temp File
 const exceptFilePath = path.join(YakitProjectPath, tempFile, exceptFileName)
 const manifestFilePath = path.join(YakitProjectPath, tempFile, manifestFileName)
-// 获取文件夹路径
+// Get Folder Path
 const commonFilePath = path.dirname(exceptFilePath)
-// 是否创建用户名/密码文件
+// Create Username/Password File
 let isCreateFile = false
 
 function deleteFolderRecursive(folderPath) {
@@ -85,28 +85,28 @@ function deleteFolderRecursive(folderPath) {
     }
 }
 
-// 删除临时文件夹及文件夹中所有文件
+// Delete Temp Folder and Contents
 const deleteCreateFile = () => {
     if (isCreateFile) {
-        // 判断文件夹是否存在
+        // Check Folder Existence
         if (fs.existsSync(commonFilePath)) {
-            // 读取文件夹中的文件和子文件夹
+            // Read files and subfolders in directory
             fs.readdirSync(commonFilePath).forEach((file) => {
                 const filePath = path.join(commonFilePath, file)
 
-                // 检查文件类型
+                // Check File Type
                 const stat = fs.statSync(filePath)
 
                 if (stat.isFile()) {
-                    // 如果是文件，则删除文件
+                    // Delete Files if File
                     fs.unlinkSync(filePath)
                 } else if (stat.isDirectory()) {
-                    // 如果是文件夹，则递归删除文件夹及其内容
+                    // Recursively Delete Folder and Contents if Folder
                     deleteFolderRecursive(filePath)
                 }
             })
 
-            // 删除空文件夹
+            // Delete Empty Folder
             fs.rmdirSync(commonFilePath)
         } else {
             console.log(`not found ${commonFilePath} .`)
@@ -116,9 +116,9 @@ const deleteCreateFile = () => {
 }
 
 module.exports = (win, getClient) => {
-    // 启动的数量
+    // Startup Count
     let startNum = 0
-    // 启动的状态
+    // Startup Status
     let started = false
     ipcMain.handle("IsChromeLaunched", async () => {
         return started
@@ -138,52 +138,52 @@ module.exports = (win, getClient) => {
 
         // https://peter.sh/experiments/chromium-command-line-switches/
         // opts:
-        //   --no-system-proxy-config-service ⊗	Do not use system proxy configuration service.
-        //   --no-proxy-server ⊗	Don't use a proxy server, always make direct connections. Overrides any other proxy server flags that are passed. ↪
+        //   --Do Not Use Sys Proxy Config.
+        //   --No Proxy Server't 仅限直接连接. ↪
         let launchOpt = {
-            startingUrl: "http://mitm", // 确保在启动时打开 chrome://newtab 页面。
+            startingUrl: "http://mitm", // Ensure Chrome Opens on Startup://新标签页。
             chromeFlags: [
                 `--no-system-proxy-config-service`, // 禁用系统代理配置服务。
-                `--proxy-bypass-list=<-loopback>`, // 为代理设置回避列表，不代理回环地址。
-                `--proxy-server=http://${hostRaw}:${portInt}`, // 设置具体的代理服务器地址和端口。
+                `--proxy-bypass-list=<-loopback>`, // 代理绕过列表，排除回环。
+                `--proxy-server=http://${hostRaw}:${portInt}`, // 设置特定代理服务器。
 
                 `--ignore-certificate-errors`, // 忽略 SSL 证书错误。
-                `--test-type`, // 表示这是一个测试实例。
-                `--ignore-urlfetcher-cert-requests`, // 忽略 URL fetcher 的证书请求。
+                `--test-type`, // 标记测试实例。
+                `--ignore-urlfetcher-cert-requests`, // 忽略 URL 取回证书请求。
                 `--disable-webrtc`, // 禁用 WebRTC。
-                `--disable-component-extensions-with-background-pages`, // 禁用带有背景页的组件扩展。
-                `--disable-extensions`, // 禁用所有扩展。
+                `--disable-component-extensions-with-background-pages`, // 禁用背景页组件。
+                `--disable-extensions`, // 禁用 所有扩展。
                 `--disable-notifications`, // 禁用通知。
-                `--force-webrtc-ip-handling-policy=default_public_interface_only`, // 强制 WebRTC IP 处理策略仅使用默认的公共接口。
-                `--disable-ipc-flooding-protection`, // 禁用 IPC 洪水攻击保护。
-                `--disable-xss-auditor`, // 禁用 XSS 审查器。
-                `--disable-bundled-ppapi-flash`, // 禁用捆绑的 PPAPI Flash 版本。
-                `--disable-plugins-discovery`, // 禁止插件发现。
+                `--force-webrtc-ip-handling-policy=default_public_interface_only`, // 强制仅使用 WebRTC 公共接口。
+                `--disable-ipc-flooding-protection`, // 禁用 IPC 泛洪攻击保护。
+                `--disable-xss-auditor`, // 禁用 XSS 审计。
+                `--disable-bundled-ppapi-flash`, // 禁用捆绑的 PPAPI Flash。
+                `--disable-plugins-discovery`, // 防止插件发现。
                 `--disable-default-apps`, // 禁用默认应用。
-                `--disable-prerender-local-predictor`, // 禁用本地预加载页面的预测功能。
-                `--disable-sync`, // 禁用同步功能。
+                `--disable-prerender-local-predictor`, // 禁用 预测性预加载本地页面。
+                `--disable-sync`, // 禁用同步。
                 `--disable-breakpad`, // 禁用 Breakpad 崩溃报告。
-                `--disable-crash-reporter`, // 禁用崩溃报告器。
+                `--disable-crash-reporter`, // 禁用 崩溃报告器。
                 `--disk-cache-size=0`, // 设置磁盘缓存大小为 0。
-                `--disable-settings-window`, // 禁用设置窗口。
-                `--disable-speech-api`, // 禁用语音API。
-                `--disable-file-system`, // 禁用文件系统API。
-                `--disable-presentation-api`, // 禁用演示API。
-                `--disable-permissions-api`, // 禁用权限API。
-                `--disable-new-zip-unpacker`, // 禁用新 ZIP 解压功能。
-                `--disable-media-session-api`, // 禁用媒体会话API。
+                `--disable-settings-window`, // 禁用 设置窗口。
+                `--disable-speech-api`, // 禁用 语音 API。
+                `--disable-file-system`, // 禁用文件系统 API。
+                `--disable-presentation-api`, // 禁用 演示 API。
+                `--disable-permissions-api`, // 禁用 权限 API。
+                `--disable-new-zip-unpacker`, // 禁用 新 ZIP 提取。
+                `--disable-media-session-api`, // 禁用 媒体会话 API。
                 `--no-experiments`, // 禁止实验。
                 `--no-events`, // 不发送事件。
                 `--no-first-run`, // 启动时跳过首次运行向导。
                 `--no-default-browser-check`, // 启动时不检查默认浏览器。
-                `--no-pings`, // 禁用 ping 跟踪。
-                `--no-service-autorun`, // 不自动运行服务。
-                `--media-cache-size=0`, // 设置媒体缓存大小为0。
-                `--use-fake-device-for-media-stream`, // 使用虚拟设备来捕获媒体流。
-                `--dbus-stub`, // 使用 DBus 存根。
-                `--disable-background-networking`, // 禁用后台网络活动。
-                `--disable-component-update`, // 不要更新 chrome://components/ 中列出的浏览器“组件”
-                `--disable-features=ChromeWhatsNewUI,HttpsUpgrades,OptimizationHints` // 禁用特定的功能。
+                `--no-pings`, // 禁用 Ping 跟踪。
+                `--no-service-autorun`, // 不自启服务。
+                `--media-cache-size=0`, // 设置媒体缓存大小为 0。
+                `--use-fake-device-for-media-stream`, // 使用虚拟设备进行媒体捕获。
+                `--dbus-stub`, // 使用 DBus Stub。
+                `--disable-background-networking`, // 禁用背景网络。
+                `--disable-component-update`, // Do Not Update Chrome://components/ Browsers Listed“Component”
+                `--disable-features=ChromeWhatsNewUI,HttpsUpgrades,OptimizationHints` // 禁用特定功能。
             ]
         }
         if (userDataDir) {
@@ -192,26 +192,26 @@ module.exports = (win, getClient) => {
         if (chromePath) {
             launchOpt["chromePath"] = chromePath
         }
-        // 用户名/密码 参数重构
+        // Username/Password Param Refactoring
         if (username.length > 0 && password.length > 0) {
             try {
-                // 屏蔽项
-                // `--proxy-server=http://${hostRaw}:${portInt}`,  // 设置具体的代理服务器地址和端口。
-                // `--disable-extensions`,  // 禁用所有扩展。
+                // Block Items
+                // `--proxy-server=http://${hostRaw}:${portInt}`,  // 设置特定代理服务器。
+                // `--disable-extensions`,  // 禁用 所有扩展。
                 launchOpt["chromeFlags"] = launchOpt.chromeFlags.filter(
                     (item) => !(item.startsWith("--proxy-server=http://") || item === "--disable-extensions")
                 )
 
-                // 要写入的内容
+                // Content to Write
                 const exceptContent = disableExtensionsExceptStr(host, port, username, password)
                 const manifestContent = manifestStr
 
-                // 创建文件夹 { recursive: true } 选项确保如果文件夹的上级目录也不存在时，一同创建。
+                // Create Folder { recursive: true } 选项以创建父文件夹。
                 if (!fs.existsSync(commonFilePath)) {
                     fs.mkdirSync(commonFilePath, {recursive: true})
                 }
 
-                // 使用 fs.writeFileSync创建文件 写入内容到临时文件
+                // Create File With fs.writeFileSync, Write Temp File
                 fs.writeFileSync(exceptFilePath, exceptContent)
                 fs.writeFileSync(manifestFilePath, manifestContent)
 
@@ -222,12 +222,12 @@ module.exports = (win, getClient) => {
                     `--load-extension=${commonFilePath}`
                 )
             } catch (error) {
-                console.log(`操作失败：${error}`)
+                console.log(`Operation Failed：${error}`)
             }
         }
         return launch(launchOpt).then((chrome) => {
             chrome.process.on("exit", () => {
-                // 在这里执行您想要的操作，当所有chrome实例都关闭时
+                // Perform Desired Actions When All Chrome Instances Are Closed
                 startNum -= 1
                 if (startNum <= 0) {
                     started = false
@@ -267,7 +267,7 @@ module.exports = (win, getClient) => {
 
     const judgePath = () => {
         switch (process.platform) {
-            // mac存在卡顿问题 因此需单独处理
+            // Handle macOS Stutter, Process Separately
             case "darwin":
                 return darwinFast()
             case "win32":

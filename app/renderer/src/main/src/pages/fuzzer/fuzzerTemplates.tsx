@@ -60,19 +60,19 @@ export const monacoEditorRemoveAllHighlight = (editor?: IMonacoEditor) => {
 
 export const fuzzOperators: FuzzOperatorItem[] = [
     {
-        name: "生成一个字符",
+        name: "Gen a char",
         callback: (editor) => {
             monacoEditorWrite(editor, "{{char(a-z)}}")
         },
         optionsRender: (origin: string, setOrigin: (s: string) => any) => {
             return (
                 <SingleTag
-                    help={"生成一个字符，例如 {{char(a-z)}}，使用 - 作为分割，解析前后 char 并生成此间范围"}
+                    help={"Gen a char, e.g. {{char(a-z)}}，Use - to split, parse char range"}
                     origin={origin}
                     setOrigin={setOrigin}
                     tag={"char"}
                     defaultInput={"a-z"}
-                    label={"字符范围"}
+                    label={"Char range"}
                     enableInput={true}
                     exampleInput={"{{char(a-z)}}"}
                 />
@@ -80,47 +80,47 @@ export const fuzzOperators: FuzzOperatorItem[] = [
         }
     },
     {
-        name: "重复一个空字符串",
+        name: "Repeat empty string",
         callback: (editor) => {
             monacoEditorWrite(editor, "{{repeat(10)}}")
         },
         optionsRender: (origin: string, setOrigin: (s: string) => any) => {
             return (
                 <SingleTag
-                    help={"控制重复执行次数的 Tag，一般 {{repeat(10)}} 指的是整体重复生成 10 次数据"}
+                    help={"Control repeat count Tag, typically {{repeat(10)}} Refers to generating data 10x"}
                     origin={origin}
                     setOrigin={setOrigin}
                     tag={"repeat"}
                     defaultInput={"10"}
-                    label={"重复次数"}
+                    label={"Repeat count"}
                     enableInput={true}
-                    exampleInput={"例如：{{repeat(10)}}"}
+                    exampleInput={"E.g.：{{repeat(10)}}"}
                 />
             )
         }
     },
     {
-        name: "重复生成字符串",
+        name: "Repeat string",
         callback: (editor) => {
             monacoEditorWrite(editor, "{{repeatstr(abc|3)}}")
         },
         optionsRender: (origin: string, setOrigin: (s: string) => any) => {
             return (
                 <SingleTag
-                    help={"控制重复渲染一定次数的数据，以 |n 来输入次数，一般 {{repeatstr(abc|3)}} 渲染为 abcabcabc"}
+                    help={"Control repeat render of data, with |n To input count, typically {{repeatstr(abc|3)}} Render as abcabcabc"}
                     origin={origin}
                     setOrigin={setOrigin}
                     tag={"repeatstr"}
                     defaultInput={"abc|3"}
-                    label={"重复次数"}
+                    label={"Repeat count"}
                     enableInput={true}
-                    exampleInput={"例如：{{repeatstr(abc|3)}} -> abcabcabc"}
+                    exampleInput={"E.g.：{{repeatstr(abc|3)}} -> abcabcabc"}
                 />
             )
         }
     },
     {
-        name: "构造数组（列表）",
+        name: "Build array (list)）",
         callback: (editor) => {
             monacoEditorWrite(editor, "{{list(1|2|3)}}")
         },
@@ -130,17 +130,17 @@ export const fuzzOperators: FuzzOperatorItem[] = [
                     origin={origin}
                     setOrigin={setOrigin}
                     enableInput={true}
-                    help={"把数据进行切割，并把切割后的数据渲染进 payload，默认使用 | 分割"}
+                    help={"Slice data & render into payload, default use | Split"}
                     tag={"list"}
                     defaultInput={"1|2|3"}
-                    label={"切割字符串（也可以用于组合 fuzztag）"}
-                    exampleInput={"例如：{{list(1|2|3)}} 解析为 [1,2,3]"}
+                    label={"Split strings (or combine fuzztag)）"}
+                    exampleInput={"E.g.：{{list(1|2|3)}} Parse as [1,2,3]"}
                 />
             )
         }
     },
     {
-        name: "随机字符串(固定长度)",
+        name: "Random string (fixed length))",
         callback: (editor) => {
             monacoEditorWrite(editor, "{{rs(6)}}")
         },
@@ -149,7 +149,7 @@ export const fuzzOperators: FuzzOperatorItem[] = [
         }
     },
     {
-        name: "随机字符串(指定长度)",
+        name: "Random string (specified length))",
         callback: (editor) => {
             monacoEditorWrite(editor, "{{rs(6)}}")
         },
@@ -158,7 +158,7 @@ export const fuzzOperators: FuzzOperatorItem[] = [
         }
     },
     {
-        name: "随机字符串(多次渲染)",
+        name: "Random string (multi-render))",
         callback: (editor) => {
             monacoEditorWrite(editor, "{{rs(6)}}")
         },
@@ -167,11 +167,11 @@ export const fuzzOperators: FuzzOperatorItem[] = [
         }
     },
     {
-        name: "整数(自由范围) - 也可用于端口",
+        name: "Integer (free range) - also for ports",
         callback: (editor) => {},
         optionsRender: (origin: string, setOrigin: (s: string) => any) => {
             return (
-                <Form.Item label={"输入范围"}>
+                <Form.Item label={"Input range"}>
                     <YakitInput
                         onChange={(v) => {
                             setOrigin(`{{int(${v.target.value})}}`)
@@ -182,63 +182,63 @@ export const fuzzOperators: FuzzOperatorItem[] = [
         }
     },
     {
-        name: "随机整数(范围)",
+        name: "Random integer (range))",
         callback: (editor) => {},
         optionsRender: (origin: string, setOrigin: (s: string) => any) => {
             return <RandInt {...{origin, setOrigin}} />
         }
     },
     {
-        name: "IP/IP段/网络/域名(多个，逗号分隔)",
+        name: "IP/IP range/Network/Domain(s), comma-separated)",
         callback: (editor) => {},
         optionsRender: (origin, setOrigin) => (
             <FuzzWithRange
-                label={"IP/网段/域名组"}
+                label={"IP/Subnet/Domain group"}
                 origin={origin}
                 setOrigin={setOrigin}
                 tag={"network"}
-                help={"一般用于拆开扫描目标，例如: 192.168.0.1/24,example.com,10.1.11.1"}
+                help={"Typically to separate scan targets, e.g., 192.168.0.1/24,example.com,10.1.11.1"}
             />
         )
     },
     {
-        name: "生成 .ico 文件头",
+        name: "Create .ico header",
         callback: (editor) => {},
         optionsRender: (origin, setOrigin) => {
             return (
-                <SingleTag {...{origin, setOrigin}} help={"生成一个 .ico 文件的文件头，一般用于上传文件"} tag={"ico"} />
+                <SingleTag {...{origin, setOrigin}} help={"Create .ico header, for uploading"} tag={"ico"} />
             )
         },
         tag: "ico"
     },
     {
-        name: "生成 .png 文件头",
+        name: "Create .png header",
         callback: (editor) => {},
         optionsRender: (origin, setOrigin) => {
             return (
-                <SingleTag {...{origin, setOrigin}} help={"生成一个 .png 文件的文件头，一般用于上传文件"} tag={"png"} />
+                <SingleTag {...{origin, setOrigin}} help={"Create .png header, for uploading"} tag={"png"} />
             )
         },
         tag: "png"
     },
     {
-        name: "生成 .gif 文件头",
+        name: "Create .gif header",
         callback: (editor) => {},
         optionsRender: (origin, setOrigin) => {
             return (
-                <SingleTag {...{origin, setOrigin}} help={"生成一个 .gif 文件的文件头，一般用于上传文件"} tag={"gif"} />
+                <SingleTag {...{origin, setOrigin}} help={"Create .gif header, for uploading"} tag={"gif"} />
             )
         },
         tag: "gif"
     },
     {
-        name: "生成 .tiff 文件头",
+        name: "Create .tiff header",
         callback: (editor) => {},
         optionsRender: (origin, setOrigin) => {
             return (
                 <SingleTag
                     {...{origin, setOrigin}}
-                    help={"生成一个 .tiff 文件的文件头，一般用于上传文件"}
+                    help={"Create .tiff header, for uploading"}
                     tag={"tiff"}
                 />
             )
@@ -246,13 +246,13 @@ export const fuzzOperators: FuzzOperatorItem[] = [
         tag: "tiff"
     },
     {
-        name: "生成 .jpeg(jpg) 文件头",
+        name: "Create .jpeg(jpg) header",
         callback: (editor) => {},
         optionsRender: (origin, setOrigin) => {
             return (
                 <SingleTag
                     {...{origin, setOrigin}}
-                    help={"生成一个 .jpeg/jpg 文件的文件头，一般用于上传文件"}
+                    help={"Create a .jpeg/jpg file header, for uploading"}
                     tag={"jpegstart"}
                 />
             )
@@ -260,13 +260,13 @@ export const fuzzOperators: FuzzOperatorItem[] = [
         tag: "jpegstart"
     },
     {
-        name: "生成 .jpeg(jpg) 文件尾",
+        name: "Create .jpeg(jpg) footer",
         callback: (editor) => {},
         optionsRender: (origin, setOrigin) => {
             return (
                 <SingleTag
                     {...{origin, setOrigin}}
-                    help={"生成一个 .jpeg/jpg 文件的文件尾，一般用于上传文件"}
+                    help={"Create a .jpeg/jpg file footer, for uploading"}
                     tag={"jpegend"}
                 />
             )
@@ -274,17 +274,17 @@ export const fuzzOperators: FuzzOperatorItem[] = [
         tag: "jpegend"
     },
     {
-        name: "任意字符（ASCII码范围）",
+        name: "Any char (ASCII range)）",
         callback: (editor) => {},
         optionsRender: (origin, setOrigin) => {
             return <RangeChar {...{origin, setOrigin}} />
         }
     },
     {
-        name: "生成所有特殊字符",
+        name: "Gen all special chars",
         callback: (editor) => {},
         optionsRender: (origin, setOrigin) => {
-            return <SingleTag {...{origin, setOrigin}} help={"生成所有特殊字符，一般用于模糊测试"} tag={"punc"} />
+            return <SingleTag {...{origin, setOrigin}} help={"Gen all special chars, for fuzz testing"} tag={"punc"} />
         },
         tag: "punc"
     }
@@ -292,148 +292,148 @@ export const fuzzOperators: FuzzOperatorItem[] = [
 
 export const encodeOperators: FuzzOperatorItem[] = [
     {
-        name: "全部转大写",
+        name: "All to uppercase",
         optionsRender: (s, callback) => (
-            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"upper"} help={"编码标签内容转大写"} />
+            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"upper"} help={"Encode tag content uppercase"} />
         ),
         tag: "upper"
     },
     {
-        name: "全部转小写",
+        name: "All to lowercase",
         optionsRender: (s, callback) => (
-            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"lower"} help={"编码标签内容转小写"} />
+            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"lower"} help={"Encode tag content lowercase"} />
         ),
         tag: "lower"
     },
     {
-        name: `解析成字符串（例如{{str(\\xA0\\x45)}}）`,
+        name: `Parse as string (e.g.{{str(\\xA0\\x45)}}）`,
         optionsRender: (s, callback) => (
             <EncodeTag
                 {...{origin: s, setOrigin: callback}}
                 tag={"str"}
-                help={'解析成字符串（例如{{str("\xA0\x45")}}），用于转换不可见字符'}
+                help={'Parse as string (e.g.{{str("\xA0\x45")}}），Convert invisible chars'}
             />
         ),
         tag: "str"
     },
     {
-        name: "base64编码",
+        name: "Base64 encode",
         optionsRender: (s, callback) => (
-            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"base64enc"} help={"Base64 编码标签内内容"} />
+            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"base64enc"} help={"Encode tag content Base64"} />
         ),
         tag: "base64enc"
     },
     {
-        name: "base64解码",
+        name: "Base64 decode",
         optionsRender: (s, callback) => (
-            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"base64dec"} help={"Base64 解码标签内内容"} />
+            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"base64dec"} help={"Decode tag content Base64"} />
         ),
         tag: "base64dec"
     },
     {
-        name: "16进制编码",
+        name: "Hex encode",
         optionsRender: (s, callback) => (
-            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"hex"} help={"把标签内容变成16进制编码"} />
+            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"hex"} help={"Convert tag content to Hex"} />
         ),
         tag: "hex"
     },
     {
-        name: "16进制解码",
+        name: "Hex decode",
         optionsRender: (s, callback) => (
-            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"hexdec"} help={"把标签内容按16进制解码"} />
+            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"hexdec"} help={"Decode tag content Hex"} />
         ),
         tag: "hexdec"
     },
     {
-        name: "计算SHA1",
+        name: "Calc SHA1",
         optionsRender: (s, callback) => (
-            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"sha1"} help={"计算标签内容的 Sha1"} />
+            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"sha1"} help={"Calc tag Sha1"} />
         ),
         tag: "sha1"
     },
     {
-        name: "计算SHA256",
+        name: "Calc SHA256",
         optionsRender: (s, callback) => (
-            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"sha256"} help={"计算标签内容的 Sha256"} />
+            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"sha256"} help={"Calc tag SHA256"} />
         ),
         tag: "sha256"
     },
     {
-        name: "计算SHA512",
+        name: "Calc SHA512",
         optionsRender: (s, callback) => (
-            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"sha512"} help={"计算标签内容的 Sha512"} />
+            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"sha512"} help={"Calc tag Sha512"} />
         ),
         tag: "sha512"
     },
     {
-        name: "URL 编码",
+        name: "URL encode",
         optionsRender: (s, callback) => (
-            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"urlenc"} help={"把标签内容变成URL 编码"} />
+            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"urlenc"} help={"Convert tag content to URL encode"} />
         ),
         tag: "urlenc"
     },
     {
-        name: "URL 解码",
+        name: "URL decode",
         optionsRender: (s, callback) => (
-            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"urldec"} help={"把标签内容按URL 解码"} />
+            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"urldec"} help={"Decode tag content by URL"} />
         ),
         tag: "urldec"
     },
     {
-        name: "'双重URL'编码",
+        name: "'Double URL'Encode",
         optionsRender: (s, callback) => (
             <EncodeTag
                 {...{origin: s, setOrigin: callback}}
                 tag={"doubleurlenc"}
-                help={"把标签内容变成'双重URL'编码"}
+                help={"Convert tag content to'Double URL'Encode"}
             />
         ),
         tag: "doubleurlenc"
     },
     {
-        name: "'双重URL'解码",
+        name: "'Double URL'Decode",
         optionsRender: (s, callback) => (
-            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"doubleurldec"} help={"把标签内容按'双重URL'解码"} />
+            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"doubleurldec"} help={"Sort tag content by'Double URL'Decode"} />
         ),
         tag: "doubleurldec"
     },
     {
-        name: "HTML(&#xxxx;)编码",
+        name: "HTML(&#xxxx;)Encode",
         optionsRender: (s, callback) => (
-            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"html"} help={"把标签内容变成HTML(&#xxxx;)编码"} />
+            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"html"} help={"Convert tag content to HTML(&#xxxx;)Encode"} />
         ),
         tag: "html"
     },
     {
-        name: "HTML(&#xAAAA;)编码 - 16进制",
+        name: "HTML(&#xAAAA;)Encode - Hex",
         optionsRender: (s, callback) => (
             <EncodeTag
                 {...{origin: s, setOrigin: callback}}
                 tag={"htmlhex"}
-                help={"把标签内容变成HTML(&#xAAAA;)编码"}
+                help={"Convert tag content to HTML(&#xAAAA;)Encode"}
             />
         ),
         tag: "htmlhex"
     },
     {
-        name: "HTML(&#xxxx;)解码",
+        name: "HTML(&#xxxx;)Decode",
         optionsRender: (s, callback) => (
-            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"htmldec"} help={"把标签内容按HTML(&#xxxx;)解码"} />
+            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"htmldec"} help={"Decode tag content HTML(&#xxxx;)Decode"} />
         ),
         tag: "htmldec"
     },
     {
-        name: "'ASCII'编码",
+        name: "'ASCII'Encode",
         tag: "ascii",
         optionsRender: (s, callback) => (
-            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"ascii"} help={"把标签内容变成'ASCII'编码"} />
+            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"ascii"} help={"Convert tag content to'ASCII'Encode"} />
         )
     },
     {
-        name: "'ASCII'解码",
+        name: "'ASCII'Decode",
         tag: "asciidec",
         optionsRender: (s, callback) => (
-            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"asciidec"} help={"把标签内容按'ASCII'解码"} />
+            <EncodeTag {...{origin: s, setOrigin: callback}} tag={"asciidec"} help={"Sort tag content by'ASCII'Decode"} />
         )
     }
 ]

@@ -17,7 +17,7 @@ export const showByContextMenu = (props: BaseMenuProps, x?: number, y?: number) 
     div.id = ContextMenuId
     div.className = "popup"
     document.body.appendChild(div)
-    /**ContextMenu 根节点 */
+    /**ContextMenu Root Node */
     let contextMenuRootDiv
 
     const destory = () => {

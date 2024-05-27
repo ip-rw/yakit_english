@@ -29,29 +29,29 @@ export const PluginLogDetail: React.FC<PluginLogDetailProps> = memo((props) => {
     const {getContainer, uuid, info, visible, onClose, onChange} = props
 
     const getContainerSize = useSize(getContainer)
-    // 抽屉展示高度
+    // Drawer Display Height
     const showHeight = useMemo(() => {
         return getContainerSize?.height || 400
     }, [getContainerSize])
 
     const [activeTab, setActiveTab] = useState<string>("diff")
 
-    // 关闭
+    // Close
     const onCancel = useMemoizedFn(() => {
         onClose()
     })
 
-    /** ---------- 获取插件日志信息 Start ---------- */
+    /** ---------- Fetch Plugin Log Info Start ---------- */
     const [fetchLoading, setFetchLoading] = useState<boolean>(false)
 
-    // pr修改的数据
+    // PR Modify Data
     const [prInfo, setPRInfo] = useState<API.PluginsAuditDetailResponse>()
-    // 插件类型
+    // Plugin type
     const pluginType = useMemo(() => {
         if (prInfo) return prInfo.type || undefined
         return "yak" || undefined
     }, [prInfo])
-    // 插件类型名和tag颜色
+    // Plugin Type Name and Tag Color
     const pluginTypeTag = useMemo(() => {
         if (pluginType && pluginTypeToName[pluginType]) {
             return {
@@ -61,35 +61,35 @@ export const PluginLogDetail: React.FC<PluginLogDetailProps> = memo((props) => {
         }
         return undefined
     }, [pluginType])
-    // 插件语言
+    // Plugin Language
     const pluginLanguage = useMemo(() => {
         if (pluginType) {
             return pluginTypeToName[pluginType]?.language || "yak"
         }
         return undefined
     }, [pluginType])
-    // 修改人及修改原因
+    // Editor and Reason for Editing
     // const [apply, setApply] = useState<{name: string; img: string; description: string}>()
 
-    // 基础信息
+    // Base Info
     const baseInfo = useRef<PluginBaseParamProps>()
-    // 配置信息
+    // Config Info
     const settingInfo = useRef<PluginSettingParamProps>()
 
-    // 对比器-源码
+    // Comparator - Source
     const oldCode = useRef<string>("")
-    // 对比器-修改源码
+    // Comparator - Modify Source
     const [newCode, setNewCode] = useState<string>("")
-    // 触发对比器刷新
+    // Trigger Comparator Refresh
     const [triggerDiff, setTriggerDiff] = useState<boolean>(true)
     useUpdateEffect(() => {
         setTriggerDiff((prev) => !prev)
     }, [activeTab])
 
-    // 插件调试数据
+    // Plugin Debug Data
     const [plugin, setPlugin] = useState<PluginDataProps>()
 
-    // 获取插件pr信息
+    // Fetch Plugin PR Info
     const fetchPluginInfo = useMemoizedFn(() => {
         if (fetchLoading) return
 
@@ -103,11 +103,11 @@ export const PluginLogDetail: React.FC<PluginLogDetailProps> = memo((props) => {
                     //     `\nresponse"${JSON.stringify(res)}`
                     // )
                     setPRInfo(res)
-                    // 获取对比器-修改源码
+                    // Fetch Comparator - Modify Source
                     setNewCode(res.content)
-                    // 获取对比器-源码
+                    // Fetch Comparator - Source
                     if (res.merge_before_plugins) oldCode.current = res.merge_before_plugins.content || ""
-                    // 获取修改人信息
+                    // Fetch Editor Info
                     // if (res.apply_user_name && res.apply_user_head_img) {
                     //     setApply({
                     //         name: res.apply_user_name || "",
@@ -115,7 +115,7 @@ export const PluginLogDetail: React.FC<PluginLogDetailProps> = memo((props) => {
                     //         description: res.logDescription || ""
                     //     })
                     // }
-                    // 获取基础信息
+                    // Fetch Base Info
                     let infoData: PluginBaseParamProps = {
                         ScriptName: res.script_name,
                         Help: res.help,
@@ -126,14 +126,14 @@ export const PluginLogDetail: React.FC<PluginLogDetailProps> = memo((props) => {
                         infoData.Tags = (res.tags || "").split(",") || []
                     } catch (error) {}
                     baseInfo.current = {...infoData}
-                    // 获取配置信息
+                    // Fetch Config Info
                     let settingData: PluginSettingParamProps = {
                         EnablePluginSelector: !!res.enable_plugin_selector,
                         PluginSelectorTypes: res.plugin_selector_types,
                         Content: res.content || ""
                     }
                     settingInfo.current = {...settingData}
-                    //获取参数信息
+                    //Fetch Param Info
                     const paramsList =
                         res.type === "yak" ? await onCodeToInfo(res.type, res.content) : {CliParameter: []}
                     setPlugin({
@@ -144,7 +144,7 @@ export const PluginLogDetail: React.FC<PluginLogDetailProps> = memo((props) => {
                     })
                     setTriggerDiff((prev) => !prev)
                 } else {
-                    yakitNotify("error", `获取修改内容为空，请重试!`)
+                    yakitNotify("error", `Fetch Modify Content Empty, Please Retry!`)
                     onCancel()
                 }
             })
@@ -163,14 +163,14 @@ export const PluginLogDetail: React.FC<PluginLogDetailProps> = memo((props) => {
             if (uuid && info) fetchPluginInfo()
         }
     }, [visible])
-    /** ---------- 获取插件日志信息 End ---------- */
+    /** ---------- Fetch Plugin Log Info End ---------- */
 
     const [modifyLoading, setModifyLoading] = useState<boolean>(false)
-    // 合并|不合并修改
+    // Merge|Cancel Merge
     const changePRInfo: (isPass: boolean, reason?: string) => Promise<string> = useMemoizedFn((isPass, reason) => {
         return new Promise(async (resolve, reject) => {
             if (prInfo) {
-                // 生成合并结果数据
+                // Generate Merge Result Data
                 const audit: API.PluginsAudit = {
                     listType: "log",
                     status: isPass ? "true" : "false",
@@ -178,7 +178,7 @@ export const PluginLogDetail: React.FC<PluginLogDetailProps> = memo((props) => {
                     logDescription: (reason || "").trim() || undefined,
                     upPluginLogId: prInfo.up_log_id || 0
                 }
-                // 生成插件数据
+                // Generate Plugin Data
                 const data: PluginDataProps = {
                     ScriptName: prInfo.script_name,
                     Type: prInfo.type,
@@ -188,7 +188,7 @@ export const PluginLogDetail: React.FC<PluginLogDetailProps> = memo((props) => {
                     EnablePluginSelector: settingInfo.current?.EnablePluginSelector,
                     PluginSelectorTypes: settingInfo.current?.PluginSelectorTypes
                 }
-                // yak类型-进行源码分析出参数和风险
+                // Yak Type - Source Analysis for Params and Risks
                 if (data.Type === "yak") {
                     const codeInfo = await onCodeToInfo(data.Type, data.Content)
                     if (codeInfo) {
@@ -196,7 +196,7 @@ export const PluginLogDetail: React.FC<PluginLogDetailProps> = memo((props) => {
                         data.Params = codeInfo.CliParameter
                     }
                 } else {
-                    // 非yak类型-排除参数和风险
+                    // Non-yak Type - Exclude Params and Risks
                     data.RiskDetail = []
                     data.Params = []
                 }
@@ -210,13 +210,13 @@ export const PluginLogDetail: React.FC<PluginLogDetailProps> = memo((props) => {
                         reject()
                     })
             } else {
-                yakitNotify("error", `未获取到插件修改信息，请关闭后重试`)
+                yakitNotify("error", `Plugin Modification Info Not Found, Please Close and Retry`)
                 reject()
             }
         })
     })
 
-    /** ---------- 不合并 Start ---------- */
+    /** ---------- Cancel Merge Start ---------- */
     const [noPass, setNoPass] = useState<boolean>(false)
     const [form] = Form.useForm()
     const onOpenNoPass = useMemoizedFn(() => {
@@ -227,7 +227,7 @@ export const PluginLogDetail: React.FC<PluginLogDetailProps> = memo((props) => {
         setModifyLoading(true)
         setNoPass(true)
     })
-    // 提交不合并的理由
+    // Submit Reason for Not Merging
     const submitNoPass = useMemoizedFn(() => {
         if (form) {
             form.validateFields()
@@ -248,9 +248,9 @@ export const PluginLogDetail: React.FC<PluginLogDetailProps> = memo((props) => {
         setNoPass(false)
         setModifyLoading(false)
     })
-    /** ---------- 不合并 End ---------- */
+    /** ---------- Cancel Merge End ---------- */
 
-    /** ---------- 合并代码 Start ---------- */
+    /** ---------- Merge Code Start ---------- */
     const [pass, setPass] = useState<boolean>(false)
     const onOpenPass = useMemoizedFn(() => {
         if (modifyLoading) return
@@ -273,9 +273,9 @@ export const PluginLogDetail: React.FC<PluginLogDetailProps> = memo((props) => {
             setPass(true)
         }
     })
-    /** @description 0-未检测;1-不合格;2-合格 */
+    /** @Description 0 - Undetected;1 - Unqualified;2 - Qualified */
     const [score, setScore] = useState<number>(0)
-    // 评分检测回调
+    // Scoring Check Callback
     const onCallbackScore = useMemoizedFn((pass: boolean) => {
         if (!pass) {
             setScore(1)
@@ -295,7 +295,7 @@ export const PluginLogDetail: React.FC<PluginLogDetailProps> = memo((props) => {
     const onCancelPass = useMemoizedFn(() => {
         setPass(false)
     })
-    /** ---------- 合并代码 End ---------- */
+    /** ---------- Merge Code End ---------- */
 
     return (
         <>
@@ -314,8 +314,8 @@ export const PluginLogDetail: React.FC<PluginLogDetailProps> = memo((props) => {
                         buttonStyle='solid'
                         value={activeTab}
                         options={[
-                            {value: "diff", label: "源码对比"},
-                            {value: "debug", label: "插件调试"}
+                            {value: "diff", label: "Source Comparison"},
+                            {value: "debug", label: "Plugin Debug"}
                         ]}
                         onChange={(e) => setActiveTab(e.target.value)}
                     />
@@ -329,7 +329,7 @@ export const PluginLogDetail: React.FC<PluginLogDetailProps> = memo((props) => {
                             icon={<SolidBanIcon />}
                             onClick={onOpenNoPass}
                         >
-                            不合并
+                            Cancel Merge
                         </YakitButton>
                         <YakitButton
                             colors='success'
@@ -337,7 +337,7 @@ export const PluginLogDetail: React.FC<PluginLogDetailProps> = memo((props) => {
                             icon={<OutlinePuzzleIcon />}
                             onClick={onOpenPass}
                         >
-                            合并代码
+                            Merge Code
                         </YakitButton>
 
                         <YakitButton type='text2' icon={<OutlineXIcon />} onClick={onCancel} />
@@ -379,7 +379,7 @@ export const PluginLogDetail: React.FC<PluginLogDetailProps> = memo((props) => {
             </YakitDrawer>
 
             <YakitModal
-                title='不合并原因描述'
+                title='Reason for Not Merging Description'
                 type='white'
                 width={448}
                 centered={true}
@@ -390,9 +390,9 @@ export const PluginLogDetail: React.FC<PluginLogDetailProps> = memo((props) => {
                 onOk={submitNoPass}
             >
                 <Form form={form}>
-                    <Form.Item label='' name='noPassReason' rules={[{required: true, message: "必须填写不合并的原因"}]}>
+                    <Form.Item label='' name='noPassReason' rules={[{required: true, message: "Reason for Not Merging Required"}]}>
                         <YakitInput.TextArea
-                            placeholder='请简单描述一下不合并原因，方便告知修改者...'
+                            placeholder='Briefly Describe Reason for Not Merging, to Inform Editor...'
                             autoSize={{minRows: 3, maxRows: 3}}
                             showCount
                             maxLength={150}
@@ -402,7 +402,7 @@ export const PluginLogDetail: React.FC<PluginLogDetailProps> = memo((props) => {
             </YakitModal>
 
             <YakitModal
-                title='修改源码评分'
+                title='Modify Source Scoring'
                 type='white'
                 width={506}
                 centered={true}
@@ -419,8 +419,8 @@ export const PluginLogDetail: React.FC<PluginLogDetailProps> = memo((props) => {
                     code={"yakit.AutoInitYakit()\n\n# Input your code!\n\n"}
                     isStart={pass}
                     successWait={10}
-                    successHint='表现良好，检测通过，开始合并修改'
-                    failedHint='检测不通过，请根据提示修改'
+                    successHint='Good Performance, Pass Check, Begin Merge Modification'
+                    failedHint='Check Failed, Modify According to Tips'
                     callback={onCallbackScore}
                 />
             </YakitModal>

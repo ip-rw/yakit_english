@@ -8,10 +8,10 @@ import EmptyPng from "./empty.png";
 
 /**
  * @description:YakitEmpty
- * @augments YakitEmptyProps 继承antd的 Empty 默认属性
+ * @augments YakitEmptyProps Inherits antd's Empty default props
  */
 export const YakitEmpty: React.FC<YakitEmptyProps> = (props) => {
-    const { title = "暂无数据",...restProps } = props
+    const { title = "No Data Available",...restProps } = props
     return (
         <Empty
             image={<img src={EmptyPng} alt="" />}

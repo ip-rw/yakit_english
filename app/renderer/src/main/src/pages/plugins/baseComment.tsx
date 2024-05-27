@@ -122,7 +122,7 @@ export const PluginComment: React.FC<PluginCommentProps> = (props) => {
                 })
             })
             .catch((err) => {
-                failed("评论查询失败:" + err)
+                failed("Comment fetch failed:" + err)
             })
             .finally(() => {
                 setTimeout(() => setLoading(false), 200)
@@ -130,18 +130,18 @@ export const PluginComment: React.FC<PluginCommentProps> = (props) => {
     })
     const isLoading = useMemoizedFn(() => {
         Modal.confirm({
-            title: "未登录",
+            title: "Not logged in",
             icon: <ExclamationCircleOutlined />,
-            content: "登录后才可评论",
-            cancelText: "取消",
-            okText: "登录",
+            content: "Comment after login",
+            cancelText: "Cancel",
+            okText: "Login",
             onOk() {
                 setLoginShow(true)
             },
             onCancel() {}
         })
     })
-    // 新增评论
+    // Add comment
     const pluginComment = useMemoizedFn(() => {
         if (!plugin) return
         if (!isLogin) {
@@ -149,7 +149,7 @@ export const PluginComment: React.FC<PluginCommentProps> = (props) => {
             return
         }
         if (!commentText && files.length === 0) {
-            failed("请输入评论内容或者上传图片")
+            failed("Enter comment or upload image")
             return
         }
         const params = {
@@ -177,9 +177,9 @@ export const PluginComment: React.FC<PluginCommentProps> = (props) => {
         })
     })
 
-    // 全局监听是否刷新子评论列表状态
+    // Global watch for sub-comment list refresh state
     const {setCommenData} = useCommenStore()
-    // 登录框状态
+    // Login Box Status
     const [loginshow, setLoginShow] = useState<boolean>(false)
     const addComment = useMemoizedFn((data: API.NewComments) => {
         NetWorkApi<API.NewComments, API.ActionSucceeded>({
@@ -188,11 +188,11 @@ export const PluginComment: React.FC<PluginCommentProps> = (props) => {
             data
         })
             .then((res) => {
-                success("评论成功")
-                // console.log("评论成功---",data);
+                success("Comment posted")
+                // console.log("Comment posted---",data);
 
                 if (data.by_user_id && data.by_user_id > 0) {
-                    // 刷新modal中子评论列表
+                    // Refresh sub-comments in modal
                     setCommenData({
                         isRefChildCommentList: true
                     })
@@ -215,7 +215,7 @@ export const PluginComment: React.FC<PluginCommentProps> = (props) => {
     })
     const pluginReply = useMemoizedFn((item: API.CommentListData) => {
         if (!isLogin) {
-            warn("请先登录")
+            warn("Please login")
             return
         }
         setCurrentComment(item)
@@ -229,7 +229,7 @@ export const PluginComment: React.FC<PluginCommentProps> = (props) => {
         }
         if (!currentComment?.id) return
         if (!commentInputText && commentFiles.length === 0) {
-            failed("请输入评论内容或者上传图片")
+            failed("Enter comment or upload image")
             return
         }
         const params = {
@@ -245,7 +245,7 @@ export const PluginComment: React.FC<PluginCommentProps> = (props) => {
     })
     const pluginCommentStar = useMemoizedFn((item: API.CommentListData) => {
         if (!isLogin) {
-            warn("请先登录")
+            warn("Please login")
             return
         }
         const params: CommentStarsProps = {
@@ -276,7 +276,7 @@ export const PluginComment: React.FC<PluginCommentProps> = (props) => {
                 }
             })
             .catch((err) => {
-                failed("点赞失败:" + err)
+                failed("Like failed:" + err)
             })
             .finally(() => {
                 setTimeout(() => setLoading(false), 200)
@@ -327,7 +327,7 @@ export const PluginComment: React.FC<PluginCommentProps> = (props) => {
             {loginshow && <Login visible={loginshow} onCancel={() => setLoginShow(false)}></Login>}
             <div className={styles["info-comment-box"]}>
                 <div className={styles["box-header"]}>
-                    <span className={styles["header-title"]}>评论</span>
+                    <span className={styles["header-title"]}>Comment</span>
                     <span className={styles["header-subtitle"]}>{commentAllNum || 0}</span>
                 </div>
                 {isLogin && (
@@ -384,7 +384,7 @@ export const PluginComment: React.FC<PluginCommentProps> = (props) => {
             />
 
             <YakitModal
-                title={<div className={styles["header-title"]}>回复@{currentComment?.user_name}</div>}
+                title={<div className={styles["header-title"]}>Reply@{currentComment?.user_name}</div>}
                 centered={true}
                 footer={null}
                 keyboard={false}
@@ -407,7 +407,7 @@ export const PluginComment: React.FC<PluginCommentProps> = (props) => {
                             isAlwaysShow={true}
                         />
                     ) : (
-                        <>请先登录</>
+                        <>Please login</>
                     )}
                 </div>
             </YakitModal>
@@ -425,12 +425,12 @@ interface PluginCommentInfoProps {
     onStar: (name: API.CommentListData) => any
     openCommentChildModel?: (visible: boolean) => any
     setParentComment?: (name: API.CommentListData) => any
-    // 头像大小 默认32
+    // Avatar size, default 32
     headImgSize?: number
-    // 是否默认懒加载图片 默认直接加载
+    // Lazy load images by default, otherwise load directly
     isLazyLoadImage?: boolean
 }
-// 评论内容单条组件
+// Single comment component
 const PluginCommentInfo = memo((props: PluginCommentInfoProps) => {
     const {
         info,
@@ -470,7 +470,7 @@ const PluginCommentInfo = memo((props: PluginCommentInfoProps) => {
                         <div className={styles["comment-body-name"]}>{info.user_name || "anonymous"}</div>
                         {info.by_user_name && (
                             <>
-                                <div className={styles["comment-replay-text"]}>回复</div>
+                                <div className={styles["comment-replay-text"]}>Reply</div>
                                 <div className={styles["comment-replay"]}>@{info.by_user_name}</div>
                             </>
                         )}
@@ -489,7 +489,7 @@ const PluginCommentInfo = memo((props: PluginCommentInfoProps) => {
                             <div className={styles["func-comment-and-star"]}>
                                 <div className={styles["comment-and-star"]} onClick={() => onReply(info)}>
                                     <YakitButton type='secondary2' className={styles["reply-btn"]}>
-                                        回复
+                                        Reply
                                     </YakitButton>
                                 </div>
                                 <div
@@ -514,7 +514,7 @@ const PluginCommentInfo = memo((props: PluginCommentInfoProps) => {
                         )}
                     </div>
                 </div>
-                {/* 此处不定高虚拟列表 二级评论的出现会导致列表泛白 */}
+                {/* Undefined height in virtual list, sub-comments cause whitening */}
                 {/* {(info.reply_content || []).length > 0 && isOperation && (
                     <>
                         {info.reply_content?.map((info) => {
@@ -545,7 +545,7 @@ const PluginCommentInfo = memo((props: PluginCommentInfoProps) => {
                             }
                         }}
                     >
-                        共 {info.reply_num} 条回复，点击查看
+                        Total {info.reply_num} replies, view
                     </a>
                 )}
             </div>
@@ -557,9 +557,9 @@ interface PluginCommentImagesProps {
     onDelete?: (v: string[]) => void
     onOpen?: () => void
     onClose?: () => void
-    // 辅助key值
+    // Auxiliary key
     key?: string | number
-    // 展示图片大小 默认56
+    // Show image size, default 56
     size?: number
 }
 
@@ -592,7 +592,7 @@ const PluginCommentImages: React.FC<PluginCommentImagesProps> = (props) => {
                                 })
                             }}
                         >
-                            预览
+                            Preview
                         </div>
                         {onDelete && (
                             <div
@@ -634,16 +634,16 @@ const PluginCommentImages: React.FC<PluginCommentImagesProps> = (props) => {
 interface PluginCommentUploadProps {
     value: string
     setValue: (value: string) => any
-    // 限制输入字数，默认150字
+    // Limit input to 150 characters by default
     limit?: number
     loading: boolean
     files: string[]
     setFiles: (files: string[]) => any
     onSubmit: () => void
     submitTxt?: string
-    // TextArea行数 默认4行
+    // TextArea rows, default 4
     rows?: number
-    // 是否常驻显示操作按钮（默认为聚焦显示）
+    // Always show action buttons (focus by default)）
     isAlwaysShow?: boolean
 }
 
@@ -661,7 +661,7 @@ export const PluginCommentUpload: React.FC<PluginCommentUploadProps> = (props) =
         files,
         setFiles,
         onSubmit,
-        submitTxt = "发布评论",
+        submitTxt = "Post comment",
         rows = 4,
         isAlwaysShow = false
     } = props
@@ -672,7 +672,7 @@ export const PluginCommentUpload: React.FC<PluginCommentUploadProps> = (props) =
     const textAreRef = useRef<InputRef>(null)
     const [isFocused, setIsFocused] = useState<boolean>(false)
 
-    // 是否允许其失焦
+    // Allow blur?
     const isAllowBlur = useRef<boolean>(true)
     const uploadFiles = (file) => {
         setFilesLoading(true)
@@ -682,7 +682,7 @@ export const PluginCommentUpload: React.FC<PluginCommentUploadProps> = (props) =
                 setFiles(files.concat(res.data))
             })
             .catch((err) => {
-                fail("图片上传失败")
+                fail("Image upload failed")
             })
             .finally(() => {
                 setTimeout(() => setFilesLoading(false), 1)
@@ -699,7 +699,7 @@ export const PluginCommentUpload: React.FC<PluginCommentUploadProps> = (props) =
         return false
     }, [value, limit, files])
 
-    // 是否展示底部元素
+    // Show bottom elements?
     const isShowdDom = useMemo(() => {
         if (files.length > 0 || value.length > 0 || isAlwaysShow || isFocused) {
             return true
@@ -742,7 +742,7 @@ export const PluginCommentUpload: React.FC<PluginCommentUploadProps> = (props) =
                     })
                 }}
             >
-                {/* 将原本padding: 12px;拆分为4个div的原因是为了解决控件闪烁 */}
+                {/* Set padding: 12px;Split into 4 divs to solve flicker issue */}
                 <div
                     className={styles["padding-top"]}
                     onMouseDown={(e) => {
@@ -780,7 +780,7 @@ export const PluginCommentUpload: React.FC<PluginCommentUploadProps> = (props) =
                                 ref={textAreRef}
                                 bordered={false}
                                 rows={rows}
-                                placeholder='说点什么...'
+                                placeholder='Say something...'
                                 onChange={(e) => setValue(e.target.value)}
                             />
                             <ResizerIcon className={styles["textArea-resizer-icon"]} />
@@ -827,11 +827,11 @@ export const PluginCommentUpload: React.FC<PluginCommentUploadProps> = (props) =
                                                 return false
                                             }
                                             if (file.size / 1024 / 1024 > 10) {
-                                                failed("图片大小不超过10M")
+                                                failed("Image size up to 10M")
                                                 return false
                                             }
                                             if (!"image/jpeg,image/png,image/jpg,image/gif".includes(file.type)) {
-                                                failed("仅支持上传图片格式为：image/jpeg,image/png,image/jpg,image/gif")
+                                                failed("Support image upload format: image/jpeg,image/png,image/jpg,image/gif")
                                                 return false
                                             }
                                             if (file) {
@@ -858,7 +858,7 @@ export const PluginCommentUpload: React.FC<PluginCommentUploadProps> = (props) =
                                     </div>
                                     <>
                                         {
-                                            // 由于Button的disabled为true时会被阻止默认事件向上传递 因此disable样式由自己实现
+                                            // Default event blocked when Button disabled=true, implement disable style manually
                                             disabled ? (
                                                 <div className={styles["disabled-btn"]}>
                                                     <PaperAirplaneIcon />
@@ -945,9 +945,9 @@ const PluginCommentChildModal = (props: PluginCommentChildModalProps) => {
             getChildComment(commentChildResponses?.pagemeta?.page + 1)
         }
     })
-    // 全局监听是否刷新子评论列表状态
+    // Global watch for sub-comment list refresh state
     const {commenData, setCommenData} = useCommenStore()
-    // 获取子评论列表
+    // Fetch sub-comments
     const getChildComment = useMemoizedFn((page: number = 1, payload: any = {}) => {
         const params = {
             root_id: parentInfo?.id,
@@ -981,13 +981,13 @@ const PluginCommentChildModal = (props: PluginCommentChildModalProps) => {
                     data: [...newCommentChildResponses.data],
                     pagemeta: item.pagemeta
                 })
-                // 刷新modal中子评论列表
+                // Refresh sub-comments in modal
                 setCommenData({
                     isRefChildCommentList: false
                 })
             })
             .catch((err) => {
-                failed("评论查询失败:" + err)
+                failed("Comment fetch failed:" + err)
             })
             .finally(() => {
                 setTimeout(() => setLoadingChild(false), 200)
@@ -995,7 +995,7 @@ const PluginCommentChildModal = (props: PluginCommentChildModalProps) => {
     })
     const onCommentChildStar = useMemoizedFn((childItem: API.CommentListData) => {
         if (!isLogin) {
-            warn("请先登录")
+            warn("Please login")
             return
         }
         const params = {
@@ -1026,7 +1026,7 @@ const PluginCommentChildModal = (props: PluginCommentChildModalProps) => {
                 }
             })
             .catch((err) => {
-                failed("点赞失败:" + err)
+                failed("Like failed:" + err)
             })
             .finally(() => {})
     })
@@ -1061,7 +1061,7 @@ const PluginCommentChildModal = (props: PluginCommentChildModalProps) => {
                     onStar={() => {}}
                     onReply={() => {}}
                 />
-                {/* 使用图片懒加载 */}
+                {/* Use lazy image loading */}
                 <div
                     className={styles["little-child-comment-list"]}
                     onScroll={(e) => {

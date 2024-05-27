@@ -8,7 +8,7 @@ module.exports = (win, getClient) => {
     let currentPort;
     let currentHost;
     let currentDownstreamProxy;
-    // 用于恢复正在劫持的 MITM 状态
+    // Recover hijacking MITM state
     ipcMain.handle("mitm-have-current-stream", e => {
         return {
             haveStream: !!stream,
@@ -18,7 +18,7 @@ module.exports = (win, getClient) => {
         };
     })
 
-    // 发送恢复会话信息，让服务器把上下文发回来
+    // Send session resume info for context return
     ipcMain.handle("mitm-recover", e => {
         if (stream) {
             stream.write({
@@ -27,7 +27,7 @@ module.exports = (win, getClient) => {
         }
     });
 
-    // 发送恢复会话信息，让服务器把上下文发回来
+    // Send session resume info for context return
     ipcMain.handle("mitm-reset-filter", e => {
         if (stream) {
             stream.write({
@@ -43,7 +43,7 @@ module.exports = (win, getClient) => {
         }
     })
 
-    // 丢掉该消息
+    // Discard message
     ipcMain.handle("mitm-drop-request", (e, id) => {
         if (stream) {
             stream.write({
@@ -53,7 +53,7 @@ module.exports = (win, getClient) => {
         }
     })
 
-    // 丢掉该响应
+    // Discard response
     ipcMain.handle("mitm-drop-response", (e, id) => {
         if (stream) {
             stream.write({
@@ -63,7 +63,7 @@ module.exports = (win, getClient) => {
         }
     })
 
-    // 原封不动转发
+    // Forward as-is
     ipcMain.handle("mitm-forward-response", (e, id) => {
         if (stream) {
             stream.write({
@@ -73,7 +73,7 @@ module.exports = (win, getClient) => {
         }
     })
 
-    // 原封不动转发请求
+    // Forward request as-is
     ipcMain.handle("mitm-forward-request", (e, id) => {
         if (stream) {
             stream.write({
@@ -83,7 +83,7 @@ module.exports = (win, getClient) => {
         }
     })
 
-    // 发送劫持请当前请求的消息，可以劫持当前响应的请求
+    // Send message to hijack current request
     ipcMain.handle("mitm-hijacked-current-response", (e, id, should) => {
         if (stream) {
             if (should) {
@@ -110,7 +110,7 @@ module.exports = (win, getClient) => {
         }
     })
 
-    // 用来关闭 MITM 劫持的信息流
+    // Close MITM hijacking stream
     ipcMain.handle("mitm-close-stream", e => {
         if (stream) {
             stream.cancel()
@@ -118,7 +118,7 @@ module.exports = (win, getClient) => {
         }
     })
 
-    // MITM 转发
+    // MITM forwarding
     ipcMain.handle("mitm-forward-modified-request", (e, request, id, tags) => {
         if (stream) {
             stream.write({
@@ -128,7 +128,7 @@ module.exports = (win, getClient) => {
             })
         }
     })
-    // MITM 转发 - HTTP 响应
+    // MITM forwarding - HTTP response
     ipcMain.handle("mitm-forward-modified-response", (e, response, id) => {
         if (stream) {
             stream.write({
@@ -138,7 +138,7 @@ module.exports = (win, getClient) => {
         }
     })
 
-    // MITM 启用插件
+    // MITM enable plugin
     ipcMain.handle("mitm-exec-script-content", (e, content) => {
         if (stream) {
             stream.write({
@@ -148,7 +148,7 @@ module.exports = (win, getClient) => {
         }
     })
 
-    // MITM 启用插件，通过插件 ID
+    // MITM enable plugin by ID
     ipcMain.handle("mitm-exec-script-by-id", (e, id, params) => {
         if (stream) {
             stream.write({
@@ -159,7 +159,7 @@ module.exports = (win, getClient) => {
         }
     })
 
-    // MITM 获取当前已经启用的插件
+    // MITM get enabled plugins
     ipcMain.handle("mitm-get-current-hook", (e, id, params) => {
         if (stream) {
             stream.write({
@@ -168,7 +168,7 @@ module.exports = (win, getClient) => {
         }
     })
 
-    // MITM 移除插件
+    // MITM remove plugin
     ipcMain.handle("mitm-remove-hook", (e, params) => {
         if (stream) {
             stream.write({
@@ -178,21 +178,21 @@ module.exports = (win, getClient) => {
         }
     })
 
-    // 设置过滤器
+    // Set filter
     ipcMain.handle("mitm-filter", (e, filter) => {
         if (stream) {
             stream.write(filter)
         }
     })
 
-    // 设置正则替换
+    // Set regex replace
     ipcMain.handle("mitm-content-replacers", (e, filter) => {
         if (stream) {
             stream.write({ ...filter, setContentReplacers: true })
         }
     })
 
-    // 清除 mitm 插件缓存
+    // Clear MITM plugin cache
     ipcMain.handle("mitm-clear-plugin-cache", () => {
         if (stream) {
             stream.write({
@@ -201,7 +201,7 @@ module.exports = (win, getClient) => {
         }
     })
 
-    // 过滤 ws
+    // Filter ws
     ipcMain.handle("mitm-filter-websocket", (e, filterWebsocket) => {
         if (stream) {
             stream.write({
@@ -211,7 +211,7 @@ module.exports = (win, getClient) => {
         }
     })
 
-    // 下游代理
+    // Downstream proxy
     ipcMain.handle("mitm-set-downstream-proxy", (e, downstreamProxy) => {
         if (stream) {
             stream.write({
@@ -220,7 +220,7 @@ module.exports = (win, getClient) => {
         }
     })
 
-    // 开始调用 MITM，设置 stream
+    // Start MITM call, set stream
     let isFirstData = true
     ipcMain.handle("mitm-start-call", (e, host, port, downstreamProxy, enableHttp2, certificates, extra) => {
         if (stream) {
@@ -232,54 +232,54 @@ module.exports = (win, getClient) => {
 
         isFirstData = true;
         stream = getClient().MITM();
-        // 设置服务器发回的消息的回调函数
+        // Set callback for server messages
         stream.on("data", data => {
-            // 处理第一个消息
-            // 第一个消息应该更新状态，第一个消息应该是同步 Filter 的信息。。。
+            // Process first message
+            // The input you've provided does not seem to contain non-English text requiring translation. Could you please provide the Chinese text that you need translated into English, so I may assist you accurately?。。。
             if (win && isFirstData) {
                 isFirstData = false;
                 win.webContents.send("client-mitm-start-success")
             }
 
-            // mitm 服务端控制客户端加载状态
+            // MITM controls client load state
             if (win && data["haveLoadingSetter"]) {
                 win.webContents.send("client-mitm-loading", !!(data["loadingFlag"]))
             }
 
-            // mitm 服务端给客户端发送提示信息
+            // MITM server sends client prompt
             if (win && data["haveNotification"]) {
                 win.webContents.send("client-mitm-notification", data["notificationContent"])
             }
 
-            // 检查替代规则的问题，如果返回了有内容，说明没 BUG
+            // Check substitution rule issues, no BUG if not empty
             if (win && (data?.replacers || []).length > 0) {
                 win.webContents.send("client-mitm-content-replacer-update", data)
             }
 
-            // 如果是强制更新的话，一般通过这里触发
+            // Trigger force update here
             if (win && data?.justContentReplacer) {
                 win.webContents.send("client-mitm-content-replacer-update", data)
             }
 
-            // 检查如果是 exec result 的话，对应字段应该是
+            // Check if exec result, correspond field should be
             if (win && data["haveMessage"]) {
                 win.webContents.send("client-mitm-message", data["message"]);
                 return
             }
 
-            // 看看当前系统的 hooks 有哪些
+            // Check current system hooks
             if (win && data["getCurrentHook"]) {
                 win.webContents.send("client-mitm-hooks", data["hooks"])
                 return
             }
 
-            // 自动更新 HTTP Flow 的表格
+            // Auto-update HTTP Flow table
             if (win && data.refresh) {
                 win.webContents.send("client-mitm-history-update", data)
                 return
             }
 
-            // 把劫持到的信息发送回前端
+            // Send hijacked info to frontend
             if (win) {
                 if (data.justFilter) {
                     win.webContents.send("client-mitm-filter", { ...data })
@@ -338,7 +338,7 @@ module.exports = (win, getClient) => {
     //         });
     //     })
     // }
-    // 获取URL的IP地址
+    // Get URL IP address
     // ipcMain.handle("fetch-url-ip", async (e, params) => {
     //     return await asyncFetchHostIp(params)
     // })
@@ -423,7 +423,7 @@ module.exports = (win, getClient) => {
         return await asyncSetCurrentRules(params)
     })
 
-    // 设置mitm filter
+    // Set MITM filter
     const asyncSetMITMFilter = (params) => {
         return new Promise((resolve, reject) => {
             getClient().SetMITMFilter(params, (err, data) => {
@@ -443,7 +443,7 @@ module.exports = (win, getClient) => {
         }
         return await asyncSetMITMFilter(params)
     })
-    // 获取mitm filter
+    // Get MITM filter
     const asyncGetMITMFilter = (params) => {
         return new Promise((resolve, reject) => {
             getClient().GetMITMFilter(params, (err, data) => {
@@ -459,7 +459,7 @@ module.exports = (win, getClient) => {
     ipcMain.handle("mitm-get-filter", async (e, params) => {
         return await asyncGetMITMFilter(params)
     })
-    // 代理劫持
+    // Proxy interception
     const asyncGenerateURL = (params) => {
         return new Promise((resolve, reject) => {
             getClient().GenerateURL(params, (err, data) => {

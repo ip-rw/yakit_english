@@ -145,7 +145,7 @@ module.exports = (win, getClient) => {
         return await asyncExportMenuItem(params)
     })
 
-    // 新增或者修改所有菜单
+    // Add or Edit All Menus
     const asyncAddMenus = (params) => {
         return new Promise((resolve, reject) => {
             getClient().AddMenus(params, (err, data) => {
@@ -161,7 +161,7 @@ module.exports = (win, getClient) => {
         return await asyncAddMenus(params)
     })
 
-    // 查询所有菜单
+    // Query All Menus
     const asyncQueryAllMenuItem = (params) => {
         return new Promise((resolve, reject) => {
             getClient().QueryAllMenuItem(params, (err, data) => {
@@ -177,7 +177,7 @@ module.exports = (win, getClient) => {
         return await asyncQueryAllMenuItem(params)
     })
 
-    // 查询所有菜单
+    // Query All Menus
     const asyncDownloadOnlinePluginByScriptNames = (params) => {
         return new Promise((resolve, reject) => {
             getClient().DownloadOnlinePluginByScriptNames(params, (err, data) => {
@@ -193,7 +193,7 @@ module.exports = (win, getClient) => {
         return await asyncDownloadOnlinePluginByScriptNames(params)
     })
 
-    // 删除 所有菜单
+    // Delete All Menus
     const asyncDeleteAllMenu = (params) => {
         return new Promise((resolve, reject) => {
             getClient().DeleteAllMenu(params, (err, data) => {
@@ -209,7 +209,7 @@ module.exports = (win, getClient) => {
         return await asyncDeleteAllMenu(params)
     })
 
-    // 获取数据库保存的菜单数据
+    // Retrieve Menu Data from DB
     const asyncGetAllNavigationItem = (params) => {
         return new Promise((resolve, reject) => {
             getClient().GetAllNavigationItem(params, (err, data) => {
@@ -225,7 +225,7 @@ module.exports = (win, getClient) => {
         return await asyncGetAllNavigationItem(params)
     })
 
-    // 更新数据库保存的菜单数据
+    // Update Menu Data in DB
     const asyncAddToNavigation = (params) => {
         return new Promise((resolve, reject) => {
             getClient().AddToNavigation(params, (err, data) => {
@@ -241,7 +241,7 @@ module.exports = (win, getClient) => {
         return await asyncAddToNavigation(params)
     })
 
-    // 删除数据库保存的菜单数据
+    // Delete Menu Data from DB
     const asyncDeleteAllNavigation = (params) => {
         return new Promise((resolve, reject) => {
             getClient().DeleteAllNavigation(params, (err, data) => {
@@ -257,7 +257,7 @@ module.exports = (win, getClient) => {
         return await asyncDeleteAllNavigation(params)
     })
 
-    // 新增单项菜单
+    // Add Single Menu Item
     const asyncAddOneNavigation = (params) => {
         return new Promise((resolve, reject) => {
             getClient().AddOneNavigation(params, (err, data) => {
@@ -273,7 +273,7 @@ module.exports = (win, getClient) => {
         return await asyncAddOneNavigation(params)
     })
 
-    // 查询菜单项的所有存在一级菜单项列表
+    // Query All Primary Menu Items
     const asyncQueryNavigationGroups = (params) => {
         return new Promise((resolve, reject) => {
             getClient().QueryNavigationGroups(params, (err, data) => {

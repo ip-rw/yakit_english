@@ -9,10 +9,10 @@ import { getReleaseEditionName } from "@/utils/envfile"
 
 
 /**
- * @description: 两种方式的数字输入
- * @augments InputNumberProps 继承antd的InputNumber默认属性
- * @param {horizontal | vertical} type  默认vertical
- * @param {YakitSizeType} size  horizontal 不支持max-large
+ * @description: Dual-mode Number Input
+ * @augments InputNumberProps Inherits antd's InputNumber default properties
+ * @param {horizontal | vertical} type Default to vertical
+ * @param {YakitSizeType} size horizontal doesn't support max-large
  */
 export const YakitInputNumber: React.FC<YakitInputNumberProps> = (props) => {
     const {type, size, className, wrapperClassName, ...resProps} = props
@@ -64,8 +64,8 @@ export const YakitInputNumber: React.FC<YakitInputNumberProps> = (props) => {
 }
 
 /**
- * @description:horizontal size 不支持max-large
- * @description:不支持 bordered false ，无边框模式
+ * @description:horizontal size doesn't support max-large
+ * @description:Does not support bordered false, borderless mode
  */
 const YakitInputNumberHorizontal: React.FC<YakitInputNumberHorizontalProps> = (props) => {
     const {size, step = 1, controls, precision, ...resProps} = props
@@ -87,8 +87,8 @@ const YakitInputNumberHorizontal: React.FC<YakitInputNumberHorizontalProps> = (p
         }
     }, [props.value, props.step, props.precision])
     /**
-     * @description: 获取精度
-     * @return {*} 精度
+     * @description: Retrieve precision
+     * @return {*} Precision
      */
     const getPrecision = (value) => {
         if (value === undefined || value === null) return 0
@@ -101,14 +101,14 @@ const YakitInputNumberHorizontal: React.FC<YakitInputNumberHorizontalProps> = (p
         return precision
     }
     /**
-     * @description: 根据精度计算最后的值
+     * @description: Calculate final value based on precision
      */
     const toPrecision = (num) => {
         const precision = precisionRef.current
         return parseFloat(`${Math.round(num * Math.pow(10, precision)) / Math.pow(10, precision)}`)
     }
     /**
-     * @description: 增加
+     * @description: Increase
      */
     const onIncrease = (val, step) => {
         if (typeof val !== "number" && val === undefined) return value
@@ -116,7 +116,7 @@ const YakitInputNumberHorizontal: React.FC<YakitInputNumberHorizontalProps> = (p
         return toPrecision((precisionFactor * val + precisionFactor * step) / precisionFactor)
     }
     /**
-     * @description: 减少
+     * @description: Decrease
      */
     const onDecrease = (val, step) => {
         if (typeof val !== "number" && val === undefined) return value

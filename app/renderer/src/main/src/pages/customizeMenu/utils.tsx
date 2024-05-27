@@ -10,9 +10,9 @@ import {
 import {SendDatabaseFirstMenuProps} from "@/routes/newRouteType"
 import {ReactNode} from "react"
 
-/** @name 编辑菜单-增强型菜单(主要适配public和private两个版本的所有属性) */
+/** @name EditMenu-Enhanced (Compatible with both public and private versions) */
 export interface EnhancedCustomRouteMenuProps {
-    /** 因为一级菜单没有page，所以无法创造唯一标识符，id用于生成唯一标识符 */
+    /** Since top-level menus lack a page, they cannot generate a unique identifier; id is used for this purpose */
     id?: string
     page: YakitRoute | undefined
     label: string
@@ -24,11 +24,11 @@ export interface EnhancedCustomRouteMenuProps {
     yakScripName?: string
     headImg?: string
     children?: EnhancedCustomRouteMenuProps[]
-    // 是否为用户自定义新增菜单(主要区分代码内定和用户自定义的一级菜单)
+    // IsCustomAddedMenu (Distinguish between hardcoded and user-defined top-level menus)
     isNew?: boolean
 }
 
-/** @name 前端菜单数据转换为JSON数据 */
+/** @name Frontend menu data to JSON */
 export const menusConvertJsonData = (data: EnhancedCustomRouteMenuProps[]) => {
     const menus: DatabaseMenuItemProps[] = []
     for (let item of data) {
@@ -59,7 +59,7 @@ export const menusConvertJsonData = (data: EnhancedCustomRouteMenuProps[]) => {
     }
     return menus
 }
-/** @name 过滤出用户删除掉的代码内定菜单项(只适用两级菜单) */
+/** @name Filter out user-deleted hardcoded menu items (Applicable to second-level menus only) */
 export const filterCodeMenus = (menus: SendDatabaseFirstMenuProps[], mode: string) => {
     if (mode === "public") {
         return filterMenus(menus, PublicCommonPlugins)
@@ -71,17 +71,17 @@ export const filterCodeMenus = (menus: SendDatabaseFirstMenuProps[], mode: strin
         return filterMenus(menus, PrivateScanRouteMenu)
     }
 }
-/** 对比过滤代码内定菜单-逻辑 */
+/** Filter hardcoded menus - Logic */
 const filterMenus = (menus: SendDatabaseFirstMenuProps[], local: PublicRouteMenuProps[] | PrivateRouteMenuProps[]) => {
     const filterNames: string[] = []
     const userMenuName: Record<string, string[] | undefined> = {}
-    // 整理用户菜单：一级菜单下的二级菜单名合集
+    // Organize user menus: Collection of second-level menu names under top-level menus
     for (let item of menus) {
         userMenuName[item.GroupLabel] = (item.Items || []).map((item) => item.VerboseLabel)
         userMenuName[item.GroupLabel] =
             userMenuName[item.GroupLabel]?.length === 0 ? undefined : userMenuName[item.GroupLabel]
     }
-    // 代码内定菜单进行过滤
+    // Filter hardcoded menus
     for (let item of local) {
         if (!userMenuName[item.label]) {
             filterNames.push(item.label)
@@ -90,7 +90,7 @@ const filterMenus = (menus: SendDatabaseFirstMenuProps[], local: PublicRouteMenu
         if (item.children && item.children.length > 0) {
             const names = userMenuName[item.label] || []
             for (let subItem of item.children) {
-                // 菜单项唯一名
+                // MenuItemUniqueName
                 const menuname =
                     subItem.page === YakitRoute.Plugin_OP ? subItem.yakScripName || subItem.label : subItem.label
                 if (!names.includes(menuname)) filterNames.push(`${item.label}-${menuname}`)

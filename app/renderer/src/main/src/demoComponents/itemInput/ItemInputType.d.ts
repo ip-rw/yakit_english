@@ -45,7 +45,7 @@ export interface ItemInputProps extends ItemProps {
     prefix?: React.ReactNode
     suffix?: React.ReactNode
 
-    // 是否阻止事件冒泡
+    // Prevent Event Bubbling
     isBubbing?: boolean
 
     value?: string
@@ -60,7 +60,7 @@ export interface ItemTextAreaProps extends ItemProps {
     textareaRow?: number
     autoSize?: TextAreaProps["autoSize"]
 
-    // 是否阻止事件冒泡
+    // Prevent Event Bubbling
     isBubbing?: boolean
 
     value?: string
@@ -74,7 +74,7 @@ export interface ItemAutoCompleteProps extends ItemProps {
     allowClear?: boolean
     autoComplete?: string[]
 
-    // 是否阻止事件冒泡
+    // Prevent Event Bubbling
     isBubbing?: boolean
 
     value?: string
@@ -96,9 +96,9 @@ export interface ItemInputFloatProps extends ItemInputIntegerProps {
 }
 
 export interface ItemInputDraggerPathProps extends ItemProps {
-    /** 展示组件 输入框|文本域 */
+    /** Display Component Input|Text Area */
     renderType?: YakitFormDraggerProps["renderType"]
-    /** 选择类型 文件|文件夹 */
+    /** Select Type File|Folder */
     selectType?: YakitFormDraggerProps["selectType"]
 
     placeholder?: string
@@ -107,7 +107,7 @@ export interface ItemInputDraggerPathProps extends ItemProps {
     allowClear?: boolean
 
     // input
-    /** 仅input组件有效 */
+    /** Valid for Input Only */
     size?: YakitInputProps["size"]
 
     // textarea

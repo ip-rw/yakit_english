@@ -32,7 +32,7 @@ interface SimpleDetectExtraParamsDrawerProps {
 const SimpleDetectExtraParamsDrawer: React.FC<SimpleDetectExtraParamsDrawerProps> = React.memo((props) => {
     const {extraParamsValue, visible, onSave} = props
 
-    const [activeKey, setActiveKey] = useState<string[]>(["弱口令配置"])
+    const [activeKey, setActiveKey] = useState<string[]>(["Weak Password Config"])
 
     const [bruteForm] = Form.useForm()
     const [portScanForm] = Form.useForm()
@@ -62,7 +62,7 @@ const SimpleDetectExtraParamsDrawer: React.FC<SimpleDetectExtraParamsDrawerProps
             visible={visible}
             onClose={onClose}
             width='65%'
-            title='额外参数'
+            title='Extra params'
         >
             <Form size='small' labelCol={{span: 6}} wrapperCol={{span: 18}} form={bruteForm} style={{marginBottom: 8}}>
                 <YakitCollapse
@@ -71,13 +71,13 @@ const SimpleDetectExtraParamsDrawer: React.FC<SimpleDetectExtraParamsDrawerProps
                     onChange={(key) => setActiveKey(key as string[])}
                     bordered={false}
                 >
-                    <BruteSettingsPanel key='弱口令配置' visible={visible} />
+                    <BruteSettingsPanel key='Weak Password Config' visible={visible} />
                 </YakitCollapse>
             </Form>
             <Form size='small' labelCol={{span: 6}} wrapperCol={{span: 18}} form={portScanForm}>
                 <SimpleDetectExtraParams visible={visible} />
             </Form>
-            <div className={styles["to-end"]}>已经到底啦～</div>
+            <div className={styles["to-end"]}>Reached Bottom～</div>
         </YakitDrawer>
     )
 })
@@ -98,9 +98,9 @@ export const BruteSettingsPanel: React.FC<BruteSettingsPanelProps> = React.memo(
     return (
         <>
             <YakitPanel
-                {...restProps} // 仅为了让Panel正确得渲染/展开折叠，暂无其他作用
-                header='弱口令设置'
-                key='弱口令设置'
+                {...restProps} // For Correct Panel Rendering Only/Expand/Collapse, No Other Function
+                header='Weak Password Settings'
+                key='Weak Password Settings'
                 extra={
                     <YakitButton
                         type='text'
@@ -111,7 +111,7 @@ export const BruteSettingsPanel: React.FC<BruteSettingsPanelProps> = React.memo(
                             onResetBrute()
                         }}
                     >
-                        重置
+                        Reset
                     </YakitButton>
                 }
             >
@@ -125,7 +125,7 @@ interface SimpleDetectExtraParamsProps {
 }
 const SimpleDetectExtraParams: React.FC<SimpleDetectExtraParamsProps> = React.memo((props) => {
     const {visible} = props
-    const [activeKey, setActiveKey] = useState<string[]>(["网卡配置", "指纹扫描配置", "基础爬虫配置", "其他配置"])
+    const [activeKey, setActiveKey] = useState<string[]>(["NIC Config", "Fingerprint Scan Config", "Basic Crawler Config", "Other Configs"])
 
     return (
         <>
@@ -135,10 +135,10 @@ const SimpleDetectExtraParams: React.FC<SimpleDetectExtraParamsProps> = React.me
                 onChange={(key) => setActiveKey(key as string[])}
                 bordered={false}
             >
-                <NetworkCardSettingsPanel key='网卡配置' visible={visible} />
-                <FingerprintSettingsPanel key='指纹扫描配置' isSimpleDetect={true} />
-                <BasicCrawlerSettingsPanel key='基础爬虫配置' />
-                <ScanOtherSettingsPanel key='其他配置' />
+                <NetworkCardSettingsPanel key='NIC Config' visible={visible} />
+                <FingerprintSettingsPanel key='Fingerprint Scan Config' isSimpleDetect={true} />
+                <BasicCrawlerSettingsPanel key='Basic Crawler Config' />
+                <ScanOtherSettingsPanel key='Other Configs' />
             </YakitCollapse>
         </>
     )

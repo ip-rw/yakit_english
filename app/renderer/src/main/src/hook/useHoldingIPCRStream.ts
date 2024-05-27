@@ -141,7 +141,7 @@ export default function useHoldingIPCRStream(
                         Buffer.from(data.Message).toString()
                     )
 
-                    // 处理 Process KVPair
+                    // Process KVPair
                     if (obj.type === "progress") {
                         const processData = obj.content as ExecResultProgress
                         if (processData && processData.id) {
@@ -158,7 +158,7 @@ export default function useHoldingIPCRStream(
 
                     const logData = obj.content as ExecResultLog
 
-                    // 处理 log feature-status-card-data
+                    // Process log feature-status-card-data
                     if (obj.type === "log" && logData.level === "feature-status-card-data") {
                         try {
                             const obj = JSON.parse(logData.data)
@@ -204,12 +204,12 @@ export default function useHoldingIPCRStream(
                         }
                     }
 
-                    // 第三方数据过滤方法
+                    // Third-party Data Filter Method
                     if (dataFilter) if (dataFilter(obj, logData)) return
 
                     messages.current.unshift(obj)
 
-                    // 只缓存 100 条结果（日志类型 + 数据类型）
+                    // Cache only 100 entries (Log Type + Data Type)）
                     if (messages.current.length > 100) {
                         messages.current.pop()
                     }

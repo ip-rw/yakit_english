@@ -16,15 +16,15 @@ if err != nil {
 
 /*
 type palm/common/yakgrpc/yakit.(Domain) struct {
-  Fields(可用字段): 
+  Fields(Available Fields): 
       Model: gorm.Model  
       Domain: string  
       IPAddr: string  
       IPInteger: int64  
       HTTPTitle: string  
       Hash: string  
-  StructMethods(结构方法/函数): 
-  PtrStructMethods(指针结构方法/函数): 
+  StructMethods(Struct Methods/Function): 
+  PtrStructMethods(Pointer Struct Methods/Function): 
       func BeforeSave() return(error) 
       func CalcHash() return(string) 
       func FillDomainHTTPInfo() 
@@ -44,9 +44,9 @@ defer fp.Close()
 yakit.Info("Start to OUTPUT to: %v", fileActually)
 /*
 type palm/common/yak/yaklib.(_yakFile) struct {
-  Fields(可用字段): 
-  StructMethods(结构方法/函数): 
-  PtrStructMethods(指针结构方法/函数): 
+  Fields(Available Fields): 
+  StructMethods(Struct Methods/Function): 
+  PtrStructMethods(Pointer Struct Methods/Function): 
       func Close() return(error) 
       func GetOsFile() return(*os.File) 
       func Name() return(string) 
@@ -85,7 +85,7 @@ if err != nil {
 
 /*
 type palm/common/yakgrpc/yakit.(Port) struct {
-  Fields(可用字段): 
+  Fields(Available Fields): 
       Model: gorm.Model  
       Host: string  
       IPInteger: int  
@@ -99,8 +99,8 @@ type palm/common/yakgrpc/yakit.(Port) struct {
       HtmlTitle: string  
       From: string  
       Hash: string  
-  StructMethods(结构方法/函数): 
-  PtrStructMethods(指针结构方法/函数): 
+  StructMethods(Struct Methods/Function): 
+  PtrStructMethods(Pointer Struct Methods/Function): 
       func BeforeSave() return(error) 
       func CalcHash() return(string) 
 }

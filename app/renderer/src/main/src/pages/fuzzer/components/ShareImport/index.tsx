@@ -32,7 +32,7 @@ interface pwdRequestProps {
 
 export function onImportShare() {
     const m = showYakitModal({
-        title: "导入数据包 ID",
+        title: "Import data packet ID",
         content: <ShareImport onClose={() => m.destroy()} />,
         footer: null
     })
@@ -42,7 +42,7 @@ export const ShareImport: React.FC<ShareImportProps> = (props) => {
     const {onClose} = props
     const [loading, setLoading] = useState<boolean>(false)
     const [isShowPassword, setIsShowPassword] = useState<boolean>(false)
-    // 全局监听登录状态
+    // Global Login Listener
     const {userInfo} = useStore()
     const onFinish = useMemoizedFn((value) => {
         if (value.extract_code) {
@@ -52,7 +52,7 @@ export const ShareImport: React.FC<ShareImportProps> = (props) => {
         }
     })
     /**
-     * @description 先进行密码验证
+     * @Desc verify password first
      */
     const onExtractPwd = useMemoizedFn((value) => {
         setLoading(true)
@@ -68,7 +68,7 @@ export const ShareImport: React.FC<ShareImportProps> = (props) => {
             .then((pwd) => {
                 if (pwd) {
                     setIsShowPassword(true)
-                    warn("该分享需要输入密码!")
+                    warn("Share requires password input!")
                     setTimeout(() => {
                         setLoading(false)
                     }, 200)
@@ -80,11 +80,11 @@ export const ShareImport: React.FC<ShareImportProps> = (props) => {
                 setTimeout(() => {
                     setLoading(false)
                 }, 200)
-                yakitNotify("error", "密码验证失败：" + err)
+                yakitNotify("error", "Password verification failed：" + err)
             })
     })
     /**
-     * @description 获取分享数据
+     * @Desc get share data
      */
     const onShareExtract = useMemoizedFn((value) => {
         if (userInfo.isLogin) {
@@ -110,7 +110,7 @@ export const ShareImport: React.FC<ShareImportProps> = (props) => {
                 }
             })
             .catch((err) => {
-                yakitNotify("error", "获取分享数据失败：" + err)
+                yakitNotify("error", "Get share data failed：" + err)
                 setTimeout(() => {
                     setLoading(false)
                 }, 200)
@@ -128,7 +128,7 @@ export const ShareImport: React.FC<ShareImportProps> = (props) => {
                 onClose()
             })
             .catch((err) => {
-                yakitNotify("error", "打开web fuzzer失败:" + err)
+                yakitNotify("error", "Open web fuzzer failed:" + err)
             })
             .finally(() => {
                 setTimeout(() => {
@@ -156,7 +156,7 @@ export const ShareImport: React.FC<ShareImportProps> = (props) => {
                 onClose()
             })
             .catch((err) => {
-                yakitNotify("error", "储存HttpHistory分享数据失败" + err)
+                yakitNotify("error", "Save HttpHistory share data failed" + err)
             })
             .finally(() => {
                 setTimeout(() => {
@@ -167,17 +167,17 @@ export const ShareImport: React.FC<ShareImportProps> = (props) => {
     return (
         <>
             <Form {...layout} name='control-hooks' onFinish={onFinish} style={{padding: 24}}>
-                <Form.Item name='share_id' label='分享id' rules={[{required: true, message: "该项为必填"}]}>
-                    <YakitInput placeholder='请输入分享id' />
+                <Form.Item name='share_id' label='Share ID' rules={[{required: true, message: "Required Field"}]}>
+                    <YakitInput placeholder='Enter share ID' />
                 </Form.Item>
                 {isShowPassword && (
-                    <Form.Item name='extract_code' label='密码' rules={[{required: true, message: "该项为必填"}]}>
-                        <YakitInput placeholder='请输入密码' allowClear />
+                    <Form.Item name='extract_code' label='Password' rules={[{required: true, message: "Required Field"}]}>
+                        <YakitInput placeholder='Enter Password' allowClear />
                     </Form.Item>
                 )}
                 <Form.Item {...tailLayout}>
                     <YakitButton type='primary' htmlType='submit' className='btn-sure' loading={loading}>
-                        确定
+                        Confirm
                     </YakitButton>
                 </Form.Item>
             </Form>

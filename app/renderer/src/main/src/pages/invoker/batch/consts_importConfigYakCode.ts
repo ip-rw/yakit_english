@@ -3,14 +3,14 @@ import { YakParamProps } from "@/pages/plugins/pluginsType"
 export namespace ImportMenuConfig {
     export const Params: YakParamProps[] = [
         {
-            Field: "config-file", FieldVerbose: "配置文件(zip/json)",
+            Field: "config-file", FieldVerbose: "Config file(zip/json)",
             Required: true, TypeVerbose: "upload-path", DefaultValue: "",
-            Help: "用于导入配置文件：配置菜单栏",
+            Help: "Import config file: Config menu bar",
         },
         {
-            Field: "delete-old", FieldVerbose: "删除旧配置？",
+            Field: "delete-old", FieldVerbose: "Delete old config？",
             TypeVerbose: "boolean", DefaultValue: "",
-            Help: "师傅删除旧的配置",
+            Help: "Deleting old config",
         },
     ]
     export const Code = `# YakCode
@@ -29,29 +29,29 @@ defer func{
     }
 }
 
-yakit.Info("正在获取当前配置信息...")
+yakit.Info("Fetching current config info...")
 configFile = cli.String("config-file")
 if configFile == "" {
     yakit.Error("config empty")
     return
 }
 
-yakit.Info("用户配置文件如下：%v", configFile)
+yakit.Info("User config file:%v", configFile)
 if !file.IsExisted(configFile) {
-    yakit.Error("%v 不存在，配置结束", configFile)
+    yakit.Error("%v not found, config end", configFile)
     return
 }
 
 if str.HasSuffix(str.ToLower(configFile), ".json") {
-    yakit.Info("用户配置为 JSON: 直接导入当前配置")
+    yakit.Info("User config is JSON: Import directly")
     jsonRaw, _ = file.ReadFile(configFile)
     return
 }
 
-yakit.Info("解压配置 ZIP: %v", configFile)
+yakit.Info("Unzip config ZIP:%v", configFile)
 die(zip.Decompress(configFile, targetDir))
 
-yakit.Info("正在加载配置中符合要求的 Schema")
+yakit.Info("Loading valid Schema in config")
 files, err = file.ReadFileInfoInDirectory(targetDir)
 die(err)
 once := sync.NewOnce()
@@ -60,14 +60,14 @@ for _, f := range files {
         continue
     }
     if str.HasSuffix(f.Name, ".json") {
-        yakit.Info("正在加载配置：%v", f.Name)
+        yakit.Info("Loading config：%v", f.Name)
         jsonRaw, _ = file.ReadFile(f.Path)
         if len(jsonRaw) > 0 && cli.Bool("delete-old") {
             once.Do(func(){ db.DeleteYakitMenuItemAll() })
         }
         err = db.SaveYakitMenuItemByBatchExecuteConfig(jsonRaw)
         if err != nil {
-            yakit.Error("加载配置失败[%v] 原因：%v", f.Path, err)
+            yakit.Error("Config load failed[%v] Reason:%v", f.Path, err)
         }
     }
 }

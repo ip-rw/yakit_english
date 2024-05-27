@@ -19,7 +19,7 @@ export const FuzzableParamList: React.FC<FuzzableParamListProp> = (props) => {
             rowKey={(row) => row.ParamName}
             columns={[
                 {
-                    title: "参数名",
+                    title: "Param Name",
                     render: (i: FuzzableParams) => (
                         <Tag>
                             <Text
@@ -33,9 +33,9 @@ export const FuzzableParamList: React.FC<FuzzableParamListProp> = (props) => {
                         </Tag>
                     )
                 },
-                {title: "参数位置", render: (i: FuzzableParams) => <Tag>{i.Position}</Tag>},
+                {title: "Param Location", render: (i: FuzzableParams) => <Tag>{i.Position}</Tag>},
                 {
-                    title: "参数原值",
+                    title: "Param Original Value",
                     render: (i: FuzzableParams) => (
                         <Tag>
                             <Text
@@ -52,11 +52,11 @@ export const FuzzableParamList: React.FC<FuzzableParamListProp> = (props) => {
                 },
                 {title: "IsHTTPS", render: (i: FuzzableParams) => <Tag>{i.IsHTTPS}</Tag>},
                 {
-                    title: "操作",
+                    title: "Actions",
                     render: (i: FuzzableParams) => (
                         <Space>
                             <Popconfirm
-                                title={"测试该参数将会暂时进入 Web Fuzzer"}
+                                title={"Test This Param with Web Fuzzer"}
                                 onConfirm={(e) => {
                                     ipcRenderer.invoke("send-to-tab", {
                                         type: "fuzzer",
@@ -69,7 +69,7 @@ export const FuzzableParamList: React.FC<FuzzableParamListProp> = (props) => {
                                 }}
                             >
                                 <Button type={"primary"} size={"small"}>
-                                    模糊测试该参数
+                                    Fuzz This Param
                                 </Button>
                             </Popconfirm>
                         </Space>

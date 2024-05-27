@@ -32,7 +32,7 @@ const showResponse = (v: HTTPFlow | Uint8Array | string, url?: string, noConfirm
             params.HTTPResponse = v as Uint8Array
         }
     } catch (e) {
-        failed("展示 Response 失败，构建参数失败，确保传入 HTTPFlow 或 HTTPResponse Uint8Array")
+        failed("Show Response Fail, build parameters failed, ensure HTTPFlow or HTTPResponse Uint8Array is passed")
         return
     }
 
@@ -43,20 +43,20 @@ const showResponse = (v: HTTPFlow | Uint8Array | string, url?: string, noConfirm
         }
 
         let m = showModal({
-            title: "确认在浏览器中打开",
+            title: "Confirm Open in Browser",
             width: "50%",
             content: (
                 <Space direction={"vertical"} style={{maxWidth:"100%"}}>
-                    <Alert type={"info"} message={"本操作会启用本地架设的高位端口的服务器，设置 Response 来查看页面渲染效果，无需设置代理；"}/>
+                    <Alert type={"info"} message={"This operation will enable the server on a high port locally, set Response to view the rendering result, no proxy needed；"}/>
                     <CopyableField text={res.FacadesUrl} mark={true} />
                     <Button onClick={() => {
                         m.destroy()
                         openExternalWebsite(res.FacadesUrl)
-                    }} type={"primary"}>确认打开</Button>
+                    }} type={"primary"}>Confirm Open</Button>
                 </Space>
             )
         })
     }).catch(e => {
-        failed(`展示 Response 失败，${e}`)
+        failed(`Show Response Fail，${e}`)
     })
 }

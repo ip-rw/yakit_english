@@ -1,4 +1,4 @@
-/** ---------- 老版专项漏洞检测类型 ---------- */
+/** ---------- Legacy Special Vulnerability Detection Type ---------- */
 // interface BugInfoProps {
 //     key: string
 //     title: string
@@ -17,12 +17,12 @@
 //     {key: "iis,IIS", title: "IIS", filter: defaultFilterByTags("iis")},
 //     {key: "ElasticSearch", title: "ElasticSearch", filter: defaultFilterByTags("elastic,elasticsearch")},
 //     {
-//         key: "SeeyouOA,seeyou_oa,seeyouoa,seeyou,Seeyou,致远,Zhiyuan,zhiyuan",
-//         title: "致远 OA",
+//         key: "SeeyouOA,seeyou_oa,seeyouoa,seeyou,Seeyou,Zhiyuan,Zhiyuan,zhiyuan",
+//         title: "Zhiyuan OA",
 //         filter: defaultFilterByTags("seeyou,seeyon,zhiyuan")
 //     },
 //     {key: "exchange", title: "Exchange", filter: defaultFilterByTags("exchange")},
-//     {key: "tongdaoa,TongdaOa,TongDa,TongDaOA", title: "通达 OA", filter: defaultFilterByTags("tongda")},
+//     {key: "tongdaoa,TongdaOa,TongDa,TongDaOA", title: "Tongda OA", filter: defaultFilterByTags("tongda")},
 //     {
 //         key: "phpmyadmin,PhpMyAdmin,PHPMyAdmin,Phpmyadmin",
 //         title: "PhpMyAdmin",
@@ -40,4 +40,4 @@
 //     {key: "nginx", title: "Nginx", filter: defaultFilterByTags("nginx")}
 // ]
 
-/** ---------- 老版专项漏洞检测类型 ---------- */
+/** ---------- Legacy Special Vulnerability Detection Type ---------- */

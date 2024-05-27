@@ -15,7 +15,7 @@ import {YakitFormDragger} from "@/components/yakitUI/YakitForm/YakitForm"
 
 const {Item} = Form
 
-/** @name 表单项-输入框 */
+/** @name - Input Field */
 export const DemoItemInput: React.FC<ItemInputProps> = memo((p) => {
     const {
         label,
@@ -63,7 +63,7 @@ export const DemoItemInput: React.FC<ItemInputProps> = memo((p) => {
     )
 })
 
-/** @name 表单项-文本域 */
+/** @name - Text Area */
 export const DemoItemTextArea: React.FC<ItemTextAreaProps> = memo((p) => {
     const {
         label,
@@ -109,7 +109,7 @@ export const DemoItemTextArea: React.FC<ItemTextAreaProps> = memo((p) => {
     )
 })
 
-/** @name 表单项-提示输入框 */
+/** @name - Tooltip Input Field */
 export const DemoItemAutoComplete: React.FC<ItemAutoCompleteProps> = memo((p) => {
     const {
         label,
@@ -162,7 +162,7 @@ export const DemoItemAutoComplete: React.FC<ItemAutoCompleteProps> = memo((p) =>
     )
 })
 
-/** @name 表单项-数字输入框(整数) */
+/** @name - Numeric Field (Integer)) */
 export const DemoItemInputInteger: React.FC<ItemInputIntegerProps> = memo((p) => {
     const {label, help, formItemStyle, required, width, size, min, max, defaultValue, disable, value, setValue} = p
 
@@ -183,7 +183,7 @@ export const DemoItemInputInteger: React.FC<ItemInputIntegerProps> = memo((p) =>
     )
 })
 
-/** @name 表单项-数字输入框(浮点数) */
+/** @name - Numeric Field (Float)) */
 export const DemoItemInputFloat: React.FC<ItemInputFloatProps> = memo((p) => {
     const {
         label,
@@ -220,8 +220,8 @@ export const DemoItemInputFloat: React.FC<ItemInputFloatProps> = memo((p) => {
 })
 
 /**
- * @name 表单项-文件路径获取框
- * @description 文件/文件夹支持拖拽放入 setContent只支持选择文件
+ * @name - File Path Field
+ * @description File/Folder Drag-and-Drop Support, setContent for Files Only
  */
 export const DemoItemInputDraggerPath: React.FC<ItemInputDraggerPathProps> = memo((p) => {
     const {

@@ -55,7 +55,7 @@ export const YakScriptHooksViewer: React.FC<YakScriptHooksViewerProp> = (props) 
                         <Col span={8}>
                             <div style={{width: "100%", textAlign: "right"}}>
                                 <Popconfirm
-                                    title={"确定要移除该 Hook 吗？"}
+                                    title={"Confirm removal of this Hook?？"}
                                     onConfirm={() => {
                                         ipcRenderer.invoke("mitm-remove-hook", {
                                             HookName: [props.hooks.HookName],
@@ -66,7 +66,7 @@ export const YakScriptHooksViewer: React.FC<YakScriptHooksViewerProp> = (props) 
                                     <Button
                                         danger={true} size={"small"}
                                         type={"link"}
-                                    >移除Hook</Button>
+                                    >Remove Hook</Button>
                                 </Popconfirm>
                             </div>
                         </Col>

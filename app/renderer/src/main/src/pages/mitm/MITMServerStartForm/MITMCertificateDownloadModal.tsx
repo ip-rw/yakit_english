@@ -25,30 +25,30 @@ export const MITMCertificateDownloadModal: React.FC<MITMCertificateDownloadModal
         })
     }, [])
     /**
-     * @description 下载证书
+     * @desc Download Certificate
      */
     const onDown = useMemoizedFn(() => {
         if (!caCerts.CaCerts) return
-        saveABSFileToOpen("yakit证书.crt.pem", caCerts.CaCerts)
+        saveABSFileToOpen("yakit_cert.crt.pem", caCerts.CaCerts)
     })
     return (
         <YakitModal
             visible={visible}
             onCancel={() => setVisible(false)}
             closable={true}
-            title='下载 SSL/TLS 证书以劫持 HTTPS'
+            title='Download SSL/TLS cert for HTTPS interception'
             width={720}
             className={styles["mitm-certificate-download-modal"]}
-            okText='下载到本地并打开'
+            okText='Download locally and open'
             footerExtra={
                 <div className={styles["certificate-download-modal-footer"]}>
-                    在设置代理后访问：
+                    Access after setting proxy：
                     <YakitTag
                         enableCopy
                         copyText='http://mitm'
                         iconColor='var(--yakit-primary-5)'
                     />
-                    可自动下载证书
+                    Auto-download certificate
                 </div>
             }
             onOk={() => onDown()}

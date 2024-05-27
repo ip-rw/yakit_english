@@ -44,17 +44,17 @@ export const PluginDebug: React.FC<PluginDebugProps> = memo((props) => {
     const {plugin, getContainer, visible, onClose, onMerge} = props
 
     const getContainerSize = useSize(getContainer)
-    // 抽屉展示高度
+    // Drawer Display Height
     const showHeight = useMemo(() => {
         return getContainerSize?.height || 400
     }, [getContainerSize])
 
-    /** 插件类型 */
+    /** Plugin Type */
     const pluginType = useMemo(() => {
         return plugin?.Type || "yak"
     }, [plugin])
 
-    // 插件源码(修改后的)
+    // Plugin Code (Modified))
     const [content, setContent] = useState<string>("")
 
     useEffect(() => {
@@ -65,12 +65,12 @@ export const PluginDebug: React.FC<PluginDebugProps> = memo((props) => {
         }
     }, [visible])
 
-    // 关闭
+    // Close
     const onCancel = useMemoizedFn(() => {
         if (onClose) onClose()
     })
 
-    /** --------------- 自动评分 Start --------------- */
+    /** --------------- Auto Grade Start --------------- */
     const [scoreShow, setScoreShow] = useState<boolean>(false)
     const onOpenScore = useMemoizedFn(() => {
         if (!scoreShow) {
@@ -80,9 +80,9 @@ export const PluginDebug: React.FC<PluginDebugProps> = memo((props) => {
             }, 10)
         }
     })
-    /** @description 0-未检测;1-不合格;2-合格 */
+    /** @Description Undetected;Fail;Pass */
     const [isPass, setIsPass] = useState<number>(0)
-    // 评分是否合格
+    // Pass Grade?
     const onCallbackScore = useMemoizedFn((v: boolean) => {
         setIsPass(v ? 2 : 1)
     })
@@ -93,20 +93,20 @@ export const PluginDebug: React.FC<PluginDebugProps> = memo((props) => {
     const onCancelScore = useMemoizedFn(() => {
         if (scoreShow) setScoreShow(false)
     })
-    /** --------------- 自动评分 End --------------- */
+    /** --------------- Auto Grade End --------------- */
 
-    /** --------------- 合并代码 Start --------------- */
+    /** --------------- Merge Code Start --------------- */
     const [diffShow, setDiffShow] = useState<boolean>(false)
-    // 强制更新对比器显示内容
+    // Force Update Comparator Display
     const triggerDiffUpdate = useRef<boolean>(false)
-    // 编辑器语言
+    // Editor Language
     const diffLanguage = useMemo(() => {
         return GetPluginLanguage(pluginType)
     }, [pluginType])
 
     const onOpenDiff = useMemoizedFn(() => {
         if (!plugin) {
-            failed("未获取插件信息，请关闭调试窗后再次尝试")
+            failed("Plugin Info Not Found, Close Debug and Retry")
             return
         }
 
@@ -125,7 +125,7 @@ export const PluginDebug: React.FC<PluginDebugProps> = memo((props) => {
     const onCancelDiff = useMemoizedFn(() => {
         if (diffShow) setDiffShow(false)
     })
-    /** --------------- 合并代码 End --------------- */
+    /** --------------- Merge Code End --------------- */
 
     return (
         <>
@@ -138,14 +138,14 @@ export const PluginDebug: React.FC<PluginDebugProps> = memo((props) => {
                 height={showHeight}
                 visible={visible}
                 className={classNames(styles["plugin-debug-drawer"])}
-                title={<div className={styles["header-title"]}>插件调试</div>}
+                title={<div className={styles["header-title"]}>Plugin Debug</div>}
                 extra={
                     <div className={styles["header-extra-wrapper"]}>
                         <YakitButton type='outline2' icon={<OutlineSparklesIcon />} onClick={onOpenScore}>
-                            自动评分
+                            Auto Grade
                         </YakitButton>
                         <YakitButton icon={<OutlinePuzzleIcon />} onClick={onOpenDiff}>
-                            合并代码
+                            Merge Code
                         </YakitButton>
 
                         <YakitButton type='text2' icon={<OutlineXIcon />} onClick={onCancel} />
@@ -157,14 +157,14 @@ export const PluginDebug: React.FC<PluginDebugProps> = memo((props) => {
             </YakitDrawer>
 
             <YakitModal
-                title='代码对比'
+                title='Code Comparison'
                 type='white'
                 width='80%'
                 centered={true}
                 maskClosable={false}
                 closable={true}
                 visible={diffShow}
-                okText='合并'
+                okText='Merge'
                 onCancel={onCancelDiff}
                 onOk={onOkDiff}
             >
@@ -181,7 +181,7 @@ export const PluginDebug: React.FC<PluginDebugProps> = memo((props) => {
             </YakitModal>
 
             <YakitModal
-                title='插件评分'
+                title='Plugin Grade'
                 type='white'
                 width={506}
                 centered={true}
@@ -189,7 +189,7 @@ export const PluginDebug: React.FC<PluginDebugProps> = memo((props) => {
                 closable={true}
                 destroyOnClose={true}
                 visible={scoreShow}
-                okText='合并代码'
+                okText='Merge Code'
                 okButtonProps={{
                     icon: <OutlinePuzzleIcon />,
                     style: isPass === 2 ? undefined : {display: "none"}
@@ -203,8 +203,8 @@ export const PluginDebug: React.FC<PluginDebugProps> = memo((props) => {
                     code={content}
                     isStart={scoreShow}
                     successWait={10}
-                    successHint='表现良好，检测通过'
-                    failedHint='检测不通过，请根据提示修改'
+                    successHint='Passed Validation'
+                    failedHint='Validation Failed, Modify as Prompted'
                     callback={onCallbackScore}
                 />
             </YakitModal>
@@ -215,11 +215,11 @@ export const PluginDebug: React.FC<PluginDebugProps> = memo((props) => {
 export const PluginDebugBody: React.FC<PluginDebugBodyProps> = memo((props) => {
     const {plugin, newCode, setNewCode} = props
 
-    /** 插件类型 */
+    /** Plugin Type */
     const pluginType = useMemo(() => {
         return plugin?.Type || "yak"
     }, [plugin])
-    // 插件类型的tag颜色
+    // Plugin Tag Color
     const pluginTypeColor = useMemo(() => {
         try {
             return pluginTypeToName[pluginType].color || undefined
@@ -228,24 +228,24 @@ export const PluginDebugBody: React.FC<PluginDebugBodyProps> = memo((props) => {
         }
     }, [pluginType])
 
-    // 插件参数
+    // Plugin Params
     const [params, setParams] = useState<YakParamProps[]>([])
-    /** 必填参数 */
+    /** Required Params */
     const requiredParams = useMemo(() => {
         return params.filter((item) => !!item.Required) || []
     }, [params])
-    /** 选填参数 */
+    /** Optional Params */
     const groupParams = useMemo(() => {
         const arr = params.filter((item) => !item.Required) || []
         return ParamsToGroupByGroupName(arr)
     }, [params])
 
     const [fetchParamsLoading, setFetchParamsLoading] = useState<boolean>(false)
-    // 获取参数
+    // Fetch Params
     const onFetchParams = useMemoizedFn(async () => {
         if (fetchParamsLoading) return
         if (!plugin) {
-            failed("未获取插件信息，请关闭调试窗后再次尝试")
+            failed("Plugin Info Not Found, Close Debug and Retry")
             return
         }
 
@@ -263,26 +263,26 @@ export const PluginDebugBody: React.FC<PluginDebugBodyProps> = memo((props) => {
     useEffect(() => {
         if (plugin) {
             if (plugin.Type === "yak") setParams(plugin.Params || [])
-            // 非yak类型插件固定参数
+            // Fixed Params for Non-Yak Plugin
             else setParams([])
             setNewCode(newCode || plugin.Content || "")
         } else {
-            failed("未获取插件信息，请关闭调试窗后再次尝试")
+            failed("Plugin Info Not Found, Close Debug and Retry")
         }
 
         return () => {
             setParams([])
         }
     }, [plugin])
-    // 更新表单内容
+    // Update Form Content
     useUpdateEffect(() => {
         initFormValue()
     }, [params])
 
-    /** --------------- 参数部分逻辑 Start --------------- */
+    /** --------------- Partial Logic Start --------------- */
     const [form] = Form.useForm()
 
-    // 设置非(yak|lua)类型的插件参数初始值
+    // Set Non-Yak|Lua) Plugin Param Default
     const onSettingDefault = useMemoizedFn(() => {
         let defaultValue: CustomPluginExecuteFormValue = {
             IsHttps: false,
@@ -303,7 +303,7 @@ export const PluginDebugBody: React.FC<PluginDebugBodyProps> = memo((props) => {
             return
         }
 
-        // 表单内数据
+        // Data in Form
         let formData: CustomPluginExecuteFormValue = {}
         if (form) formData = (form.getFieldsValue() || {}) as CustomPluginExecuteFormValue
 
@@ -356,10 +356,10 @@ export const PluginDebugBody: React.FC<PluginDebugBodyProps> = memo((props) => {
         }
     }
 
-    /** 请求类型-为原始请求则不展示额外参数 */
+    /** Request Type - Hide Extra Params for Raw Requests */
     const requestType = Form.useWatch("requestType", form)
 
-    /** 是否隐藏非必填参数项 */
+    /** Hide Optional Params? */
     const isShowGroupParams = useMemo(() => {
         if (pluginType === "yak" || pluginType === "lua") return false
         if (requestType !== "input") return true
@@ -370,7 +370,7 @@ export const PluginDebugBody: React.FC<PluginDebugBodyProps> = memo((props) => {
         onGetRemoteValues: () => {},
         onSetRemoteValues: (s: string[]) => {}
     })
-    /** 重置固定的额外参数中的表单值 */
+    /** Reset Fixed Params in Form */
     const onSettingExtraParams = useMemoizedFn((restValue) => {
         form.setFieldsValue({...restValue})
     })
@@ -382,12 +382,12 @@ export const PluginDebugBody: React.FC<PluginDebugBodyProps> = memo((props) => {
                 return groupParams.length > 0 ? (
                     <>
                         <div className={styles["additional-params-divider"]}>
-                            <div className={styles["text-style"]}>额外参数 (非必填)</div>
+                            <div className={styles["text-style"]}>Extra Params (Optional))</div>
                             <div className={styles["divider-style"]}></div>
                         </div>
                         <ExtraParamsNodeByType extraParamsGroup={groupParams} pluginType={pluginType} />
 
-                        <div className={styles["to-end"]}>已经到底啦～</div>
+                        <div className={styles["to-end"]}>End of Content～</div>
                     </>
                 ) : null
 
@@ -397,7 +397,7 @@ export const PluginDebugBody: React.FC<PluginDebugBodyProps> = memo((props) => {
                 return (
                     <>
                         <div className={styles["additional-params-divider"]}>
-                            <div className={styles["text-style"]}>额外参数 (非必填)</div>
+                            <div className={styles["text-style"]}>Extra Params (Optional))</div>
                             <div className={styles["divider-style"]}></div>
                         </div>
                         <FixExtraParamsNode
@@ -414,12 +414,12 @@ export const PluginDebugBody: React.FC<PluginDebugBodyProps> = memo((props) => {
                 return null
         }
     }
-    /** --------------- 参数部分逻辑 End --------------- */
+    /** --------------- Partial Logic End --------------- */
 
-    /** --------------- 执行部分逻辑 Start --------------- */
+    /** --------------- Execute Partial Logic Start --------------- */
     const [activeTab, setActiveTab] = useState<string>("code")
 
-    /** 是否在执行中 */
+    /** In Progress? */
     const [isExecuting, setIsExecuting] = useState<boolean>(false)
     const [runtimeId, setRuntimeId] = useState<string>("")
     const tokenRef = useRef<string>(randomString(40))
@@ -432,7 +432,7 @@ export const PluginDebugBody: React.FC<PluginDebugBodyProps> = memo((props) => {
             setTimeout(() => setIsExecuting(false), 300)
         },
         setRuntimeId: (rId) => {
-            yakitNotify("info", `调试任务启动成功，运行时 ID: ${rId}`)
+            yakitNotify("info", `Guest: ${rId}`)
             setRuntimeId(rId)
         }
     })
@@ -441,8 +441,8 @@ export const PluginDebugBody: React.FC<PluginDebugBodyProps> = memo((props) => {
         if (form) {
             form.validateFields()
                 .then((value: any) => {
-                    // console.log("插件执行时的表单值", value)
-                    // 保存参数-请求路径的选项
+                    // console.log("Form Values on Plugin Execution", value)
+                    // Save Param - Request Path Options
                     if (pathRef && pathRef.current) {
                         pathRef.current.onSetRemoteValues(value?.Path || [])
                     }
@@ -492,21 +492,21 @@ export const PluginDebugBody: React.FC<PluginDebugBodyProps> = memo((props) => {
         }
     })
 
-    /**取消执行 */
+    /**Text Empty If No Answer */
     const onStopExecute = useMemoizedFn(() => {
         apiCancelDebugPlugin(tokenRef.current).then(() => {
             debugPluginStreamEvent.stop()
             setIsExecuting(false)
         })
     })
-    /** --------------- 执行部分逻辑 End --------------- */
+    /** --------------- Execute Partial Logic End --------------- */
 
-    // 停靠模式-浮窗
+    // Dock Mode - Floating
     return (
         <div className={styles["plugin-debug-wrapper"]}>
             <div className={styles["left-wrapper"]}>
                 <YakitCard
-                    title='参数列表'
+                    title='Param List'
                     style={{borderTop: 0}}
                     headClassName={styles["left-header-wrapper"]}
                     extra={
@@ -514,7 +514,7 @@ export const PluginDebugBody: React.FC<PluginDebugBodyProps> = memo((props) => {
                             {plugin?.Type === "yak" && (
                                 <>
                                     <YakitButton type='text' loading={fetchParamsLoading} onClick={onFetchParams}>
-                                        获取参数
+                                        Fetch Params
                                         <OutlineRefreshIcon />
                                     </YakitButton>
                                     <div className={styles["divider-wrapper"]}></div>
@@ -522,11 +522,11 @@ export const PluginDebugBody: React.FC<PluginDebugBodyProps> = memo((props) => {
                             )}
                             {isExecuting ? (
                                 <YakitButton danger onClick={onStopExecute}>
-                                    停止
+                                    Just Input
                                 </YakitButton>
                             ) : (
                                 <YakitButton icon={<SolidPlayIcon />} onClick={onStartExecute}>
-                                    执行
+                                    Update Last Item
                                 </YakitButton>
                             )}
                         </div>
@@ -543,7 +543,7 @@ export const PluginDebugBody: React.FC<PluginDebugBodyProps> = memo((props) => {
                             labelWrap={true}
                             validateMessages={{
                                 /* eslint-disable no-template-curly-in-string */
-                                required: "${label} 是必填字段"
+                                required: "${label} Required Field"
                             }}
                         >
                             <div className={styles["custom-params-wrapper"]}>{pluginRequiredItem(pluginType)}</div>
@@ -558,8 +558,8 @@ export const PluginDebugBody: React.FC<PluginDebugBodyProps> = memo((props) => {
                         buttonStyle='solid'
                         value={activeTab}
                         options={[
-                            {value: "code", label: "源码"},
-                            {value: "execResult", label: "执行结果"}
+                            {value: "code", label: "Source Code"},
+                            {value: "execResult", label: "Execution result"}
                         ]}
                         onChange={(e) => setActiveTab(e.target.value)}
                     />
@@ -615,7 +615,7 @@ export const PluginDebugBody: React.FC<PluginDebugBodyProps> = memo((props) => {
                                 </div>
                             </>
                         ) : (
-                            <YakitEmpty style={{marginTop: 60}} description={"点击【执行】以开始"} />
+                            <YakitEmpty style={{marginTop: 60}} description={"Click 'Execute' to Start"} />
                         )}
                     </div>
                 </div>

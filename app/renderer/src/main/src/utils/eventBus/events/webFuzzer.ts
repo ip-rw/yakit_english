@@ -1,6 +1,6 @@
 export type WebFuzzerEventProps = {
     onRefWebFuzzer?: string
-    /**设置fuzzer tab高级配置显示/隐藏对应得tab样式 */
+    /**Set fuzzer tab advanced settings display/Hide corresponding tab style */
     onGetFuzzerAdvancedConfigShow: string
     onImportYamlPopEditorContent: string
     onImportYamlEditorChange: string
@@ -10,19 +10,19 @@ export type WebFuzzerEventProps = {
     onOpenMatchingAndExtractionCard: string
     onOpenFuzzerModal: string
     onRunChatcsAIByFuzzer: string
-    /**设置tab【配置】/【规则】中得高级配置显示/隐藏 */
+    /**Set tab "Config】/【Advanced settings display in "Rules"/Hide */
     onSetAdvancedConfigShow: string
-    /** 发送到HTTPFuzzerPage 切换【配置】/【规则】tab 得选中type */
+    /** Send to HTTPFuzzerPage, switch to "Config】/【Rules" tab, select type */
     onSwitchTypeWebFuzzerPage: string
     /**
-     * 1.发送到WebFuzzerPage
-     * 2.序列包裹层点击tab切换到【配置】/【规则】
+     * 1. Send to WebFuzzerPage
+     * 2. Click sequence wrapper layer tab to switch to "Config】/【Rules】
      * */
     sequenceSendSwitchTypeToFuzzer: string
-    /**发送到MainOperatorContent层中切换【序列】/(【规则】/配置) */
+    /**Send to MainOperatorContent layer, switch to "Sequence】/(【Rules】/Config) */
     sendSwitchSequenceToMainOperatorContent: string
-    /**VariableList组件从数据中心刷新最新的展开项 */
+    /**VariableList component refreshes latest expanded items from data center */
     onRefVariableActiveKey?: string
-    /**打开匹配器和提取器Modal */
+    /**Open Matcher and Extractor Modal */
     openMatcherAndExtraction: string
 }

@@ -8,20 +8,20 @@ const {ipcRenderer} = window.require("electron");
 
 export const invalidCacheAndUserData = (delTemporaryProject) => {
     const m = showModal({
-        title: "重置用户数据与缓存",
+        title: "Reset UserData & Cache",
         content: (
             <Space style={{width: 600}} direction={"vertical"}>
-                <Alert type={"error"} message={`如果你的 ${getReleaseEditionName()} 出现异常，可使用此功能删除所有本地缓存和用户数据，重连重启。`}/>
-                <Alert type={"error"} message={"注意，本操作将永久删除缓存数据，难以恢复，请谨慎操作"}/>
+                <Alert type={"error"} message={`If your ${getReleaseEditionName()} 若遇到错误, 请使用此功能删除所有本地缓存与用户数据, 重新连接与重启。`}/>
+                <Alert type={"error"} message={"Caution, this action will permanently delete cache data, hard to recover, proceed with caution"}/>
                 <Button type={"primary"} danger={true} onClick={async () => {
                     m.destroy()
                     await delTemporaryProject()
                     ipcRenderer.invoke("ResetAndInvalidUserData", {}).then(() => {
                     }).catch(e => {
                     }).finally(() => {
-                        info("执行重置用户数据成功")
+                        info("Reset UserData Success")
                     })
-                }}>我确认此风险，立即删除</Button>
+                }}>I acknowledge the risk, delete now</Button>
             </Space>
         ),
         width: 700,

@@ -5,13 +5,13 @@ import classNames from "classnames"
 import styles from "./YakitCollapseText.module.scss"
 
 /**
- * @name 可展开收起的段落组件
- * @description 只适合纯文字
+ * @name Collapsible paragraph component
+ * @description Text only
  */
 export const YakitCollapseText: React.FC<YakitCollapseTextProps> = memo((props) => {
     const {content, rows = 3, lineHeight = 16, fontSize = 12, wrapperClassName} = props
 
-    /** 内容行高 */
+    /** Row height */
     const textStyle = useMemo(() => {
         const styles: CSSProperties = {}
         if (fontSize) styles["fontSize"] = `${fontSize || 12}px`
@@ -37,7 +37,7 @@ export const YakitCollapseText: React.FC<YakitCollapseTextProps> = memo((props) 
         }
     }, [textRef.current, content])
 
-    /** 是否展开的样式 */
+    /** Expand style */
     const expandStyle = useMemo(() => {
         const styles: CSSProperties = {}
         if (showExpand) {
@@ -59,7 +59,7 @@ export const YakitCollapseText: React.FC<YakitCollapseTextProps> = memo((props) 
             </div>
             {showExpand && (
                 <div className={styles["expand-btn"]} onClick={onExpand} title={content}>
-                    {isExpand ? "收起" : "展开"}
+                    {isExpand ? "Collapse" : "Expand"}
                 </div>
             )}
         </div>

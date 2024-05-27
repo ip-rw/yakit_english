@@ -3,7 +3,7 @@ const https = require('https');
 const {ipcMain, webContents} = require("electron")
 const {USER_INFO, HttpSetting} = require("./state")
 
-// 请求超时时间
+// Request timeout
 const DefaultTimeOut = 30 * 1000
 
 ipcMain.on("sync-edit-baseUrl", (event, arg) => {
@@ -14,12 +14,12 @@ ipcMain.on("sync-edit-baseUrl", (event, arg) => {
 const service = axios.create({
     // baseURL: "http://onlinecs.vaiwan.cn/api/",
     baseURL: `${HttpSetting.httpBaseURL}/api/`,
-    timeout: DefaultTimeOut, // 请求超时时间
-    maxBodyLength: Infinity, //设置适当的大小
-    httpsAgent: new https.Agent({rejectUnauthorized: false}), // 忽略 HTTPS 错误
+    timeout: DefaultTimeOut, // Request timeout
+    maxBodyLength: Infinity, //Set appropriate size
+    httpsAgent: new https.Agent({rejectUnauthorized: false}), // Ignore HTTPS errors
 })
 
-// request拦截器,拦截每一个请求加上请求头
+// Request interceptor - intercept each request to add headers
 service.interceptors.request.use(
     (config) => {
         config.baseURL = config.diyHome ? `${config.diyHome}/api/` : `${HttpSetting.httpBaseURL}/api/`
@@ -32,7 +32,7 @@ service.interceptors.request.use(
     }
 )
 
-// respone拦截器 拦截到所有的response，然后先做一些判断
+// Response interceptor - intercept all responses for preliminary checks
 service.interceptors.response.use(
     (response) => {
         const res = {
@@ -44,7 +44,7 @@ service.interceptors.response.use(
     },
     (error) => {
         // console.log("error_1", error)
-        if (error.response && error.response.data && error.response.data.message === "token过期") {
+        if (error.response && error.response.data && error.response.data.message === "Token expired") {
             const res = {
                 code: 401,
                 message: error.response.data.message,

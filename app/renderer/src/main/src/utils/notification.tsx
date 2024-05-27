@@ -26,7 +26,7 @@ export const failed = (msg: React.ReactNode) => {
     yakitFailed(msg)
 }
 
-// ==========================新版 yakit notification ==========================
+// ==========================New Yakit Notification ==========================
 export const yakitFailed = (props: ArgsProps | string | React.ReactNode) => {
     let newProps: ArgsProps = {
         message: ""
@@ -47,7 +47,7 @@ export const yakitFailed = (props: ArgsProps | string | React.ReactNode) => {
 
 /**
  * @param type
- * @returns {React.ReactNode} 图标
+ * @returns {React.ReactNode} Icon
  */
 const getIcon = (type) => {
     switch (type) {

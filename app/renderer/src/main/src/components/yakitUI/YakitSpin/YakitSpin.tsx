@@ -5,14 +5,14 @@ import styles from "./YakitSpin.module.scss"
 import classNames from "classnames"
 
 /**
- * 更新说明
- * 1.增加环境变量加载主题色
- * 2.增加颜色变量
+ * Update Notes
+ * 1. Load theme color from env var
+ * 2. Add color variables
  */
 
 /**
- * @description YakitSpinProps 的属性
- * @augments YakitSpinProps 继承antd的 SpinProps 默认属性
+ * @description YakitSpinProps Properties
+ * @augments YakitSpinProps Inherits default SpinProps from antd
  */
 export const YakitSpin: React.FC<YakitSpinProps> = (props) => {
     return (

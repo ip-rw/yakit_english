@@ -1,9 +1,9 @@
 import {HoldGRPCStreamProps} from "./useHoldGRPCStreamType"
 
-/** @name 插件执行结果默认展示的tab集合 */
+/** @name Default tabs for plugin execution results */
 export const DefaultTabs: HoldGRPCStreamProps.InfoTab[] = [
-    {tabName: "HTTP 流量", type: "http"},
-    {tabName: "漏洞与风险", type: "risk"},
-    {tabName: "日志", type: "log"},
+    {tabName: "HTTP Traffic", type: "http"},
+    {tabName: "Vulnerabilities & Risks", type: "risk"},
+    {tabName: "Log", type: "log"},
     {tabName: "Console", type: "console"}
 ]

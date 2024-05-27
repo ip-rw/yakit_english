@@ -24,12 +24,12 @@ import {YakParamProps} from "../plugins/pluginsType"
 import {YakitEditor} from "@/components/yakitUI/YakitEditor/YakitEditor"
 const {ipcRenderer} = window.require("electron")
 export interface NewCodecInputUIProps extends YakitInputProps {
-    // 标题
+    // Title
     title?: string
     extra?: React.ReactNode
-    // 是否为必填
+    // Required?
     require?: boolean
-    // 左右布局时 border圆角方向
+    // Border Radius Direction in L/R Layout
     direction?: "left" | "right"
 }
 export const NewCodecInputUI: React.FC<NewCodecInputUIProps> = (props) => {
@@ -78,7 +78,7 @@ export const NewCodecInputUI: React.FC<NewCodecInputUIProps> = (props) => {
                         onFocus={onFocus}
                         onBlur={onBlur}
                         ref={inputRef}
-                        placeholder='请输入...'
+                        placeholder='Please Enter...'
                         {...restProps}
                     />
                 </div>
@@ -89,12 +89,12 @@ export const NewCodecInputUI: React.FC<NewCodecInputUIProps> = (props) => {
 }
 
 export interface NewCodecTextAreaUIProps extends InternalTextAreaProps {
-    // 标题
+    // Title
     title?: string
     extra?: React.ReactNode
-    // 是否为必填
+    // Required?
     require?: boolean
-    // 左右布局时 border圆角方向
+    // Border Radius Direction in L/R Layout
     direction?: "left" | "right"
 }
 
@@ -144,7 +144,7 @@ export const NewCodecTextAreaUI: React.FC<NewCodecTextAreaUIProps> = (props) => 
                     onFocus={onFocus}
                     onBlur={onBlur}
                     ref={inputRef}
-                    placeholder='请输入...'
+                    placeholder='Please Enter...'
                     {...restProps}/>
             </div>
         </div>
@@ -154,11 +154,11 @@ export const NewCodecTextAreaUI: React.FC<NewCodecTextAreaUIProps> = (props) => 
 }
 
 export interface NewCodecCheckUIProps {
-    // 是否禁用
+    // Disabled
     disabled?: boolean
-    // 可供选择值
+    // Selectable Values
     options?: {label: string; value: string}[]
-    // 选中值
+    // Selected Value
     value?: CheckboxValueType[]
     onChange?: (v: CheckboxValueType[]) => void
 }
@@ -185,18 +185,18 @@ export interface CodecType {
 }
 
 export interface NewCodecSelectUIProps extends YakitSelectProps {
-    // 标题
+    // Title
     title?: string
-    // 是否为必填
+    // Required?
     require?: boolean
-    // 是否可搜索
+    // Searchable?
     showSearch?: boolean
-    // 左右布局时 border圆角方向
+    // Border Radius Direction in L/R Layout
     directionBox?: "left" | "right"
-    // 是否启用社区插件查询
+    // Enable Community Plugin Query?
     isPlugin?: boolean
 }
-// 当前控件样式仅适配此尺寸 - 如需更多尺寸请自行扩展
+// Current Widget Style Fits This Size Only - For More Sizes, Extend Yourself
 export const NewCodecSelectUI: React.FC<NewCodecSelectUIProps> = (props) => {
     const {require, title, showSearch, directionBox, options = [], isPlugin, onSearch, ...restProps} = props
     const [optionsList, setOptionsList] = useState<DefaultOptionType[]>(options)
@@ -254,7 +254,7 @@ export const NewCodecSelectUI: React.FC<NewCodecSelectUIProps> = (props) => {
             {showSearch ? (
                 <YakitSelect
                     showSearch={true}
-                    placeholder='请选择...'
+                    placeholder='Please Select...'
                     suffixIcon={
                         <div className={styles["search-icon"]}>
                             <OutlineSearchIcon />
@@ -277,7 +277,7 @@ export const NewCodecSelectUI: React.FC<NewCodecSelectUIProps> = (props) => {
                 </YakitSelect>
             ) : (
                 <YakitSelect
-                    placeholder='请选择...'
+                    placeholder='Please Select...'
                     onSearch={(v) => {
                         if (isPlugin) {
                             search(v)
@@ -298,16 +298,16 @@ export const NewCodecSelectUI: React.FC<NewCodecSelectUIProps> = (props) => {
     )
 }
 interface NewCodecEditorBodyProps extends NewCodecEditorProps {
-    // 值
+    // Value
     editorValue: string
     setEditorValue: (v: string) => void
-    // 是否是全屏
+    // Fullscreen?
     extend: boolean
-    // 全屏回调
+    // Fullscreen Callback
     onExtend?: () => void
-    // 缩小回调
+    // Minimize Callback
     onClose?: () => void
-    // 是否打开弹层
+    // Popup Open?
     isShowExtend?: boolean
 }
 export const NewCodecEditorBody: React.FC<NewCodecEditorBodyProps> = (props) => {
@@ -325,18 +325,18 @@ export const NewCodecEditorBody: React.FC<NewCodecEditorBodyProps> = (props) => 
         onChange
     } = props
 
-    // 编辑器实例
+    // Editor Instance
     const [reqEditor, setReqEditor] = useState<IMonacoEditor>()
-    // 编辑器焦点状态
+    // Editor Focus State
     const [editorFocus, setEditorFocus] = useState<boolean>(false)
-    // 编辑器
+    // Editor
     useEffect(() => {
         if (reqEditor) {
-            // 添加焦点获取的监听器
+            // Add Focus Gained Listener
             reqEditor.onDidFocusEditorText(() => {
                 setEditorFocus(true)
             })
-            // 添加焦点失去的监听器
+            // Add Focus Lost Listener
             reqEditor.onDidBlurEditorText(() => {
                 setEditorFocus(false)
             })
@@ -344,7 +344,7 @@ export const NewCodecEditorBody: React.FC<NewCodecEditorBodyProps> = (props) => 
     }, [reqEditor])
 
     useEffect(() => {
-        // 当弹窗编辑器更改时
+        // On Popup Editor Change
         if (reqEditor && reqEditor.getValue() !== editorValue) {
             reqEditor.setValue(editorValue)
         }
@@ -396,7 +396,7 @@ export const NewCodecEditorBody: React.FC<NewCodecEditorBodyProps> = (props) => 
                             onChange && onChange(editorValue)
                         }}
                     >
-                        保存
+                        Save
                     </div>
                     <Divider
                         type={"vertical"}
@@ -429,27 +429,27 @@ export const NewCodecEditorBody: React.FC<NewCodecEditorBodyProps> = (props) => 
 }
 
 export interface NewCodecEditorProps {
-    // 标题
+    // Title
     title?: string
-    // 值
+    // Value
     value?: string
-    // 值变化的回调
+    // Value Change Callback
     onChange?: (v: string) => void
-    // 是否为必填
+    // Required?
     require?: boolean
-    // 是否禁用
+    // Disabled
     disabled?: boolean
 }
 export const NewCodecEditor: React.FC<NewCodecEditorProps> = (props) => {
     const {value = "", onChange} = props
     const [editorValue, setEditorValue] = useState<string>("")
-    // 是否打开弹层
+    // Popup Open?
     const [isShowExtend, setShowExtend] = useState<boolean>(false)
     useEffect(() => {
         setEditorValue(value)
     }, [value])
 
-    // 自动保存
+    // Auto Save
     useEffect(() => {
         const id = setInterval(() => {
             if (editorValue !== value) {

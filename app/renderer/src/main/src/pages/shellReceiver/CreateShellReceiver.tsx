@@ -18,12 +18,12 @@ export const CreateShellReceiverForm: React.FC<CreateShellReceiverFormProp> = (p
             e.preventDefault()
 
             if (!host) {
-                failed("监听主机地址不能为空")
+                failed("Host address required")
                 return
             }
 
             if (port <= 0 || port > 65535) {
-                failed(`端口设置不合理，不能为: [${port}]`)
+                failed(`Invalid port setting, cannot be: [${port}]`)
                 return
             }
 
@@ -37,17 +37,17 @@ export const CreateShellReceiverForm: React.FC<CreateShellReceiverFormProp> = (p
                 <h2 style={{marginTop: 30}}>{props.title}</h2>
             </Form.Item>}
             <InputItem
-                label={"监听的主机"} value={host} setValue={setHost}
+                label={"Host to Monitor"} value={host} setValue={setHost}
                 autoComplete={[
                     "0.0.0.0", "127.0.0.1", "192.168.1.235",
                 ]}
             />
             <InputInteger
-                label={"端口"} value={port} setValue={setPort}
+                label={"Port"} value={port} setValue={setPort}
                 min={1} max={65535}
             />
             <Form.Item colon={false} label={" "}>
-                <Button type="primary" htmlType="submit"> 监听该端口 </Button>
+                <Button type="primary" htmlType="submit"> Port to Monitor </Button>
             </Form.Item>
         </Form>
     </div>

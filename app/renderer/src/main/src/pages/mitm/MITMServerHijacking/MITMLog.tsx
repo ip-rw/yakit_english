@@ -16,7 +16,7 @@ const {ipcRenderer} = window.require("electron")
 interface MITMLogHeardExtraProps {
 }
 export const MITMLogHeardExtra: React.FC<MITMLogHeardExtraProps> = React.memo((props) => {
-    // 屏蔽数据
+    // Block Data
     const [shieldData, setShieldData] = useState<ShieldData>({
         data: []
     })
@@ -44,7 +44,7 @@ export const MITMLogHeardExtra: React.FC<MITMLogHeardExtraProps> = React.memo((p
                 emiter.emit("cleanMitmLogEvent")
             })
             .catch((e: any) => {
-                yakitNotify("error", `历史记录删除失败: ${e}`)
+                yakitNotify("error", `Failed to Delete History: ${e}`)
             })
             .finally(() => {
                 emiter.emit("onDeleteToUpdate",JSON.stringify({sourcePage:"MITM"}))
@@ -58,11 +58,11 @@ export const MITMLogHeardExtra: React.FC<MITMLogHeardExtraProps> = React.memo((p
                     data: [
                         {
                             key: "resetId",
-                            label: "重置请求 ID"
+                            label: "Reset Request ID"
                         },
                         {
                             key: "noResetId",
-                            label: "不重置请求 ID"
+                            label: "Do Not Reset Request ID"
                         }
                     ],
                     onClick: ({key}) => {
@@ -84,7 +84,7 @@ export const MITMLogHeardExtra: React.FC<MITMLogHeardExtraProps> = React.memo((p
                 }}
             >
                 <YakitButton type='outline1' colors='danger'>
-                    清空
+                    Clear
                 </YakitButton>
             </YakitDropdownMenu>
             <HTTPFlowShield shieldData={shieldData} cancleFilter={cancleFilter} />

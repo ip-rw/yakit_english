@@ -7,7 +7,7 @@ export interface YakitEllipsisProp {
     width?: number
 }
 /**
- * 缺陷较大，暂不建议频繁使用
+ * Major flaws, not recommended for frequent use
  */
 export const YakitEllipsis: React.FC<YakitEllipsisProp> = (props) => {
     const {text, width = 260} = props

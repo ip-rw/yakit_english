@@ -9,17 +9,17 @@ import classNames from "classnames"
 import styles from "./yakitMenu.module.scss"
 
 export interface YakitMenuItemProps {
-    /** 菜单项展示内容 */
+    /** Menu Display Content */
     label: string | ReactNode
-    /** 菜单项值 */
+    /** Menu Item Value */
     key: string
-    /** 是否禁用 */
+    /** Disabled */
     disabled?: boolean
     children?: YakitMenuItemProps[]
     itemIcon?: ReactNode
-    /** tooltip提示，不填默认用label */
+    /** Tooltip Text, Default to Label if Empty */
     title?: string
-    /** 单项菜单类型(只在叶子节点时有效) */
+    /** Single Menu Type (Leaf Nodes Only)) */
     type?: "success" | "danger"
 }
 export interface YakitMenuItemDividerProps {
@@ -31,10 +31,10 @@ export interface YakitMenuProp extends MenuProps {
     data?: YakitMenuItemType[]
     width?: number
     type?: "primary" | "grey"
-    /** 是否鼠标悬浮展示文字内容弹窗 */
+    /** Show Tooltip on Hover Toggle */
     isHint?: boolean
     popupClassName?: string
-    /** @name 组件尺寸类型(默认|右键高度紧凑型) */
+    /** @name Component Size Type (default|Right-click Compact Height) */
     size?: "default" | "rightMenu"
 }
 

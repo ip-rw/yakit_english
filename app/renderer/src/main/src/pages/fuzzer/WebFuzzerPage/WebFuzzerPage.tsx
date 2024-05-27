@@ -20,21 +20,21 @@ const {ipcRenderer} = window.require("electron")
 export const webFuzzerTabs = [
     {
         key: "config",
-        label: "配置",
+        label: "Config",
         icon: <OutlineAdjustmentsIcon />
     },
     {
         key: "rule",
-        label: "规则",
+        label: "Rules",
         icon: <OutlineClipboardlistIcon />
     },
     {
         key: "sequence",
-        label: "序列",
+        label: "Sequence",
         icon: <OutlineCollectionIcon />
     }
 ]
-/**包裹 配置和规则，不包裹序列 */
+/**Wrap Config and Rules, not Sequences */
 const WebFuzzerPage: React.FC<WebFuzzerPageProps> = React.memo((props) => {
     const {id} = props
     const {queryPagesDataById, selectGroupId, getPagesDataByGroupId} = usePageInfo(
@@ -60,7 +60,7 @@ const WebFuzzerPage: React.FC<WebFuzzerPageProps> = React.memo((props) => {
     const webFuzzerRef = useRef<any>(null)
     const [inViewport] = useInViewport(webFuzzerRef)
     const [type, setType] = useState<WebFuzzerType>(props.defaultType || "config")
-    // 高级配置的隐藏/显示
+    // Hide Advanced Settings/Display
     const [advancedConfigShow, setAdvancedConfigShow] = useState<AdvancedConfigShowProps>({
         config: true,
         rule: true
@@ -95,32 +95,32 @@ const WebFuzzerPage: React.FC<WebFuzzerPageProps> = React.memo((props) => {
     const onSetSequence = useMemoizedFn(() => {
         const pageChildrenList: PageNodeItemProps[] = getPagesDataByGroupId(YakitRoute.HTTPFuzzer, selectGroupId) || []
         if (props.id && pageChildrenList.length === 0) {
-            // 新建组
+            // Create Group
             onAddGroup(props.id)
         } else {
-            // 设置MainOperatorContent层type变化用来控制是否展示【序列】
+            // Toggle MainOpContentType Sequencing】
             emiter.emit("sendSwitchSequenceToMainOperatorContent", JSON.stringify({type: "sequence"}))
         }
     })
     const onAddGroup = useMemoizedFn((id: string) => {
         ipcRenderer.invoke("send-add-group", {pageId: id})
     })
-    /**本组件中切换tab展示的事件 */
+    /**Event to Switch Tab Display in This Component */
     const onSetType = useMemoizedFn((key: WebFuzzerType) => {
         switch (key) {
             case "sequence":
                 onSetSequence()
                 break
             default:
-                // 设置MainOperatorContent层type变化用来控制是否展示【配置】/【规则】
+                // Toggle MainOpContentType Config】/【Rules】
                 emiter.emit("sendSwitchSequenceToMainOperatorContent", JSON.stringify({type: key}))
-                // 发送到HTTPFuzzerPage组件中 切换【配置】/【规则】tab 得选中type
+                // Send to HTTPFuzzerPage for Config Toggle】/【Rule Tab Type Select
                 emiter.emit("onSwitchTypeWebFuzzerPage", JSON.stringify({type: key}))
                 if (type === key) {
-                    // 设置【规则】/【规则】的高级配置的隐藏或显示
+                    // Configure Rule】/【Toggle Adv. Settings in Rules
                     emiter.emit("onSetAdvancedConfigShow", JSON.stringify({type: key}))
                 }
-                // 设置【配置】/【规则】选中
+                // Configure】/【Select Rule
                 setType(key)
                 break
         }
@@ -141,7 +141,7 @@ const WebFuzzerPage: React.FC<WebFuzzerPageProps> = React.memo((props) => {
             } catch (error) {}
         }
     })
-    /**FuzzerSequenceWrapper组件中发送的信号，切换【配置】/【规则】包裹层的type */
+    /**FuzzerSeqWrapper Config Toggle Signal】/【Wrapper Layer Rule Type */
     const onSwitchType = useMemoizedFn((data) => {
         if (!inViewport) return
         try {
@@ -149,7 +149,7 @@ const WebFuzzerPage: React.FC<WebFuzzerPageProps> = React.memo((props) => {
             const type = value.type as WebFuzzerType
             if (type === "sequence") return
             setType(type)
-            // 发送到HTTPFuzzerPage组件中 切换【配置】/【规则】tab 得选中type
+            // Send to HTTPFuzzerPage for Config Toggle】/【Rule Tab Type Select
             emiter.emit("onSwitchTypeWebFuzzerPage", JSON.stringify({type}))
         } catch (error) {}
     })

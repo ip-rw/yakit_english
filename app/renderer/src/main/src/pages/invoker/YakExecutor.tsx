@@ -62,14 +62,14 @@ const {TabPane} = Tabs
 const {Text, Paragraph} = Typography
 
 const tabMenu: CustomMenuProps[] = [
-    {key: "own", value: "关闭当前页"},
-    {key: "other", value: "关闭其他页"},
-    {key: "all", value: "关闭全部页"}
+    {key: "own", value: "Close Tab"},
+    {key: "other", value: "Close Other Tabs"},
+    {key: "all", value: "Close All Tabs"}
 ]
 const fileMenu: CustomMenuProps[] = [
-    {key: "rename", value: "重命名"},
-    {key: "remove", value: "移除"},
-    {key: "delete", value: "删除"}
+    {key: "rename", value: "Rename"},
+    {key: "remove", value: "Remove"},
+    {key: "delete", value: "Delete"}
 ]
 
 const CustomMenu = (
@@ -204,7 +204,7 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
     const sendRequest = useMemoizedFn((data: {}) => {
         ipcRenderer.invoke(`InteractiveRunYakCodeWrite`, token, data)
     })
-    // 自动保存
+    // Auto Save
     const autoSaveCurrentFile = useMemoizedFn(() => {
         const tabInfo = tabList[+activeTab]
         if (tabInfo?.isFile) {
@@ -214,7 +214,7 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
             })
         }
     })
-    // 保存近期文件内的15个
+    // Save Last 15
     const saveFileList = useMemoizedFn(() => {
         let files = cloneDeep(fileList).reverse()
         files.splice(14)
@@ -228,7 +228,7 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
             ipcRenderer.invoke("cancel-InteractiveRunYakCode", token)
         }
     }, [])
-    // 自动保存
+    // Auto Save
     useDebounceEffect(
         () => {
             autoSaveCurrentFile()
@@ -237,7 +237,7 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
         [tabList[+activeTab]?.code],
         {wait: 500}
     )
-    // 获取和保存近期打开文件信息，同时展示打开默认内容
+    // Fetch/Save Recent Files & Show Default
     useEffect(() => {
         setLoading(true)
         ipcRenderer
@@ -271,7 +271,7 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
         }
     }, [])
 
-    // 全局监听重命名事件是否被打断
+    // Global Intercept Rename
     useEffect(() => {
         document.onmousedown = (e) => {
             try {
@@ -286,7 +286,7 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
         }
     }, [renameFlag])
 
-    // 打开文件
+    // Open File
     const addFile = useMemoizedFn((file: any) => {
         const isExists = fileList.filter((item) => item.tab === file.name && item.route === file.path).length === 1
 
@@ -315,14 +315,14 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
                 setTabList(tabList.concat([tab]))
             })
             .catch(() => {
-                failed("无法获取该文件内容，请检查后后重试！")
+                failed("File Unreadable, Please Retry！")
                 const files = cloneDeep(fileList)
                 for (let i in files) if (files[i].route === file.path) files.splice(i, 1)
                 setFileList(files)
             })
         return false
     })
-    // 新建文件
+    // New File
     const newFile = useMemoizedFn(() => {
         const tab: tabCodeProps = {
             tab: `Untitle-${unTitleCount}.yak`,
@@ -334,13 +334,13 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
         setTabList(tabList.concat([tab]))
         setUnTitleCount(unTitleCount + 1)
     })
-    //修改文件
+    //Edit File
     const modifyCode = useMemoizedFn((value: string, index: number) => {
         const tabs = cloneDeep(tabList)
         tabs[index].code = value
         setTabList(tabs)
     })
-    // 保存文件
+    // Save File
     const saveCode = useMemoizedFn((info: tabCodeProps, index: number) => {
         if (info.isFile) {
             ipcRenderer.invoke("write-file", {
@@ -395,7 +395,7 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
             })
         }
     })
-    //关闭文件
+    //Close File
     const closeCode = useMemoizedFn((index, isFileList: boolean) => {
         const tabInfo = isFileList ? fileList[+index] : tabList[+index]
         if (isFileList) {
@@ -425,7 +425,7 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
             }
         }
     })
-    // 关闭虚拟文件不保存
+    // Close Temp Without Saving
     const ownCloseCode = useMemoizedFn(() => {
         const tabs = cloneDeep(tabList)
         tabs.splice(hintIndex, 1)
@@ -433,7 +433,7 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
         setHintShow(false)
         setActiveTab(tabs.length >= 1 ? `0` : "")
     })
-    // 删除文件
+    // Delete File
     const delCode = useMemoizedFn((index) => {
         const fileInfo = fileList[index]
 
@@ -453,10 +453,10 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
                 setFileList(arr)
             })
             .catch(() => {
-                failed("文件删除失败！")
+                failed("File Deletion Failed！")
             })
     })
-    //重命名操作
+    //Rename Action
     const renameCode = useMemoizedFn((index: number) => {
         const tabInfo = fileList[index]
 
@@ -478,7 +478,7 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
                 setRenameHint(true)
             })
     })
-    // 重命名文件
+    // Rename File
     const renameFile = useMemoizedFn(
         (index: number, rename: string, oldRoute: string, newRoute: string, callback?: () => void) => {
             ipcRenderer.invoke("rename-file", {old: oldRoute, new: newRoute}).then(() => {
@@ -616,7 +616,7 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
             }
         })
         ipcRenderer.on("client-yak-end", () => {
-            info("Yak 代码执行完毕")
+            info("Yak Execution Complete")
             setTriggerForUpdatingHistory(getRandomInt(100000))
             setTimeout(() => {
                 setExecuting(false)
@@ -755,7 +755,7 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
                                                         setIsInteractive(Boolean(tabList[+activeTab]?.interactive))
                                                     }}
                                                 >
-                                                    {isInteractive ? "常规编辑" : "交互式编辑"}
+                                                    {isInteractive ? "Standard Edit" : "Interactive Edit"}
                                                 </Button>
 
                                                 <Button
@@ -773,11 +773,11 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
                                                 />
                                                 <Popover
                                                     trigger={["click"]}
-                                                    title={"其他设置"}
+                                                    title={"Other Settings"}
                                                     placement='bottomRight'
                                                     content={
                                                         <>
-                                                            <Form.Item label='运行命令' name='runCommand'>
+                                                            <Form.Item label='Run Command' name='runCommand'>
                                                                 <YakitInput
                                                                     prefix={
                                                                         "yak " + tabList[+activeTab]?.tab || "[file]"
@@ -796,11 +796,11 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
                                                                                     return item
                                                                                 })
                                                                             )
-                                                                        success("保存成功")
+                                                                        success("Save Successful")
                                                                     }}
                                                                 />
                                                             </Form.Item>
-                                                            <Form.Item label='字体大小' name='fontSize'>
+                                                            <Form.Item label='Font Size' name='fontSize'>
                                                                 <YakitInputNumber
                                                                     size='small'
                                                                     value={fontSize}
@@ -858,7 +858,7 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
                                     {tabList.map((item, index) => {
                                         return (
                                             <TabPane
-                                                tab={item.isFile ? item.tab : `(未保存)${item.tab}`}
+                                                tab={item.isFile ? item.tab : `(Unsaved)${item.tab}`}
                                                 key={`${index}`}
                                             >
                                                 <div style={{height: "100%"}}>
@@ -905,12 +905,12 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
                                                     rowClassName={"interactive-executor-table"}
                                                     columns={[
                                                         {
-                                                            title: "变量",
+                                                            title: "Variables",
                                                             dataIndex: "varName",
                                                             key: "varName"
                                                         },
                                                         {
-                                                            title: "值",
+                                                            title: "Value",
                                                             dataIndex: "value",
                                                             key: "value"
                                                         }
@@ -959,8 +959,8 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
                                                         setValue={setOutputEncoding}
                                                         size={"small"}
                                                         data={[
-                                                            {text: "GBxxx编码", value: "latin1"},
-                                                            {text: "UTF-8编码", value: "utf8"}
+                                                            {text: "GBxxx Encoded", value: "latin1"},
+                                                            {text: "UTF-8", value: "utf8"}
                                                         ]}
                                                     />
                                                     <Button
@@ -975,7 +975,7 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
                                             }
                                         >
                                             <TabPane
-                                                tab={<div style={{width: 50, textAlign: "center"}}>输出</div>}
+                                                tab={<div style={{width: 50, textAlign: "center"}}>Output</div>}
                                                 key={"output"}
                                             >
                                                 <div style={{width: "100%", height: "100%"}}>
@@ -1020,7 +1020,7 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
                                             <TabPane
                                                 tab={
                                                     <div style={{width: 50, textAlign: "center"}} key={"terminal"}>
-                                                        终端(监修中)
+                                                        Terminal (Under Supervision))
                                                     </div>
                                                 }
                                                 disabled
@@ -1035,7 +1035,7 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
                         />
                     )}
                     {tabList.length === 0 && (
-                        <Empty className='right-empty' description={<p>请点击左侧打开或新建文件</p>}></Empty>
+                        <Empty className='right-empty' description={<p>Open/New File on Left</p>}></Empty>
                     )}
                 </div>
 
@@ -1044,21 +1044,21 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
                     onCancel={() => setHintShow(false)}
                     footer={[
                         <Button key='link' onClick={() => setHintShow(false)}>
-                            取消
+                            Cancel
                         </Button>,
                         <Button key='submit' onClick={() => ownCloseCode()}>
-                            不保存
+                            Do Not Save
                         </Button>,
                         <Button key='back' type='primary' onClick={() => saveCode(tabList[hintIndex], hintIndex)}>
-                            保存
+                            Save
                         </Button>
                     ]}
                 >
                     <div style={{height: 40}}>
                         <ExclamationCircleOutlined style={{fontSize: 22, color: "#faad14"}} />
-                        <span style={{fontSize: 18, marginLeft: 15}}>文件未保存</span>
+                        <span style={{fontSize: 18, marginLeft: 15}}>File Not Saved</span>
                     </div>
-                    <p style={{fontSize: 15, marginLeft: 37}}>{`是否要保存${hintFile}里面的内容吗？`}</p>
+                    <p style={{fontSize: 15, marginLeft: 37}}>{`Save Changes?${hintFile}Content Inside？`}</p>
                 </Modal>
 
                 <Modal
@@ -1066,7 +1066,7 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
                     onCancel={() => setHintShow(false)}
                     footer={[
                         <Button key='link' onClick={() => setRenameHint(false)}>
-                            取消
+                            Cancel
                         </Button>,
                         <Button
                             key='back'
@@ -1084,15 +1084,15 @@ export const YakExecutor: React.FC<YakExecutorProp> = (props) => {
                                 })
                             }}
                         >
-                            确定
+                            Confirm
                         </Button>
                     ]}
                 >
                     <div style={{height: 40}}>
                         <ExclamationCircleOutlined style={{fontSize: 22, color: "#faad14"}} />
-                        <span style={{fontSize: 18, marginLeft: 15}}>文件已存在</span>
+                        <span style={{fontSize: 18, marginLeft: 15}}>File Exists</span>
                     </div>
-                    <p style={{fontSize: 15, marginLeft: 37}}>{`是否要覆盖已存在的文件吗？`}</p>
+                    <p style={{fontSize: 15, marginLeft: 37}}>{`Overwrite File?？`}</p>
                 </Modal>
             </div>
         </AutoCard>
@@ -1136,7 +1136,7 @@ const ExecutorFileList = (props: ExecutorFileListProps) => {
     return (
         <AutoCard
             className={"executor-file-list"}
-            title={<span style={{color: "#000", fontWeight: 400}}>近期文件</span>}
+            title={<span style={{color: "#000", fontWeight: 400}}>Recent Files</span>}
             headStyle={{
                 minHeight: 0,
                 fontSize: 14,
@@ -1209,7 +1209,7 @@ const ExecutorFileList = (props: ExecutorFileListProps) => {
                     description={
                         <div style={{marginTop: 90}}>
                             <Button type='link' icon={<FileAddOutlined style={{fontSize: 30}} />} onClick={newFile} />
-                            <p style={{marginTop: 10}}>新建文件</p>
+                            <p style={{marginTop: 10}}>New File</p>
                         </div>
                     }
                 />

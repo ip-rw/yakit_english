@@ -13,24 +13,24 @@ const windowStateKeeper = require("electron-window-state")
 const {clearFolder} = require("./toolsFunc")
 const {MenuTemplate} = require("./menu")
 
-/** 获取缓存数据-软件是否需要展示关闭二次确认弹框 */
+/** Retrieve cache data - need to show closure confirmation dialog? */
 const UICloseFlag = "windows-close-flag"
 
-/** 主进程窗口对象 */
+/** Main process window object */
 let win
-// 是否展示关闭二次确认弹窗的标志位
+// Flag for showing closure confirmation
 let closeFlag = true
 
 process.on("uncaughtException", (error) => {
     console.info(error)
 })
 
-// 性能优化：https://juejin.cn/post/6844904029231775758
+// Performance optimization: https://juejin.cn/post/6844904029231775758
 
 const createWindow = () => {
-    /** 获取缓存数据并储存于软件内 */
+    /** Retrieve and store cache data */
     initLocalCache()
-    /** 获取扩展缓存数据并储存于软件内(是否弹出关闭二次确认弹窗) */
+    /** Retrieve and store extension cache data (show closure confirmation dialog?) */
     initExtraLocalCache(() => {
         const cacheFlag = getExtraLocalCacheValue(UICloseFlag)
         closeFlag = cacheFlag === undefined ? true : cacheFlag
@@ -77,22 +77,22 @@ const createWindow = () => {
     win.on("close", async (e) => {
         e.preventDefault()
         mainWindowState.saveState(win)
-        // 关闭app时通知渲染进程 渲染进程操作后再进行关闭
+        // Notify render process when closing app, then close after processing
         win.webContents.send("close-windows-renderer")
     })
     win.on("minimize", (e) => {
         win.webContents.send("refresh-token")
-        // 关闭app时通知渲染进程 渲染进程操作后再进行关闭
+        // Notify render process when closing app, then close after processing
         win.webContents.send("minimize-windows-renderer")
     })
     win.on("maximize", (e) => {
         win.webContents.send("refresh-token")
     })
-    // 阻止内部react页面的链接点击跳转
+    // Prevent internal React page link navigation
     win.webContents.on("will-navigate", (e, url) => {
         e.preventDefault()
     })
-    // 录屏
+    // Screen recording
     // globalShortcut.register("Control+Shift+X", (e) => {
     //     win.webContents.send("open-screenCap-modal")
     // })
@@ -106,7 +106,7 @@ const menu = Menu.buildFromTemplate(MenuTemplate)
 Menu.setApplicationMenu(menu)
 
 app.whenReady().then(() => {
-    // 截图功能的注册(功能和全局快捷键的注册)
+    // Register screenshot feature (and global shortcut)
     if (["darwin", "win32"].includes(process.platform)) {
         const screenshots = new Screenshots({
             singleWindow: true
@@ -132,14 +132,14 @@ app.whenReady().then(() => {
             globalShortcut.unregister("esc")
         })
 
-        // 点击确定按钮回调事件
+        // OK button click callback
         screenshots.on("ok", (e, buffer, bounds) => {
             if (screenshots.$win?.isFocused()) {
                 screenshots.endCapture()
                 globalShortcut.unregister("esc")
             }
         })
-        // 点击取消按钮回调事件
+        // Cancel button click callback
         screenshots.on("cancel", () => {
             globalShortcut.unregister("esc")
         })
@@ -147,8 +147,8 @@ app.whenReady().then(() => {
 
     /**
      * error-log:
-     * 存在则检查文件数量是否超过10个，超过则只保留最近10个文件
-     * 不存在则新建文件夹
+     * If exists, check if file count exceeds 10, keep only the last 10 files
+     * Create folder if not exists
      */
     if (fs.existsSync(engineLog)) {
         clearFolder(engineLog, 9)
@@ -166,7 +166,7 @@ app.whenReady().then(() => {
         fs.mkdirSync(printLog, {recursive: true})
     }
 
-    // 软件退出的逻辑
+    // App exit logic
     ipcMain.handle("app-exit", async (e, params) => {
         const showCloseMessageBox = params.showCloseMessageBox
         if (closeFlag && showCloseMessageBox) {
@@ -174,12 +174,12 @@ app.whenReady().then(() => {
                 .showMessageBox(win, {
                     icon: nativeImage.createFromPath(path.join(__dirname, "../assets/yakitlogo.pic.jpg")),
                     type: "none",
-                    title: "提示",
+                    title: "Prompt",
                     defaultId: 0,
                     cancelId: 3,
-                    message: "确定要关闭吗？",
-                    buttons: ["最小化", "直接退出"],
-                    checkboxLabel: "不再展示关闭二次确认？",
+                    message: "Confirm closure?？",
+                    buttons: ["Minimize", "Exit directly"],
+                    checkboxLabel: "Don't show closure confirmation again？",
                     checkboxChecked: false,
                     noLink: true
                 })
@@ -199,7 +199,7 @@ app.whenReady().then(() => {
                     }
                 })
         } else {
-            // close时关掉远程控制
+            // Close remote control on app close
             await asyncKillDynamicControl()
             win = null
             clearing()
@@ -207,7 +207,7 @@ app.whenReady().then(() => {
         }
     })
 
-    // 协议
+    // Protocol
     protocol.registerFileProtocol("atom", (request, callback) => {
         const filePath = url.fileURLToPath("file://" + request.url.slice("atom://".length))
         callback(filePath)
@@ -231,7 +231,7 @@ app.whenReady().then(() => {
     })
 })
 
-// 这个退出压根执行不到 win.on("close") 阻止了默认行为
+// Exit unreachable due to win.on("close") Prevented default action
 app.on("window-all-closed", function () {
     clearing()
     app.quit()

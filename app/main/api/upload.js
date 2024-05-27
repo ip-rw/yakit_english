@@ -8,9 +8,9 @@ const crypto = require("crypto")
 module.exports = (win, getClient) => {
     ipcMain.handle("upload-img", async (event, params) => {
         const {path, type} = params
-        // 创建数据流
+        // Create stream
         // console.log('time1',new Date().getHours(),new Date().getMinutes(),new Date().getSeconds());
-        const readerStream = fs.createReadStream(path) // 可以像使用同步接口一样使用它。
+        const readerStream = fs.createReadStream(path) // Use as sync interface。
         const formData = new FormData()
         formData.append("file_name", readerStream)
         formData.append("type", type)
@@ -29,9 +29,9 @@ module.exports = (win, getClient) => {
 
     ipcMain.handle("upload-group-data", async (event, params) => {
         const {path} = params
-        // 创建数据流
+        // Create stream
         // console.log('time1',new Date().getHours(),new Date().getMinutes(),new Date().getSeconds());
-        const readerStream = fs.createReadStream(path) // 可以像使用同步接口一样使用它。
+        const readerStream = fs.createReadStream(path) // Use as sync interface。
         const formData = new FormData()
         formData.append("file", readerStream)
         const res = httpApi(
@@ -44,7 +44,7 @@ module.exports = (win, getClient) => {
         return res
     })
 
-    // 计算Hash（支持分片计算与整体计算）
+    // Compute Hash (supports shard and whole)）
     const hashChunk = ({path, size, chunkSize, chunkIndex}) => {
         return new Promise((resolve, reject) => {
             let options = {}
@@ -53,16 +53,16 @@ module.exports = (win, getClient) => {
                 const end = Math.min(start + chunkSize, size)
                 options = {start, end}
             }
-            // 创建当前分片的读取流
+            // Create shard's read stream
             const chunkStream = fs.createReadStream(path, options)
-            // 计算Hash
+            // Compute Hash
             const hash = crypto.createHash("sha1")
             chunkStream.on("data", (chunk) => {
                 hash.update(chunk)
             })
             chunkStream.on("end", () => {
-                // 单独一片的Hash
-                const fileChunkHash = hash.digest("hex").slice(0, 8) // 仅保留前8个字符作为哈希值
+                // Individual shard Hash
+                const fileChunkHash = hash.digest("hex").slice(0, 8) // Keep first 8 chars of hash
                 resolve(fileChunkHash)
             })
 
@@ -72,7 +72,7 @@ module.exports = (win, getClient) => {
         })
     }
 
-    // 上传次数缓存
+    // Upload retries cache
     let postPackageHistory = {}
     const postProject = ({url, chunkStream, chunkIndex, totalChunks, fileName, hash, fileHash, token}) => {
         return new Promise((resolve, reject) => {
@@ -84,7 +84,7 @@ module.exports = (win, getClient) => {
             formData.append("totalChunks", totalChunks)
             formData.append("hash", fileHash)
             formData.append("fileName", fileName)
-            // console.log("参数---", fileName, fileHash)
+            // console.log("Parameters---", fileName, fileHash)
             httpApi(
                 "post",
                 url,
@@ -101,11 +101,11 @@ module.exports = (win, getClient) => {
                         progress
                     })
                     if (res.code !== 200 && postPackageHistory[hash] <= 3) {
-                        // console.log("重传", postPackageHistory[hash])
-                        // 传输失败 重传3次
+                        // console.log("Retry", postPackageHistory[hash])
+                        // Transfer failed, retry thrice
                         await postProject({url, chunkStream, chunkIndex, totalChunks, fileName, hash, fileHash, token})
                     } else if (postPackageHistory[hash] > 3) {
-                        reject("重传三次失败")
+                        reject("Retry thrice on failure")
                     }
                     resolve()
                 })
@@ -130,29 +130,29 @@ module.exports = (win, getClient) => {
         })
     }
 
-    // 上传状态
+    // Upload status
     let TaskStatus = true
-    // 分片上传
+    // Shard upload
     ipcMain.handle("split-upload", (event, params) => {
         return new Promise(async (resolve, reject) => {
             // console.log("params---",params);
-            // path为文件路径 token为切片进度回调 url为接口
+            // path as file path, token as slice progress, url as endpoint
             const {url, path, token} = params
-            // 获取文件名
+            // Get filename
             const fileName = customPath.basename(path)
-            // 文件大小（以字节为单位）
+            // File size in bytes）
             const size = fs.statSync(path).size
-            // 5GB 的字节数
+            // Bytes in 5GB
             const fiveGBInBytes = 5 * 1024 * 1024 * 1024
             if (size > fiveGBInBytes) {
-                reject("上传大小不可大于5GB")
+                reject("Upload limit: ≤5GB")
                 return
             }
-            // 每块分片大小
-            const chunkSize = 60 * 1024 * 1024 // 每个分片的大小，这里设置为60MB
-            // 计算分片总数
+            // Shard size
+            const chunkSize = 60 * 1024 * 1024 // Shard size, set to 60MB
+            // Total shards count
             const totalChunks = Math.ceil(size / chunkSize)
-            // 计算整个文件Hash
+            // Compute file Hash
             const fileHash = await hashChunk({path})
             const fileHashTime = `${fileHash}-${Date.now()}`
             TaskStatus = true
@@ -163,7 +163,7 @@ module.exports = (win, getClient) => {
                         let add = chunkIndex === 0 ? 0 : 1
                         const start = chunkIndex * chunkSize + add
                         const end = Math.min((chunkIndex + 1) * chunkSize, size)
-                        // 创建当前分片的读取流
+                        // Create shard's read stream
                         const chunkStream = fs.createReadStream(path, {start, end})
                         await postProject({
                             url,

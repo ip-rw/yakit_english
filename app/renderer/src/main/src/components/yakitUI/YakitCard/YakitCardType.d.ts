@@ -2,9 +2,9 @@ import React, { CSSProperties, ReactNode } from "react"
 
 /**
  * @description Csrd
- * @property {ReactNode} extra 头部extra
+ * @property {ReactNode} Extra Header
  * @property {ReactNode} title 
- * @property {boolean}  bordered 是否有边框 
+ * @property {boolean}  Bordered 
  * @property {CSSProperties}  headStyle  
  * @property {CSSProperties}  bodyStyle  
  * @property {CSSProperties}  style  

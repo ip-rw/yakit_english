@@ -41,21 +41,21 @@ interface MITMHijackedContentProps {
 
 const MITMHijackedContent: React.FC<MITMHijackedContentProps> = React.memo((props) => {
     const {status, setStatus, isFullScreen, setIsFullScreen, logs, statusCards} = props
-    // 自动转发 与 劫持响应的自动设置
+    // Auto Forward & Intercept Settings
     const [autoForward, setAutoForward, getAutoForward] = useGetState<"manual" | "log" | "passive">("log")
 
-    const [hijackResponseType, setHijackResponseType] = useState<"onlyOne" | "all" | "never">("never") // 劫持类型
+    const [hijackResponseType, setHijackResponseType] = useState<"onlyOne" | "all" | "never">("never") // Intercept Mode
 
     const [forResponse, setForResponse] = useState(false)
-    const [urlInfo, setUrlInfo] = useState("监听中...")
+    const [urlInfo, setUrlInfo] = useState("Listening...")
     const [ipInfo, setIpInfo] = useState("")
 
-    // 当前正在劫持的请求/响应，是否是 Websocket
+    // Current Intercepting Request/Websocket Response
     const [currentIsWebsocket, setCurrentIsWebsocket] = useState(false)
-    // 当前正在劫持的请求/响应
+    // Current Intercepting Request/Response
     const [currentIsForResponse, setCurrentIsForResponse] = useState(false)
 
-    // 存储修改前和修改后的包！
+    // Store Packages Pre/Post Modification！
     const [currentPacketInfo, setCurrentPacketInfo] = useState<{
         requestPacket: Uint8Array
         currentPacket: Uint8Array
@@ -79,8 +79,8 @@ const MITMHijackedContent: React.FC<MITMHijackedContentProps> = React.memo((prop
 
     const [calloutColor, setCalloutColor] = useState<string>("")
 
-    const [whiteListFlag, setWhiteListFlag] = useState<boolean>(false) // 是否配置过过滤器白名单文案
-    const [openRepRuleFlag, setOpenRepRuleFlag] = useState<boolean>(false) // 是否开启过替换规则
+    const [whiteListFlag, setWhiteListFlag] = useState<boolean>(false) // Configured Filters Whitelist
+    const [openRepRuleFlag, setOpenRepRuleFlag] = useState<boolean>(false) // Replacements Enabled
     const [alertVisible, setAlertVisible] = useState<boolean>(false)
 
     const [beautifyOpen, setBeautifyOpen] = useState<boolean>(false)
@@ -100,7 +100,7 @@ const MITMHijackedContent: React.FC<MITMHijackedContentProps> = React.memo((prop
                 }
             })
             .catch((err) => {
-                yakitFailed("获取 MITM 过滤器失败:" + err)
+                yakitFailed("Fetch MITM Filter Failed:" + err)
             })
     })
     useEffect(() => {
@@ -132,7 +132,7 @@ const MITMHijackedContent: React.FC<MITMHijackedContentProps> = React.memo((prop
                     setAlertVisible(true)
                 }
             })
-            .catch((e) => yakitFailed("获取规则列表失败:" + e))
+            .catch((e) => yakitFailed("Fetch Rule List Failed:" + e))
     })
     useEffect(() => {
         getRules()
@@ -161,7 +161,7 @@ const MITMHijackedContent: React.FC<MITMHijackedContentProps> = React.memo((prop
 
     useEffect(() => {
         ipcRenderer.invoke("mitm-auto-forward", !isManual).finally(() => {
-            console.info(`设置服务端自动转发：${!isManual}`)
+            console.info(`Auto Forward Set：${!isManual}`)
         })
     }, [autoForward])
     useEffect(() => {
@@ -169,7 +169,7 @@ const MITMHijackedContent: React.FC<MITMHijackedContentProps> = React.memo((prop
             allowHijackedResponseByRequest(currentPacketId)
         }
     }, [hijackResponseType, currentPacketId])
-    // 自动转发劫持，进行的操作
+    // Auto Forward Actions
     const forwardHandler = useMemoizedFn((e: any, msg: MITMResponse) => {
         if (msg?.RemoteAddr) {
             setIpInfo(msg?.RemoteAddr)
@@ -181,7 +181,7 @@ const MITMHijackedContent: React.FC<MITMHijackedContentProps> = React.memo((prop
 
         if (msg.forResponse) {
             if (!msg.response || !msg.responseId) {
-                yakitFailed("BUG: MITM 错误，未能获取到正确的 Response 或 Response ID")
+                yakitFailed("BUG: MITM Error, Invalid Response/ID")
                 return
             }
             if (!isManual) {
@@ -251,10 +251,10 @@ const MITMHijackedContent: React.FC<MITMHijackedContentProps> = React.memo((prop
         }
     })
     /**
-     * @description 这个 Forward 主要用来转发修改后的内容，同时可以转发请求和响应
+     * @Forward Edited Content
      */
     const forward = useMemoizedFn(() => {
-        // ID 不存在
+        // ID Not Found
         if (!currentPacketId) {
             return
         }
@@ -287,7 +287,7 @@ const MITMHijackedContent: React.FC<MITMHijackedContentProps> = React.memo((prop
         setStatus("hijacking")
     })
     /**
-     * @description 切换劫持类型
+     * @Toggle Intercept Type
      */
     const onSetHijackResponseType = useMemoizedFn((val) => {
         switch (val) {
@@ -298,11 +298,11 @@ const MITMHijackedContent: React.FC<MITMHijackedContentProps> = React.memo((prop
                 if (currentPacketId > 0) {
                     allowHijackedResponseByRequest(currentPacketId)
                 }
-                info("劫持所有响应内容")
+                info("Intercept All Responses")
                 break
             case "never":
                 cancelHijackedResponseByRequest(currentPacketId)
-                info("仅劫持请求")
+                info("Intercept Requests Only")
                 break
             default:
                 break
@@ -310,7 +310,7 @@ const MITMHijackedContent: React.FC<MITMHijackedContentProps> = React.memo((prop
         setHijackResponseType(val)
     })
     /**
-     * @description 丢弃数据
+     * @Discard Data
      */
     const onDiscardRequest = useMemoizedFn(() => {
         hijacking()
@@ -327,7 +327,7 @@ const MITMHijackedContent: React.FC<MITMHijackedContentProps> = React.memo((prop
         }
         setForResponse(false)
         setCalloutColor("")
-        setUrlInfo("监听中...")
+        setUrlInfo("Listening...")
         setIpInfo("")
     })
     useHotkeys(
@@ -339,7 +339,7 @@ const MITMHijackedContent: React.FC<MITMHijackedContentProps> = React.memo((prop
     )
 
     /**
-     * 美化
+     * Beautify
      */
     useEffect(() => {
         const currentPacketStr = Uint8ArrayToString(currentPacket)
@@ -396,7 +396,7 @@ const MITMHijackedContent: React.FC<MITMHijackedContentProps> = React.memo((prop
 
     const onRenderContent = useMemoizedFn(() => {
         switch (autoForward) {
-            // 手动劫持
+            // Manual Intercept
             case "manual":
                 return (
                     <div className={styles["mitm-hijacked-manual-content"]}>
@@ -431,14 +431,14 @@ const MITMHijackedContent: React.FC<MITMHijackedContentProps> = React.memo((prop
                         </div>
                     </div>
                 )
-            // 自动放行
+            // Auto Pass
             case "log":
                 return (
                     <>
                         <HTTPHistory pageType='MITM' />
                     </>
                 )
-            // 被动日志
+            // Passive Logs
             case "passive":
                 return (
                     <div className={styles["mitm-hijacked-passive-content"]}>
@@ -450,11 +450,11 @@ const MITMHijackedContent: React.FC<MITMHijackedContentProps> = React.memo((prop
         }
     })
 
-    // 提示文案
+    // Prompt Text
     const alertMsg = useMemo(() => {
-        if (whiteListFlag && openRepRuleFlag) return "检测到配置替换规则和过滤器白名单，如抓包有问题可先将配置关闭"
-        if (whiteListFlag) return "检测到配置过滤器白名单，如抓包有问题可先将白名单设置关闭"
-        if (openRepRuleFlag) return "检测到配置替换规则，如抓包有问题可先将替换关闭"
+        if (whiteListFlag && openRepRuleFlag) return "Config Issues Detected: Disable Replacements/Whitelist If Issues"
+        if (whiteListFlag) return "Config Issues Detected: Disable Whitelist If Issues"
+        if (openRepRuleFlag) return "Config Issues Detected: Disable Replacements If Issues"
         return ""
     }, [openRepRuleFlag, whiteListFlag])
     useEffect(() => {
@@ -483,9 +483,9 @@ const MITMHijackedContent: React.FC<MITMHijackedContentProps> = React.memo((prop
                         buttonStyle='solid'
                         value={autoForward}
                         options={[
-                            {label: "手动劫持", value: "manual"},
-                            {label: "自动放行", value: "log"},
-                            {label: "被动日志", value: "passive"}
+                            {label: "Manual Intercept", value: "manual"},
+                            {label: "Auto Pass", value: "log"},
+                            {label: "Passive Logs", value: "passive"}
                         ]}
                         onChange={(e) => {
                             handleAutoForward(e.target.value)

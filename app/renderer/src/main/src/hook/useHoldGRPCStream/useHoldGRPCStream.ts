@@ -6,7 +6,7 @@ import {DefaultTabs} from "./constant"
 
 const {ipcRenderer} = window.require("electron")
 
-/** @name 将缓冲区Map对象(卡片类) 转换成 hook数据数据(卡片集合) */
+/** @name Convert Buffer Map (Card Type) to Hook Data (Card Collection)) */
 export const convertCardInfo = (maps: Map<string, HoldGRPCStreamProps.CacheCard>) => {
     const cardArr: HoldGRPCStreamProps.InfoCard[] = []
     maps.forEach((value) => {
@@ -35,23 +35,23 @@ export const convertCardInfo = (maps: Map<string, HoldGRPCStreamProps.CacheCard>
 }
 
 export interface HoldGRPCStreamParams {
-    /** @name 执行结果展示的常驻tab页合集 */
+    /** @name Persistent Tabs for Result Display */
     tabs?: HoldGRPCStreamProps.InfoTab[]
-    /** @name 任务名称 */
+    /** @name Task Name */
     taskName: string
-    /** @name 后端API */
+    /** @name Backend API */
     apiKey: string
-    /** @name 数据流token */
+    /** @name Data Stream Token */
     token: string
-    /** @name 数据流请求间隔(默认:500,单位:ms) */
+    /** @name Data Stream Request Interval (Default:500, Unit:ms)) */
     waitTime?: number
-    /** @name 数据流结束的回调事件 */
+    /** @name Data Stream End Callback */
     onEnd?: () => any
-    /** @name 数据流报错的回调事件 */
+    /** @name Data Stream Error Callback */
     onError?: (e: any) => void
-    /** @name 额外的数据过滤方法 */
+    /** @name Additional Data Filter Method */
     dataFilter?: (obj: StreamResult.Message, content: StreamResult.Log) => boolean
-    /** @name 设置run-time-id值 */
+    /** @name Set run-time-id */
     setRuntimeId?: (runtimeId: string) => any
 }
 
@@ -77,7 +77,7 @@ export default function useHoldGRPCStream(params: HoldGRPCStreamParams) {
         logState: []
     })
 
-    // 启动数据流处理定时器
+    // Start Data Stream Timer
     const timeRef = useRef<any>(null)
 
     // runtime-id
@@ -89,9 +89,9 @@ export default function useHoldGRPCStream(params: HoldGRPCStreamParams) {
         new Map<string, HoldGRPCStreamProps.CacheCard>()
     )
 
-    // 前置tabs
+    // Leading Tabs
     const topTabs = useRef<HoldGRPCStreamProps.InfoTab[]>([])
-    // 后置tabs
+    // Trailing Tabs
     const endTabs = useRef<HoldGRPCStreamProps.InfoTab[]>([])
 
     // tabInfo-website
@@ -107,21 +107,21 @@ export default function useHoldGRPCStream(params: HoldGRPCStreamParams) {
     // logs
     let messages = useRef<StreamResult.Message[]>([])
 
-    /** 自定义tab页放前面还是后面 */
+    /** Custom Tab Order */
     const placeTab = useMemoizedFn((isHead: boolean, info: HoldGRPCStreamProps.InfoTab) => {
         topTabs.current.unshift(info)
     })
 
-    /** 放入日志队列 */
+    /** Add to Log Queue */
     const pushLogs = useMemoizedFn((log: StreamResult.Message) => {
         messages.current.unshift(log)
-        // 只缓存 100 条结果（日志类型 + 数据类型）
+        // Cache Only 100 Entries (Log + Data Types)）
         if (messages.current.length > 100) {
             messages.current.pop()
         }
     })
 
-    /** 判断是否为无效数据 */
+    /** Validate Data */
     const checkStreamValidity = useMemoizedFn((stream: StreamResult.Log) => {
         try {
             const check = JSON.parse(stream.data)
@@ -143,7 +143,7 @@ export default function useHoldGRPCStream(params: HoldGRPCStreamParams) {
                 try {
                     let obj: StreamResult.Message = JSON.parse(Buffer.from(data.Message).toString())
 
-                    // progress 进度条
+                    // progress Progress Bar
                     if (obj.type === "progress") {
                         const processData = obj.content as StreamResult.Progress
                         if (processData && processData.id) {
@@ -157,7 +157,7 @@ export default function useHoldGRPCStream(params: HoldGRPCStreamParams) {
 
                     const logData = obj.content as StreamResult.Log
 
-                    // feature-status-card-data 卡片展示
+                    // feature-status-card-data Card Display
                     if (obj.type === "log" && logData.level === "feature-status-card-data") {
                         try {
                             const checkInfo = checkStreamValidity(logData)
@@ -180,7 +180,7 @@ export default function useHoldGRPCStream(params: HoldGRPCStreamParams) {
                         return
                     }
 
-                    // new-tab(插件自增tab页)
+                    // new-tab (Auto-added Tab))
                     if (obj.type === "log" && logData.level === "json-feature") {
                         try {
                             const checkInfo = checkStreamValidity(logData)
@@ -191,7 +191,7 @@ export default function useHoldGRPCStream(params: HoldGRPCStreamParams) {
                             switch (info.feature) {
                                 case "website-trees":
                                     const website = info.params as StreamResult.WebSite
-                                    // tabInfo = {tabName: "网站树结构", type: "website"}
+                                    // tabInfo = {tabName: "Website Tree Structure", type: "website"}
                                     // placeTab(!!info.at_head, tabInfo)
                                     tabWebsite.current = website
                                     break
@@ -233,7 +233,7 @@ export default function useHoldGRPCStream(params: HoldGRPCStreamParams) {
                         return
                     }
 
-                    // 自定义table数据
+                    // Custom Table Data
                     if (obj.type === "log" && logData.level === "feature-table-data") {
                         try {
                             const checkInfo = checkStreamValidity(logData)
@@ -247,7 +247,7 @@ export default function useHoldGRPCStream(params: HoldGRPCStreamParams) {
                             }
 
                             const datas = originTable?.data || (new Map() as HoldGRPCStreamProps.CacheTable["data"])
-                            // uuid一定存在，不存在归为脏数据
+                            // uuid Must Exist, Else Dirty Data
                             if (!tableOpt.data.uuid) {
                                 pushLogs(obj)
                                 return
@@ -262,7 +262,7 @@ export default function useHoldGRPCStream(params: HoldGRPCStreamParams) {
                         return
                     }
 
-                    // 自定义text数据
+                    // Custom Text Data
                     if (obj.type === "log" && logData.level === "feature-text-data") {
                         try {
                             const checkInfo = checkStreamValidity(logData)
@@ -281,7 +281,7 @@ export default function useHoldGRPCStream(params: HoldGRPCStreamParams) {
                         return
                     }
 
-                    // risk 风险信息列表
+                    // risk Risk Info List
                     if (obj.type === "log" && logData.level === "json-risk") {
                         try {
                             const checkInfo = checkStreamValidity(logData)
@@ -292,9 +292,9 @@ export default function useHoldGRPCStream(params: HoldGRPCStreamParams) {
                         return
                     }
 
-                    // 外界传入的筛选方法
+                    // External Filter Method
                     if (dataFilter && dataFilter(obj, logData)) return
-                    // 日志信息
+                    // Log Info
                     pushLogs(obj)
                 } catch (e) {}
             }
@@ -324,7 +324,7 @@ export default function useHoldGRPCStream(params: HoldGRPCStreamParams) {
         }
     }, [token])
 
-    /** @name 数据流处理逻辑 */
+    /** @name Data Stream Processing Logic */
     const handleResults = useMemoizedFn(() => {
         // runtime-id
         if (runTimeId.current.sent !== runTimeId.current.cache && setRuntimeId) {
@@ -390,7 +390,7 @@ export default function useHoldGRPCStream(params: HoldGRPCStreamParams) {
         }
     }, [waitTime])
 
-    /** @name 开始处理数据流 */
+    /** @name Start Data Stream */
     const start = useMemoizedFn(() => {
         if (timeRef.current) {
             clearInterval(timeRef.current)
@@ -398,18 +398,18 @@ export default function useHoldGRPCStream(params: HoldGRPCStreamParams) {
         }
         timeRef.current = setInterval(() => handleResults(), waitTime)
     })
-    /** @name 停止处理数据流 */
+    /** @name Stop Data Stream */
     const stop = useMemoizedFn(() => {
         if (timeRef.current) {
             clearInterval(timeRef.current)
             timeRef.current = null
         }
     })
-    /** @name 关闭处理数据流 */
+    /** @name Close Data Stream */
     const cancel = useMemoizedFn(() => {
         ipcRenderer.invoke(`cancel-${apiKey}`, token)
     })
-    /** @name 重置数据流 */
+    /** @name Reset Data Stream */
     const reset = useMemoizedFn(() => {
         setStreamInfo({
             progressState: [],

@@ -39,19 +39,19 @@ export interface ShowUserInfoProps extends API.NewUrmResponse {
 const ShowUserInfo: React.FC<ShowUserInfoProps> = (props) => {
     const {user_name, password, onClose} = props
     const copyUserInfo = () => {
-        callCopyToClipboard(`用户名：${user_name}\n密码：${password}`)
+        callCopyToClipboard(`Username：${user_name}\nPassword：${password}`)
     }
     return (
         <div style={{padding: "0 10px"}}>
             <div>
-                用户名：<span>{user_name}</span>
+                Username：<span>{user_name}</span>
             </div>
             <div>
-                密码：<span>{password}</span>
+                Password：<span>{password}</span>
             </div>
             <div style={{textAlign: "center", paddingTop: 10}}>
                 <Button type='primary' onClick={() => copyUserInfo()}>
-                    复制
+                    Copy
                 </Button>
             </div>
         </div>
@@ -64,7 +64,7 @@ interface QueryAccountProps {
 export interface AccountFormProps {
     editInfo: API.UrmUserList | undefined
     onCancel: () => void
-    // 第一个参数为更新其他架构ID 第二个参数为自己ID
+    // Update other structure ID first, self ID second
     refresh: (v: number, b?: number) => void
 }
 
@@ -85,14 +85,14 @@ const AccountForm: React.FC<AccountFormProps> = (props) => {
     const {onCancel, refresh, editInfo} = props
     const [form] = Form.useForm()
     const [loading, setLoading] = useState<boolean>(false)
-    // 角色分页
+    // Role pagination
     const [pagination, setPagination, getPagination] = useGetState<PaginationSchema>({
         Limit: 20,
         Order: "desc",
         OrderBy: "updated_at",
         Page: 1
     })
-    // 组织架构分页
+    // Org Chart pagination
     const [depPagination, setDepPagination, getDepPagination] = useGetState<PaginationSchema>({
         Limit: 20,
         Order: "desc",
@@ -104,7 +104,7 @@ const AccountForm: React.FC<AccountFormProps> = (props) => {
     const isOnceLoading = useRef<boolean>(true)
     const [depData, setDepData, getDepData] = useGetState<DepData[]>([])
     const getRolesData = (page?: number, limit?: number) => {
-        // 加载角色列表
+        // Load role list
         isOnceLoading.current = false
         setSelectLoading(true)
         const paginationProps = {
@@ -126,7 +126,7 @@ const AccountForm: React.FC<AccountFormProps> = (props) => {
                 }
             })
             .catch((err) => {
-                failed("获取角色列表失败：" + err)
+                failed("Get role list failed：" + err)
             })
             .finally(() => {
                 setTimeout(() => {
@@ -149,7 +149,7 @@ const AccountForm: React.FC<AccountFormProps> = (props) => {
         })
             .then((res: API.DepartmentListResponse) => {
                 if (Array.isArray(res.data)) {
-                    // 控件不支持分页-获取全部数据
+                    // Pagination unsupported - get all data
                     NetWorkApi<DepartmentGetProps, API.DepartmentListResponse>({
                         method: "get",
                         url: "department",
@@ -165,7 +165,7 @@ const AccountForm: React.FC<AccountFormProps> = (props) => {
                                 isLeaf: item.exist_group ? false : true
                             }))
                             if (id) {
-                                // 初始化默认数据
+                                // Initialize default data
                                 initLoadData(data, id)
                             } else {
                                 setDepData(data)
@@ -173,13 +173,13 @@ const AccountForm: React.FC<AccountFormProps> = (props) => {
                             setDepPagination({...pagination, Limit: res.pagemeta.limit, Page: res.pagemeta.page})
                         })
                         .catch((err) => {
-                            failed("失败：" + err)
+                            failed("Failed：" + err)
                         })
                         .finally(() => {})
                 }
             })
             .catch((err) => {
-                failed("失败：" + err)
+                failed("Failed：" + err)
             })
             .finally(() => {})
     }
@@ -187,7 +187,7 @@ const AccountForm: React.FC<AccountFormProps> = (props) => {
     useEffect(() => {
         getRolesData()
         if (editInfo?.uid) {
-            // 加载编辑数据
+            // Loading edit data
             NetWorkApi<QueryAccountProps, API.UrmEditListResponse>({
                 method: "get",
                 url: "/urm/edit",
@@ -215,7 +215,7 @@ const AccountForm: React.FC<AccountFormProps> = (props) => {
                     }
                 })
                 .catch((err) => {
-                    failed("加载数据失败：" + err)
+                    failed("Load data failed：" + err)
                 })
                 .finally(() => {
                     setTimeout(() => {
@@ -229,7 +229,7 @@ const AccountForm: React.FC<AccountFormProps> = (props) => {
 
     const onFinish = useMemoizedFn((values) => {
         const {user_name, department, role_id} = values
-        // 编辑
+        // Edit
         const departmentId: number = department[department.length - 1]
         if (editInfo) {
             const params: API.EditUrmRequest = {
@@ -248,7 +248,7 @@ const AccountForm: React.FC<AccountFormProps> = (props) => {
                     onCancel()
                 })
                 .catch((err) => {
-                    failed("修改账号失败：" + err)
+                    failed("Modify account failed：" + err)
                 })
                 .finally(() => {
                     setTimeout(() => {
@@ -256,7 +256,7 @@ const AccountForm: React.FC<AccountFormProps> = (props) => {
                     }, 200)
                 })
         }
-        // 新增
+        // Add
         else {
             const params: API.NewUrmRequest = {
                 user_name,
@@ -273,13 +273,13 @@ const AccountForm: React.FC<AccountFormProps> = (props) => {
                     onCancel()
                     refresh(departmentId)
                     const m = showModal({
-                        title: "账号信息",
+                        title: "Account info",
                         content: <ShowUserInfo user_name={user_name} password={password} onClose={() => m.destroy()} />
                     })
                     return m
                 })
                 .catch((err) => {
-                    failed("创建账号失败：" + err)
+                    failed("Create account failed：" + err)
                 })
                 .finally(() => {
                     setTimeout(() => {
@@ -324,7 +324,7 @@ const AccountForm: React.FC<AccountFormProps> = (props) => {
                 }
             })
             .catch((err) => {
-                failed("失败：" + err)
+                failed("Failed：" + err)
             })
             .finally(() => {})
     }
@@ -352,7 +352,7 @@ const AccountForm: React.FC<AccountFormProps> = (props) => {
                 }
             })
             .catch((err) => {
-                failed("失败：" + err)
+                failed("Failed：" + err)
             })
             .finally(() => {})
     }
@@ -366,14 +366,14 @@ const AccountForm: React.FC<AccountFormProps> = (props) => {
     return (
         <div style={{marginTop: 24}}>
             <Form {...layout} form={form} onFinish={onFinish}>
-                <Form.Item name='user_name' label='用户名' rules={[{required: true, message: "该项为必填"}]}>
-                    <Input placeholder='请输入用户名' allowClear />
+                <Form.Item name='user_name' label='Username' rules={[{required: true, message: "Required Field"}]}>
+                    <Input placeholder='Enter Username' allowClear />
                 </Form.Item>
-                <Form.Item name='department' label='组织架构' rules={[{required: true, message: "该项为必填"}]}>
+                <Form.Item name='department' label='Org Chart' rules={[{required: true, message: "Required Field"}]}>
                     <Cascader
                         options={depData}
                         loadData={loadData}
-                        placeholder='请选择组织架构'
+                        placeholder='Select an org structure'
                         changeOnSelect
                         onPopupScroll={(e) => {
                             const {target} = e
@@ -384,10 +384,10 @@ const AccountForm: React.FC<AccountFormProps> = (props) => {
                         }}
                     />
                 </Form.Item>
-                <Form.Item name='role_id' label='角色' rules={[{required: true, message: "该项为必填"}]}>
+                <Form.Item name='role_id' label='Role' rules={[{required: true, message: "Required Field"}]}>
                     <YakitSelect
                         showSearch
-                        placeholder='请选择角色'
+                        placeholder='Select a role'
                         optionFilterProp='children'
                         filterOption={(input, option) =>
                             (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
@@ -410,7 +410,7 @@ const AccountForm: React.FC<AccountFormProps> = (props) => {
                 </Form.Item>
                 <div style={{textAlign: "center"}}>
                     <Button style={{width: 200}} type='primary' htmlType='submit' loading={loading}>
-                        确认
+                        Confirm
                     </Button>
                 </div>
             </Form>
@@ -449,13 +449,13 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
         })
             .then((res: number) => {
                 if (res) {
-                    success("新建成功")
+                    success("Created successfully")
                     refresh({name: values.name, key: res})
                     onClose()
                 }
             })
             .catch((err) => {
-                failed("失败：" + err)
+                failed("Failed：" + err)
             })
             .finally(() => {
                 setLoading(false)
@@ -464,12 +464,12 @@ const CreateOrganizationForm: React.FC<CreateOrganizationFormProps> = (props) =>
     return (
         <div style={{marginTop: 24}}>
             <Form {...layout} form={form} onFinish={onFinish}>
-                <Form.Item name='name' label='部门名称' rules={[{required: true, message: "该项为必填"}]}>
-                    <Input placeholder='请输入部门名称' allowClear />
+                <Form.Item name='name' label='Dept name' rules={[{required: true, message: "Required Field"}]}>
+                    <Input placeholder='Enter dept name' allowClear />
                 </Form.Item>
                 <div style={{textAlign: "center"}}>
                     <Button style={{width: 200}} type='primary' htmlType='submit' loading={loading}>
-                        确认
+                        Confirm
                     </Button>
                 </div>
             </Form>
@@ -486,15 +486,15 @@ interface DepartmentRemoveProps {
 interface DataSourceProps {
     title: string
     key: number
-    // 能否展开
+    // Expandable?
     isLeaf: boolean
-    // 数量
+    // Count
     userNum?: number
-    // 是否展示添加按钮
+    // Show add button?
     isShowAddBtn?: boolean
-    // 父级ID
+    // Parent ID
     pid?: number
-    // 是否显示所有按钮
+    // Show all buttons?
     isShowAllBtn?: boolean
     children?: any
 }
@@ -525,16 +525,16 @@ const OrganizationAdminPage: React.FC<OrganizationAdminPageProps> = (props) => {
     })
     const [treeHeight, setTreeHeight] = useState<number>(0)
     const TreeBoxRef = useRef<any>()
-    // 正常 - 组织架构
+    // Normal - Org Chart
     const [department, setDepartment, getDepartment] = useGetState<DataSourceProps[]>([])
-    // 无归属 - 组织架构数量
+    // Unaffiliated - Org Chart count
     const [noDepartment, setNoDepartment] = useState<number>()
 
     const realDataSource = useMemo(() => {
         if (noDepartment && noDepartment > 0) {
             return [
                 {
-                    title: "无归属",
+                    title: "Unaffiliated",
                     key: -1,
                     userNum: noDepartment,
                     isLeaf: true,
@@ -548,9 +548,9 @@ const OrganizationAdminPage: React.FC<OrganizationAdminPageProps> = (props) => {
 
     useEffect(() => {
         setTreeHeight(TreeBoxRef.current.offsetHeight)
-        // 获取正常组织架构
+        // Get normal org structure
         update()
-        // 获取无归属组织架构
+        // Get unaffiliated org structure
         noUpdate()
     }, [])
 
@@ -589,7 +589,7 @@ const OrganizationAdminPage: React.FC<OrganizationAdminPageProps> = (props) => {
             return node
         })
 
-    // 更新count数量
+    // Update count
     useEffect(() => {
         if (treeCount) {
             setDepartment((origin) => updateTreeCount(origin, treeCount))
@@ -608,7 +608,7 @@ const OrganizationAdminPage: React.FC<OrganizationAdminPageProps> = (props) => {
                     userNum
                 }
             }
-            // 多层递归（如后续升级可用）
+            // Multi-level recursion (for future upgrades)）
             if (node.children) {
                 return {
                     ...node,
@@ -619,7 +619,7 @@ const OrganizationAdminPage: React.FC<OrganizationAdminPageProps> = (props) => {
         })
     }
 
-    // 动态计算更新count数量
+    // Dynamically calculate count update
     useEffect(() => {
         if (treeReduceCount) {
             setDepartment((origin) => updateTreeReduceCount(origin, treeReduceCount))
@@ -637,7 +637,7 @@ const OrganizationAdminPage: React.FC<OrganizationAdminPageProps> = (props) => {
                 setNoDepartment(res.userNum)
             })
             .catch((err) => {
-                failed("失败：" + err)
+                failed("Failed：" + err)
             })
             .finally(() => {
                 setLoading(false)
@@ -668,7 +668,7 @@ const OrganizationAdminPage: React.FC<OrganizationAdminPageProps> = (props) => {
                         isLeaf: item.exist_group ? false : true,
                         isShowAddBtn: true
                     }))
-                // 若无选中 则 默认选中第一项
+                // Default select first if none
                 // if (newData.length > 0) {
                 //     setSelectItemId(selectItemId || newData[0].key)
                 // }
@@ -676,7 +676,7 @@ const OrganizationAdminPage: React.FC<OrganizationAdminPageProps> = (props) => {
                 setPagination({...pagination, Limit: res.pagemeta.limit})
             })
             .catch((err) => {
-                failed("失败：" + err)
+                failed("Failed：" + err)
             })
             .finally(() => {
                 setLoading(false)
@@ -691,7 +691,7 @@ const OrganizationAdminPage: React.FC<OrganizationAdminPageProps> = (props) => {
         },
         {wait: 500}
     )
-    // 删除
+    // Delete
     const onRemove = (id: number, pid?: number) => {
         NetWorkApi<DepartmentRemoveProps, API.ActionSucceeded>({
             method: "delete",
@@ -702,26 +702,26 @@ const OrganizationAdminPage: React.FC<OrganizationAdminPageProps> = (props) => {
         })
             .then((res: API.ActionSucceeded) => {
                 if (res.ok) {
-                    success("删除成功")
-                    // 重置回显示全部
+                    success("Delete Success")
+                    // Reset to show all
                     setSelectItemId(undefined)
                     setSelectTitle(undefined)
                     noUpdate()
                     if (pid) {
                         onLoadData({key: pid})
                     } else {
-                        // 操作数据 仅动态删除一条
+                        // Dynamic delete single data operation
                         const filterArr = department.filter((item) => item.key !== id)
                         setDepartment(filterArr)
                     }
                 }
             })
             .catch((err) => {
-                failed("失败：" + err)
+                failed("Failed：" + err)
             })
             .finally(() => {})
     }
-    // 修改名称
+    // Edit name
     const resetName = (name, id, pid = 0) => {
         const params: ResetNameProps = {
             name,
@@ -737,8 +737,8 @@ const OrganizationAdminPage: React.FC<OrganizationAdminPageProps> = (props) => {
         })
             .then((res: API.ActionSucceeded) => {
                 if (res) {
-                    success("修改成功")
-                    // 第一层更新
+                    success("Modified successfully")
+                    // First-level update
                     if (pid === 0) {
                         setDepartment((origin) =>
                             origin.map((node) => {
@@ -752,14 +752,14 @@ const OrganizationAdminPage: React.FC<OrganizationAdminPageProps> = (props) => {
                             })
                         )
                     }
-                    // 内部更新
+                    // Internal update
                     else {
                         onLoadData({key: pid})
                     }
                 }
             })
             .catch((err) => {
-                failed("失败：" + err)
+                failed("Failed：" + err)
             })
             .finally(() => {})
     }
@@ -773,7 +773,7 @@ const OrganizationAdminPage: React.FC<OrganizationAdminPageProps> = (props) => {
                     children
                 }
             }
-            // 多层递归（如后续升级可用）
+            // Multi-level recursion (for future upgrades)）
             // if (node.children) {
             //     return {
             //         ...node,
@@ -806,7 +806,7 @@ const OrganizationAdminPage: React.FC<OrganizationAdminPageProps> = (props) => {
                         }))
                         setDepartment((origin) => updateTreeData(origin, key, newArr))
                     }
-                    // 当获取结果为空 则为删除的最后一个
+                    // If result empty, last deleted
                     else {
                         setDepartment((origin) =>
                             origin.map((node) => {
@@ -823,7 +823,7 @@ const OrganizationAdminPage: React.FC<OrganizationAdminPageProps> = (props) => {
                     }
                 })
                 .catch((err) => {
-                    failed("失败：" + err)
+                    failed("Failed：" + err)
                 })
                 .finally(() => {
                     resolve()
@@ -834,12 +834,12 @@ const OrganizationAdminPage: React.FC<OrganizationAdminPageProps> = (props) => {
     return (
         <div className='organization-admin-page'>
             <div className='organization-admin-page-title'>
-                <div className='title'>组织架构</div>
+                <div className='title'>Org Chart</div>
                 <div
                     className='add-icon'
                     onClick={() => {
                         const m = showModal({
-                            title: "添加一级部门",
+                            title: "Add 1st Level Dept",
                             width: 600,
                             content: (
                                 <CreateOrganizationForm
@@ -847,7 +847,7 @@ const OrganizationAdminPage: React.FC<OrganizationAdminPageProps> = (props) => {
                                         m.destroy()
                                     }}
                                     refresh={(obj) => {
-                                        // 操作数据 仅动态添加一条
+                                        // Dynamic add single data operation
                                         if (obj) {
                                             setDepartment((origin) => [
                                                 {
@@ -910,7 +910,7 @@ const OrganizationAdminPage: React.FC<OrganizationAdminPageProps> = (props) => {
                                                 <Space>
                                                     <Popover
                                                         trigger={"click"}
-                                                        title={"修改名称"}
+                                                        title={"Edit name"}
                                                         content={
                                                             <Input
                                                                 size={"small"}
@@ -923,7 +923,7 @@ const OrganizationAdminPage: React.FC<OrganizationAdminPageProps> = (props) => {
                                                                             nodeData.pid
                                                                         )
                                                                     } else {
-                                                                        warn("不可为空")
+                                                                        warn("Cannot be empty")
                                                                     }
                                                                 }}
                                                             />
@@ -931,7 +931,7 @@ const OrganizationAdminPage: React.FC<OrganizationAdminPageProps> = (props) => {
                                                     >
                                                         <EditOutlined
                                                             onClick={(e) => {
-                                                                // 阻止冒泡
+                                                                // Prevent bubbling
                                                                 e?.stopPropagation()
                                                                 setSelectItemId(nodeData.key)
                                                             }}
@@ -939,14 +939,14 @@ const OrganizationAdminPage: React.FC<OrganizationAdminPageProps> = (props) => {
                                                         />
                                                     </Popover>
                                                     <Popconfirm
-                                                        title={"确定删除此项吗？不可恢复"}
+                                                        title={"Confirm item deletion? Irreversible"}
                                                         onConfirm={(e) => {
                                                             onRemove(nodeData.key, nodeData.pid)
                                                         }}
                                                     >
                                                         <DeleteOutlined
                                                             onClick={(e) => {
-                                                                // 阻止冒泡
+                                                                // Prevent bubbling
                                                                 e?.stopPropagation()
                                                                 setSelectItemId(nodeData.key)
                                                             }}
@@ -957,11 +957,11 @@ const OrganizationAdminPage: React.FC<OrganizationAdminPageProps> = (props) => {
                                                         <PlusOutlined
                                                             className='department-item-operation-add-icon'
                                                             onClick={(e) => {
-                                                                // 阻止冒泡
+                                                                // Prevent bubbling
                                                                 e?.stopPropagation()
                                                                 setSelectItemId(nodeData.key)
                                                                 const m = showModal({
-                                                                    title: "添加二级部门",
+                                                                    title: "Add 2nd Level Dept",
                                                                     width: 600,
                                                                     content: (
                                                                         <CreateOrganizationForm
@@ -1029,9 +1029,9 @@ interface ResetProps {
 }
 
 interface TreeReduceCountProps {
-    // 是否做减法-否则做加法
+    // Subtract? Otherwise, add
     reduce: boolean
-    // 改变对象
+    // Change object
     obj: any
 }
 interface SelectTitleProps {
@@ -1055,13 +1055,13 @@ const AccountAdminPage: React.FC<AccountAdminPageProps> = (props) => {
     })
     const [dataSource, setDataSource] = useState<API.UrmUserList[]>([])
     const [total, setTotal] = useState<number>()
-    // 编辑项信息
+    // Edit item info
     const [editInfo, setEditInfo] = useState<API.UrmUserList>()
     const [selectItemId, setSelectItemId,getSelectItemId] = useGetState<string | number>()
     const [selectTitle, setSelectTitle] = useState<SelectTitleProps>()
-    // 根据请求返回Total更改Count
+    // Total to Count based on request
     const [treeCount, setTreeCount] = useState<TreeCountProps>()
-    // 根据数据动态处理计算Count条数
+    // Dynamically process and calculate Count
     const [treeReduceCount, setTreeReduceCount] = useState<TreeReduceCountProps>({reduce: true, obj: {}})
     const {userInfo, setStoreUserInfo} = useStore()
     const update = (page?: number, limit?: number, addDepartmentId?: number) => {
@@ -1070,9 +1070,9 @@ const AccountAdminPage: React.FC<AccountAdminPageProps> = (props) => {
             page: page || 1,
             limit: limit || pagination.Limit
         }
-        // 处理无归属请求
+        // Handle unaffiliated request
         const id = getSelectItemId() === -1 ? 0 : getSelectItemId()
-        // 创建账号时用于更新组织架构数量
+        // Used to update org chart count on account creation
         const departmentId = addDepartmentId || id
         let filterObj: any = {
             ...params,
@@ -1091,14 +1091,14 @@ const AccountAdminPage: React.FC<AccountAdminPageProps> = (props) => {
             }
         })
             .then((res) => {
-                // 创建账号 更改组织架构count
+                // Create account change org count
                 if (addDepartmentId) {
                     setTreeCount({
                         id: addDepartmentId,
                         count: res.pagemeta.total
                     })
                 }
-                // 正常渲染Table
+                // Normal table render
                 else {
                     if (Array.isArray(res.data)) {
                         const newData = res.data.map((item) => ({...item}))
@@ -1116,7 +1116,7 @@ const AccountAdminPage: React.FC<AccountAdminPageProps> = (props) => {
                 }
             })
             .catch((err) => {
-                failed("获取账号列表失败：" + err)
+                failed("Get account list failed：" + err)
             })
             .finally(() => {
                 setTimeout(() => {
@@ -1148,9 +1148,9 @@ const AccountAdminPage: React.FC<AccountAdminPageProps> = (props) => {
             }
         })
             .then((res) => {
-                success("删除用户成功")
+                success("Delete user successful")
                 update()
-                // 如若是默认展示的所有数据进行删除处理
+                // Delete default displayed data
                 if (!selectItemId) {
                     let removeTool = {}
                     if (department_id) {
@@ -1171,7 +1171,7 @@ const AccountAdminPage: React.FC<AccountAdminPageProps> = (props) => {
                 }
             })
             .catch((err) => {
-                failed("删除账号失败：" + err)
+                failed("Delete account failed：" + err)
             })
             .finally(() => {})
     }
@@ -1189,13 +1189,13 @@ const AccountAdminPage: React.FC<AccountAdminPageProps> = (props) => {
                 update()
                 const {user_name, password} = res
                 const m = showModal({
-                    title: "账号信息",
+                    title: "Account info",
                     content: <ShowUserInfo user_name={user_name} password={password} onClose={() => m.destroy()} />
                 })
                 return m
             })
             .catch((err) => {
-                failed("重置账号失败：" + err)
+                failed("Reset account failed：" + err)
             })
             .finally(() => {})
     }
@@ -1234,21 +1234,21 @@ const AccountAdminPage: React.FC<AccountAdminPageProps> = (props) => {
                 }
                 const showData = unReadable(resultObj)
                 ipcRenderer.invoke("set-copy-clipboard", showData)
-                success("复制远程连接成功")
+                success("Copy remote link success")
             } else {
-                failed(`暂无最新连接信息，请该用户发起远程连接后再操作`)
+                failed(`No recent link info, ask user to initiate remote connection`)
             }
         })
         .catch((err) => {
             setLoading(false)
-                failed(`复制远程连接失败:${err}`)
+                failed(`Copy remote link failed:${err}`)
         })
         .finally(() => {})
     }
 
     const columns: ColumnsType<API.UrmUserList> = [
         {
-            title: "用户名",
+            title: "Username",
             dataIndex: "user_name",
             render: (text: string, record) => (
                 <div>
@@ -1258,7 +1258,7 @@ const AccountAdminPage: React.FC<AccountAdminPageProps> = (props) => {
             )
         },
         {
-            title: "组织架构",
+            title: "Org Chart",
             dataIndex: "department_name",
             render: (text, record) => {
                 return (
@@ -1270,16 +1270,16 @@ const AccountAdminPage: React.FC<AccountAdminPageProps> = (props) => {
             }
         },
         {
-            title: "角色",
+            title: "Role",
             dataIndex: "role_name"
         },
         {
-            title: "创建时间",
+            title: "Created time",
             dataIndex: "created_at",
             render: (text) => <span>{moment.unix(text).format("YYYY-MM-DD HH:mm")}</span>
         },
         {
-            title: "操作",
+            title: "Action",
             render: (i) => (
                 <Space>
                     <Button
@@ -1290,11 +1290,11 @@ const AccountAdminPage: React.FC<AccountAdminPageProps> = (props) => {
                             setUserInfoForm(true)
                         }}
                     >
-                        编辑
+                        Edit
                     </Button>
-                    <Popconfirm title={"确定要重置该用户密码吗？"} onConfirm={() => onReset(i.uid, i.user_name)}>
+                    <Popconfirm title={"Confirm reset user password?？"} onConfirm={() => onReset(i.uid, i.user_name)}>
                         <Button size='small' type="link">
-                            重置密码
+                            Reset password
                         </Button>
                     </Popconfirm>
                     <Button
@@ -1302,17 +1302,17 @@ const AccountAdminPage: React.FC<AccountAdminPageProps> = (props) => {
                         type="link"
                         onClick={() => copySecretKey(i.user_name)}
                     >
-                        复制远程连接
+                        Copy remote link
                     </Button>
                     <Popconfirm
-                        title={"确定删除该用户吗？"}
+                        title={"Confirm deletion of this user?？"}
                         onConfirm={() => {
                             onRemove([i.uid], i.department_id)
                         }}
                         placement="right"
                     >
                         <Button size={"small"} danger={true} type="link">
-                            删除
+                            Delete
                         </Button>
                     </Popconfirm>
                 </Space>
@@ -1325,7 +1325,7 @@ const AccountAdminPage: React.FC<AccountAdminPageProps> = (props) => {
             <div className='title-operation'>
                 <div className='filter'>
                     <Input.Search
-                        placeholder={"请输入用户名进行搜索"}
+                        placeholder={"Enter username to search"}
                         enterButton={true}
                         size={"small"}
                         style={{width: 200}}
@@ -1347,18 +1347,18 @@ const AccountAdminPage: React.FC<AccountAdminPageProps> = (props) => {
                     <Space>
                         {!!selectedRowKeys.length ? (
                             <Popconfirm
-                                title={"确定删除选择的用户吗？不可恢复"}
+                                title={"Confirm delete selected users? Irreversible"}
                                 onConfirm={() => {
                                     onRemove(selectedRowKeys)
                                 }}
                             >
                                 <Button type='primary' htmlType='submit' size='small'>
-                                    批量删除
+                                    Batch delete
                                 </Button>
                             </Popconfirm>
                         ) : (
                             <Button type='primary' size='small' disabled={true}>
-                                批量删除
+                                Batch delete
                             </Button>
                         )}
                         <Button
@@ -1370,7 +1370,7 @@ const AccountAdminPage: React.FC<AccountAdminPageProps> = (props) => {
                                 setUserInfoForm(!userInfoForm)
                             }}
                         >
-                            创建账号
+                            Create account
                         </Button>
                     </Space>
                 </div>
@@ -1401,7 +1401,7 @@ const AccountAdminPage: React.FC<AccountAdminPageProps> = (props) => {
                                     )}
                                 </>
                             ) : (
-                                "全部成员"
+                                "All members"
                             )}
                         </div>
                         <Table
@@ -1433,7 +1433,7 @@ const AccountAdminPage: React.FC<AccountAdminPageProps> = (props) => {
 
             <Modal
                 visible={userInfoForm}
-                title={editInfo ? "编辑账号" : "创建账号"}
+                title={editInfo ? "Edit account" : "Create account"}
                 destroyOnClose={true}
                 maskClosable={false}
                 bodyStyle={{padding: "10px 24px 24px 24px"}}
@@ -1445,14 +1445,14 @@ const AccountAdminPage: React.FC<AccountAdminPageProps> = (props) => {
                     editInfo={editInfo}
                     onCancel={() => setUserInfoForm(false)}
                     refresh={(id, oldId) => {
-                        // 当有 selectItemId 时count来源于表总数
+                        // Count from table total if selectCartItem
                         if (selectItemId) {
-                            // 解释：此处新增的话 重新计算新增的count
-                            // 编辑时如若更换组织架构则需要更新2处 自己与变动处
+                            // Explanation: recalculate added count
+                            // Update self and affected on org structure change
                             id === selectItemId ? update() : update(1, undefined, id)
                             id !== selectItemId && oldId && update()
                         } else {
-                            // 当没有 selectItemId 时count来源于加减法
+                            // Count from +/- when no selectItemId
                             update()
                             if (oldId) {
                                 if (oldId !== id) {

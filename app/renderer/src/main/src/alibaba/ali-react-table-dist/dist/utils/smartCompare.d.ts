@@ -1,9 +1,9 @@
-/** 比较函数，支持字符串、数字、数组和 null。
- * * 对于字符串将比较两者的字典序；
- * * 对数字将比较两者大小；
- * * null 值在比较时总是小于另一个值；
- * * 对于数组来说，将逐个比较数组中的元素，第一个不相等的比较结果将作为整个数组的比较结果
+/** Comparison function for strings, numbers, arrays, and null。
+ * * Strings are compared lexicographically；
+ * * Numbers are compared by size；
+ * * null is always considered less than any other value；
+ * * For arrays, compare elements one by one, the first unequal comparison result is the overall result
  *
- * 数组的比较可参考 python 中的元祖比较：
+ * Array comparison similar to Python tuple comparison：
  * https://stackoverflow.com/questions/5292303/how-does-tuple-comparison-work-in-python */
 export default function smartCompare(x: any, y: any): number;

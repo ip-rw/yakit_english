@@ -13,9 +13,9 @@ export interface CacheDataHistoryProps {
 }
 
 /**
- * 获取 cacheHistoryDataKey 对应的数据
+ * Get cacheHistoryDataKey data
  * @param {string} cacheHistoryDataKey
- * @returns {CacheDataHistoryProps} 对应的数据
+ * @returns {CacheDataHistoryProps} Corresponding data
  */
 export const onGetRemoteValuesBase: (cacheHistoryDataKey: string) => Promise<CacheDataHistoryProps> = (
     cacheHistoryDataKey
@@ -53,17 +53,17 @@ export const onGetRemoteValuesBase: (cacheHistoryDataKey: string) => Promise<Cac
                                   defaultValue: ""
                               }
                     } else {
-                        // 兼容以前 key 保存的数据
+                        // Compat previous key data
                         cacheData.defaultValue = newData
                     }
                     resolve(cacheData)
                 } catch (error) {
-                    yakitNotify("error", `${cacheHistoryDataKey}缓存字段转换数据出错:` + error)
+                    yakitNotify("error", `${cacheHistoryDataKey}Cache field convert error:` + error)
                     reject(error)
                 }
             })
             .catch((error) => {
-                yakitNotify("error", `${cacheHistoryDataKey}缓存字段转换数据出错:` + error)
+                yakitNotify("error", `${cacheHistoryDataKey}Cache field convert error:` + error)
                 reject(error)
             })
     })
@@ -72,13 +72,13 @@ export interface SetRemoteValuesBaseProps {
     cacheHistoryDataKey: string
     newValue: string
     cacheHistoryListLength?: number
-    /**是否缓存默认值 */
+    /**Cache default? */
     isCacheDefaultValue?: boolean
-    /**删除缓存选项 */
+    /**Delete cache option */
     delCacheValue?: string
 }
 /**
- * 缓存 cacheHistoryDataKey 对应的数据
+ * Cache cacheHistoryDataKey data
  * @param  {SetRemoteValuesBaseProps} params
  * @returns
  */
@@ -130,7 +130,7 @@ export const onSetRemoteValuesBase: (params: SetRemoteValuesBaseProps) => Promis
                     defaultValue: isCacheDefaultValue ? cacheHistory.defaultValue : ""
                 }
             } else {
-                // 删除缓存
+                // Delete cache
                 const newHistoryList = oldCacheHistoryData.options.filter((item) => item.value !== delCacheValue)
                 cacheData = {
                     options: newHistoryList,
@@ -146,7 +146,7 @@ export const onSetRemoteValuesBase: (params: SetRemoteValuesBaseProps) => Promis
                     resolve(cacheHistory)
                 })
                 .catch((e) => {
-                    yakitNotify("error", `${cacheHistoryDataKey}缓存字段保存数据出错:` + e)
+                    yakitNotify("error", `${cacheHistoryDataKey}Cache field save error:` + e)
                     reject(e)
                 })
         })

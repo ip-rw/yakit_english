@@ -3,7 +3,7 @@ import styles from "./ExpandAndRetract.module.scss"
 import {OutlineChevrondoubledownIcon, OutlineChevrondoubleupIcon} from "@/assets/icon/outline"
 import classNames from "classnames"
 
-/** 根据状态显示过度动画 */
+/** Show transition animation based on status */
 export type ExpandAndRetractExcessiveState = "default" | "process" | "finished" | "error" | "paused"
 interface ExpandAndRetractProps {
     onExpand: MouseEventHandler<HTMLDivElement>
@@ -11,7 +11,7 @@ interface ExpandAndRetractProps {
     children?: ReactNode
     className?: string
     animationWrapperClassName?: string
-    /**@description 默认/过程中/完成 根据状态显示过度动画 */
+    /**@default description/In process/Complete Show transition animation based on status */
     status?: ExpandAndRetractExcessiveState
 }
 export const ExpandAndRetract: React.FC<ExpandAndRetractProps> = React.memo((props) => {
@@ -33,12 +33,12 @@ export const ExpandAndRetract: React.FC<ExpandAndRetractProps> = React.memo((pro
                 {isExpand ? (
                     <>
                         <OutlineChevrondoubleupIcon className={styles["expand-and-retract-icon"]} />
-                        <span className={styles["expand-and-retract-header-icon-text"]}>收起参数</span>
+                        <span className={styles["expand-and-retract-header-icon-text"]}>Collapse Params</span>
                     </>
                 ) : (
                     <>
                         <OutlineChevrondoubledownIcon className={styles["expand-and-retract-icon"]} />
-                        <span className={styles["expand-and-retract-header-icon-text"]}>展开参数</span>
+                        <span className={styles["expand-and-retract-header-icon-text"]}>Expand Params</span>
                     </>
                 )}
             </div>

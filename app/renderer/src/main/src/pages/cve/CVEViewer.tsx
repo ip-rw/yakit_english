@@ -35,7 +35,7 @@ export const CVEViewer: React.FC<CVEViewerProp> = (props) => {
     const [params, setParams] = useState<QueryCVERequest>(defQueryCVERequest)
     const [advancedQuery, setAdvancedQuery] = useState<boolean>(true)
     const [loading, setLoading] = useState(false)
-    const [available, setAvailable] = useState(false) // cve数据库是否可用
+    const [available, setAvailable] = useState(false) // CVE DB Available
     useEffect(() => {
         onIsCVEDatabaseReady()
     }, [])
@@ -47,7 +47,7 @@ export const CVEViewer: React.FC<CVEViewerProp> = (props) => {
                 setAvailable(rsp.Ok)
             })
             .catch((err) => {
-                yakitFailed("IsCVEDatabaseReady失败：" + err)
+                yakitFailed("IsCVEDatabaseReady Failed：" + err)
             })
             .finally(() => setTimeout(() => setLoading(false), 200))
     })
@@ -76,7 +76,7 @@ export const CVEViewer: React.FC<CVEViewerProp> = (props) => {
 interface CVEQueryProp {
     defaultParams?: QueryCVERequest
     onChange?: (req: QueryCVERequest) => any
-    advancedQuery: boolean //是否开启高级查询
+    advancedQuery: boolean //Advanced Query Enabled
     setAdvancedQuery: (b: boolean) => void
 }
 export const defQueryCVERequest:QueryCVERequest = {
@@ -104,58 +104,58 @@ const CVEQuery: React.FC<CVEQueryProp> = (props) => {
     return (
         <div className={styles["cve-query"]}>
             <div className={styles["cve-query-heard"]}>
-                <span>高级查询</span>
+                <span>Advanced Query</span>
                 <YakitSwitch checked={advancedQuery} onChange={setAdvancedQuery} />
             </div>
             <div className={styles["cve-query-body"]}>
                 <div className={styles["cve-query-text"]}>
-                    <span>CVE 查询条件</span>
+                    <span>CVE Search Criteria</span>
                     <span
                         className={styles["cve-query-resetting"]}
                         onClick={() => {
                             setParams(defQueryCVERequest)
                         }}
                     >
-                        重置
+                        Reset
                     </span>
                 </div>
                 <div className={styles["cve-query-item"]}>
-                    <div>利用路径</div>
+                    <div>Exploit Path</div>
                     <YakitCheckableTagList
                         data={[
-                            {value: "NETWORK", label: "网络"},
-                            {value: "ADJACENT_NETWORK", label: "局域网"},
-                            {value: "LOCAL", label: "本地"},
-                            {value: "PHYSICAL", label: "物理"}
+                            {value: "NETWORK", label: "Network"},
+                            {value: "ADJACENT_NETWORK", label: "LAN"},
+                            {value: "LOCAL", label: "Local"},
+                            {value: "PHYSICAL", label: "Physical"}
                         ]}
                         value={params.AccessVector ? params.AccessVector.split(",") : []}
                         setValue={(AccessVector) => setParams({...params, AccessVector: AccessVector.join(",")})}
                     />
                 </div>
                 <div className={styles["cve-query-item"]}>
-                    <div>利用难度</div>
+                    <div>Exploit Difficulty</div>
                     <YakitCheckableTagList
                         setValue={(AccessComplexity) =>
                             setParams({...params, AccessComplexity: AccessComplexity.join(",")})
                         }
                         value={params.AccessComplexity ? params.AccessComplexity.split(",") : []}
                         data={[
-                            {value: "HIGH", label: "困难"},
-                            {value: "MEDIUM", label: "一般"},
-                            {value: "LOW", label: "容易"}
+                            {value: "HIGH", label: "Difficult"},
+                            {value: "MEDIUM", label: "Normal"},
+                            {value: "LOW", label: "Easy"}
                         ]}
                     />
                 </div>
                 <div className={styles["cve-query-item"]}>
-                    <div>漏洞级别</div>
+                    <div>Vulnerability Level</div>
                     <YakitCheckableTagList
                         setValue={(Severity) => setParams({...params, Severity: Severity.join(",")})}
                         value={params.Severity ? params.Severity.split(",") : []}
                         data={[
-                            {value: "CRITICAL", label: "严重"},
-                            {value: "HIGH", label: "高危"},
-                            {value: "MEDIUM", label: "中危"},
-                            {value: "LOW", label: "低危"}
+                            {value: "CRITICAL", label: "Severe"},
+                            {value: "HIGH", label: "High Risk"},
+                            {value: "MEDIUM", label: "Reply Complete"},
+                            {value: "LOW", label: "Low Risk"}
                         ]}
                     />
                 </div>

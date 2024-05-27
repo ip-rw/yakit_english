@@ -1,22 +1,22 @@
 import {HTTPResponseExtractor, HTTPResponseMatcher} from "./MatcherAndExtractionCardType"
 
-/**@name 过滤器模式 */
+/**@name Filter Mode */
 export const filterModeOptions = [
     {
         value: "drop",
-        label: "丢弃"
+        label: "Discard"
     },
     {
         value: "match",
-        label: "保留"
+        label: "Retain"
     },
     {
         value: "onlyMatch",
-        label: "仅匹配"
+        label: "Matches Only"
     }
 ]
 
-/**@name 条件关系 */
+/**@name Conditional Rel */
 export const matchersConditionOptions = [
     {
         value: "and",
@@ -52,19 +52,19 @@ export const defaultExtractorItem: HTTPResponseExtractor = {
 }
 
 export const matcherTypeList = [
-    {label: "关键字", value: "word"},
-    {label: "正则表达式", value: "regex"},
-    {label: "状态码", value: "status_code"},
-    {label: "十六进制", value: "binary"},
-    {label: "表达式", value: "expr"}
+    {label: "Keyword", value: "word"},
+    {label: "Regex", value: "regex"},
+    {label: "Status Code", value: "status_code"},
+    {label: "Hex", value: "binary"},
+    {label: "Expression", value: "expr"}
 ]
 
 export const extractorTypeList = [
-    {label: "正则表达式", value: "regex"},
+    {label: "Regex", value: "regex"},
     {label: "XPath", value: "xpath"},
-    {label: "键值对", value: "kval"},
+    {label: "Key-Value", value: "kval"},
     {label: "JQ(*)", value: "json"},
-    {label: "表达式", value: "nuclei-dsl"}
+    {label: "Expression", value: "nuclei-dsl"}
 ]
 
 export const defMatcherAndExtractionCode =

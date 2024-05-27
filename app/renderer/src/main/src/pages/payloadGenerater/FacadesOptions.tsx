@@ -77,13 +77,13 @@ export const FacadeOptions: React.FC<FacadeOptionsProp> = (props) => {
                             setParams({...params, IsRemote})
                         }}
                         value={params.IsRemote}
-                        label={"启用公网反连"}
+                        label={"Enable Public Callback"}
                     ></SwitchItem>
 
                     {params.IsRemote ? (
                         <>
                             <InputItem
-                                label={"Bridge地址"}
+                                label={"Bridge Addr"}
                                 value={params.BridgeParam.Addr}
                                 setValue={(BridgeAddr) => {
                                     params.BridgeParam.Addr = BridgeAddr
@@ -92,7 +92,7 @@ export const FacadeOptions: React.FC<FacadeOptionsProp> = (props) => {
                             />
                             <InputItem
                                 type='password'
-                                label={"密码"}
+                                label={"Password"}
                                 value={params.BridgeParam.Secret}
                                 setValue={(Secret) => {
                                     params.BridgeParam.Secret = Secret
@@ -100,7 +100,7 @@ export const FacadeOptions: React.FC<FacadeOptionsProp> = (props) => {
                                 }}
                             />
                             <InputInteger
-                                label={"反连端口"}
+                                label={"Callback Port"}
                                 setValue={(ReversePort) => {
                                     setParams({...params, ReversePort})
                                 }}
@@ -110,14 +110,14 @@ export const FacadeOptions: React.FC<FacadeOptionsProp> = (props) => {
                     ) : (
                         <>
                             <InputItem
-                                label={"反连地址"}
+                                label={"Callback Addr"}
                                 value={params.ReverseHost}
                                 setValue={(host) => {
                                     setParams({...params, ReverseHost: host})
                                 }}
                             />
                             <InputInteger
-                                label={"反连端口"}
+                                label={"Callback Port"}
                                 setValue={(ReversePort) => {
                                     setParams({...params, ReversePort})
                                 }}
@@ -128,7 +128,7 @@ export const FacadeOptions: React.FC<FacadeOptionsProp> = (props) => {
                     <Form.Item colon={false} label={""}>
                         <Button type='primary' htmlType='submit'>
                             {" "}
-                            启动FacadeServer{" "}
+                            Start FacadeServer{" "}
                         </Button>
                     </Form.Item>
                 </Form>
@@ -138,7 +138,7 @@ export const FacadeOptions: React.FC<FacadeOptionsProp> = (props) => {
             insertCallback={(template: string) => {
                 if (!template) {
                     Modal.warn({
-                        title: "Payload 为空 / Fuzz 模版为空"
+                        title: "Payload Empty / Fuzz Template is Empty"
                     })
                 } else {
                     if (reqEditor && template) {
@@ -147,7 +147,7 @@ export const FacadeOptions: React.FC<FacadeOptionsProp> = (props) => {
                         })
                     } else {
                         Modal.error({
-                            title: "BUG: 编辑器失效"
+                            title: "BUG: Editor Inactive"
                         })
                     }
                     m.destroy()

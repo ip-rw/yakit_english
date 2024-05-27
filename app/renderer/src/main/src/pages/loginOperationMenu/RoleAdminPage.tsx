@@ -44,11 +44,11 @@ const RoleOperationForm: React.FC<CreateUserFormProps> = (props) => {
     const [loading, setLoading] = useState<boolean>(false)
     const [treeLoadedKeys,setTreeLoadedKeys] = useState<any>([])
     const PluginType = {
-        yak: "YAK 插件",
-        mitm: "MITM 插件",
-        "packet-hack": "数据包扫描",
-        "port-scan": "端口扫描插件",
-        codec: "CODEC插件",
+        yak: "YAK Plugin",
+        mitm: "MITM Plugin",
+        "packet-hack": "Data Packet Scan",
+        "port-scan": "Port Scan Plugin",
+        codec: "CODEC Plugin",
         nuclei: "YAML POC"
     }
     const PluginTypeKeyArr: string[] = Object.keys(PluginType)
@@ -73,7 +73,7 @@ const RoleOperationForm: React.FC<CreateUserFormProps> = (props) => {
         })
     ]
     const [selectedAll, setSelectedAll] = useState<boolean>(false)
-     // 受控模式控制浮层
+     // Controlled Mode Overlay
      const [open, setOpen] = useState(false)
 
     useEffect(() => {
@@ -112,7 +112,7 @@ const RoleOperationForm: React.FC<CreateUserFormProps> = (props) => {
                     })
                 })
                 .catch((err) => {
-                    failed("失败：" + err)
+                    failed("Failure：" + err)
                 })
                 .finally(() => {
                     setTimeout(() => {
@@ -122,7 +122,7 @@ const RoleOperationForm: React.FC<CreateUserFormProps> = (props) => {
         }
     }, [])
 
-    // 保留数组中重复元素
+    // Keep duplicates in array
     const filterUnique = (arr) => arr.filter((i) => arr.indexOf(i) !== arr.lastIndexOf(i))
     const onFinish = useMemoizedFn((values) => {
         const {name, 
@@ -154,7 +154,7 @@ const RoleOperationForm: React.FC<CreateUserFormProps> = (props) => {
                 }
             })
             .catch((err) => {
-                failed("失败：" + err)
+                failed("Failure：" + err)
             })
             .finally(() => {
                 setTimeout(() => {
@@ -187,7 +187,7 @@ const RoleOperationForm: React.FC<CreateUserFormProps> = (props) => {
                     }
                 })
                 .catch((err) => {
-                    failed("失败：" + err)
+                    failed("Failure：" + err)
                 })
                 .finally(() => {
                     resolve(undefined)
@@ -246,7 +246,7 @@ const RoleOperationForm: React.FC<CreateUserFormProps> = (props) => {
                         }
                     }}
                 >
-                    全部
+                    Deselect
                 </Checkbox>
                 {originNode}
             </>
@@ -256,12 +256,12 @@ const RoleOperationForm: React.FC<CreateUserFormProps> = (props) => {
     return (
         <div style={{marginTop: 24}}>
             <Form {...layout} form={form} onFinish={onFinish}>
-                <Form.Item name='name' label='角色名' rules={[{required: true, message: "该项为必填"}]}>
-                    <Input placeholder='请输入角色名' allowClear />
+                <Form.Item name='name' label='Role Name' rules={[{required: true, message: "Required Field"}]}>
+                    <Input placeholder='Please enter role name' allowClear />
                 </Form.Item>
                 <Row>
                     <Col span={5}>
-                        <div style={{textAlign: "right", paddingTop: 4}}>操作权限：</div>
+                        <div style={{textAlign: "right", paddingTop: 4}}>Operational Permissions：</div>
                     </Col>
                     <Col span={16}>
                         <div style={{display: "flex"}}>
@@ -270,10 +270,10 @@ const RoleOperationForm: React.FC<CreateUserFormProps> = (props) => {
                                     {...itemLayout}
                                     name='checkPlugin'
                                     valuePropName='checked'
-                                    label='审核插件'
+                                    label='Audit Plugin'
                                     initialValue={false}
                                 >
-                                    <Switch onChange={setTreeSelect} checkedChildren='开' unCheckedChildren='关' />
+                                    <Switch onChange={setTreeSelect} checkedChildren='On' unCheckedChildren='Off' />
                                 </Form.Item>
                             </div>
 
@@ -282,10 +282,10 @@ const RoleOperationForm: React.FC<CreateUserFormProps> = (props) => {
                                     {...itemLayout}
                                     name='deletePlugin'
                                     valuePropName='checked'
-                                    label='插件删除'
+                                    label='Delete Plugin'
                                     initialValue={false}
                                 >
-                                    <Switch checkedChildren='开' unCheckedChildren='关' />
+                                    <Switch checkedChildren='On' unCheckedChildren='Off' />
                                 </Form.Item>
                             </div> */}
                         </div>
@@ -293,8 +293,8 @@ const RoleOperationForm: React.FC<CreateUserFormProps> = (props) => {
                 </Row>
                 <Form.Item
                     name='treeSelect'
-                    label='插件权限'
-                    rules={[{required: true, message: "该项为必填"}]}
+                    label='Plugin Permissions'
+                    rules={[{required: true, message: "Required Field"}]}
                     // initialValue={
                     //     ["port-scan"]
                     // }
@@ -304,7 +304,7 @@ const RoleOperationForm: React.FC<CreateUserFormProps> = (props) => {
                         treeDataSimpleMode
                         style={{width: "100%"}}
                         dropdownStyle={{maxHeight: 400, overflow: "auto"}}
-                        placeholder='请选择插件权限'
+                        placeholder='Please select plugin permissions'
                         treeCheckable={true}
                         onChange={onChange}
                         loadData={onLoadData}
@@ -312,7 +312,7 @@ const RoleOperationForm: React.FC<CreateUserFormProps> = (props) => {
                         allowClear
                         showCheckedStrategy='SHOW_PARENT'
                         maxTagCount={selectedAll ? 0 : 10}
-                        maxTagPlaceholder={(omittedValues)=>selectedAll ? "全部" : <>+ {omittedValues.length} ...</>}
+                        maxTagPlaceholder={(omittedValues)=>selectedAll ? "Deselect" : <>+ {omittedValues.length} ...</>}
                         dropdownRender={(originNode: React.ReactNode) => selectDropdown(originNode)}
                         open={open}
                         onDropdownVisibleChange={(visible) => setOpen(visible)}
@@ -327,7 +327,7 @@ const RoleOperationForm: React.FC<CreateUserFormProps> = (props) => {
                 
                 <div style={{textAlign: "center"}}>
                     <Button style={{width: 200}} type='primary' htmlType='submit' loading={loading}>
-                        确认
+                        Confirm
                     </Button>
                 </div>
             </Form>
@@ -356,7 +356,7 @@ const RoleAdminPage: React.FC<RoleAdminPageProps> = (props) => {
     })
     const [data, setData] = useState<API.RoleList[]>([])
     const [total, setTotal] = useState<number>(0)
-    // 编辑项信息
+    // Edit Item Info
     const [editInfo, setEditInfo] = useState<API.RoleList>()
     const update = (page?: number, limit?: number, order?: string, orderBy?: string) => {
         setLoading(true)
@@ -382,7 +382,7 @@ const RoleAdminPage: React.FC<RoleAdminPageProps> = (props) => {
                 }
             })
             .catch((err) => {
-                failed("获取角色列表失败：" + err)
+                failed("Failed to get role list：" + err)
             })
             .finally(() => {
                 setTimeout(() => {
@@ -410,18 +410,18 @@ const RoleAdminPage: React.FC<RoleAdminPageProps> = (props) => {
             }
         })
             .then((res) => {
-                success("删除角色成功")
+                success("Successfully deleted role")
                 update()
             })
             .catch((err) => {
-                failed("删除角色失败：" + err)
+                failed("Failed to delete role：" + err)
             })
             .finally(() => {})
     }
 
     const columns: ColumnsType<API.RoleList> = [
         {
-            title: "角色名",
+            title: "Role Name",
             dataIndex: "name",
             render: (text: string, record) => (
                 <div>
@@ -430,21 +430,21 @@ const RoleAdminPage: React.FC<RoleAdminPageProps> = (props) => {
             )
         },
         {
-            title: "操作权限",
+            title: "Operational Permissions",
             render: (text: string, record) => (
                 <div>
                     {!record.checkPlugin && "-"}
-                    {record.checkPlugin && <span style={{marginRight: 10}}>审核插件</span>}
+                    {record.checkPlugin && <span style={{marginRight: 10}}>Audit Plugin</span>}
                 </div>
             )
         },
         {
-            title: "创建时间",
+            title: "Creation Time",
             dataIndex: "createdAt",
             render: (text) => <span>{moment.unix(text).format("YYYY-MM-DD HH:mm")}</span>
         },
         {
-            title: "操作",
+            title: "Action",
             render: (i) => (
                 <Space>
                     <Button
@@ -455,17 +455,17 @@ const RoleAdminPage: React.FC<RoleAdminPageProps> = (props) => {
                             setRoleFormShow(true)
                         }}
                     >
-                        编辑
+                        Edit
                     </Button>
                     <Popconfirm
-                        title={"确定删除该角色吗？"}
+                        title={"Confirm delete this role?？"}
                         onConfirm={() => {
                             onRemove([i.id])
                         }}
                         placement="right"
                     >
                         <Button size={"small"} danger={true} type="link">
-                            删除
+                            Delete
                         </Button>
                     </Popconfirm>
                 </Space>
@@ -491,23 +491,23 @@ const RoleAdminPage: React.FC<RoleAdminPageProps> = (props) => {
                 title={(e) => {
                     return (
                         <div className='table-title'>
-                            <div className='tab-title'>角色管理</div>
+                            <div className='tab-title'>Role Mgmt</div>
                             <div className='operation'>
                                 <Space>
                                     {!!selectedRowKeys.length ? (
                                         <Popconfirm
-                                            title={"确定删除选择的角色吗？不可恢复"}
+                                            title={"Confirm delete selected role? Irreversible"}
                                             onConfirm={() => {
                                                 onRemove(selectedRowKeys)
                                             }}
                                         >
                                             <Button type='primary' htmlType='submit' size='small'>
-                                                批量删除
+                                                Batch Delete
                                             </Button>
                                         </Popconfirm>
                                     ) : (
                                         <Button type='primary' size='small' disabled={true}>
-                                            批量删除
+                                            Batch Delete
                                         </Button>
                                     )}
                                     <Button
@@ -519,7 +519,7 @@ const RoleAdminPage: React.FC<RoleAdminPageProps> = (props) => {
                                             setRoleFormShow(true)
                                         }}
                                     >
-                                        创建角色
+                                        Create Role
                                     </Button>
                                 </Space>
                             </div>
@@ -537,7 +537,7 @@ const RoleAdminPage: React.FC<RoleAdminPageProps> = (props) => {
             />
             <Modal
                 visible={roleFormShow}
-                title={editInfo ? "编辑角色" : "创建角色"}
+                title={editInfo ? "Edit Role" : "Create Role"}
                 destroyOnClose={true}
                 maskClosable={false}
                 bodyStyle={{padding: "10px 24px 24px 24px"}}

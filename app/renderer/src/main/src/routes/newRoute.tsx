@@ -139,175 +139,175 @@ const HTTPHacker = React.lazy(() => import("../pages/hacker/httpHacker"))
 const NewHome = React.lazy(() => import("@/pages/newHome/NewHome"))
 const WebFuzzerPage = React.lazy(() => import("@/pages/fuzzer/WebFuzzerPage/WebFuzzerPage"))
 
-/** 渲染端所有页面枚举 */
+/** Render All Pages Enum */
 export enum YakitRoute {
-    /** 首页 */
+    /** Homepage */
     NewHome = "new-home",
-    /** 手动渗透 */
+    /** Manual Penetration */
     HTTPHacker = "httpHacker",
     HTTPFuzzer = "httpFuzzer",
     WebsocketFuzzer = "websocket-fuzzer",
     Codec = "codec",
     DataCompare = "dataCompare",
-    /** 基础工具 */
+    /** Basic Tools */
     Mod_ScanPort = "scan-port",
     PoC = "poc",
     Plugin_OP = "plugin-op",
     Mod_Brute = "brute",
-    /** 插件 */
+    /** Plugin */
     Plugin_Store = "plugin-store",
     Plugin_Owner = "plugin-owner",
     Plugin_Local = "plugin-local",
     Plugin_Groups = "plugin-groups",
     BatchExecutorPage = "batch-executor-page-ex",
-    /** 反连 */
+    /** Reverse Shell */
     DNSLog = "dnslog",
     ICMPSizeLog = "icmp-sizelog",
     TCPPortLog = "tcp-portlog",
     PayloadGenerater_New = "PayloadGenerater_New",
     ReverseServer_New = "ReverseServer_New",
     ShellReceiver = "shellReceiver",
-    /** 数据库 */
+    /** Database */
     DB_HTTPHistory = "db-http-request",
     DB_Report = "db-reports-results",
     DB_Risk = "db-risks",
     DB_Ports = "db-ports",
     DB_Domain = "db-domains",
     DB_CVE = "cve",
-    /** 独立功能页面 */
-    // Yak-Runner页面
+    /** Stand-alone Function Page */
+    // Yak-Runner Page
     YakScript = "yakScript",
-    // Payload页面
+    // Payload Page
     PayloadManager = "payload-manager",
-    // 私有版用户管理
+    // Private User Management
     AccountAdminPage = "account-admin-page",
     RoleAdminPage = "role-admin-page",
     HoleCollectPage = "hole-collect-page",
     LicenseAdminPage = "license-admin-page",
-    // 公开版用户管理
+    // Public User Management
     TrustListPage = "trust-list-admin-page",
     PlugInAdminPage = "plug-in-admin-page",
-    // 远程管理
+    // Remote Mgmt
     ControlAdminPage = "control-admin-page",
-    // 插件批量页面中未完成页面的点击弹出页面
+    // Plugin Batch Incomplete Click Pop-up
     BatchExecutorRecover = "batch-executor-recover",
-    // http-history页面右键菜单"数据包扫描"生成页面
+    // http-history Right-click Menu"Data Packet Scan"Generate Page
     PacketScanPage = "packet-scan-page",
-    // 新建插件页面
+    // New Plugin Page
     AddYakitScript = "add-yakit-script",
-    // 编辑插件页面
+    // Edit Plugin Page
     ModifyYakitScript = "modify-yakit-script",
-    /** 简易版专属 */
+    /** Simple Exclusive */
     SimpleDetect = "simple-detect",
-    // 录屏管理器
+    // Screen Recorder Manager
     ScreenRecorderPage = "screen-recorder-page",
-    // 全局功能-试验性功能-BAS实验室
+    // Global Features-Experimental-BAS Lab
     DB_ChaosMaker = "db-chaosmaker",
-    // 调试插件的功能
+    // Debug Plugin Functions
     Beta_DebugPlugin = "beta-debug-plugin",
-    // 调试插件编辑器
+    // Debug Plugin Editor
     Beta_DebugTrafficAnalize = "**beta-debug-traffic-analize",
-    // 调试插件编辑器
+    // Debug Plugin Editor
     Beta_DebugMonacoEditor = "beta-debug-monaco-editor",
-    // 靶场调试
+    // Practice Range Debugging
     Beta_VulinboxManager = "beta-vulinbox-manager",
-    // 网络调试
+    // Network Debugging
     Beta_DiagnoseNetwork = "beta-diagnose-network",
-    // 配置全局
+    // Configure Global
     Beta_ConfigNetwork = "beta-config-network",
-    // 插件管理
+    // Plugin Mgmt
     Plugin_Audit = "plugin-audit",
-    // WebShell 管理
+    // WebShell Management
     Beta_WebShellManager = "beta-webshell-manager",
     Beta_WebShellOpt = "beta-webshell-opt",
-    // 数据统计
+    // Data Stats
     Data_Statistics = "data_statistics",
-    /**空间引擎 */
+    /**Space Engine */
     Space_Engine = "space-engine"
 }
 /**
- * @description 页面路由对应的页面信息
- * * label-页面名称
- * * describe(非必需)-页面描述语
+ * @description Page Route Info
+ * * label-Page Name
+ * * describe(Optional)-Page Description
  */
 export const YakitRouteToPageInfo: Record<YakitRoute, {label: string; describe?: string}> = {
-    "new-home": {label: "首页"},
+    "new-home": {label: "Homepage"},
     httpHacker: {
-        label: "MITM 交互式劫持",
-        describe: "安装 SSL/TLS 证书，劫持浏览器所有流量请求、响应数据包，提供手动劫持与被动扫描两种模式"
+        label: "MITM Interactive Hijacking",
+        describe: "Install SSL/TLS Certificate, Hijack All Traffic, Manual/Passive Mode"
     },
     httpFuzzer: {
         label: "Web Fuzzer",
-        describe: "通过核心模糊测试标签语法，实现了对 Burpsuite 的 Repeater 和 Intruder 的完美整合"
+        describe: "Fuzz Testing Integration Repeater and Intruder"
     },
     "websocket-fuzzer": {label: "Websocket Fuzzer"},
     codec: {
         label: "Codec",
-        describe: "可对数据进行各种处理（包括加密、解密、反序列化、Json 处理等等），还可通过插件自定义数据处理方法"
+        describe: "Data Processing (Encrypt, Decrypt, Deserialization, Json, etc.), Plugin Custom Methods"
     },
-    dataCompare: {label: "数据对比", describe: "将数据进行对比，快速识别不同处"},
+    dataCompare: {label: "Data Comparison", describe: "Quick Diff Data"},
     "scan-port": {
-        label: "端口/指纹扫描",
-        describe: "对 IP、IP段、域名等端口进行 SYN、指纹检测、可编写插件进行检测、满足更个性化等需求"
+        label: "Port/description: Fingerprint Scan",
+        describe: "SYN, Fingerprint Detection, Plugin for IP/Domain"
     },
-    poc: {label: "专项漏洞检测", describe: "通过预制漏洞源码，对特定目标进行专项漏洞检测，可以自定义新增 POC 种类"},
-    "plugin-op": {label: "插件"},
-    brute: {label: "弱口令检测", describe: "对目标的登录账号、密码等进行爆破，在爆破前会进行未授权检测"},
-    "plugin-store": {label: "插件商店", describe: "目前插件为6大类型，可根据需要灵活编写插件，支持从插件商店下载插件"},
-    "plugin-owner": {label: "我的插件"},
-    "plugin-local": {label: "本地插件"},
-    "plugin-groups": {label: "插件组管理"},
-    "batch-executor-page-ex": {label: "批量执行", describe: "自由选择需要的 POC 进行批量漏洞检测"},
-    dnslog: {label: "DNSLog", describe: "自动生成一个子域名，任何查询到这个子域名的 IP 被集合展示在列表中"},
-    "icmp-sizelog": {label: "ICMP-SizeLog", describe: "使用 ping 携带特定长度数据包判定 ICMP 反连"},
-    "tcp-portlog": {label: "TCP-PortLog", describe: "使用未开放的随机端口来判定 TCP 反连"},
-    PayloadGenerater_New: {label: "Yso-Java Hack", describe: "配置序列化 Payload 或恶意类"},
+    poc: {label: "Special Vulnerability Detection", describe: "Custom POC for Specific Target Vulnerability Scanning"},
+    "plugin-op": {label: "Plugin"},
+    brute: {label: "Weak-password detection", describe: "Password Brute-force, Pre-auth Check"},
+    "plugin-store": {label: "Plugin Store", describe: "Flexible Plugin Creation, Download from Store"},
+    "plugin-owner": {label: "My Plugins"},
+    "plugin-local": {label: "Local Plugins"},
+    "plugin-groups": {label: "Plugin group management"},
+    "batch-executor-page-ex": {label: "Batch execution", describe: "Select POCs for Bulk Vulnerability Scanning"},
+    dnslog: {label: "DNSLog", describe: "Auto-generated Subdomain, IP Listing"},
+    "icmp-sizelog": {label: "ICMP-SizeLog", describe: "Use ping with specific packet length to determine ICMP back connections"},
+    "tcp-portlog": {label: "TCP-PortLog", describe: "Determine TCP back-connect using a closed random port"},
+    PayloadGenerater_New: {label: "Yso-Java Hack", describe: "Config Serialize Payload/Malicious Class"},
     ReverseServer_New: {
-        label: "反连服务器",
-        describe: "使用协议端口复用技术，同时在一个端口同时实现 HTTP / RMI / HTTPS 等协议的反连"
+        label: "Reverse Connect Server",
+        describe: "Use protocol port multiplexing, achieve HTTP on a single port simultaneously / RMI / Reverse Connect over HTTPS and Other Protocols"
     },
     shellReceiver: {
-        label: "端口监听器",
-        describe: "反弹 Shell 接收工具，可以在服务器上开启一个端口，进行监听，并进行交互"
+        label: "Port Listener",
+        describe: "Reverse Shell receiving tool, opens a port on the server for listening and interaction"
     },
     "db-http-request": {label: "History"},
-    "db-reports-results": {label: "报告"},
-    "db-risks": {label: "漏洞"},
-    "db-ports": {label: "端口"},
-    "db-domains": {label: "域名"},
-    cve: {label: "CVE 管理"},
-    yakScript: {label: "Yak Runner", describe: "使用特有的 Yaklang 进行编程，直接调用引擎最底层能力 POC 种类"},
+    "db-reports-results": {label: "Reports"},
+    "db-risks": {label: "Vulnerability"},
+    "db-ports": {label: "Port"},
+    "db-domains": {label: "Domain"},
+    cve: {label: "CVE Management"},
+    yakScript: {label: "Yak Runner", describe: "Yaklang Programming, Direct Engine Access POC Types"},
     "payload-manager": {
         label: "Payload",
-        describe: "通过上传文件、手动删改等，自定义 Payload，可在爆破和 Web Fuzzer 中进行使用"
+        describe: "Custom Payload Upload/File Edit for Brute-force/Web Fuzzer"
     },
-    "account-admin-page": {label: "用户管理"},
-    "role-admin-page": {label: "角色管理"},
-    "hole-collect-page": {label: "漏洞汇总"},
-    "license-admin-page": {label: "License管理"},
-    "trust-list-admin-page": {label: "用户管理"},
-    "plug-in-admin-page": {label: "插件权限"},
-    "control-admin-page": {label: "远程管理"},
-    "batch-executor-recover": {label: "继续任务：批量执行插件"},
-    "packet-scan-page": {label: "数据包扫描"},
-    "add-yakit-script": {label: "新建插件"},
-    "modify-yakit-script": {label: "编辑插件"},
-    "simple-detect": {label: "安全检测"},
-    "screen-recorder-page": {label: "录屏管理"},
-    "db-chaosmaker": {label: "BAS实验室"},
-    "beta-debug-plugin": {label: "插件调试"},
-    "beta-debug-monaco-editor": {label: "插件编辑器"},
-    "beta-vulinbox-manager": {label: "Vulinbox 管理器"},
-    "beta-diagnose-network": {label: "网络异常诊断"},
-    "beta-config-network": {label: "全局配置"},
-    "plugin-audit": {label: "插件管理"},
-    "**beta-debug-traffic-analize": {label: "流量分析"},
-    "beta-webshell-manager": {label: "网站管理"},
-    "beta-webshell-opt": {label: "WebShell 实例"},
-    data_statistics: {label: "数据统计"},
-    "space-engine": {label: "空间引擎"}
+    "account-admin-page": {label: "User Mgmt"},
+    "role-admin-page": {label: "Role Mgmt"},
+    "hole-collect-page": {label: "Vulnerability Summary"},
+    "license-admin-page": {label: "License Mgmt"},
+    "trust-list-admin-page": {label: "User Mgmt"},
+    "plug-in-admin-page": {label: "Plugin Permissions"},
+    "control-admin-page": {label: "Remote Mgmt"},
+    "batch-executor-recover": {label: "Continue Task: Batch Execute Plugins"},
+    "packet-scan-page": {label: "Data Packet Scan"},
+    "add-yakit-script": {label: "Create Plugin"},
+    "modify-yakit-script": {label: "Edit Plugin"},
+    "simple-detect": {label: "Security Detection"},
+    "screen-recorder-page": {label: "Recording Mgmt"},
+    "db-chaosmaker": {label: "BAS Labs"},
+    "beta-debug-plugin": {label: "Plugin debugging"},
+    "beta-debug-monaco-editor": {label: "Plugin Editor"},
+    "beta-vulinbox-manager": {label: "Vulinbox Manager"},
+    "beta-diagnose-network": {label: "Network Diagnostic"},
+    "beta-config-network": {label: "Global Config"},
+    "plugin-audit": {label: "Plugin Mgmt"},
+    "**beta-debug-traffic-analize": {label: "Traffic Analysis"},
+    "beta-webshell-manager": {label: "Website Mgmt"},
+    "beta-webshell-opt": {label: "WebShell Example"},
+    data_statistics: {label: "Data Stats"},
+    "space-engine": {label: "Space Engine"}
 }
-/** 页面路由(无法多开的页面) */
+/** Single-instance Page Route) */
 export const SingletonPageRoute: YakitRoute[] = [
     YakitRoute.NewHome,
     YakitRoute.HTTPHacker,
@@ -345,7 +345,7 @@ export const SingletonPageRoute: YakitRoute[] = [
     YakitRoute.Beta_WebShellManager,
     YakitRoute.Data_Statistics
 ]
-/** 不需要软件安全边距的页面路由 */
+/** Page Route Without Software Margin */
 export const NoPaddingRoute: YakitRoute[] = [
     YakitRoute.PayloadGenerater_New,
     YakitRoute.ReverseServer_New,
@@ -379,99 +379,99 @@ export const NoPaddingRoute: YakitRoute[] = [
     YakitRoute.Mod_Brute,
     YakitRoute.SimpleDetect
 ]
-/** 无滚动条的页面路由 */
+/** No Scroll Page Route */
 export const NoScrollRoutes: YakitRoute[] = [YakitRoute.HTTPHacker, YakitRoute.Mod_Brute, YakitRoute.YakScript]
-/** 一级tab固定展示tab  */
+/** Fixed Primary Tabs  */
 export const defaultFixedTabs: YakitRoute[] = [YakitRoute.NewHome, YakitRoute.DB_HTTPHistory]
-/** 用户退出登录后，需自动关闭的页面 */
+/** Close Pages on User Logout */
 export const LogOutCloseRoutes: YakitRoute[] = [YakitRoute.Plugin_Audit, YakitRoute.Data_Statistics]
 
 export interface ComponentParams {
-    // 是否跳转到新开页面 默认跳转
+    // Open New Page by Default
     openFlag?: boolean
-    // Route.HTTPFuzzer 参数---start
+    // Route.HTTPFuzzer Args---start
     isHttps?: boolean
     isGmTLS?: boolean
     request?: string
     system?: string
     advancedConfigValue?: AdvancedConfigValueProps
     advancedConfigShow?: AdvancedConfigShowProps | null
-    // Route.HTTPFuzzer 参数---end
+    // Route.HTTPFuzzer Args---end
 
     // order?: string
-    /**@param id 页面唯一标识id HTTPFuzzer/SimpleDetect必须要有的，其他页面可以不用 */
+    /**@param id Unique Page ID HTTPFuzzer/SimpleDetect Mandatory */
     id?: string
-    /**@param groupId HTTPFuzzer必须要有的，其他页面可以不用 */
+    /**@param groupId Mandatory for HTTPFuzzer */
     groupId?: string
-    /**@name webFuzzer变量参数 */
+    /**@name webFuzzer Variable Args */
     params?: FuzzerParamItem[]
-    /**@name webFuzzer提取器参数 */
+    /**@name webFuzzer Extractor Args */
     extractors?: HTTPResponseExtractor[]
 
-    // Route.Mod_ScanPort 参数
+    // Route.Mod_ScanPort Args
     scanportParams?: string
 
-    // Route.Mod_Brute 参数
+    // Route.Mod_Brute Args
     bruteParams?: string
     recoverUid?: string
     recoverBaseProgress?: number
 
-    // Route.PacketScanPage 参数
+    // Route.PacketScanPage Args
     packetScan_FlowIds?: number[]
     packetScan_Https?: boolean
     packetScan_HttpRequest?: Uint8Array
     packetScan_Keyword?: string
 
-    // 分享的初始化参数
+    // Share Initialization Args
     shareContent?: string
 
-    // websocket fuzzer 相关
+    // websocket fuzzer Related
     wsTls?: boolean
     wsRequest?: Uint8Array
     wsToServer?: Uint8Array
 
-    // yakit 插件日志详情参数
+    // yakit Plugin Log Details Args
     YakScriptJournalDetailsId?: number
-    // facade server参数
+    // facade server Args
     facadeServerParams?: StartFacadeServerParams
     classGeneraterParams?: {[key: string]: any}
     classType?: string
 
-    // 简易企业版 - 安全检测
+    // Simple Enterprise Security Check
     recoverOnlineGroup?: string
     recoverTaskName?: string
 
-    // 数据对比
+    // Data Comparison
     leftData?: string
     rightData?: string
 
-    // 插件调试
+    // Plugin debugging
     generateYamlTemplate?: boolean
     YamlContent?: string
     scriptName?: string
-    // 新建插件
+    // Create Plugin
     moduleType?: string
     content?: string
 
-    // 编辑插件
+    // Edit Plugin
     editPluginId?: number
 
-    // 插件组类型
+    // Plugin Group Type
     pluginGroupType?: PluginGroupType
 
     // webshell info
     webshellInfo?: WebShellDetail
-    /**批量执行页面参数 */
+    /**Batch Execute Page Args */
     pluginBatchExecutorPageInfo?: PluginBatchExecutorPageInfoProps
-    /**专项漏洞页面 */
+    /**Special Vulnerability Page */
     pocPageInfo?: PocPageInfoProps
-    /**弱口令页面 */
+    /**Weak Password Page */
     brutePageInfo?: BrutePageInfoProps
-    /**端口扫描页面 */
+    /**Port Scan Page */
     scanPortPageInfo?: ScanPortPageInfoProps
-    /**空间引擎页面 */
+    /**Space Engine Page */
     spaceEnginePageInfo?: SpaceEnginePageInfoProps
-    /**简易版 安全检测页面 */
+    /**Simple Security Check Page */
     simpleDetectPageInfo?: SimpleDetectPageInfoProps
 }
 
@@ -481,11 +481,11 @@ function withRouteToPage(WrappedComponent) {
             <ErrorBoundary
                 FallbackComponent={({error, resetErrorBoundary}) => {
                     if (!error) {
-                        return <div>未知错误</div>
+                        return <div>Unknown Error</div>
                     }
                     return (
                         <div>
-                            <p>逻辑性崩溃，请关闭重试！</p>
+                            <p>Logical Crash, Please Retry！</p>
                             <pre>{error?.message}</pre>
                         </div>
                     )
@@ -532,7 +532,7 @@ export const RouteToPage: (props: PageItemProps) => ReactNode = (props) => {
         case YakitRoute.Mod_Brute:
             return <NewBrute id={params?.id || ""} />
         case YakitRoute.Plugin_Store:
-            // 社区版的插件商店不用判断登录,企业版/简易版的插件商店登录后才可查看
+            // Community Plugin Store No Login, Enterprise Version/Simple Plugin Store Login Required
             return (
                 <OnlineJudgment isJudgingLogin={!isCommunityEdition()}>
                     <PluginsOnline />
@@ -648,59 +648,59 @@ export const RouteToPage: (props: PageItemProps) => ReactNode = (props) => {
 
 export const RouteToPageItem = withRouteToPage(RouteToPage)
 
-/** @name 菜单中内定插件的插件名称(不是展示名称) */
+/** @name Plugin Name (Not Display Name) */
 export enum ResidentPluginName {
-    SubDomainCollection = "子域名收集",
-    BasicCrawler = "基础爬虫",
-    DirectoryScanning = "综合目录扫描与爆破"
+    SubDomainCollection = "Subdomain Collection",
+    BasicCrawler = "Basic Crawler",
+    DirectoryScanning = "Comprehensive Directory Scan and Brute-force"
 }
 
-/** @name 数据库一级菜单项属性 */
+/** @name DB Primary Menu Item Attributes */
 export interface DatabaseFirstMenuProps {
-    /** @name 一级菜单展示名 */
+    /** @name Primary Menu Display Name */
     Group: string
-    /** @name 二级菜单项集合 */
+    /** @name Secondary Menu Items Collection */
     Items: DatabaseSecondMenuProps[]
-    /** @name 一级菜单顺序位 */
+    /** @name Primary Menu Order */
     GroupSort: number
-    /** @name 菜单模式 */
+    /** @name Menu Mode */
     Mode: string
-    /** @name 一级菜单初始值 */
+    /** @name Primary Menu Initial Value */
     GroupLabel: string
 }
-/** @name 数据库二级菜单项属性 */
+/** @name DB Secondary Menu Item Attributes */
 export interface DatabaseSecondMenuProps {
-    /** @name 插件id */
+    /** @name Plugin ID */
     YakScriptId: number
-    /** @name 插件名称 */
+    /** @name Plugin Name */
     YakScriptName: string
-    /** @name 插件头像 */
+    /** @name Plugin Avatar */
     HeadImg?: string
-    /** @name 菜单模式 */
+    /** @name Menu Mode */
     Mode: string
-    /** @name 二级菜单顺序位 */
+    /** @name Secondary Menu Order */
     VerboseSort: number
-    /** @name 一级菜单顺序位 */
+    /** @name Primary Menu Order */
     GroupSort: number
-    /** @name 二级菜单路由 */
+    /** @name Secondary Menu Route */
     Route: string
-    /** @name 二级菜单展示名 */
+    /** @name Secondary Menu Display Name */
     Verbose: string
-    /** @name 二级菜单初始值 */
+    /** @name Secondary Menu Initial Value */
     VerboseLabel: string
-    /** @name 一级菜单展示名 */
+    /** @name Primary Menu Display Name */
     Group: string
-    /** @name 一级菜单初始值 */
+    /** @name Primary Menu Initial Value */
     GroupLabel: string
 }
 /**
- * @name 数据库转化的前端数据属性
- * @param route 菜单路由
- * @param label 菜单显示名称
- * @param menuName 菜单代码名(前端代码中定义的名)
- * @param pluginId 插件id
- * @param pluginName 插件名称
- * @param children 子集
+ * @name DB to Front-end Data Attribute
+ * @param route Menu Route
+ * @param label Menu Display Name
+ * @param menuName Menu Code Name)
+ * @param pluginId Plugin ID
+ * @param pluginName Plugin Name
+ * @param children Subsets
  */
 export interface DatabaseMenuItemProps {
     route: YakitRoute | undefined
@@ -711,7 +711,7 @@ export interface DatabaseMenuItemProps {
     HeadImg?: string
     children?: DatabaseMenuItemProps[]
 }
-/** @name 数据库菜单数据转换为前端数据 */
+/** @name DB Menu Data to Front-end Data */
 export const databaseConvertData = (data: DatabaseFirstMenuProps[]) => {
     const menus: DatabaseMenuItemProps[] = []
     for (let item of data) {
@@ -743,7 +743,7 @@ export const databaseConvertData = (data: DatabaseFirstMenuProps[]) => {
     return menus
 }
 
-/** public版菜单项属性 */
+/** Public Menu Item Properties */
 export interface PublicRouteMenuProps {
     page: YakitRoute | undefined
     label: string
@@ -753,13 +753,13 @@ export interface PublicRouteMenuProps {
     children?: PublicRouteMenuProps[]
 }
 /**
- * @name public版菜单配置数据
- * @description 注意! 该数据只在折叠菜单时使用，展开菜单的渲染并未使用该数据，如需调整展开菜单，请在组件MenuMode内修改
+ * @name Public Menu Config Data
+ * @description Note! Used Only in Collapsed Menu, Adjust Expanded Menu in MenuMode Component
  */
 export const PublicRouteMenu: PublicRouteMenuProps[] = [
     {
         page: undefined,
-        label: "渗透测试",
+        label: "Penetration Testing",
         children: [
             {
                 page: YakitRoute.HTTPHacker,
@@ -788,24 +788,24 @@ export const PublicRouteMenu: PublicRouteMenuProps[] = [
     },
     {
         page: undefined,
-        label: "安全工具",
+        label: "Security Tools",
         children: [
             {
                 page: YakitRoute.Mod_ScanPort,
                 ...YakitRouteToPageInfo[YakitRoute.Mod_ScanPort]
             },
             {page: YakitRoute.PoC, ...YakitRouteToPageInfo[YakitRoute.PoC]},
-            {page: YakitRoute.Plugin_OP, label: "子域名收集", yakScripName: ResidentPluginName.SubDomainCollection},
+            {page: YakitRoute.Plugin_OP, label: "Subdomain Collection", yakScripName: ResidentPluginName.SubDomainCollection},
             {
                 page: YakitRoute.Plugin_OP,
-                label: "基础爬虫",
+                label: "Basic Crawler",
                 yakScripName: ResidentPluginName.BasicCrawler,
-                describe: "通过爬虫可快速了解网站的整体架构"
+                describe: "Rapidly Understand Site Structure via Crawling"
             },
             {page: YakitRoute.Space_Engine, ...YakitRouteToPageInfo[YakitRoute.Space_Engine]},
             {
                 page: undefined,
-                label: "爆破与未授权检测",
+                label: "Brute Force & Unauthorized Detection",
                 children: [
                     {
                         page: YakitRoute.Mod_Brute,
@@ -813,9 +813,9 @@ export const PublicRouteMenu: PublicRouteMenuProps[] = [
                     },
                     {
                         page: YakitRoute.Plugin_OP,
-                        label: "目录扫描",
+                        label: "Directory Scanning",
                         yakScripName: ResidentPluginName.DirectoryScanning,
-                        describe: "带有内置字典的综合目录扫描与爆破"
+                        describe: "Comprehensive Directory Scan & Brute-Force with Built-In Dictionary"
                     }
                 ]
             }
@@ -823,7 +823,7 @@ export const PublicRouteMenu: PublicRouteMenuProps[] = [
     },
     {
         page: undefined,
-        label: "插件",
+        label: "Plugin",
         children: [
             {
                 page: YakitRoute.Plugin_Store,
@@ -845,11 +845,11 @@ export const PublicRouteMenu: PublicRouteMenuProps[] = [
     },
     {
         page: undefined,
-        label: "反连",
+        label: "Reverse Shell",
         children: [
             {
                 page: undefined,
-                label: "反连触发器",
+                label: "Reverse Shell Trigger",
                 children: [
                     {
                         page: YakitRoute.DNSLog,
@@ -887,7 +887,7 @@ export const PublicRouteMenu: PublicRouteMenuProps[] = [
     },
     {
         page: undefined,
-        label: "数据库",
+        label: "Database",
         children: [
             {
                 page: YakitRoute.DB_HTTPHistory,
@@ -902,35 +902,35 @@ export const PublicRouteMenu: PublicRouteMenuProps[] = [
     }
 ]
 /**
- * @name public版常用插件列表
- * @description 注意！该列表内保存的都为插件的名称
+ * @name Public Common Plugins List
+ * @description Note! Saves Plugin Names
  */
 export const PublicCommonPlugins: PublicRouteMenuProps[] = [
     {
         page: undefined,
-        label: "基础工具",
+        label: "Basic Tools",
         children: [
-            "web登录页面用户名密码爆破",
-            "基础爬虫",
-            "字典生成器",
-            "无头浏览器模拟点击爬虫",
-            "综合目录扫描与爆破",
-            "fuzztag表格生成",
-            "按行去重"
+            "Web Login Username Password Brute-force",
+            "Basic Crawler",
+            "Dict Generator",
+            "Headless Browser Click Crawling",
+            "Comprehensive Directory Scan and Brute-force",
+            "fuzztag Table Generation",
+            "Deduplicate by Line"
         ].map((item) => {
             return {page: YakitRoute.Plugin_OP, label: item, yakScripName: item}
         })
     },
     {
         page: undefined,
-        label: "子域名收集",
-        children: ["子域名收集&漏洞扫描", "IP批量查询", "主动指纹探测", "ICP备案查询", "瞅一下"].map((item) => {
+        label: "Subdomain Collection",
+        children: ["Subdomain Collect & Vuln Scan", "IP Batch Query", "Active Fingerprint Detection", "ICP Record Query", "Take a Peek"].map((item) => {
             return {page: YakitRoute.Plugin_OP, label: item, yakScripName: item}
         })
     }
 ]
 
-/** private版菜单项属性 */
+/** Private Menu Item Properties */
 export interface PrivateRouteMenuProps {
     page: YakitRoute | undefined
     label: string
@@ -941,51 +941,51 @@ export interface PrivateRouteMenuProps {
     yakScripName?: string
     children?: PrivateRouteMenuProps[]
 }
-/** 软件内定插件菜单的icon */
+/** Default Plugin Menu Icon */
 export const getFixedPluginIcon = (name: string) => {
     switch (name) {
-        case "基础爬虫":
+        case "Basic Crawler":
             return <PrivateOutlineBasicCrawlerIcon />
-        case "子域名收集":
+        case "Subdomain Collection":
             return <PrivateOutlineSubDomainCollectionIcon />
-        case "综合目录扫描与爆破":
+        case "Comprehensive Directory Scan and Brute-force":
             return <PrivateOutlineDirectoryScanningIcon />
         default:
             return <PrivateOutlineDefaultPluginIcon />
     }
 }
-/** 软件内定插件菜单的hover-icon */
+/** Default Plugin Menu hover-icon */
 export const getFixedPluginHoverIcon = (name: string) => {
     switch (name) {
-        case "基础爬虫":
+        case "Basic Crawler":
             return <PrivateSolidBasicCrawlerIcon />
-        case "子域名收集":
+        case "Subdomain Collection":
             return <PrivateSolidSubDomainCollectionIcon />
-        case "综合目录扫描与爆破":
+        case "Comprehensive Directory Scan and Brute-force":
             return <PrivateSolidDirectoryScanningIcon />
         default:
             return <PrivateSolidDefaultPluginIcon />
     }
 }
-/** 软件内定插件菜单的describe */
+/** Default Plugin Menu Describe */
 export const getFixedPluginDescribe = (name: string) => {
     switch (name) {
-        case "基础爬虫":
-            return "通过爬虫可快速了解网站的整体架构"
-        case "空间引擎集成版本":
+        case "Basic Crawler":
+            return "Rapidly Understand Site Structure via Crawling"
+        case "Space Engine Integrated Version":
             return ""
-        case "子域名收集":
+        case "Subdomain Collection":
             return ""
-        case "综合目录扫描与爆破":
-            return "带有内置字典的综合目录扫描与爆破"
+        case "Comprehensive Directory Scan and Brute-force":
+            return "Comprehensive Directory Scan & Brute-Force with Built-In Dictionary"
         default:
             return ""
     }
 }
 
 /**
- * @name 可以配置和展示的菜单项
- * @description 主要使用-编辑菜单中的系统功能列表
+ * @name Configurable and Displayable Menu Items
+ * @description Main Use-Edit Menu System Function List
  */
 export const PrivateAllMenus: Record<string, PrivateRouteMenuProps> = {
     [YakitRoute.HTTPHacker]: {
@@ -1139,7 +1139,7 @@ export const PrivateAllMenus: Record<string, PrivateRouteMenuProps> = {
         ...YakitRouteToPageInfo[YakitRoute.Space_Engine]
     }
 }
-// 通过传入的 YakitRoute数组 快速生成页面数据数组
+// YakitRoute Array for Quick Page Array
 const routeToChildren: (route: (YakitRoute | ResidentPluginName)[]) => PrivateRouteMenuProps[] = (route) => {
     const menus: PrivateRouteMenuProps[] = []
     for (let name of route) {
@@ -1148,39 +1148,39 @@ const routeToChildren: (route: (YakitRoute | ResidentPluginName)[]) => PrivateRo
     return menus
 }
 /**
- * @name 强制删除用户端的无效一级菜单项集合
- * @description 该菜单数据为开发者迭代版本所产生的已消失的一级菜单项
- * @description 每个菜单项由 '|' 字符进行分割
+ * @name Force Remove Invalid Primary Menu Items
+ * @description Lost Primary Menu Items from Developer Iteration
+ * @description Each Menu Item by '|' Split by Character
  */
 export const InvalidFirstMenuItem = isCommunityEdition()
     ? CommunityDeprecatedFirstMenu.join("|")
     : EnterpriseDeprecatedFirstMenu.join("|")
 /**
- * @name 强制删除用户端的无效菜单项集合
- * @description 该菜单数据为开发者迭代版本所产生的已消失的页面菜单项
- * @description 每个菜单项由 '|' 字符进行分割
+ * @name Force Remove Invalid Menu Items
+ * @description Menu Data from Developer Iteration Lost Items
+ * @description Each Menu Item by '|' Split by Character
  */
 export const InvalidPageMenuItem = isCommunityEdition()
     ? CommunityDeprecatedSecondMenu.join("|")
     : EnterpriseDeprecatedSecondMenu.join("|")
 /**
- * @name private版专家模式菜单配置数据
- * @description 修改只对专家模式有效，别的模式需取对应模式数据进行修改
+ * @name Private Expert Mode Menu Data
+ * @description Edit Effective Only in Expert Mode
  */
 export const PrivateExpertRouteMenu: PrivateRouteMenuProps[] = [
     {
         page: undefined,
-        label: "手工渗透",
+        label: "Manual Penetration",
         children: routeToChildren([YakitRoute.HTTPHacker, YakitRoute.HTTPFuzzer, YakitRoute.WebsocketFuzzer])
     },
     {
         page: undefined,
-        label: "安全工具",
+        label: "Security Tools",
         children: [
             PrivateAllMenus[YakitRoute.Mod_Brute],
             {
                 page: YakitRoute.Plugin_OP,
-                label: "基础爬虫",
+                label: "Basic Crawler",
                 icon: getFixedPluginIcon(ResidentPluginName.BasicCrawler),
                 hoverIcon: getFixedPluginHoverIcon(ResidentPluginName.BasicCrawler),
                 describe: getFixedPluginDescribe(ResidentPluginName.BasicCrawler),
@@ -1190,7 +1190,7 @@ export const PrivateExpertRouteMenu: PrivateRouteMenuProps[] = [
             PrivateAllMenus[YakitRoute.Mod_ScanPort],
             {
                 page: YakitRoute.Plugin_OP,
-                label: "子域名收集",
+                label: "Subdomain Collection",
                 icon: getFixedPluginIcon(ResidentPluginName.SubDomainCollection),
                 hoverIcon: getFixedPluginHoverIcon(ResidentPluginName.SubDomainCollection),
                 describe: getFixedPluginDescribe(ResidentPluginName.SubDomainCollection),
@@ -1198,7 +1198,7 @@ export const PrivateExpertRouteMenu: PrivateRouteMenuProps[] = [
             },
             {
                 page: YakitRoute.Plugin_OP,
-                label: "目录扫描",
+                label: "Directory Scanning",
                 icon: getFixedPluginIcon(ResidentPluginName.DirectoryScanning),
                 hoverIcon: getFixedPluginHoverIcon(ResidentPluginName.DirectoryScanning),
                 describe: getFixedPluginDescribe(ResidentPluginName.DirectoryScanning),
@@ -1208,12 +1208,12 @@ export const PrivateExpertRouteMenu: PrivateRouteMenuProps[] = [
     },
     {
         page: undefined,
-        label: "专项漏洞检测",
+        label: "Special Vulnerability Detection",
         children: routeToChildren([YakitRoute.PoC])
     },
     {
         page: undefined,
-        label: "插件",
+        label: "Plugin",
         children: routeToChildren([
             YakitRoute.Plugin_Store,
             YakitRoute.Plugin_Owner,
@@ -1223,7 +1223,7 @@ export const PrivateExpertRouteMenu: PrivateRouteMenuProps[] = [
     },
     {
         page: undefined,
-        label: "反连",
+        label: "Reverse Shell",
         children: routeToChildren([
             YakitRoute.ShellReceiver,
             YakitRoute.ReverseServer_New,
@@ -1235,12 +1235,12 @@ export const PrivateExpertRouteMenu: PrivateRouteMenuProps[] = [
     },
     {
         page: undefined,
-        label: "数据处理",
+        label: "Data Processing",
         children: routeToChildren([YakitRoute.Codec, YakitRoute.DataCompare])
     },
     {
         page: undefined,
-        label: "数据库",
+        label: "Database",
         children: routeToChildren([
             YakitRoute.DB_Report,
             YakitRoute.DB_Ports,
@@ -1252,18 +1252,18 @@ export const PrivateExpertRouteMenu: PrivateRouteMenuProps[] = [
     }
 ]
 /**
- * @name private版扫描模式菜单配置数据
- * @description 修改只对扫描模式有效，别的模式需取对应模式数据进行修改
+ * @name Private Scanning Mode Menu Data
+ * @description Edit Effective Only in Scanning Mode
  */
 export const PrivateScanRouteMenu: PrivateRouteMenuProps[] = [
     {
         page: undefined,
-        label: "安全工具",
+        label: "Security Tools",
         children: [
             PrivateAllMenus[YakitRoute.Mod_Brute],
             {
                 page: YakitRoute.Plugin_OP,
-                label: "基础爬虫",
+                label: "Basic Crawler",
                 icon: getFixedPluginIcon(ResidentPluginName.BasicCrawler),
                 hoverIcon: getFixedPluginHoverIcon(ResidentPluginName.BasicCrawler),
                 describe: getFixedPluginDescribe(ResidentPluginName.BasicCrawler),
@@ -1273,7 +1273,7 @@ export const PrivateScanRouteMenu: PrivateRouteMenuProps[] = [
             PrivateAllMenus[YakitRoute.Mod_ScanPort],
             {
                 page: YakitRoute.Plugin_OP,
-                label: "子域名收集",
+                label: "Subdomain Collection",
                 icon: getFixedPluginIcon(ResidentPluginName.SubDomainCollection),
                 hoverIcon: getFixedPluginHoverIcon(ResidentPluginName.SubDomainCollection),
                 describe: getFixedPluginDescribe(ResidentPluginName.SubDomainCollection),
@@ -1281,7 +1281,7 @@ export const PrivateScanRouteMenu: PrivateRouteMenuProps[] = [
             },
             {
                 page: YakitRoute.Plugin_OP,
-                label: "目录扫描",
+                label: "Directory Scanning",
                 icon: getFixedPluginIcon(ResidentPluginName.DirectoryScanning),
                 hoverIcon: getFixedPluginHoverIcon(ResidentPluginName.DirectoryScanning),
                 describe: getFixedPluginDescribe(ResidentPluginName.DirectoryScanning),
@@ -1291,12 +1291,12 @@ export const PrivateScanRouteMenu: PrivateRouteMenuProps[] = [
     },
     {
         page: undefined,
-        label: "专项漏洞检测",
+        label: "Special Vulnerability Detection",
         children: routeToChildren([YakitRoute.PoC])
     },
     {
         page: undefined,
-        label: "插件",
+        label: "Plugin",
         children: routeToChildren([
             YakitRoute.Plugin_Store,
             YakitRoute.Plugin_Owner,
@@ -1306,12 +1306,12 @@ export const PrivateScanRouteMenu: PrivateRouteMenuProps[] = [
     },
     {
         page: undefined,
-        label: "数据处理",
+        label: "Data Processing",
         children: routeToChildren([YakitRoute.Codec, YakitRoute.DataCompare])
     },
     {
         page: undefined,
-        label: "数据库",
+        label: "Database",
         children: routeToChildren([
             YakitRoute.DB_Report,
             YakitRoute.DB_Ports,
@@ -1323,14 +1323,14 @@ export const PrivateScanRouteMenu: PrivateRouteMenuProps[] = [
     }
 ]
 /**
- * @name private版简易版菜单配置数据
- * @description !注意 简易版暂时不能进行菜单编辑,开放编辑请参考专家或扫描模式的菜单数据结构
- * @description 修改只对简易版有效，别的模式需取对应模式数据进行修改
+ * @name Private Simple Mode Menu Data
+ * @description !Note Simple Mode No Menu Editing
+ * @description Edit Effective Only in Simple Mode
  */
 export const PrivateSimpleRouteMenu: PrivateRouteMenuProps[] = [
     {
         page: undefined,
-        label: "安全检测",
+        label: "Security Detection",
         children: [
             {
                 page: YakitRoute.SimpleDetect,
@@ -1342,7 +1342,7 @@ export const PrivateSimpleRouteMenu: PrivateRouteMenuProps[] = [
     },
     {
         page: undefined,
-        label: "插件",
+        label: "Plugin",
         children: [
             {
                 page: YakitRoute.Plugin_Store,
@@ -1372,7 +1372,7 @@ export const PrivateSimpleRouteMenu: PrivateRouteMenuProps[] = [
     },
     {
         page: undefined,
-        label: "数据库",
+        label: "Database",
         children: [
             {
                 page: YakitRoute.DB_Report,

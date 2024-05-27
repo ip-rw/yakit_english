@@ -73,7 +73,7 @@ export const RenderFuzzerSequence: React.FC<RenderFuzzerSequenceProps> = React.m
         updateRender(selectGroupId)
     }, [type, selectGroupId])
     const updateRender = useMemoizedFn((id: string) => {
-        // 控制渲染
+        // Control Rendering
         if (getPageSequenceRenderList(id)) return
         if (type === "sequence" && id !== "0") {
             setPageSequenceRenderList(id, true)

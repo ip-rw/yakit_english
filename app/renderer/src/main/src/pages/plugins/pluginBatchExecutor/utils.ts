@@ -10,7 +10,7 @@ interface HybridScanTaskFilter {
     FromId?: number
     UntilId?: number
     HybridScanTaskSource?: HybridScanTaskSourceType[]
-    /**前端 Status 目前是单选，这个字段前端使用 */
+    /**Frontend Status Currently Single Selection, Field Used in Frontend */
     StatusType?: string
 }
 export interface QueryHybridScanTaskRequest {
@@ -24,7 +24,7 @@ export interface QueryHybridScanTaskResponse {
     Total: number
 }
 
-/**插件批量执行任务列表 */
+/**Bulk Plugin Task Execution List */
 export const apiQueryHybridScanTask: (query: QueryHybridScanTaskRequest) => Promise<QueryHybridScanTaskResponse> = (
     query
 ) => {
@@ -33,7 +33,7 @@ export const apiQueryHybridScanTask: (query: QueryHybridScanTaskRequest) => Prom
             .invoke("QueryHybridScanTask", query)
             .then(resolve)
             .catch((e) => {
-                yakitNotify("error", "获取任务列表失败:" + e)
+                yakitNotify("error", "Failed to Retrieve Task List:" + e)
                 reject(e)
             })
     })
@@ -46,14 +46,14 @@ export interface DeleteHybridScanTaskRequest {
     DeleteAll?: boolean
     Filter: HybridScanTaskFilter
 }
-/**插件批量执行任务 删除接口 */
+/**Bulk Plugin Tasks Delete Interface */
 export const apiDeleteHybridScanTask: (query: DeleteHybridScanTaskRequest) => Promise<null> = (query) => {
     return new Promise((resolve, reject) => {
         ipcRenderer
             .invoke("DeleteHybridScanTask", query)
             .then(resolve)
             .catch((e) => {
-                yakitNotify("error", "删除任务列表失败:" + e)
+                yakitNotify("error", "Failed to Delete Task List:" + e)
                 reject(e)
             })
     })

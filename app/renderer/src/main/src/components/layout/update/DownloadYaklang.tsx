@@ -24,32 +24,32 @@ interface DownloadYaklangProps {
     onCancel: () => any
 }
 
-/** @name Yaklang引擎更新下载弹窗 */
+/** @Name Yaklang Engine Update Prompt */
 export const DownloadYaklang: React.FC<DownloadYaklangProps> = React.memo((props) => {
     const {yaklangSpecifyVersion, system, visible, onCancel} = props
 
-    /** 常见问题弹窗是否展示 */
+    /** FAQ Popup Displayed? */
     const [qsShow, setQSShow] = useState<boolean>(false)
 
-    /** 是否置顶 */
+    /** Pin to Top? */
     const [isTop, setIsTop] = useState<0 | 1 | 2>(0)
 
     const [disabled, setDisabled] = useState(true)
     const [bounds, setBounds] = useState({left: 0, top: 0, bottom: 0, right: 0})
     const draggleRef = useRef<HTMLDivElement>(null)
 
-    /** 远端yaklang引擎版本 */
+    /** Remote Yaklang Version */
     const yakLangVersion = useRef<string>("")
-    /** 下载进度条数据 */
+    /** Download Progress Data */
     const [downloadProgress, setDownloadProgress, getDownloadProgress] = useGetState<DownloadingState>()
 
-    // 是否中断下载进程
+    // Interrupt Download?
     const isBreakRef = useRef<boolean>(false)
-    // 执行中途是否失败
+    // Execution Failure?
     const [isFailed, setIsFailed] = useState<boolean>(false)
 
     const fetchVersion = useMemoizedFn(() => {
-        let isTry: boolean = false // 是否需要重试
+        let isTry: boolean = false // Need to Retry?
 
         setIsFailed(false)
         setDownloadProgress(undefined)
@@ -61,7 +61,7 @@ export const DownloadYaklang: React.FC<DownloadYaklangProps> = React.memo((props
             })
             .catch((e: any) => {
                 if (isBreakRef.current) return
-                failed(`获取引擎最新版本失败 ${e}`)
+                failed(`Failed to Get Latest Engine Version ${e}`)
                 setIsFailed(true)
                 isTry = true
             })
@@ -78,7 +78,7 @@ export const DownloadYaklang: React.FC<DownloadYaklangProps> = React.memo((props
             .then(() => {
                 if (isBreakRef.current) return
 
-                success("下载完毕")
+                success("Download Complete")
                 if (!getDownloadProgress()?.size) return
                 setDownloadProgress({
                     time: {
@@ -90,21 +90,21 @@ export const DownloadYaklang: React.FC<DownloadYaklangProps> = React.memo((props
                     // @ts-ignore
                     size: getDownloadProgress().size
                 })
-                // 清空主进程yaklang版本缓存
+                // Clear Main Process Yaklang Cache
                 ipcRenderer.invoke("clear-local-yaklang-version-cache")
                 onUpdate()
             })
             .catch((e: any) => {
                 if (isBreakRef.current) return
-                failed(`引擎下载失败: ${e}`)
+                failed(`Engine Download Failed: ${e}`)
                 setDownloadProgress(undefined)
                 setIsFailed(true)
             })
     }
 
     /**
-     * 1. 获取引擎版本号(版本号内带有'v'字符)，并下载
-     * 2. 监听本地下载引擎进度数据
+     * 1. Get Engine Version (Includes'v'Characters) and Download
+     * 2. Monitor Local Download Progress
      */
     useEffect(() => {
         if (visible) {
@@ -130,23 +130,23 @@ export const DownloadYaklang: React.FC<DownloadYaklangProps> = React.memo((props
         }
     }, [visible])
 
-    /** 立即更新 */
+    /** Update Now */
     const onUpdate = useMemoizedFn(() => {
         if (isBreakRef.current) return
         ipcRenderer
             .invoke("install-yak-engine", yakLangVersion.current)
             .then(() => {
-                success(`安装成功，如未生效，重启 ${getReleaseEditionName()} 即可`)
+                success(`Installation Successful, Restart if Not Effective ${getReleaseEditionName()} Then`)
             })
             .catch((err: any) => {
-                failed(`安装失败: ${err.message.indexOf("operation not permitted") > -1 ? "请关闭引擎后重试" : err}`)
+                failed(`Installation Failed: ${err.message.indexOf("operation not permitted") > -1 ? "Please Close Engine and Retry" : err}`)
             })
             .finally(() => {
                 onClose()
             })
     })
 
-    /** 弹窗拖拽移动触发事件 */
+    /** Popup Drag Event */
     const onStart = useMemoizedFn((_event: DraggableEvent, uiData: DraggableData) => {
         const {clientWidth, clientHeight} = window.document.documentElement
         const targetRect = draggleRef.current?.getBoundingClientRect()
@@ -207,7 +207,7 @@ export const DownloadYaklang: React.FC<DownloadYaklangProps> = React.memo((props
 
                             <div className={styles["hint-right-wrapper"]}>
                                 <div className={styles["hint-right-download"]}>
-                                    <div className={styles["hint-right-title"]}>Yaklang 引擎下载中...</div>
+                                    <div className={styles["hint-right-title"]}>Yaklang Engine Downloading...</div>
                                     <div className={styles["download-progress"]}>
                                         <Progress
                                             strokeColor='#F28B44'
@@ -216,15 +216,15 @@ export const DownloadYaklang: React.FC<DownloadYaklangProps> = React.memo((props
                                         />
                                     </div>
                                     <div className={styles["download-info-wrapper"]}>
-                                        <div>剩余时间 : {(downloadProgress?.time.remaining || 0).toFixed(2)}s</div>
+                                        <div>Remaining Time : {(downloadProgress?.time.remaining || 0).toFixed(2)}s</div>
                                         <div className={styles["divider-wrapper"]}>
                                             <div className={styles["divider-style"]}></div>
                                         </div>
-                                        <div>耗时 : {(downloadProgress?.time.elapsed || 0).toFixed(2)}s</div>
+                                        <div>Duration : {(downloadProgress?.time.elapsed || 0).toFixed(2)}s</div>
                                         <div className={styles["divider-wrapper"]}>
                                             <div className={styles["divider-style"]}></div>
                                         </div>
-                                        <div>下载速度 : {((downloadProgress?.speed || 0) / 1000000).toFixed(2)}M/s</div>
+                                        <div>Download Speed : {((downloadProgress?.speed || 0) / 1000000).toFixed(2)}M/s</div>
                                     </div>
                                     <div className={styles["download-btn"]}>
                                         {isFailed && (
@@ -235,11 +235,11 @@ export const DownloadYaklang: React.FC<DownloadYaklangProps> = React.memo((props
                                                     yaklangSpecifyVersion ? downloadYak() : fetchVersion()
                                                 }
                                             >
-                                                重试
+                                                Retry
                                             </YakitButton>
                                         )}
                                         <YakitButton size='max' type='outline2' onClick={onClose}>
-                                            取消
+                                            Cancel
                                         </YakitButton>
                                     </div>
                                 </div>

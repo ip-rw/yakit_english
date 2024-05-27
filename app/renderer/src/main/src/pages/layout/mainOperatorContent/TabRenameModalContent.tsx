@@ -42,7 +42,7 @@ const TabRenameModalContent: React.FC<TabRenameModalProps> = React.memo((props) 
                     maxLength={50}
                     onChange={(e) => setValue(e.target.value)}
                     onKeyDown={(e) => {
-                        // 限制enter换行
+                        // Disable Enter for newline
                         const keyCode = e.keyCode ? e.keyCode : e.key
                         if (keyCode === 13) {
                             e.stopPropagation()
@@ -59,10 +59,10 @@ const TabRenameModalContent: React.FC<TabRenameModalProps> = React.memo((props) 
                         setValue("")
                     }}
                 >
-                    取消
+                    Cancel
                 </YakitButton>
                 <YakitButton type='primary' onClick={() => onOk(value)}>
-                    确定
+                    Confirm
                 </YakitButton>
             </div>
         </div>

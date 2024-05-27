@@ -61,15 +61,15 @@ const directionStyle = (editorInfo, isCenter = true) => {
     return obj
 }
 
-// 拖拽左右限制
+// DragBoundsLR
 const getItemStyle = (isDragging, draggableStyle) => {
     let transform: string = draggableStyle["transform"] || ""
     // console.log("transform---",transform,isDragging);
     if (isDragging) {
-        // 使用正则表达式匹配 translate 函数中的两个参数
+        // Regex Match two args in translate function
         const match = transform.match(/translate\((-?\d+)px, (-?\d+)px\)/)
         if (match) {
-            // 提取匹配到的两个值，并将它们转换为数字
+            // Extract & Convert Two Values to Numbers
             const [value1, value2] = match.slice(1).map(Number)
             const modifiedString = transform.replace(/translate\((-?\d+)px, (-?\d+)px\)/, `translate(0px, ${value2}px)`)
             transform = modifiedString
@@ -88,7 +88,7 @@ export interface HTTPFuzzerClickEditorMenuProps {
     insert: (v: QueryFuzzerLabelResponseProps) => void
     addLabel: () => void
     className?: string
-    // 是否开启关闭倒计时
+    // StartupShutdownTimer?
     fizzSelectTimeoutId?: any
     closeTimeout?: boolean
 }
@@ -110,17 +110,17 @@ export const HTTPFuzzerClickEditorMenu: React.FC<HTTPFuzzerClickEditorMenuProps>
     const [inputValue, setInputValue] = useState<string>()
     const [isEnterSimple, setEnterSimple] = useState<boolean>(false)
     const [destinationDrag, setDestinationDrag] = useState<string>("droppable-editor")
-    // 是否中文输入中
+    // InChineseInput?
     const isComposition = useRef<boolean>(false)
-    // 是否在拖拽中
+    // Dragging?
     const isDragging = useRef<boolean>(false)
-    // 鼠标是否进入main
+    // MouseInMain?
     const isMainEnter = useRef<boolean>(false)
-    // 鼠标是否进入simple
+    // MouseInSimple?
     const isSimpleEnter = useRef<boolean>(false)
-    // 菜单显示宽度
+    // MenuWidth
     const [menuWidth, setMenuWidth] = useState<number>()
-    // 菜单显示高度
+    // MenuHeight
     const [menuHeight, setMenuHeight] = useState<number>()
 
     const getData = () => {
@@ -134,18 +134,18 @@ export const HTTPFuzzerClickEditorMenu: React.FC<HTTPFuzzerClickEditorMenuProps>
     }
 
     const [boxHidden, setBoxHidden] = useState<boolean>(true)
-    // 0.8秒后显示
+    // ShowAfter0.8Secs
     useEffect(() => {
         setTimeout(() => {
             setBoxHidden(false)
         }, 800)
     }, [])
-    // 5秒无操作自动关闭
+    // AutoClose5SecsIdle
     const closeTimeoutFun = useMemoizedFn(() => {
         const closeTimeoutId = setTimeout(() => {
             close()
         }, 5 * 1000)
-        // 返回timeoutId，以便稍后取消
+        // ReturnTimeoutIdForCancel
         return closeTimeoutId
     })
     useEffect(() => {
@@ -173,7 +173,7 @@ export const HTTPFuzzerClickEditorMenu: React.FC<HTTPFuzzerClickEditorMenuProps>
 
     const insertLabel = (item: QueryFuzzerLabelResponseProps) => {
         if (isSelect(item)) {
-            // 复原修改项
+            // UndoChanges
             setSelectLabel(undefined)
         } else {
             insert(item)
@@ -185,7 +185,7 @@ export const HTTPFuzzerClickEditorMenu: React.FC<HTTPFuzzerClickEditorMenuProps>
         })
     }
     const reset = () => {
-        // 删除标签后重新添加默认标签
+        // ReaddDefaultAfterDelTag
         ipcRenderer.invoke("DeleteFuzzerLabel", {}).then(() => {
             setRemoteValue(FUZZER_LABEL_LIST_NUMBER, JSON.stringify({number: defaultLabel.length}))
             ipcRenderer
@@ -200,7 +200,7 @@ export const HTTPFuzzerClickEditorMenu: React.FC<HTTPFuzzerClickEditorMenuProps>
     const isSelect = (item: QueryFuzzerLabelResponseProps) => selectLabel === item.Hash
 
     const dragList = (newItems) => {
-        // 重新排序
+        // Resort
         ipcRenderer.invoke("DeleteFuzzerLabel", {}).then(() => {
             setRemoteValue(FUZZER_LABEL_LIST_NUMBER, JSON.stringify({number: newItems.length}))
             ipcRenderer.invoke("SaveFuzzerLabel", {
@@ -209,7 +209,7 @@ export const HTTPFuzzerClickEditorMenu: React.FC<HTTPFuzzerClickEditorMenuProps>
         })
     }
 
-    // 拖放完成后的回调函数
+    // DragCompleteCallback
     const onDragEnd = (result) => {
         isDragging.current = false
         if (!result.destination) return
@@ -223,7 +223,7 @@ export const HTTPFuzzerClickEditorMenu: React.FC<HTTPFuzzerClickEditorMenuProps>
     }
 
     /**
-     * @description: 计算移动的范围是否在目标范围类destinationDrag
+     * @CalcMoveInRangeOfDestDrag
      */
     const onDragUpdate = useThrottleFn(
         (result) => {
@@ -258,7 +258,7 @@ export const HTTPFuzzerClickEditorMenu: React.FC<HTTPFuzzerClickEditorMenuProps>
                     }}
                 >
                     <IconSolidTagIcon className={styles["tag"]} />
-                    <div className={styles["content"]}>插入标签</div>
+                    <div className={styles["content"]}>Insert Tag</div>
                     {isEnterSimple ? (
                         <ChevronUpIcon className={styles["up"]} />
                     ) : (
@@ -269,7 +269,7 @@ export const HTTPFuzzerClickEditorMenu: React.FC<HTTPFuzzerClickEditorMenuProps>
             {isEnterSimple && (
                 <div
                     className={classNames(styles["http-fuzzer-click-editor-menu"])}
-                    // 此处会引起拖拽卡死
+                    // DragFreezeWarning
                     onMouseLeave={() => {
                         isSimpleEnter.current = false
                         setTimeout(() => {
@@ -294,7 +294,7 @@ export const HTTPFuzzerClickEditorMenu: React.FC<HTTPFuzzerClickEditorMenuProps>
                 >
                     <div className={styles["menu-header"]}>
                         <div className={styles["menu-header-left"]}>
-                            常用标签
+                            FavTags
                             {!(menuWidth && menuWidth < 220) && (
                                 <span className={styles["menu-header-left-count"]}>{labelData.length || ""}</span>
                             )}
@@ -305,11 +305,11 @@ export const HTTPFuzzerClickEditorMenu: React.FC<HTTPFuzzerClickEditorMenuProps>
                                 type='text'
                                 onClick={() => addLabel()}
                             >
-                                添加 <PlusOutlined />
+                                Add <PlusOutlined />
                             </YakitButton>
                             <div className={styles["line"]}></div>
                             <YakitButton type='text2' style={{color: "#85899E"}} onClick={() => reset()}>
-                                复原
+                                Undo
                             </YakitButton>
                         </div>
                     </div>
@@ -424,7 +424,7 @@ export const HTTPFuzzerClickEditorMenu: React.FC<HTTPFuzzerClickEditorMenuProps>
                                                                                 }
                                                                             }}
                                                                         >
-                                                                            确认
+                                                                            Confirm
                                                                         </YakitButton>
                                                                     ) : (
                                                                         <>
@@ -461,7 +461,7 @@ export const HTTPFuzzerClickEditorMenu: React.FC<HTTPFuzzerClickEditorMenuProps>
                                                             </div>
                                                         </div>
                                                     )
-                                                    // snapshot.isDragging 是否拖拽此项
+                                                    // DraggingThis?
                                                 }}
                                             </Draggable>
                                         ))}
@@ -493,49 +493,49 @@ export const EncodeComponent: React.FC<EncodeComponentProps> = (props) => {
         {
             color: "rgba(136, 99, 247, 0.6)",
             avatar: "m",
-            title: "Md5 编码",
+            title: "Md5Encode",
             sub_title: "md5",
             encode: (v: string) => `{{md5(${v})}}`
         },
         {
             color: "rgba(74, 148, 248, 0.6)",
             avatar: "b",
-            title: "Base64 编码",
+            title: "Base64 Encode",
             sub_title: "base64enc",
             encode: (v: string) => `{{base64enc(${v})}}`
         },
         {
             color: "rgba(74, 148, 248, 0.6)",
             avatar: "b",
-            title: "先 Base64 后 URL 编码",
+            title: "Base64 then URL Encode",
             sub_title: "{{urlenc(base64enc(xxx))}}",
             encode: (v: string) => `{{urlenc(base64enc(${v}))}}`
         },
         {
             color: "rgba(86, 201, 145, 0.6)",
             avatar: "h",
-            title: "HEX 编码（十六进制编码）",
+            title: "HEX Encode）",
             sub_title: "hexenc",
             encode: (v: string) => `{{hexenc(${v})}}`
         },
         {
             color: "rgba(244, 115, 107, 0.6)",
             avatar: "h",
-            title: "HTML 编码",
+            title: "HTML Encode",
             sub_title: "htmlenc",
             encode: (v: string) => `{{htmlenc(${v})}}`
         },
         {
             color: "rgba(255, 182, 96, 0.6)",
             avatar: "u",
-            title: "URL 编码",
+            title: "URL Encode",
             sub_title: "urlenc",
             encode: (v: string) => `{{urlenc(${v})}}`
         },
         {
             color: "rgba(218, 95, 221, 0.6)",
             avatar: "u",
-            title: "URL 编码（只编码特殊字符）",
+            title: "URLEncodeSpecialCharsOnly）",
             sub_title: "urlescape",
             encode: (v: string) => `{{urlescape(${v})}}`
         }
@@ -559,10 +559,10 @@ export const EncodeComponent: React.FC<EncodeComponentProps> = (props) => {
 
 interface DecodeCopyReplaceProps {
     item: AutoDecodeResult
-    // 是否显示边框
+    // ShowBorders?
     isShowBorder: boolean
     index?: number
-    // 是否仅可读
+    // ReadOnly?
     isReadOnly?: boolean
     replace?: (v: string) => void
 }
@@ -597,7 +597,7 @@ export const DecodeCopyReplace: React.FC<DecodeCopyReplaceProps> = (props) => {
                                 replace && replace(itemStr)
                             }}
                         >
-                            替换
+                            Replace
                         </YakitButton>
                     )}
                 </div>
@@ -657,7 +657,7 @@ export const DecodeComponent: React.FC<DecodeComponentProps> = (props) => {
 
     return (
         <div className={styles["decode-box"]}>
-            {isReadOnly && <div className={styles["title"]}>智能解码</div>}
+            {isReadOnly && <div className={styles["title"]}>SmartDecode</div>}
             {status === "only" && (
                 <div className={styles["only-one"]}>
                     <DecodeCopyReplace isReadOnly={isReadOnly} item={result[0]} isShowBorder={true} replace={replace} />
@@ -685,7 +685,7 @@ export const DecodeComponent: React.FC<DecodeComponentProps> = (props) => {
                     </Timeline>
                 </div>
             )}
-            {status === "none" && <div className={styles["none-decode"]}>无解码信息</div>}
+            {status === "none" && <div className={styles["none-decode"]}>NoDecodeInfo</div>}
         </div>
     )
 }
@@ -702,9 +702,9 @@ export interface HTTPFuzzerRangeEditorMenuProps {
 export const HTTPFuzzerRangeEditorMenu: React.FC<HTTPFuzzerRangeEditorMenuProps> = (props) => {
     const {close, editorInfo, insert, rangeValue, replace, hTTPFuzzerClickEditorMenuProps, fizzRangeTimeoutId} = props
     const {direction, top = 0, left = 0, bottom = 0, right = 0} = editorInfo || {}
-    // 菜单显示宽度
+    // MenuWidth
     const [menuWidth, setMenuWidth] = useState<number>()
-    // 菜单显示高度
+    // MenuHeight
     const [menuHeight, setMenuHeight] = useState<number>()
     useEffect(() => {
         if (right - left < 720) {
@@ -717,13 +717,13 @@ export const HTTPFuzzerRangeEditorMenu: React.FC<HTTPFuzzerRangeEditorMenuProps>
         }
     }, [])
     const [segmentedType, setSegmentedType] = useState<"decode" | "encode">()
-    // 鼠标是否进入main
+    // MouseInMain?
     const isMainEnter = useRef<boolean>(false)
-    // 鼠标是否进入simple
+    // MouseInSimple?
     const isSimpleEnter = useRef<boolean>(false)
 
     const [boxHidden, setBoxHidden] = useState<boolean>(true)
-    // 0.8秒后显示
+    // ShowAfter0.8Secs
     useEffect(() => {
         fizzRangeTimeoutId.current = undefined
         fizzRangeTimeoutId.current = closeTimeoutFun()
@@ -731,12 +731,12 @@ export const HTTPFuzzerRangeEditorMenu: React.FC<HTTPFuzzerRangeEditorMenuProps>
             setBoxHidden(false)
         }, 800)
     }, [])
-    // 5秒无操作自动关闭
+    // AutoClose5SecsIdle
     const closeTimeoutFun = useMemoizedFn(() => {
         const closeTimeoutId = setTimeout(() => {
             close()
         }, 5 * 1000)
-        // 返回timeoutId，以便稍后取消
+        // ReturnTimeoutIdForCancel
         return closeTimeoutId
     })
 
@@ -781,7 +781,7 @@ export const HTTPFuzzerRangeEditorMenu: React.FC<HTTPFuzzerRangeEditorMenuProps>
                             }}
                         >
                             <IconSolidCodeIcon className={styles["tag"]} />
-                            <div className={styles["content"]}>编码</div>
+                            <div className={styles["content"]}>Encode</div>
                             {segmentedType === "encode" ? (
                                 <ChevronUpIcon className={styles["up"]} />
                             ) : (
@@ -796,7 +796,7 @@ export const HTTPFuzzerRangeEditorMenu: React.FC<HTTPFuzzerRangeEditorMenuProps>
                             }}
                         >
                             <IconSolidSparklesIcon className={styles[""]} />
-                            <div className={styles["content"]}>解码</div>
+                            <div className={styles["content"]}>Decode</div>
                         </div>
                     </div>
                 </div>
@@ -843,13 +843,13 @@ export const HTTPFuzzerRangeReadOnlyEditorMenu: React.FC<HTTPFuzzerRangeReadOnly
     const {editorInfo, rangeValue, fizzRangeTimeoutId, close} = props
     const [segmentedType, setSegmentedType] = useState<"decode">()
     const {direction, top = 0, left = 0, bottom = 0, right = 0} = editorInfo || {}
-    // 菜单显示宽度
+    // MenuWidth
     const [menuWidth, setMenuWidth] = useState<number>()
-    // 菜单显示高度
+    // MenuHeight
     const [menuHeight, setMenuHeight] = useState<number>()
 
     const [boxHidden, setBoxHidden] = useState<boolean>(true)
-    // 0.8秒后显示
+    // ShowAfter0.8Secs
     useEffect(() => {
         fizzRangeTimeoutId.current = undefined
         fizzRangeTimeoutId.current = closeTimeoutFun()
@@ -857,12 +857,12 @@ export const HTTPFuzzerRangeReadOnlyEditorMenu: React.FC<HTTPFuzzerRangeReadOnly
             setBoxHidden(false)
         }, 800)
     }, [])
-    // 5秒无操作自动关闭
+    // AutoClose5SecsIdle
     const closeTimeoutFun = useMemoizedFn(() => {
         const closeTimeoutId = setTimeout(() => {
             close()
         }, 5 * 1000)
-        // 返回timeoutId，以便稍后取消
+        // ReturnTimeoutIdForCancel
         return closeTimeoutId
     })
 
@@ -893,7 +893,7 @@ export const HTTPFuzzerRangeReadOnlyEditorMenu: React.FC<HTTPFuzzerRangeReadOnly
                 <div className={styles["show-box"]}>
                     <div className={styles["decode-box"]} onClick={() => setSegmentedType("decode")}>
                         <IconSolidSparklesIcon className={styles[""]} />
-                        <div className={styles["content"]}>解码</div>
+                        <div className={styles["content"]}>Decode</div>
                     </div>
                 </div>
             </div>

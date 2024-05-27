@@ -12,19 +12,19 @@ import {OutlineXIcon} from "@/assets/icon/outline"
 const {ipcRenderer} = window.require("electron")
 
 /**
- * 更新说明
- * 1、关闭按钮增加hover主题色
- * 2.height 修为不加border
+ * Update Notes
+ * 1. Close button hover theme color
+ * 2.height Exclude border
  */
 
 /**
  * @description: tag
- * @augments TagProps 继承antd的TagProps默认属性
- * @param {middle|large|small} size 默认middle 16 20 24
- * @param {"danger" | "info" | "success" | "warning"|"serious" |"yellow"| "purple" | "blue" | "cyan" | "bluePurple"} color 颜色
+ * @augments TagProps Inherits antd's TagProps default props
+ * @param {middle|large|small} size Default middle 16 20 24
+ * @param {"danger" | "info" | "success" | "warning"|"serious" |"yellow"| "purple" | "blue" | "cyan" | "bluePurple"} color Color
  * @param {boolean} disable
- * @param {boolean} enableCopy 是否可复制
- * @param {e} onAfterCopy 复制后的回调
+ * @param {boolean} enableCopy Copy enabled
+ * @param {e} onAfterCopy Callback after copying
  */
 export const YakitTag: React.FC<YakitTagProps> = (props) => {
     const {color, size, disable, className, enableCopy, iconColor, copyText, ...restProps} = props
@@ -86,7 +86,7 @@ export const CopyComponents: React.FC<CopyComponentsProps> = (props) => {
             setTimeout(() => {
                 setIsShowSure(false)
             }, 2000)
-            success("复制成功")
+            success("Copy Success")
         }, 1000)
         if (props.onAfterCopy) props.onAfterCopy(e)
     })

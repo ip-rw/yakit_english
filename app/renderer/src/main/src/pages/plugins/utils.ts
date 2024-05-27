@@ -37,11 +37,11 @@ import {defPluginBatchExecuteExtraFormValue} from "@/defaultConstants/PluginBatc
 const {ipcRenderer} = window.require("electron")
 
 /**
- * 本地插件、插件商店、插件管理页面
- * 当filters过滤条件被其他页面或者意外删掉，插件列表却带了该过滤条件的情况，切换到该页面时需要把被删掉的过滤条件排除
- * @param oldfilters 页面上此时的鼓过滤条件
- * @param newfilters 接口获取的最新过滤条件
- * @returns realFilter - 页面上此时真正的过滤条件 updateFilterFlag - 是否需要更新页面的filters
+ * Local Plugins, Plugin Store, Plugin Management Pages
+ * Exclude Deleted Filter Conditions When Switching Pages with Persistent Filters
+ * @param oldfilters Current Drum Filters on Page
+ * @param newfilters Latest Filters from API
+ * @returns realFilter - Current Real Filters on Page updateFilterFlag - Whether to Update Page's filters
  */
 export interface ExcludeNoExistfilter {
     realFilter: PluginFilterParams
@@ -73,8 +73,8 @@ export const excludeNoExistfilter = (
 }
 
 /**
- * @name http接口公共参数转换(前端数据转接口参数)
- * @description 适用api接口请求参数是否继承 API.PluginsWhere
+ * @name Convert HTTP Common Params (Frontend Data to API Params))
+ * @description Inherit API.PluginsWhere in API request params?
  */
 export const convertPluginsRequestParams = (
     filter: PluginFilterParams,
@@ -100,7 +100,7 @@ export const convertPluginsRequestParams = (
     return toolDelInvalidKV(data)
 }
 
-/**插件商店这边需要token */
+/**Plugin Store Requires Token */
 function PluginNetWorkApi<T extends {token?: string}, D>(params: requestConfig<T>): Promise<D> {
     return new Promise(async (resolve, reject) => {
         try {
@@ -118,10 +118,10 @@ function PluginNetWorkApi<T extends {token?: string}, D>(params: requestConfig<T
     })
 }
 /**
- * @description  /plugins 接口请求的定义
+ * @description  /plugins API Request Definition
  */
 export interface PluginsQueryProps extends API.PluginsWhereListRequest, PluginListPageMeta {}
-/**线上插件基础接口 */
+/**Online Plugin Basic API */
 const apiFetchList: (query: PluginsQueryProps) => Promise<YakitPluginListOnlineResponse> = (query) => {
     return new Promise((resolve, reject) => {
         try {
@@ -150,7 +150,7 @@ const apiFetchList: (query: PluginsQueryProps) => Promise<YakitPluginListOnlineR
         }
     })
 }
-/**获取插件商店列表 */
+/**Get Plugin Store List */
 export const apiFetchOnlineList: (query: PluginsQueryProps) => Promise<YakitPluginListOnlineResponse> = (query) => {
     return new Promise((resolve, reject) => {
         try {
@@ -163,21 +163,21 @@ export const apiFetchOnlineList: (query: PluginsQueryProps) => Promise<YakitPlug
                     resolve(res)
                 })
                 .catch((err) => {
-                    if (err !== "token过期") {
-                        yakitNotify("error", "获取插件商店列表失败:" + err)
+                    if (err !== "Token Expired") {
+                        yakitNotify("error", "Get Plugin Store List Failed:" + err)
                     }
                     reject(err)
                 })
         } catch (error) {
-            if (error !== "token过期") {
-                yakitNotify("error", "获取插件商店列表失败:" + error)
+            if (error !== "Token Expired") {
+                yakitNotify("error", "Get Plugin Store List Failed:" + error)
             }
             reject(error)
         }
     })
 }
 
-/**获取我的插件列表 */
+/**Get My Plugin List */
 export const apiFetchMineList: (query: PluginsQueryProps) => Promise<YakitPluginListOnlineResponse> = (query) => {
     return new Promise((resolve, reject) => {
         try {
@@ -191,17 +191,17 @@ export const apiFetchMineList: (query: PluginsQueryProps) => Promise<YakitPlugin
                     resolve(res)
                 })
                 .catch((err) => {
-                    yakitNotify("error", "获取我的插件列表失败:" + err)
+                    yakitNotify("error", "Get My Plugin List Failed:" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "获取我的插件列表失败:" + error)
+            yakitNotify("error", "Get My Plugin List Failed:" + error)
             reject(error)
         }
     })
 }
 
-/**获取插件回收站列表 */
+/**Get Recycle Bin Plugin List */
 export const apiFetchRecycleList: (query: PluginsQueryProps) => Promise<YakitPluginListOnlineResponse> = (query) => {
     return new Promise((resolve, reject) => {
         try {
@@ -215,17 +215,17 @@ export const apiFetchRecycleList: (query: PluginsQueryProps) => Promise<YakitPlu
                     resolve(res)
                 })
                 .catch((err) => {
-                    yakitNotify("error", "获取回收站列表失败:" + err)
+                    yakitNotify("error", "Get Recycle Bin List Failed:" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "获取回收站列表失败:" + error)
+            yakitNotify("error", "Get Recycle Bin List Failed:" + error)
             reject(error)
         }
     })
 }
 
-/**获取插件审核页面列表 */
+/**Get Plugin Approval Page List */
 export const apiFetchCheckList: (query: PluginsQueryProps) => Promise<YakitPluginListOnlineResponse> = (query) => {
     return new Promise((resolve, reject) => {
         try {
@@ -239,17 +239,17 @@ export const apiFetchCheckList: (query: PluginsQueryProps) => Promise<YakitPlugi
                     resolve(res)
                 })
                 .catch((err) => {
-                    yakitNotify("error", "获取插件审核列表失败:" + err)
+                    yakitNotify("error", "Get Plugin Approval List Failed:" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "获取插件审核列表失败:" + error)
+            yakitNotify("error", "Get Plugin Approval List Failed:" + error)
             reject(error)
         }
     })
 }
 
-/**线上插件左侧统计接口基础版 */
+/**Online Plugin Sidebar Stats Basic */
 export const apiFetchGroupStatistics: (query?: API.PluginsSearchRequest) => Promise<API.PluginsSearchResponse> = (
     query
 ) => {
@@ -275,7 +275,7 @@ export const apiFetchGroupStatistics: (query?: API.PluginsSearchRequest) => Prom
     })
 }
 
-/**插件商店左侧统计 */
+/**Plugin Store Sidebar Stats */
 export const apiFetchGroupStatisticsOnline: (query?: API.PluginsSearchRequest) => Promise<API.PluginsSearchResponse> = (
     query
 ) => {
@@ -290,21 +290,21 @@ export const apiFetchGroupStatisticsOnline: (query?: API.PluginsSearchRequest) =
                     resolve(res)
                 })
                 .catch((err) => {
-                    if (err !== "token过期") {
-                        yakitNotify("error", "获取插件商店统计数据失败:" + err)
+                    if (err !== "Token Expired") {
+                        yakitNotify("error", "Get Plugin Store Stats Failed:" + err)
                     }
                     reject(err)
                 })
         } catch (error) {
-            if (error !== "token过期") {
-                yakitNotify("error", "获取插件商店统计数据失败:" + error)
+            if (error !== "Token Expired") {
+                yakitNotify("error", "Get Plugin Store Stats Failed:" + error)
             }
             reject(error)
         }
     })
 }
 
-/**我的插件左侧统计 */
+/**My Plugin Sidebar Stats */
 export const apiFetchGroupStatisticsMine: (query?: API.PluginsSearchRequest) => Promise<API.PluginsSearchResponse> = (
     query
 ) => {
@@ -319,17 +319,17 @@ export const apiFetchGroupStatisticsMine: (query?: API.PluginsSearchRequest) => 
                     resolve(res)
                 })
                 .catch((err) => {
-                    yakitNotify("error", "获取我的插件统计数据失败:" + err)
+                    yakitNotify("error", "Get My Plugin Stats Failed:" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "获取我的插件统计数据失败:" + error)
+            yakitNotify("error", "Get My Plugin Stats Failed:" + error)
             reject(error)
         }
     })
 }
 
-/**插件审核 插件管理 左侧统计 */
+/**Plugin Approval and Management Sidebar Stats */
 export const apiFetchGroupStatisticsCheck: (query?: API.PluginsSearchRequest) => Promise<API.PluginsSearchResponse> = (
     query
 ) => {
@@ -341,7 +341,7 @@ export const apiFetchGroupStatisticsCheck: (query?: API.PluginsSearchRequest) =>
             }
             apiFetchGroupStatistics(newQuery)
                 .then((res: API.PluginsSearchResponse) => {
-                    // 插件类型、Tag、审核状态 插件分组
+                    // Group Plugins by Type, Tag, Audit Status
                     const newData = res.data || []
                     resolve({
                         ...res,
@@ -349,24 +349,24 @@ export const apiFetchGroupStatisticsCheck: (query?: API.PluginsSearchRequest) =>
                     })
                 })
                 .catch((err) => {
-                    yakitNotify("error", "获取插件审核统计数据失败:" + err)
+                    yakitNotify("error", "Get Plugin Approval Stats Failed:" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "获取插件审核统计数据失败:" + error)
+            yakitNotify("error", "Get Plugin Approval Stats Failed:" + error)
             reject(error)
         }
     })
 }
 
 /**
- * @description 接口/yakit/plugin/stars 请求参数
+ * @description Interface/yakit/plugin/stars Request Params
  */
 export interface PluginStarsRequest {
     uuid: string
     operation: "remove" | "add"
 }
-/**线上插件点赞 */
+/**Online Plugin Like */
 export const apiPluginStars: (query: PluginStarsRequest) => Promise<API.ActionSucceeded> = (query) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -379,17 +379,17 @@ export const apiPluginStars: (query: PluginStarsRequest) => Promise<API.ActionSu
                     resolve(res)
                 })
                 .catch((err) => {
-                    yakitNotify("error", "点赞失败:" + err)
+                    yakitNotify("error", "Like Failed:" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "点赞失败:" + error)
+            yakitNotify("error", "Like Failed:" + error)
             reject(error)
         }
     })
 }
 
-/** grpc接口 批量下载插件 */
+/** grpc Batch Download Plugins */
 export interface DownloadOnlinePluginsRequest {
     Token?: string
     IsPrivate?: boolean[]
@@ -405,7 +405,7 @@ export interface DownloadOnlinePluginsRequest {
     UUID?: string[]
     ScriptName?: string[]
 }
-// 开发参数 转换为 DownloadOnlinePluginBatch接口类型
+// Params for OnlineDownloadPluginBatch
 export const convertDownloadOnlinePluginBatchRequestParams = (
     filter: PluginFilterParams,
     search: PluginSearchParams
@@ -425,7 +425,7 @@ export const convertDownloadOnlinePluginBatchRequestParams = (
     return toolDelInvalidKV(data)
 }
 
-/**下载插件 非进度条版本 */
+/**Plugin Download Non-Progress Version */
 export const apiDownloadPluginBase: (query?: DownloadOnlinePluginsRequest) => Promise<null> = (query) => {
     return new Promise((resolve, reject) => {
         ipcRenderer
@@ -433,7 +433,7 @@ export const apiDownloadPluginBase: (query?: DownloadOnlinePluginsRequest) => Pr
             .then((res) => {
                 if (isCommunityEdition()) ipcRenderer.invoke("refresh-public-menu")
                 else ipcRenderer.invoke("change-main-menu")
-                // 插件商店、我的插件、插件管理页面 下载插件后需要更新 本地插件列表
+                // Update Local Plugin List After Downloading from Plugin Store, My Plugins, Plugin Management
                 emiter.emit("onRefLocalPluginList", "")
                 resolve(res)
             })
@@ -443,7 +443,7 @@ export const apiDownloadPluginBase: (query?: DownloadOnlinePluginsRequest) => Pr
     })
 }
 
-/** 插件商店 下载插件 */
+/** Download from Plugin Store */
 export const apiDownloadPluginOnline: (query?: DownloadOnlinePluginsRequest) => Promise<null> = (query) => {
     return new Promise((resolve, reject) => {
         try {
@@ -453,21 +453,21 @@ export const apiDownloadPluginOnline: (query?: DownloadOnlinePluginsRequest) => 
             }
             apiDownloadPluginBase(newQuery)
                 .then((res) => {
-                    yakitNotify("success", "下载成功")
+                    yakitNotify("success", "Download Successful")
                     resolve(res)
                 })
                 .catch((err) => {
-                    yakitNotify("error", "插件商店下载插件失败:" + err)
+                    yakitNotify("error", "Plugin Store Download Failed:" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "插件商店下载插件失败:" + error)
+            yakitNotify("error", "Plugin Store Download Failed:" + error)
             reject(error)
         }
     })
 }
 
-/** 我的插件 下载插件 */
+/** My Plugins Download */
 export const apiDownloadPluginMine: (query?: DownloadOnlinePluginsRequest) => Promise<null> = (query) => {
     return new Promise((resolve, reject) => {
         try {
@@ -477,21 +477,21 @@ export const apiDownloadPluginMine: (query?: DownloadOnlinePluginsRequest) => Pr
             }
             apiDownloadPluginBase(newQuery)
                 .then((res) => {
-                    yakitNotify("success", "下载成功")
+                    yakitNotify("success", "Download Successful")
                     resolve(res)
                 })
                 .catch((err) => {
-                    yakitNotify("error", "下载我的插件失败:" + err)
+                    yakitNotify("error", "Download My Plugin Failed:" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "下载我的插件失败:" + error)
+            yakitNotify("error", "Download My Plugin Failed:" + error)
             reject(error)
         }
     })
 }
 
-/** 插件管理 下载插件 */
+/** Download from Plugin Management */
 export const apiDownloadPluginCheck: (query?: DownloadOnlinePluginsRequest) => Promise<null> = (query) => {
     return new Promise((resolve, reject) => {
         try {
@@ -502,17 +502,17 @@ export const apiDownloadPluginCheck: (query?: DownloadOnlinePluginsRequest) => P
             apiDownloadPluginBase(newQuery)
                 .then((res) => resolve(res))
                 .catch((err) => {
-                    yakitNotify("error", "插件管理插件失败:" + err)
+                    yakitNotify("error", "Plugin Management Failed:" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "插件管理插件失败:" + error)
+            yakitNotify("error", "Plugin Management Failed:" + error)
             reject(error)
         }
     })
 }
 
-/** 其他情况，不区分私密公开 下载插件 */
+/** Other Cases, Download Plugin Without Differentiating Between Private and Public */
 export const apiDownloadPluginOther: (query?: DownloadOnlinePluginsRequest) => Promise<null> = (query) => {
     return new Promise((resolve, reject) => {
         const newQuery = {
@@ -522,13 +522,13 @@ export const apiDownloadPluginOther: (query?: DownloadOnlinePluginsRequest) => P
         apiDownloadPluginBase(newQuery)
             .then(resolve)
             .catch((err) => {
-                yakitNotify("error", "插件导入/下载失败:" + err)
+                yakitNotify("error", "Plugin Import/Download Failed:" + err)
                 reject(err)
             })
     })
 }
 
-/**线上删除插件接口基础版  删除（放到回收站） */
+/**Online Delete Plugin Basic API to Recycle Bin） */
 const apiDeletePlugin: (query?: API.PluginsWhereDeleteRequest) => Promise<API.ActionSucceeded> = (query) => {
     return new Promise((resolve, reject) => {
         try {
@@ -549,7 +549,7 @@ const apiDeletePlugin: (query?: API.PluginsWhereDeleteRequest) => Promise<API.Ac
     })
 }
 
-/**我的插件 删除插件接口 删除（放到回收站）*/
+/**My Plugins Delete to Recycle Bin）*/
 export const apiDeletePluginMine: (query?: API.PluginsWhereDeleteRequest) => Promise<API.ActionSucceeded> = (query) => {
     return new Promise((resolve, reject) => {
         try {
@@ -562,17 +562,17 @@ export const apiDeletePluginMine: (query?: API.PluginsWhereDeleteRequest) => Pro
                     resolve(res)
                 })
                 .catch((err) => {
-                    yakitNotify("error", "删除我的插件失败：" + err)
+                    yakitNotify("error", "Delete My Plugin Failed：" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "删除我的插件失败：" + error)
+            yakitNotify("error", "Delete My Plugin Failed：" + error)
             reject(error)
         }
     })
 }
 
-/**插件审核 删除插件接口 删除（放到回收站）*/
+/**Plugin Audit Delete to Recycle Bin）*/
 export const apiDeletePluginCheck: (query?: API.PluginsWhereDeleteRequest) => Promise<API.ActionSucceeded> = (
     query
 ) => {
@@ -587,17 +587,17 @@ export const apiDeletePluginCheck: (query?: API.PluginsWhereDeleteRequest) => Pr
                     resolve(res)
                 })
                 .catch((err) => {
-                    yakitNotify("error", "删除插件失败：" + err)
+                    yakitNotify("error", "Delete Plugin Failed：" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "删除插件失败：" + error)
+            yakitNotify("error", "Delete Plugin Failed：" + error)
             reject(error)
         }
     })
 }
 
-/**我的插件 修改私密公开 */
+/**My Plugins Toggle Privacy */
 export const apiUpdatePluginPrivateMine: (query: API.UpPluginsPrivateRequest) => Promise<API.ActionSucceeded> = (
     query
 ) => {
@@ -609,24 +609,24 @@ export const apiUpdatePluginPrivateMine: (query: API.UpPluginsPrivateRequest) =>
                 data: {...query}
             })
                 .then((res: API.ActionSucceeded) => {
-                    yakitNotify("success", "公开/私密修改成功")
+                    yakitNotify("success", "Public/Private Modification Successful")
                     resolve(res)
                 })
                 .catch((err) => {
-                    yakitNotify("error", "公开/私密修改失败：" + err)
+                    yakitNotify("error", "Public/Private Modification Failed：" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "公开/私密修改失败：" + error)
+            yakitNotify("error", "Public/Private Modification Failed：" + error)
             reject(error)
         }
     })
 }
-/**彻底删除和还原得接口请求定义 */
+/**Permanently Delete and Restore API Definitions */
 export interface PluginsRecycleRequest extends Omit<API.PluginsWhere, "listType"> {
     uuid?: API.PluginsRecycle["uuid"]
 }
-/**彻底删除 只有回收站有 */
+/**Permanent Deletion Only for Recycle Bin */
 export const apiRemoveRecyclePlugin: (query?: PluginsRecycleRequest) => Promise<API.ActionSucceeded> = (query) => {
     return new Promise((resolve, reject) => {
         try {
@@ -639,17 +639,17 @@ export const apiRemoveRecyclePlugin: (query?: PluginsRecycleRequest) => Promise<
                     resolve(res)
                 })
                 .catch((err) => {
-                    yakitNotify("error", "彻底删除插件失败：" + err)
+                    yakitNotify("error", "Permanently Delete Plugin Failed：" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "彻底删除插件失败：" + error)
+            yakitNotify("error", "Permanently Delete Plugin Failed：" + error)
             reject(error)
         }
     })
 }
 
-/**还原 只有回收站有 */
+/**Restore Only for Recycle Bin */
 export const apiReductionRecyclePlugin: (query?: PluginsRecycleRequest) => Promise<API.ActionSucceeded> = (query) => {
     return new Promise((resolve, reject) => {
         try {
@@ -662,18 +662,18 @@ export const apiReductionRecyclePlugin: (query?: PluginsRecycleRequest) => Promi
                     resolve(res)
                 })
                 .catch((err) => {
-                    yakitNotify("error", "还原插件失败：" + err)
+                    yakitNotify("error", "Restore Plugin Failed：" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "还原插件失败：" + error)
+            yakitNotify("error", "Restore Plugin Failed：" + error)
             reject(error)
         }
     })
 }
 
 /**
- * @name QueryYakScript接口参数转换(前端数据转接口参数)
+ * @name Convert QueryYakScript Params (Frontend Data to API Params))
  */
 export const convertLocalPluginsRequestParams = (query: {
     filter: PluginFilterParams
@@ -710,7 +710,7 @@ export const convertLocalPluginsRequestParams = (query: {
     }
     return toolDelInvalidKV(data)
 }
-/**本地，获取插件 QueryYakScript 接口基础版 */
+/**Local, Query YakScript Basic API */
 export const apiQueryYakScriptBase: (query?: QueryYakScriptRequest) => Promise<QueryYakScriptsResponse> = (query) => {
     return new Promise((resolve, reject) => {
         try {
@@ -727,23 +727,23 @@ export const apiQueryYakScriptBase: (query?: QueryYakScriptRequest) => Promise<Q
         }
     })
 }
-/**本地，获取插件列表 */
+/**Local, Get Plugin List */
 export const apiQueryYakScript: (query?: QueryYakScriptRequest) => Promise<QueryYakScriptsResponse> = (query) => {
     return new Promise((resolve, reject) => {
         try {
             apiQueryYakScriptBase(query)
                 .then(resolve)
                 .catch((e: any) => {
-                    yakitNotify("error", "获取本地插件失败:" + e)
+                    yakitNotify("error", "Get Local Plugin Failed:" + e)
                     reject(e)
                 })
         } catch (error) {
-            yakitNotify("error", "获取本地插件失败:" + error)
+            yakitNotify("error", "Get Local Plugin Failed:" + error)
             reject(error)
         }
     })
 }
-/**本地，获取插件总数 */
+/**Local, Get Total Plugins */
 export const apiQueryYakScriptTotal: () => Promise<QueryYakScriptsResponse> = () => {
     return new Promise((resolve, reject) => {
         try {
@@ -760,16 +760,16 @@ export const apiQueryYakScriptTotal: () => Promise<QueryYakScriptsResponse> = ()
                     resolve(item)
                 })
                 .catch((e: any) => {
-                    yakitNotify("error", "获取本地插件总数失败:" + e)
+                    yakitNotify("error", "Get Local Plugin Total Failed:" + e)
                     reject(e)
                 })
         } catch (error) {
-            yakitNotify("error", "获取本地插件总数失败:" + error)
+            yakitNotify("error", "Get Local Plugin Total Failed:" + error)
             reject(error)
         }
     })
 }
-/**本地插件列表分组 */
+/**Local Plugin List Grouping */
 export const apiFetchGroupStatisticsLocal: () => Promise<API.PluginsSearchResponse> = () => {
     return new Promise((resolve, reject) => {
         try {
@@ -779,7 +779,7 @@ export const apiFetchGroupStatisticsLocal: () => Promise<API.PluginsSearchRespon
                     const data = [
                         {
                             groupKey: "plugin_type",
-                            groupName: "插件类型",
+                            groupName: "Plugin Type",
                             sort: 1,
                             data: (res["Type"] || []).map((ele) => ({
                                 label: pluginTypeToName[ele.Value]?.name || ele.Value,
@@ -789,7 +789,7 @@ export const apiFetchGroupStatisticsLocal: () => Promise<API.PluginsSearchRespon
                         },
                         {
                             groupKey: "plugin_group",
-                            groupName: "插件组",
+                            groupName: "Plugin Group",
                             sort: 2,
                             data: (res["Group"] || []).map((ele) => ({
                                 label: ele.Value,
@@ -817,19 +817,19 @@ export const apiFetchGroupStatisticsLocal: () => Promise<API.PluginsSearchRespon
                     resolve({data})
                 })
                 .catch((e) => {
-                    yakitNotify("error", `获取本地插件统计数据展示错误:${e}`)
+                    yakitNotify("error", `Local Plugin Stats Display Error:${e}`)
                 })
         } catch (error) {
-            yakitNotify("error", "获取本地插件统计数据展示错误:" + error)
+            yakitNotify("error", "Local Plugin Stats Display Error:" + error)
             reject(error)
         }
     })
 }
-/** apiDeleteYakScriptByIds 请求参数 */
+/** apiDeleteYakScriptByIds Request Params */
 export interface DeleteYakScriptRequestByIdsProps {
     Ids: number[]
 }
-/**本地，批量删除插件 */
+/**Local, Batch Delete Plugins */
 export const apiDeleteYakScriptByIds: (query: DeleteYakScriptRequestByIdsProps) => Promise<null> = (query) => {
     return new Promise((resolve, reject) => {
         try {
@@ -844,11 +844,11 @@ export const apiDeleteYakScriptByIds: (query: DeleteYakScriptRequestByIdsProps) 
                     resolve(null)
                 })
                 .catch((e: any) => {
-                    yakitNotify("error", "批量删除本地插件失败:" + e)
+                    yakitNotify("error", "Batch Delete Local Plugins Failed:" + e)
                     reject(e)
                 })
         } catch (error) {
-            yakitNotify("error", "批量删除本地插件失败:" + error)
+            yakitNotify("error", "Batch Delete Local Plugins Failed:" + error)
             reject(error)
         }
     })
@@ -861,7 +861,7 @@ export const defaultDeleteLocalPluginsByWhereRequest: DeleteLocalPluginsByWhereR
     Tags: "",
     Groups: []
 }
-/** grpc接口 DeleteLocalPluginsByWhere 请求参数 */
+/** grpc Api DeleteLocalPluginsByWhere Request Params */
 export interface DeleteLocalPluginsByWhereRequestProps {
     Keywords: string
     Type: string
@@ -870,7 +870,7 @@ export interface DeleteLocalPluginsByWhereRequestProps {
     Groups: string[]
 }
 /**
- * @name DeleteLocalPluginsByWhere 接口参数转换(前端数据转接口参数)
+ * @name Convert DeleteLocalPluginsByWhere Params (Frontend Data to API Params))
  */
 export const convertDeleteLocalPluginsByWhereRequestParams = (
     filter: PluginFilterParams,
@@ -888,7 +888,7 @@ export const convertDeleteLocalPluginsByWhereRequestParams = (
     }
     return toolDelInvalidKV(data)
 }
-/**本地，带条件的全部删除 */
+/**Local, Delete All With Conditions */
 export const apiDeleteLocalPluginsByWhere: (query: DeleteLocalPluginsByWhereRequestProps) => Promise<null> = (
     query
 ) => {
@@ -902,19 +902,19 @@ export const apiDeleteLocalPluginsByWhere: (query: DeleteLocalPluginsByWhereRequ
                     resolve(null)
                 })
                 .catch((e: any) => {
-                    yakitNotify("error", "DeleteLocalPluginsByWhere删除本地插件失败:" + e)
+                    yakitNotify("error", "DeleteLocalPluginsByWhere Failed:" + e)
                     reject(e)
                 })
         } catch (error) {
-            yakitNotify("error", "DeleteLocalPluginsByWhere删除本地插件失败:" + error)
+            yakitNotify("error", "DeleteLocalPluginsByWhere Failed:" + error)
             reject(error)
         }
     })
 }
 
 /**
- * @name 获取插件的详细信息
- * @description 审核|日志
+ * @name Get Plugin Details
+ * @description Audit|Logs
  */
 export const apiFetchPluginDetailCheck: (
     query: API.PluginsAuditDetailRequest
@@ -930,19 +930,19 @@ export const apiFetchPluginDetailCheck: (
                     resolve(res)
                 })
                 .catch((err) => {
-                    yakitNotify("error", "获取详情失败：" + err)
+                    yakitNotify("error", "Get Details Failed：" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "获取详情失败：：" + error)
+            yakitNotify("error", "Get Details Failed：：" + error)
             reject(error)
         }
     })
 }
 
 /**
- * @name 审核插件详情(通过|不通过)
- * @description 审核|日志
+ * @name Plugin Audit Details (Approved)|Rejected)
+ * @description Audit|Logs
  */
 export const apiAuditPluginDetaiCheck: (query: API.PluginsAuditRequest) => Promise<API.ActionSucceeded> = (query) => {
     return new Promise((resolve, reject) => {
@@ -956,18 +956,18 @@ export const apiAuditPluginDetaiCheck: (query: API.PluginsAuditRequest) => Promi
                     resolve(res)
                 })
                 .catch((err) => {
-                    yakitNotify("error", "操作失败：" + err)
+                    yakitNotify("error", "Operation Failed：" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "操作失败：" + error)
+            yakitNotify("error", "Operation Failed：" + error)
             reject(error)
         }
     })
 }
 
 /**
- * @name 获取指定插件的详情(线上)
+ * @name Get Specified Plugin Details (Online))
  */
 export const apiFetchOnlinePluginInfo: (uuid: string, isShowError?: boolean) => Promise<API.PluginsDetail> = (
     uuid,
@@ -981,7 +981,7 @@ export const apiFetchOnlinePluginInfo: (uuid: string, isShowError?: boolean) => 
         })
             .then(resolve)
             .catch((err) => {
-                if (isShowError !== false) yakitNotify("error", "获取线上插件详情失败:" + err)
+                if (isShowError !== false) yakitNotify("error", "Get Online Plugin Details Failed:" + err)
                 reject(err)
             })
     })
@@ -989,7 +989,7 @@ export const apiFetchOnlinePluginInfo: (uuid: string, isShowError?: boolean) => 
 
 export interface PluginLogsRequest extends HTTPRequestParameters, API.LogsRequest {}
 /**
- * @name 获取插件的日志
+ * @name Get Plugin Logs
  */
 export const apiFetchPluginLogs: (query: {
     uuid: string
@@ -1022,11 +1022,11 @@ export const apiFetchPluginLogs: (query: {
             })
                 .then(resolve)
                 .catch((err) => {
-                    yakitNotify("error", "获取日志失败:" + err)
+                    yakitNotify("error", "Get Log Failed:" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "获取日志失败:" + error)
+            yakitNotify("error", "Get Log Failed:" + error)
             reject(error)
         }
     })
@@ -1036,7 +1036,7 @@ interface GetYakScriptByOnlineIDRequest {
     UUID: string
 }
 /**
- * @description 通过线上uuid查询本地插件数据
+ * @description Query Local Plugin by Online uuid
  */
 export const apiGetYakScriptByOnlineID: (query: GetYakScriptByOnlineIDRequest) => Promise<YakScript> = (query) => {
     return new Promise((resolve, reject) => {
@@ -1049,18 +1049,18 @@ export const apiGetYakScriptByOnlineID: (query: GetYakScriptByOnlineIDRequest) =
                     resolve(newScript)
                 })
                 .catch((e) => {
-                    yakitNotify("error", "查询本地插件错误:" + e)
+                    yakitNotify("error", "Query Local Plugin Error:" + e)
                     reject(e)
                 })
         } catch (error) {
-            yakitNotify("error", "查询本地插件错误:" + error)
+            yakitNotify("error", "Query Local Plugin Error:" + error)
             reject(error)
         }
     })
 }
 
 /**
- * @description 插件商店/我的插件详情点击去使用，跳转本地详情
+ * @description Plugin Store/My Plugin Details Use Redirect to Local Details
  */
 export const onlineUseToLocalDetail = (uuid: string, listType: "online" | "mine") => {
     const query: QueryYakScriptRequest = {
@@ -1097,7 +1097,7 @@ interface QueryYakScriptByYakScriptNameRequest {
 }
 
 /**
- * @description 插件商店/我的插件详情点击去使用，跳转本地详情
+ * @description Plugin Store/My Plugin Details Use Redirect to Local Details
  */
 export const apiQueryYakScriptByYakScriptName: (query: QueryYakScriptByYakScriptNameRequest) => Promise<YakScript> = (
     query
@@ -1121,16 +1121,16 @@ export const apiQueryYakScriptByYakScriptName: (query: QueryYakScriptByYakScript
                     if (item.Data.length > 0) {
                         resolve(item.Data[0])
                     } else {
-                        yakitNotify("error", "未查询到该插件")
-                        reject("未查询到该插件")
+                        yakitNotify("error", "Not Found Plugin")
+                        reject("Not Found Plugin")
                     }
                 })
                 .catch((e: any) => {
-                    yakitNotify("error", "查询本地插件错误" + e)
+                    yakitNotify("error", "Query Local Plugin Error" + e)
                     reject(e)
                 })
         } catch (error) {
-            yakitNotify("error", "查询本地插件错误" + error)
+            yakitNotify("error", "Query Local Plugin Error" + error)
             reject(error)
         }
     })
@@ -1142,7 +1142,7 @@ export interface DebugPluginRequest {
     Input: string
     HTTPRequestTemplate: HTTPRequestBuilderParams
     ExecParams: KVPair[]
-    /**插件UI联动相关参数*/
+    /**Plugin UI Interaction Params*/
     LinkPluginConfig?: HybridScanPluginConfig
     PluginName: string
 }
@@ -1151,7 +1151,7 @@ export const defaultLinkPluginConfig = {
     Filter: undefined
 }
 /**
- * @description 本地插件详情执行方法
+ * @Local Plugin Execution Method
  */
 export const apiDebugPlugin: (params: DebugPluginRequest, token: string) => Promise<null> = (params, token) => {
     return new Promise((resolve, reject) => {
@@ -1183,22 +1183,22 @@ export const apiDebugPlugin: (params: DebugPluginRequest, token: string) => Prom
             ipcRenderer
                 .invoke("DebugPlugin", executeParams, token)
                 .then(() => {
-                    yakitNotify("info", "启动任务成功")
+                    yakitNotify("info", "Start Task Successfully")
                     resolve(null)
                 })
                 .catch((e: any) => {
-                    yakitNotify("error", "本地插件执行出错:" + e)
+                    yakitNotify("error", "Local Plugin Execution Error:" + e)
                     reject(e)
                 })
         } catch (error) {
-            yakitNotify("error", "本地插件执行出错:" + error)
+            yakitNotify("error", "Local Plugin Execution Error:" + error)
             reject(error)
         }
     })
 }
 
 /**
- * @description 取消DebugPlugin
+ * @Cancel DebugPlugin
  */
 export const apiCancelDebugPlugin: (token: string) => Promise<null> = (token) => {
     return new Promise((resolve, reject) => {
@@ -1209,11 +1209,11 @@ export const apiCancelDebugPlugin: (token: string) => Promise<null> = (token) =>
                     resolve(null)
                 })
                 .catch((e: any) => {
-                    yakitNotify("error", "取消本地插件执行出错:" + e)
+                    yakitNotify("error", "Cancel Local Plugin Execution Error:" + e)
                     reject(e)
                 })
         } catch (error) {
-            yakitNotify("error", "取消本地插件执行出错:" + error)
+            yakitNotify("error", "Cancel Local Plugin Execution Error:" + error)
             reject(error)
         }
     })
@@ -1221,7 +1221,7 @@ export const apiCancelDebugPlugin: (token: string) => Promise<null> = (token) =>
 interface QueryYakScriptByOnlineGroupRequest {
     Data: YakScript[]
 }
-/**通过组名获取组内插件 */
+/**Get Plugins by Group Name */
 export const apiGetPluginByGroup: (OnlineGroup: string[]) => Promise<QueryYakScriptByOnlineGroupRequest> = (
     OnlineGroup
 ) => {
@@ -1231,11 +1231,11 @@ export const apiGetPluginByGroup: (OnlineGroup: string[]) => Promise<QueryYakScr
                 .invoke("QueryYakScriptByOnlineGroup", {OnlineGroup})
                 .then(resolve)
                 .catch((e: any) => {
-                    yakitNotify("error", "获取组内插件出错:" + e)
+                    yakitNotify("error", "Get Plugins in Group Error:" + e)
                     reject(e)
                 })
         } catch (error) {
-            yakitNotify("error", "获取组内插件出错:" + error)
+            yakitNotify("error", "Get Plugins in Group Error:" + error)
             reject(error)
         }
     })
@@ -1247,7 +1247,7 @@ export interface PluginInfoProps {
     filters?: PluginFilterParams
 }
 /**
- * @name HybridScan接口参数转换(前端数据转接口参数)
+ * @name Convert HybridScan Params (Frontend Data to API Params))
  * @description HybridScan
  */
 export const convertHybridScanParams = (
@@ -1297,7 +1297,7 @@ export interface PluginBatchExecutorInputValueProps {
     pluginInfo: PluginInfoProps
 }
 /**
- * @name HybridScan返回的输入参数参数转换为前端所需结构(后端数据转前端参数)
+ * @name Convert HybridScan Input for Frontend (Backend Data to Frontend Params))
  * @description HybridScan
  */
 export const hybridScanParamsConvertToInputValue = (
@@ -1318,11 +1318,11 @@ export const hybridScanParamsConvertToInputValue = (
         }
     }
     try {
-        // 只需要 HybridScanControlAfterRequest 部分参数
+        // Only Need HybridScanControlAfterRequest Params
         const resParams: HybridScanControlAfterRequest = {...value}
         let targets = resParams.Targets
         let plugin = resParams.Plugin
-        // 确保 plugin targets 一定会有初始值
+        // Ensure plugin targets always initialized
         if (!plugin) {
             plugin = {PluginNames: [], Filter: {Pagination: genDefaultPagination()}}
         }
@@ -1333,7 +1333,7 @@ export const hybridScanParamsConvertToInputValue = (
                 HTTPRequestTemplate: {...cloneDeep(defPluginBatchExecuteExtraFormValue)}
             }
         }
-        //处理插件的输入值 1.勾选插件 2.全选(搜索条件)
+        //Process Plugin Input Values 1. Select Plugins 2. Select All (Search Conditions))
         if ((plugin.PluginNames?.length || 0) > 0) {
             data.pluginInfo.selectPluginName = plugin.PluginNames
         } else {
@@ -1351,7 +1351,7 @@ export const hybridScanParamsConvertToInputValue = (
                 plugin_group: (plugin.Filter?.Group?.Group || []).map((item) => ({value: item, label: item, count: 0}))
             }
         }
-        // 处理输入的参数，包括额外参数
+        // Handle Input Params, Including Extras
         data.params.Input = targets.Input
         data.params.Proxy = resParams.Proxy || ""
         data.params.Concurrent = resParams.Concurrent || 30
@@ -1361,7 +1361,7 @@ export const hybridScanParamsConvertToInputValue = (
             ...targets.HTTPRequestTemplate
         }
     } catch (error) {
-        yakitNotify("error", "解析任务输入参数数据和插件勾选数据失败:" + error)
+        yakitNotify("error", "Parsing Task Input Parameters and Plugin Selection Failed:" + error)
     }
     return data
 }
@@ -1375,7 +1375,7 @@ export interface HybridScanRequest extends PluginBatchExecutorTaskProps {
     HTTPRequestTemplate: HTTPRequestBuilderParams
 }
 /**
- * @description HybridScan 批量执行
+ * @description HybridScan Batch Execution
  */
 export const apiHybridScan: (params: HybridScanControlAfterRequest, token: string) => Promise<null> = (
     params,
@@ -1400,21 +1400,21 @@ export const apiHybridScan: (params: HybridScanControlAfterRequest, token: strin
                     token
                 )
                 .then(() => {
-                    info(`启动成功,任务ID: ${token}`)
+                    info(`Launch Successful, Task ID: ${token}`)
                     // send target / plugin
                     ipcRenderer.invoke("HybridScan", executeParams, token).then(() => {
-                        info("发送扫描目标与插件成功")
+                        info("Send Scan Targets and Plugins Successfully")
                     })
                     resolve(null)
                 })
         } catch (error) {
-            yakitNotify("error", "插件批量执行出错:" + error)
+            yakitNotify("error", "Batch Plugin Execution Error:" + error)
             reject(error)
         }
     })
 }
 /**
- * @description 取消 HybridScan
+ * @Cancel HybridScan
  */
 export const apiCancelHybridScan: (token: string) => Promise<null> = (token) => {
     return new Promise((resolve, reject) => {
@@ -1424,14 +1424,14 @@ export const apiCancelHybridScan: (token: string) => Promise<null> = (token) => 
                 resolve(null)
             })
             .catch((e: any) => {
-                yakitNotify("error", "取消插件批量执行出错:" + e)
+                yakitNotify("error", "Cancel Batch Plugin Execution Error:" + e)
                 reject(e)
             })
     })
 }
 
 /**
- * @description HybridScan 批量执行查询/恢复/暂停操作
+ * @HybridScan Batch Query/Restore/Pause Operation
  */
 export const apiHybridScanByMode: (
     runtimeId: string,
@@ -1448,32 +1448,32 @@ export const apiHybridScanByMode: (
         ipcRenderer
             .invoke("HybridScan", params, token)
             .then(() => {
-                info(`任务ID: ${token}`)
+                info(`Task ID: ${token}`)
                 resolve(null)
             })
             .catch((error) => {
-                yakitNotify("error", "插件批量执行出错:" + error)
+                yakitNotify("error", "Batch Plugin Execution Error:" + error)
                 reject(error)
             })
     })
 }
 /**
- * @description 去插件编辑页面
+ * @Go to Plugin Edit Page
  * @param plugin
  * @returns
  */
 export const onToEditPlugin = (plugin: YakScript) => {
     if (plugin.IsCorePlugin) {
-        yakitNotify("error", "内置插件无法编辑，建议复制源码新建插件进行编辑。")
+        yakitNotify("error", "Built-in Plugins Cannot Be Edited, Suggest Copying Source Code to Edit。")
         return
     }
     if (plugin.Type === "packet-hack") {
-        yakitNotify("error", "该类型已下架，不可编辑")
+        yakitNotify("error", "Type Discontinued, Cannot Edit")
         return
     }
     if (plugin.Id && +plugin.Id) {
-        if (plugin.ScriptName === "综合目录扫描与爆破") {
-            yakitNotify("warning", "暂不可编辑")
+        if (plugin.ScriptName === "Comprehensive Directory Scanning & Brute Forcing") {
+            yakitNotify("warning", "Currently Not Editable")
             return
         }
         emiter.emit(
@@ -1487,7 +1487,7 @@ export const onToEditPlugin = (plugin: YakScript) => {
 }
 
 /**
- * @description 获取插件详情，通过插件id
+ * @description Get Plugin Details by ID
  */
 export const apiGetYakScriptById: (Id: string | number) => Promise<YakScript> = (Id) => {
     return new Promise((resolve, reject) => {
@@ -1495,7 +1495,7 @@ export const apiGetYakScriptById: (Id: string | number) => Promise<YakScript> = 
     })
 }
 
-/**本地获取插件组数据 */
+/**Get Local Plugin Group Data */
 export const apiFetchQueryYakScriptGroupLocal: (All?: boolean, ExcludeType?: string[]) => Promise<GroupCount[]> = (
     All = true,
     ExcludeType = ["yak", "codec"]
@@ -1508,12 +1508,12 @@ export const apiFetchQueryYakScriptGroupLocal: (All?: boolean, ExcludeType?: str
             })
             .catch((e) => {
                 reject(e)
-                yakitNotify("error", "获取本地插件组：" + e)
+                yakitNotify("error", "Get Local Plugin Group：" + e)
             })
     })
 }
 
-/**本地插件组名字修改 */
+/**Local Group Name Change */
 export const apiFetchRenameYakScriptGroupLocal: (Group: string, NewGroup: string) => Promise<null> = (
     Group,
     NewGroup
@@ -1526,12 +1526,12 @@ export const apiFetchRenameYakScriptGroupLocal: (Group: string, NewGroup: string
             })
             .catch((e) => {
                 reject(e)
-                yakitNotify("error", "修改本地插件组名：" + e)
+                yakitNotify("error", "Modify Local Plugin Group Name：" + e)
             })
     })
 }
 
-/**本地插件组删除 */
+/**Local Plugin Group Deleted */
 export const apiFetchDeleteYakScriptGroupLocal: (Group: string) => Promise<null> = (Group) => {
     return new Promise((resolve, reject) => {
         ipcRenderer
@@ -1541,12 +1541,12 @@ export const apiFetchDeleteYakScriptGroupLocal: (Group: string) => Promise<null>
             })
             .catch((e) => {
                 reject(e)
-                yakitNotify("error", "删除本地插件组：" + e)
+                yakitNotify("error", "Delete Local Plugin Group：" + e)
             })
     })
 }
 
-/**本地获取插件所在插件组和其他插件组 */
+/**Get Local Plugin Groups and Others */
 export const apiFetchGetYakScriptGroupLocal: (params: QueryYakScriptRequest) => Promise<GetYakScriptGroupResponse> = (
     params
 ) => {
@@ -1563,7 +1563,7 @@ export const apiFetchGetYakScriptGroupLocal: (params: QueryYakScriptRequest) => 
     })
 }
 
-/**本地更新插件所在组&新增插件组 */
+/**Update & Add Local Plugin Group */
 export const apiFetchSaveYakScriptGroupLocal: (params: SaveYakScriptGroupRequest) => Promise<null> = (params) => {
     return new Promise((resolve, reject) => {
         ipcRenderer
@@ -1573,12 +1573,12 @@ export const apiFetchSaveYakScriptGroupLocal: (params: SaveYakScriptGroupRequest
             })
             .catch((e) => {
                 reject(e)
-                yakitNotify("error", "更新本地插件所在组：" + e)
+                yakitNotify("error", "Update Local Plugin Group：" + e)
             })
     })
 }
 
-/**本地插件组重置为线上插件组 */
+/**Reset Local Groups to Online Groups */
 export const apiFetchResetYakScriptGroup: (params: ResetYakScriptGroupRequest) => Promise<null> = (params) => {
     return new Promise((resolve, reject) => {
         ipcRenderer
@@ -1588,12 +1588,12 @@ export const apiFetchResetYakScriptGroup: (params: ResetYakScriptGroupRequest) =
             })
             .catch((e) => {
                 reject(e)
-                yakitNotify("error", "重置失败：" + e)
+                yakitNotify("error", "Reset Failed：" + e)
             })
     })
 }
 
-/** 线上获取插件组数据 */
+/** Get Online Plugin Group Data */
 export const apiFetchQueryYakScriptGroupOnline: () => Promise<API.GroupResponse> = () => {
     return new Promise((resolve, reject) => {
         try {
@@ -1605,17 +1605,17 @@ export const apiFetchQueryYakScriptGroupOnline: () => Promise<API.GroupResponse>
                     resolve(res)
                 })
                 .catch((err) => {
-                    yakitNotify("error", "获取插件组失败：" + err)
+                    yakitNotify("error", "Get Plugin Group Failed：" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "获取插件组失败：" + error)
+            yakitNotify("error", "Get Plugin Group Failed：" + error)
             reject(error)
         }
     })
 }
 
-/**线上插件组名字修改 */
+/**Online Group Name Change */
 export interface PluginGroupRename {
     group: string
     newGroup: string
@@ -1634,17 +1634,17 @@ export const apiFetchRenameYakScriptGroupOnline: (query: PluginGroupRename) => P
                     resolve(res)
                 })
                 .catch((err) => {
-                    yakitNotify("error", "修改插件组名失败：" + err)
+                    yakitNotify("error", "Modify Plugin Group Name Failed：" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "修改插件组名失败：" + error)
+            yakitNotify("error", "Modify Plugin Group Name Failed：" + error)
             reject(error)
         }
     })
 }
 
-/**线上插件组删除 */
+/**Online Plugin Group Deleted */
 export interface PluginGroupDel {
     group: string
 }
@@ -1660,17 +1660,17 @@ export const apiFetchDeleteYakScriptGroupOnline: (query: PluginGroupDel) => Prom
                     resolve(res)
                 })
                 .catch((err) => {
-                    yakitNotify("error", "删除插件组失败1：" + err)
+                    yakitNotify("error", "Delete Plugin Group Failed1：" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "删除插件组失败：" + error)
+            yakitNotify("error", "Delete Plugin Group Failed：" + error)
             reject(error)
         }
     })
 }
 
-/** 线上获取插件所在插件组和其他插件组 */
+/** Online Get Plugin & Other Groups */
 export const apiFetchGetYakScriptGroupOnline: (params: API.PluginsGroupRequest) => Promise<API.PluginsGroupResponse> = (
     params
 ) => {
@@ -1685,17 +1685,17 @@ export const apiFetchGetYakScriptGroupOnline: (params: API.PluginsGroupRequest) 
                     resolve(res)
                 })
                 .catch((err) => {
-                    yakitNotify("error", "获取失败：" + err)
+                    yakitNotify("error", "Get Failed：" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "获取失败：" + error)
+            yakitNotify("error", "Get Failed：" + error)
             reject(error)
         }
     })
 }
 
-/**线上更新插件所在组&新增插件组 */
+/**Update & Add Online Plugin Group */
 export const apiFetchSaveYakScriptGroupOnline: (params: API.GroupRequest) => Promise<API.ActionSucceeded> = (
     params
 ) => {
@@ -1710,17 +1710,17 @@ export const apiFetchSaveYakScriptGroupOnline: (params: API.GroupRequest) => Pro
                     resolve(res)
                 })
                 .catch((err) => {
-                    yakitNotify("error", "更新失败：" + err)
+                    yakitNotify("error", "Update Failed：" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "更新失败：" + error)
+            yakitNotify("error", "Update Failed：" + error)
             reject(error)
         }
     })
 }
 
-/** 插件商店 获取线上组 不需要登录*/
+/** Plugin Store Access Online Groups Without Login*/
 export const apiFetchQueryYakScriptGroupOnlineNotLoggedIn: () => Promise<API.GroupResponse> = () => {
     return new Promise((resolve, reject) => {
         try {
@@ -1732,11 +1732,11 @@ export const apiFetchQueryYakScriptGroupOnlineNotLoggedIn: () => Promise<API.Gro
                     resolve(res)
                 })
                 .catch((err) => {
-                    yakitNotify("error", "获取插件组失败：" + err)
+                    yakitNotify("error", "Get Plugin Group Failed：" + err)
                     reject(err)
                 })
         } catch (error) {
-            yakitNotify("error", "获取插件组失败：" + error)
+            yakitNotify("error", "Get Plugin Group Failed：" + error)
             reject(error)
         }
     })

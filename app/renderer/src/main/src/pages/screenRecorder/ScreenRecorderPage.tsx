@@ -32,7 +32,7 @@ export const ScreenRecorderPage: React.FC<ScreenRecorderPageProp> = (props) => {
                 setAvailable(data.Ok)
             })
             .catch((err) => {
-                yakitFailed("IsScrecorderReady失败:" + err)
+                yakitFailed("IsScrecorderReady Failed:" + err)
             })
             .finally(() => setTimeout(() => setLoading(false), 200))
     }
@@ -50,8 +50,8 @@ export const ScreenRecorderPage: React.FC<ScreenRecorderPageProp> = (props) => {
                     <YakitEmpty
                         image={<img src={screcorderEmpty} alt='' />}
                         imageStyle={{height: 200,margin: 'auto',marginBottom: 24}}
-                        title={<div style={{fontSize: 14}}>未安装录屏</div>}
-                        description='点击“安装录屏”，录屏工具安装成功后即可开始录屏'
+                        title={<div style={{fontSize: 14}}>Screen Recorder not installed</div>}
+                        description='Click“Install Screen Recorder”，Screen Recorder successfully installed and ready to use'
                     />
                     <div className={styles["not-installed-buttons"]}>
                         <YakitButton
@@ -61,14 +61,14 @@ export const ScreenRecorderPage: React.FC<ScreenRecorderPageProp> = (props) => {
                                 setInstallVisible(true)
                             }}
                         >
-                            安装录屏
+                            Install Screen Recorder
                         </YakitButton>
                     </div>
                 </div>
             )}
             <YakitHint
                 visible={installVisible}
-                title='录屏工具安装中...'
+                title='Installing Screen Recorder...'
                 heardIcon={<SolidCloudDownloadIcon style={{color: "var(--yakit-warning-5)"}} />}
                 onCancel={() => {
                     setInstallVisible(false)
@@ -100,8 +100,8 @@ export const InstallFFmpeg: React.FC<InstallFFmpegProp> = (props) => {
     const [results, setResults, getResult] = useGetState<string[]>([])
     const [percent, setPercent, getPercent] = useGetState<number>(0)
 
-    const timer = useRef<number>(0) //超时处理
-    const prePercent = useRef<number>(0) // 上一次的进度数值
+    const timer = useRef<number>(0) //Timeout Handling
+    const prePercent = useRef<number>(0) // Last Progress Value
 
     useEffect(() => {
         ipcRenderer.on(`${token}-data`, async (e, data: ExecResult) => {
@@ -115,14 +115,14 @@ export const InstallFFmpeg: React.FC<InstallFFmpegProp> = (props) => {
                 timer.current = 0
             }
             if (timer.current > 30) {
-                yakitFailed(`[InstallScrecorder] error:连接超时`)
+                yakitFailed(`[[InstallScreenRecorder] error: Connection timed out`)
                 timer.current = 0
             }
             setPercent(Math.ceil(data.Progress))
             setResults([Uint8ArrayToString(data.Message), ...getResult()])
         })
         ipcRenderer.on(`${token}-error`, (e, error) => {
-            yakitFailed("下载失败：" + error)
+            yakitFailed("Download Failed：" + error)
         })
         ipcRenderer.on(`${token}-end`, (e, data) => {
             onFinish()
@@ -158,7 +158,7 @@ export const InstallFFmpeg: React.FC<InstallFFmpegProp> = (props) => {
                     strokeColor='#F28B44'
                     trailColor='#F0F2F5'
                     percent={percent}
-                    format={(percent) => `已下载 ${percent}%`}
+                    format={(percent) => `Downloaded ${percent}%`}
                 />
             </div>
             <div className={styles["download-progress-messages"]}>

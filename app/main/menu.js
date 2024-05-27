@@ -4,7 +4,7 @@ const process = require("process")
 const isMac = process.platform === "darwin"
 
 /**
- * @name mac系统专属应用上下文菜单项
+ * @name Mac-Exclusive Context Menu Items
  * @type {Electron.MenuItemConstructorOptions}
  */
 const macAppMenu = {
@@ -23,7 +23,7 @@ const macAppMenu = {
 }
 
 /**
- * @name 开发者工具菜单项
+ * @name Developer Tools Menu Item
  * @type {Electron.MenuItemConstructorOptions}
  */
 const devToolMenu = {
@@ -42,7 +42,7 @@ const devToolMenu = {
 }
 
 /**
- * @name 帮助菜单项
+ * @name Help Menu Item
  * @type {Electron.MenuItemConstructorOptions}
  */
 const helpMenu = {
@@ -75,7 +75,7 @@ const helpMenu = {
     ]
 }
 
-/** @name 软件顶部菜单 */
+/** @name Software Top Menu */
 const MenuTemplate = [...(isMac ? [macAppMenu] : []), {role: "editMenu"}, devToolMenu, {role: "windowMenu"}, helpMenu]
 
 module.exports = {MenuTemplate}

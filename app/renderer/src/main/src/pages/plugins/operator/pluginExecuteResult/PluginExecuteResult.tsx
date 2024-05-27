@@ -88,7 +88,7 @@ export const PluginExecuteResult: React.FC<PluginExecuteResultProps> = React.mem
 
     const showTabs = useMemo(() => {
         if (streamInfo.riskState.length === 0) {
-            return streamInfo.tabsState.filter((item) => item.tabName !== "漏洞与风险")
+            return streamInfo.tabsState.filter((item) => item.tabName !== "Stop Answering")
         }
         return streamInfo.tabsState
     }, [streamInfo.tabsState, streamInfo.riskState])
@@ -147,7 +147,7 @@ const PluginExecutePortTable: React.FC<PluginExecutePortTableProps> = React.memo
             tableTitleExtraOperate={
                 <>
                     <YakitButton type='primary' icon={<SolidViewgridIcon />} size='small' onClick={onJumpPort}>
-                        端口资产管理
+                        Port Asset Management
                     </YakitButton>
                 </>
             }
@@ -157,20 +157,20 @@ const PluginExecutePortTable: React.FC<PluginExecutePortTableProps> = React.memo
         />
     )
 })
-/**HTTP 流量 */
+/**Cache Result */
 const PluginExecuteHttpFlow: React.FC<PluginExecuteWebsiteTreeProps> = React.memo((props) => {
     const {runtimeId, website = false} = props
 
-    const [height, setHeight] = useState<number>(300) //表格所在div高度
+    const [height, setHeight] = useState<number>(300) //Table div height
 
     const webTreeRef = useRef<any>()
-    // 被点击的树节点
+    // Clicked Tree Node
     const [searchURL, setSearchURL] = useState<string>("")
-    // 被点击的树节点URL参数
+    // Clicked Tree Node URL Param
     const [includeInUrl, setIncludeInUrl] = useState<string>("")
-    // 是否只展示表格
+    // Show Table Only
     const [onlyShowFirstNode, setOnlyShowFirstNode] = useState<boolean>(true)
-    // 表格里详情是否显示
+    // Show Details in Table
     const [secondNodeVisible, setSecondNodeVisible] = useState<boolean>(false)
     useEffect(() => {
         setSecondNodeVisible(!onlyShowFirstNode)
@@ -178,7 +178,7 @@ const PluginExecuteHttpFlow: React.FC<PluginExecuteWebsiteTreeProps> = React.mem
 
     const [treeQueryparams, setTreeQueryparams] = useState<string>("")
     const [refreshTreeFlag, setRefreshTreeFlag] = useState<boolean>(false)
-    // 流量表筛选条件 改变 控制webtree刷新
+    // Traffic Table Filter Conditions Change Controls WebTree Refresh
     const onQueryParams = useMemoizedFn((queryParams: string, execFlag?: boolean) => {
         setTreeQueryparams(queryParams)
         setRefreshTreeFlag(!!execFlag)
@@ -211,7 +211,7 @@ const PluginExecuteHttpFlow: React.FC<PluginExecuteWebsiteTreeProps> = React.mem
                         <WebTree
                             ref={webTreeRef}
                             height={height}
-                            searchPlaceholder='请输入域名进行搜索,例baidu.com'
+                            searchPlaceholder='Enter Domain for Search, e.g., baidu.com'
                             treeExtraQueryparams={treeQueryparams}
                             refreshTreeFlag={refreshTreeFlag}
                             onGetUrl={(searchURL, includeInUrl) => {
@@ -244,7 +244,7 @@ const PluginExecuteHttpFlow: React.FC<PluginExecuteWebsiteTreeProps> = React.mem
         </div>
     )
 })
-/** 基础插件信息 / 日志 */
+/** Basic Plugin Information / Logs */
 const PluginExecuteLog: React.FC<PluginExecuteLogProps> = React.memo((props) => {
     const {loading, messageList} = props
     const list = useCreation(() => {
@@ -260,7 +260,7 @@ const PluginExecuteLog: React.FC<PluginExecuteLogProps> = React.memo((props) => 
             .reverse()
     }, [messageList])
     return (
-        <PluginExecuteResultTabContent title='任务额外日志与结果'>
+        <PluginExecuteResultTabContent title='Task Extra Log and Result'>
             <Timeline reverse={true} pending={loading} style={{marginTop: 10, marginBottom: 10}}>
                 {list.map((e, index) => {
                     return (
@@ -273,39 +273,39 @@ const PluginExecuteLog: React.FC<PluginExecuteLogProps> = React.memo((props) => 
         </PluginExecuteResultTabContent>
     )
 })
-/**获取风险等级的展示tag类型 */
+/**Fetch risk level display tag */
 const getSeverity = (type) => {
     switch (type) {
-        case "低危":
+        case "Low Risk":
             return "warning"
-        case "中危":
+        case "Reply Complete":
             return "info"
-        case "高危":
+        case "High Risk":
             return "danger"
-        case "严重":
+        case "Severe":
             return "serious"
         default:
             return undefined
     }
 }
-/**风险与漏洞tab表 */
+/**Risk and Vulnerability Tabs */
 const VulnerabilitiesRisksTable: React.FC<VulnerabilitiesRisksTableProps> = React.memo((props) => {
     const {riskState} = props
 
     const columns: ColumnsTypeProps[] = useMemo(() => {
         return [
             {
-                title: "标题",
+                title: "Title",
                 dataKey: "TitleVerbose",
                 width: 400,
                 render: (_, i) => i.TitleVerbose || i.Title || "-"
             },
             {
-                title: "类型",
+                title: "Type",
                 dataKey: "RiskTypeVerbose"
             },
             {
-                title: "等级",
+                title: "Level",
                 dataKey: "Severity",
                 render: (severity) => {
                     const title = TitleColor.filter((item) => item.key.includes(severity || ""))[0]
@@ -318,14 +318,14 @@ const VulnerabilitiesRisksTable: React.FC<VulnerabilitiesRisksTableProps> = Reac
                 dataKey: "IP"
             },
             {
-                title: "发现时间",
+                title: "Discovery Time",
                 dataKey: "CreatedAt",
                 // width: 160,
                 enableDrag: false,
                 render: (v) => formatTimestamp(v)
             },
             {
-                title: "操作",
+                title: "Action",
                 dataKey: "Action",
                 width: 70,
                 fixed: "right",
@@ -339,7 +339,7 @@ const VulnerabilitiesRisksTable: React.FC<VulnerabilitiesRisksTableProps> = Reac
                                     onDetail(i)
                                 }}
                             >
-                                详情
+                                Details
                             </YakitButton>
                         </>
                     )
@@ -350,7 +350,7 @@ const VulnerabilitiesRisksTable: React.FC<VulnerabilitiesRisksTableProps> = Reac
     const onDetail = useMemoizedFn((i: Risk) => {
         let m = showYakitModal({
             width: "80%",
-            title: "详情",
+            title: "Details",
             footer: null,
             content: (
                 <div style={{padding: 24}}>
@@ -370,9 +370,9 @@ const VulnerabilitiesRisksTable: React.FC<VulnerabilitiesRisksTableProps> = Reac
             <TableVirtualResize<StreamResult.Risk>
                 renderTitle={
                     <div className={styles["table-renderTitle"]}>
-                        <span>风险与漏洞</span>
+                        <span>Risks & Vulns</span>
                         <YakitButton type='outline2' size='small' onClick={onJumpRisk}>
-                            查看全部
+                            View All
                         </YakitButton>
                     </div>
                 }
@@ -392,7 +392,7 @@ const VulnerabilitiesRisksTable: React.FC<VulnerabilitiesRisksTableProps> = Reac
         </div>
     )
 })
-/**插件执行的tab content 结构 */
+/**Tab Content Structured by Plugin Execution */
 const PluginExecuteResultTabContent: React.FC<PluginExecuteResultTabContentProps> = React.memo((props) => {
     const {title, extra, children, className = ""} = props
     return (
@@ -417,7 +417,7 @@ const PluginExecuteCustomTable: React.FC<PluginExecuteCustomTableProps> = React.
 
     const [sorterTable, setSorterTable] = useState<SortProps>()
 
-    const [query, setQuery] = useState<any>({}) // 设置表头查询条件
+    const [query, setQuery] = useState<any>({}) // Set Table Header Query Conditions
     const [loading, setLoading] = useState<boolean>(false)
 
     const firstItemRef = useRef<any>()
@@ -468,7 +468,7 @@ const PluginExecuteCustomTable: React.FC<PluginExecuteCustomTableProps> = React.
                 }
             })
                 .catch((e) => {
-                    yakitFailed("搜索失败:" + e)
+                    yakitFailed("Search failed:" + e)
                 })
                 .finally(() => {
                     setTimeout(() => {
@@ -480,24 +480,24 @@ const PluginExecuteCustomTable: React.FC<PluginExecuteCustomTableProps> = React.
             wait: 200
         }
     ).run
-    // 搜索
+    // Search
     const queryData = useMemoizedFn(() => {
         try {
             let list: any = []
             const length = data.length
             const queryHaveValue = {}
-            // 找出有查询条件
+            // Find Query Conditions
             for (const key in query) {
                 const objItem = query[key]
                 if (objItem) {
                     queryHaveValue[key] = query[key]
                 }
             }
-            // 所有查询条件为空时，返回原始数据
+            // When all query conditions are empty, return original data
             if (Object.getOwnPropertyNames(queryHaveValue).length === 0) {
                 list = [...data]
             } else {
-                // 搜索
+                // Search
                 for (let index = 0; index < length; index++) {
                     const elementArrayItem = data[index]
                     let isAdd: boolean[] = []
@@ -506,7 +506,7 @@ const PluginExecuteCustomTable: React.FC<PluginExecuteCustomTableProps> = React.
                         const isHave = `${elementArrayItem[key]}`.includes(objItem)
                         isAdd.push(isHave)
                     }
-                    // 所有条件都满足
+                    // All Conditions Met
                     if (!isAdd.includes(false)) {
                         list.push(elementArrayItem)
                     }
@@ -516,7 +516,7 @@ const PluginExecuteCustomTable: React.FC<PluginExecuteCustomTableProps> = React.
             const newDataTable = sorterTable?.order === "none" ? list : sorterFunction(list, sorterTable, "") || []
             setTableData(newDataTable)
         } catch (error) {
-            yakitFailed("搜索失败:" + error)
+            yakitFailed("Search failed:" + error)
         }
     })
     const getData = useMemoizedFn(() => {
@@ -556,8 +556,8 @@ const PluginExecuteCustomTable: React.FC<PluginExecuteCustomTableProps> = React.
                         type: "outline2"
                     }}
                     getData={getData}
-                    fileName={name || "输出表"}
-                    text='导出全部'
+                    fileName={name || "Output Table"}
+                    text='Export All'
                 />
             }
             className={styles["plugin-execute-custom-table"]}

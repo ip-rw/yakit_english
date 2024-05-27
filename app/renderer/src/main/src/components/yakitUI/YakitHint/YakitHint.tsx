@@ -22,14 +22,14 @@ export const YakitHint: React.FC<YakitHintProps> = memo((props) => {
     const modals = useMemo(() => {
         if (!!modalsPrevious && modalsPrevious.length > 0) {
             for (let index in childModal) {
-                /** 判断新数据位置是否超出旧数据长度 */
+                /** New data position exceeds old data length */
                 const position = +index < modalsPrevious.length
                 if (position) {
-                    /** 新数据展示是否为true */
+                    /** New data display is true */
                     const isLatest = childModal[index].content.visible === true
-                    /** 旧数据展示是否为false */
+                    /** Old data display is false */
                     const isOld = modalsPrevious[index].content.visible === false
-                    /** 由false变为true时，置顶该弹窗 */
+                    /** When false to true, pin popup */
                     if (isLatest && isOld) {
                         setTimeout(() => {
                             setCurrnetTop(childModal[index].key)

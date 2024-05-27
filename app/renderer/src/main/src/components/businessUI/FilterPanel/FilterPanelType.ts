@@ -1,40 +1,40 @@
 import {API} from "@/services/swagger/resposeType"
 
 export interface FilterPanelGroupItem {
-    /** 单项过滤条件key */
+    /** Item Filter Key */
     groupKey: string
-    /** 单项过滤条件展示名 */
+    /** Item Filter Display Name */
     groupName: string
-    /** 单选过滤额外操作按钮 */
+    /** Single-Select Filter Action Button */
     groupExtraOptBtn?: React.ReactElement
-    /** 单项过滤条件-过滤内容列表 */
+    /** Item Filter - Filter List */
     data: {
-        /** 选项展示内容 */
+        /** Option Display */
         label: string
-        /** 选项值 */
+        /** Option Value */
         value: string
-        /** 选项统计总数 */
+        /** Option Count */
         count: number
     }[]
 }
 
 export interface FilterPanelProps {
-    /** 外框架修饰类 */
+    /** Outer Decorator Class */
     wrapperClassName?: string
-    /** 列表架修饰类 */
+    /** List Decorator Class */
     listClassName?: string
-    /** 加载状态 */
+    /** Loading State */
     loading?: boolean
-    /** 是否可见 */
+    /** Visible? */
     visible: boolean
-    /** 设置是否可见 */
+    /** Set Visibility */
     setVisible: (show: boolean) => any
-    /** 选中数据 */
+    /** Selected Data */
     selecteds: Record<string, API.PluginsSearchData[]>
-    /** 选中数据回调 */
+    /** Selected Data Callback */
     onSelect: (value: Record<string, API.PluginsSearchData[]>) => any
-    /** 数据展示列表 */
+    /** Data Display List */
     groupList: FilterPanelGroupItem[]
-    /** 数据为空时的提示信息 */
+    /** Empty Data Tip */
     noDataHint?: string
 }

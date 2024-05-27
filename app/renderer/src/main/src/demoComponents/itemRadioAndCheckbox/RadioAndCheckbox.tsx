@@ -8,7 +8,7 @@ import "../demoStyle.scss"
 
 const {Item} = Form
 
-/** @name 表单项-单选组 */
+/** @name Form Item - Radio Group */
 export const DemoItemRadio: React.FC<ItemRadioProps> = memo((p) => {
     const {label, help, formItemStyle, required, disabled, size, value, setValue, data} = p
 
@@ -26,7 +26,7 @@ export const DemoItemRadio: React.FC<ItemRadioProps> = memo((p) => {
     )
 })
 
-/** @name 表单项-单选按钮组 */
+/** @name Form Item - Radio Button Group */
 export const DemoItemRadioButton: React.FC<ItemRadioProps> = memo((p) => {
     const {label, help, formItemStyle, required, disabled, size, value, setValue, data} = p
 
@@ -45,7 +45,7 @@ export const DemoItemRadioButton: React.FC<ItemRadioProps> = memo((p) => {
     )
 })
 
-/** @name 表单项-多选组 */
+/** @name Form Item - Checkbox Group */
 export const DemoItemCheckBox: React.FC<ItemCheckBoxProps> = memo((p) => {
     const {label, help, formItemStyle, required, disabled, value, setValue, data} = p
 

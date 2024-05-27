@@ -35,7 +35,7 @@ export const YakURLTree: React.FC<YakURLTreeProp> = (props) => {
                     isLeaf: !i.HaveChildrenNodes,
                 })))
             }).catch(e => {
-                yakitFailed(`加载失败: ${e}`)
+                yakitFailed(`Loading Failed: ${e}`)
                 setData([])
             })
         }, [yakurl])
@@ -107,7 +107,7 @@ export const YakURLTree: React.FC<YakURLTreeProp> = (props) => {
                     treeData={data}
                 />}
                 secondNode={<div>
-                    {selected ? <div>SELECTED {`${JSON.stringify(selected)}`}</div> : <div>未选择</div>}
+                    {selected ? <div>SELECTED {`${JSON.stringify(selected)}`}</div> : <div>Not Selected</div>}
                 </div>}
             />
         </AutoCard>

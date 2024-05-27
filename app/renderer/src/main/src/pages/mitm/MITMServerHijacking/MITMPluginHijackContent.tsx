@@ -99,18 +99,18 @@ export const MITMPluginHijackContent: React.FC<MITMPluginHijackContentProps> = (
     const [mitmTabs, setMitmTabs] = useState<Array<TabsItem>>([
         {
             key: "all",
-            label: "全部",
-            contShow: true // 初始为true
+            label: "Deselect",
+            contShow: true // Initially true
         },
         {
             key: "loaded",
-            label: "已启用",
-            contShow: false // 初始为false
+            label: "Enabled",
+            contShow: false // Initially false
         },
         {
             key: "hot-patch",
-            label: "热加载",
-            contShow: false // 初始为false
+            label: "Hot Reload",
+            contShow: false // Initially false
         }
     ])
 
@@ -119,7 +119,7 @@ export const MITMPluginHijackContent: React.FC<MITMPluginHijackContentProps> = (
     const [isHooksSearch, setIsHooksSearch] = useState<boolean>(false)
     const [refreshCode, setRefreshCode] = useState<boolean>(false)
     /**
-     * 选中的插件组
+     * Selected plugin group
      */
     const [selectGroup, setSelectGroup] = useState<YakFilterRemoteObj[]>([])
 
@@ -128,10 +128,10 @@ export const MITMPluginHijackContent: React.FC<MITMPluginHijackContentProps> = (
     const [hooks, handlers] = useMap<string, boolean>(new Map<string, boolean>())
     const [loading, setLoading] = useState(false)
 
-    // 是否允许获取默认勾选值
+    // Allow getting default checked value?
     const isDefaultCheck = useRef<boolean>(false)
 
-    // 初始化加载 hooks，设置定时更新 hooks 状态
+    // Init hooks, set to periodically update status
     useEffect(() => {
         updateHooks()
         const id = setInterval(() => {
@@ -143,7 +143,7 @@ export const MITMPluginHijackContent: React.FC<MITMPluginHijackContentProps> = (
     }, [])
 
     useEffect(() => {
-        // 加载状态(从服务端加载)
+        // Loading state (from server))
         ipcRenderer.on("client-mitm-loading", (_, flag: boolean) => {
             setLoading(flag)
         })
@@ -163,7 +163,7 @@ export const MITMPluginHijackContent: React.FC<MITMPluginHijackContentProps> = (
                 isDefaultCheck.current = true
             })
         let cacheTmp: string[] = []
-        // 用于 MITM 的 查看当前 Hooks
+        // View current Hooks for MITM
         ipcRenderer.on("client-mitm-hooks", (e, data: YakScriptHooks[]) => {
             if (isDefaultCheck.current) {
                 const tmp = new Map<string, boolean>()
@@ -182,7 +182,7 @@ export const MITMPluginHijackContent: React.FC<MITMPluginHijackContentProps> = (
         })
         updateHooks()
         return () => {
-            // 组价销毁时进行本地缓存 用于后续页面进入默认选项
+            // Cache locally on component destroy for default options on revisit
             const localSaveData = [...new Set(cacheTmp)]
             setRemoteValue(CHECK_CACHE_LIST_DATA, JSON.stringify(localSaveData))
             ipcRenderer.removeAllListeners("client-mitm-hooks")
@@ -218,17 +218,17 @@ export const MITMPluginHijackContent: React.FC<MITMPluginHijackContentProps> = (
     }, [hooks, isHooksSearch])
 
     /**
-     * @description 多选插件
+     * @description Multiple plugins
      * @param checkList
      */
     const multipleMitm = (checkList: string[]) => {
         enableMITMPluginMode(checkList).then(() => {
-            info("启动 MITM 插件成功")
+            info("Start MITM plugin successful")
         })
     }
     const updateHooks = useMemoizedFn(() => {
         ipcRenderer.invoke("mitm-get-current-hook").catch((e) => {
-            yakitFailed(`更新 MITM 插件状态失败: ${e}`)
+            yakitFailed(`Update MITM plugin status failed: ${e}`)
         })
     })
     const onRefresh = useMemoizedFn(() => {
@@ -239,25 +239,25 @@ export const MITMPluginHijackContent: React.FC<MITMPluginHijackContentProps> = (
         setTriggerSearch(!triggerSearch)
     })
     /**
-     * @description 发送到【热加载】中调试代码
+     * @description Send to【HR】for debugging
      */
     const onSendToPatch = useMemoizedFn((s: YakScript) => {
         setScript(s)
         handleTabClick({
             key: "hot-patch",
-            label: "热加载",
+            label: "Hot Reload",
             contShow: false
         })
     })
-    /**@description 保存热加载代码到本地插件 */
+    /**@description Save hot-reload code to local plugin */
     const onSaveHotCode = useMemoizedFn(() => {
         ipcRenderer
             .invoke("SaveYakScript", script)
             .then((data: YakScript) => {
-                yakitNotify("success", `保存本地插件成功`)
+                yakitNotify("success", `Save local plugin successful`)
             })
             .catch((e: any) => {
-                yakitNotify("error", `保存插件失败:` + e)
+                yakitNotify("error", `Save plugin failed:` + e)
             })
     })
 
@@ -282,7 +282,7 @@ export const MITMPluginHijackContent: React.FC<MITMPluginHijackContentProps> = (
                 return (
                     <div className={styles["hot-patch-heard-extra"]}>
                         <YakitPopconfirm
-                            title={"确认重置热加载代码？"}
+                            title={"Confirm reset hot-reload code？"}
                             onConfirm={() => {
                                 setScript(HotLoadDefaultData)
                                 onRefresh()
@@ -298,11 +298,11 @@ export const MITMPluginHijackContent: React.FC<MITMPluginHijackContentProps> = (
                                 type='outline1'
                                 onClick={() => {
                                     setRemoteValue(RemoteGV.MITMHotPatchCodeSave, script.Content).then(() => {
-                                        yakitNotify("success", `保存成功`)
+                                        yakitNotify("success", `Save Successful`)
                                     })
                                 }}
                             >
-                                保存
+                                Save
                             </YakitButton>
                         )}
                         <YakitButton
@@ -311,15 +311,15 @@ export const MITMPluginHijackContent: React.FC<MITMPluginHijackContentProps> = (
                                 ipcRenderer
                                     .invoke("mitm-exec-script-content", script.Content)
                                     .then(() => {
-                                        info("加载成功")
+                                        info("Load successful")
                                     })
                                     .catch((e) => {
-                                        yakitFailed("加载失败：" + e)
+                                        yakitFailed("Loading Failed：" + e)
                                     })
                             }}
                         >
                             <PlayIcon />
-                            热加载
+                            Hot Reload
                         </YakitButton>
                         {isFullScreen ? (
                             <ArrowsRetractIcon
@@ -340,7 +340,7 @@ export const MITMPluginHijackContent: React.FC<MITMPluginHijackContentProps> = (
                 return (
                     <>
                         <YakitInput.Search
-                            placeholder='请输入插件名称搜索'
+                            placeholder='Enter plugin name to search'
                             value={hookScriptNameSearch}
                             onChange={(e) => setHookScriptNameSearch(e.target.value)}
                             onSearch={() => setIsHooksSearch(!isHooksSearch)}
@@ -372,12 +372,12 @@ export const MITMPluginHijackContent: React.FC<MITMPluginHijackContentProps> = (
             case "hot-patch":
                 return (
                     <div className={styles["hot-patch-code"]}>
-                        {/* 用户热加载代码 */}
+                        {/* User hot-reloads code */}
                         {script.Id ? (
                             <div className={styles["hot-patch-heard"]}>
-                                <span>插件名称：{script.ScriptName}</span>
+                                <span>Plugin name：{script.ScriptName}</span>
                                 <YakitButton type='primary' onClick={() => onSaveHotCode()}>
-                                    保存源码
+                                    Save source code
                                 </YakitButton>
                             </div>
                         ) : (
@@ -408,7 +408,7 @@ export const MITMPluginHijackContent: React.FC<MITMPluginHijackContentProps> = (
                     </div>
                 )
             case "loaded":
-                // 已启用
+                // Enabled
                 return (
                     <div className={styles["plugin-loaded-list"]}>
                         <div className={styles["plugin-loaded-list-heard"]}>
@@ -419,7 +419,7 @@ export const MITMPluginHijackContent: React.FC<MITMPluginHijackContentProps> = (
                                 className={styles["plugin-loaded-list-heard-empty"]}
                                 onClick={() => onSelectAll(false)}
                             >
-                                清&nbsp;空
+                                Clear&nbsp;Empty
                             </div>
                         </div>
                         <div className={styles["plugin-loaded-hooks-list"]}>
@@ -436,7 +436,7 @@ export const MITMPluginHijackContent: React.FC<MITMPluginHijackContentProps> = (
                                         status={status}
                                         key={data.ScriptName}
                                         script={data}
-                                        // 劫持启动后
+                                        // Post-hijack start
                                         hooks={hooks}
                                         onSendToPatch={onSendToPatch}
                                         onSubmitYakScriptId={props.onSubmitYakScriptId}
@@ -445,7 +445,7 @@ export const MITMPluginHijackContent: React.FC<MITMPluginHijackContentProps> = (
                                                 setIsSelectAll(false)
                                             }
                                         }}
-                                        // 劫持启动前
+                                        // Pre-hijack start
                                         defaultPlugins={checkList}
                                         setDefaultPlugins={setCheckList}
                                     />

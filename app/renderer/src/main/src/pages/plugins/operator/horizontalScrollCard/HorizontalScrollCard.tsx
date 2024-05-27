@@ -15,13 +15,13 @@ import ReactResizeDetector from "react-resize-detector"
 const getTextColor = (id: string) => {
     switch (true) {
         case id.includes("success"):
-        case id.includes("成功"):
+        case id.includes("Success"):
         case id.includes("succeeded"):
         case id.includes("finished"):
             return "success"
         case id.includes("error"):
-        case id.includes("失败"):
-        case id.includes("错误"):
+        case id.includes("Fail"):
+        case id.includes("Error"):
         case id.includes("fatal"):
         case id.includes("missed"):
         case id.includes("miss"):

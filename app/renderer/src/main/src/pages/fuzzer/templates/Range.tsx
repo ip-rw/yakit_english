@@ -38,7 +38,7 @@ export const RangeChar: React.FC<RangeCharProp> = (props) => {
 
     return (
         <>
-            <Form.Item label={"设置字符最小 ASCII 码"}>
+            <Form.Item label={"Min Char ASCII"}>
                 <YakitInput
                     value={min}
                     prefix={"0x"}
@@ -54,7 +54,7 @@ export const RangeChar: React.FC<RangeCharProp> = (props) => {
                     }}
                 />
             </Form.Item>
-            <Form.Item label={"设置字符最大 ASCII 码"}>
+            <Form.Item label={"Max Char ASCII"}>
                 <YakitInput
                     prefix={"0x"}
                     value={max}

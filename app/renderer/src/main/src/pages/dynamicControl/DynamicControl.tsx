@@ -28,24 +28,24 @@ export interface ControlOperationProps {
     controlName: string
 }
 
-// 控制中 - 禁止操作
+// In Control - No Operations Allowed
 export const ControlOperation: React.FC<ControlOperationProps> = (props) => {
     const {controlName} = props
     const {userInfo} = useStore()
     const {dynamicStatus} = yakitDynamicStatus()
-    // 关闭远程控制
+    // Close Remote Control
     const closeControl = () => {
         ipcRenderer.invoke("kill-dynamic-control")
-        // 立即退出界面
+        // Immediate Logout
         ipcRenderer.invoke("lougin-out-dynamic-control-page")
         remoteOperation(false, dynamicStatus, userInfo)
     }
     return (
         <div className={styles["control-operation"]}>
             <div className={styles["control-operation-box"]}>
-                <div className={styles["control-operation-title"]}>远程控制中</div>
+                <div className={styles["control-operation-title"]}>Remote Control Active</div>
                 <div className={styles["control-operation-seconend-title"]}>
-                    已被用户 {controlName} 远程控制，请勿关闭 {getReleaseEditionName()}
+                    User Occupied {controlName} Do Not Close During Remote Control {getReleaseEditionName()}
                 </div>
                 <div className={styles["control-operation-img"]}>
                     <ControlMyselfIcon />
@@ -57,7 +57,7 @@ export const ControlOperation: React.FC<ControlOperationProps> = (props) => {
                     colors="danger"
                     className={styles["control-operation-btn"]}
                 >
-                    退出远程
+                    Exit Remote
                 </YakitButton>
                 <div className={styles["control-operation-left-bg"]}></div>
                 <div className={styles["control-operation-right-bg"]}></div>
@@ -83,7 +83,7 @@ export interface ResposeProps {
     alive: boolean
 }
 
-// 受控端
+// Controlled End
 export const ControlMyself: React.FC<ControlMyselfProps> = (props) => {
     const {goBack} = props
     const [loading, setLoading] = useState<boolean>(true)
@@ -93,7 +93,7 @@ export const ControlMyself: React.FC<ControlMyselfProps> = (props) => {
     const [restartBtn, setRestartBtn] = useState<boolean>(false)
     const [restartLoading, setRestartLoading] = useState<boolean>(false)
 
-    // 10秒内获取不到密钥则切换按钮（杀掉进程-重新获取）
+    // Switch Button if Key Not Obtained Within 10s (Terminate Process - Retry)）
     const judgeLoading = () => {
         setRestartLoading(false)
         setTimeout(() => {
@@ -105,8 +105,8 @@ export const ControlMyself: React.FC<ControlMyselfProps> = (props) => {
 
     const run = () => {
         /* 
-            受控端步骤
-            1.通过/remote/tunnel获取ip与password
+            Controlled Steps
+            1.Via/remote/Tunnel Obtain IP & Password
         */
         NetWorkApi<any, API.RemoteTunnelResponse>({
             url: "remote/tunnel",
@@ -114,15 +114,15 @@ export const ControlMyself: React.FC<ControlMyselfProps> = (props) => {
         })
             .then((data) => {
                 const {server, secret, gen_tls_crt} = data
-                // 2.启动远程控制服务
+                // 2.Start Remote Control Service
                 ipcRenderer
                     .invoke("start-dynamic-control", {note: userInfo.companyName, server, secret, gen_tls_crt})
                     .then((respose: ResposeProps) => {
-                        // 如若服务已启动 且10秒内获取不到密钥则切换按钮（杀掉进程-重新获取）
+                        // Switch Button if Key Not Obtained Within 10s After Service Starts (Terminate Process - Retry)）
                         if (respose.alive) {
                             judgeLoading()
                         }
-                        // 3.获取密钥
+                        // 3.Obtain Key
                         NetWorkApi<any, API.RemoteOperationResponse>({
                             url: "remote/operation",
                             method: "get",
@@ -145,25 +145,25 @@ export const ControlMyself: React.FC<ControlMyselfProps> = (props) => {
                                         secret
                                     }
                                     const showData = unReadable(resultObj)
-                                    // 用于受控主动退出通知
+                                    // For Controlled Initiated Exit Notification
                                     setDynamicStatus({...dynamicStatus, ...resultObj})
                                     setTextArea(showData)
                                     setLoading(false)
                                 } else {
-                                    failed(`获取远程连接信息/复制密钥失败`)
+                                    failed(`Retrieve Remote Connection Info/Copy Key Failed`)
                                 }
                             })
                             .catch((err) => {
-                                failed(`获取远程连接信息/复制密钥失败:${err}`)
+                                failed(`Retrieve Remote Connection Info/Copy Key Failed:${err}`)
                             })
                             .finally(() => {})
                     })
                     .catch((e) => {
-                        failed(`远程连接失败:${e}`)
+                        failed(`Remote Connection Failed:${e}`)
                     })
             })
             .catch((err) => {
-                failed(`获取server/secret失败:${err}`)
+                failed(`Obtain Server/Secret Failed:${err}`)
             })
             .finally(() => {})
     }
@@ -187,7 +187,7 @@ export const ControlMyself: React.FC<ControlMyselfProps> = (props) => {
             </Spin>
             <div className={styles["btn-box"]}>
                 <YakitButton type='outline2' style={{marginRight: 8}} onClick={goBack}>
-                    返回上一步
+                    Back
                 </YakitButton>
                 {restartBtn ? (
                     <YakitButton
@@ -200,17 +200,17 @@ export const ControlMyself: React.FC<ControlMyselfProps> = (props) => {
                             })
                         }}
                     >
-                        重启服务
+                        Restart Service
                     </YakitButton>
                 ) : (
                     <YakitButton
                         loading={loading}
                         onClick={() => {
                             ipcRenderer.invoke("set-copy-clipboard", textArea)
-                            success("复制成功")
+                            success("Copy Success")
                         }}
                     >
-                        复制密钥
+                        Copy Key
                     </YakitButton>
                 )}
             </div>
@@ -223,7 +223,7 @@ export interface ControlOtherProps {
     runControl: (v: string, url: string) => void
 }
 
-// 控制端
+// Controller
 export const ControlOther: React.FC<ControlOtherProps> = (props) => {
     const {goBack, runControl} = props
     const [textAreaValue, setTextAreaValue] = useState<string>("")
@@ -241,22 +241,22 @@ export const ControlOther: React.FC<ControlOtherProps> = (props) => {
                 }
             }).then((res) => {
                 if (res.status) {
-                    warn("由于远程目标已在远程控制中，暂无法连接")
+                    warn("Unable to Connect as the Remote Target is Already Being Controlled")
                 } else {
-                    // 如有受控端服务则杀掉
+                    // Terminate Controlled Service if Exists
                     ipcRenderer.invoke("kill-dynamic-control")
                     setLoading(true)
                     getRemoteValue(RemoteGV.HttpSetting).then((setting) => {
                         if (!setting) return
                         const value = JSON.parse(setting)
                         let url = value.BaseUrl
-                        // 切换到自动远程连接
+                        // Switch to Auto Remote Connect
                         runControl(JSON.stringify(resultObj), url)
                     })
                 }
             })
         } else {
-            failed("密钥格式有误")
+            failed("Invalid Key Format")
         }
     }
     return (
@@ -274,14 +274,14 @@ export const ControlOther: React.FC<ControlOtherProps> = (props) => {
                             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                         ]
                         if (!typeArr.includes(f.type)) {
-                            failed(`${f.name}非txt、Excel文件，请上传txt、Excel格式文件！`)
+                            failed(`${f.name}Non-txt/Excel, Upload txt/Excel！`)
                             return false
                         }
 
                         setUploadLoading(true)
                         ipcRenderer.invoke("fetch-file-content", (f as any).path).then((res) => {
                             let Targets = res
-                            // 处理Excel格式文件
+                            // Process Excel
                             if (f.type !== "text/plain") {
                                 let str = JSON.stringify(res)
                                 Targets = str.replace(/(\[|\]|\{|\}|\")/g, "")
@@ -298,16 +298,16 @@ export const ControlOther: React.FC<ControlOtherProps> = (props) => {
                         setValue: (value) => setTextAreaValue(value),
                         value: textAreaValue,
                         autoSize: {minRows: 3, maxRows: 10},
-                        placeholder: "请将链接密钥粘贴/输入到文本框中"
+                        placeholder: "Paste Link Key/Enter in Text Box"
                     }}
                 />
             </Spin>
             <div className={styles["btn-box"]}>
                 <YakitButton type='outline2' style={{marginRight: 8}} onClick={goBack}>
-                    返回上一步
+                    Back
                 </YakitButton>
                 <YakitButton onClick={() => onFinish()} loading={loading} disabled={textAreaValue.length === 0}>
-                    远程连接
+                    Remote Connection
                 </YakitButton>
             </div>
         </div>
@@ -319,7 +319,7 @@ export interface SelectControlTypeProps {
     onControlOther: (v: boolean) => void
 }
 
-// 控制模式选择
+// Control Mode Selection
 export const SelectControlType: React.FC<SelectControlTypeProps> = (props) => {
     const {onControlMyself, onControlOther} = props
     return (
@@ -329,8 +329,8 @@ export const SelectControlType: React.FC<SelectControlTypeProps> = (props) => {
                     <ControlMyselfIcon />
                 </div>
                 <div className={styles["type-content"]}>
-                    <div className={styles["type-title"]}>受控端</div>
-                    <div className={styles["type-text"]}>生成邀请密钥</div>
+                    <div className={styles["type-title"]}>Controlled End</div>
+                    <div className={styles["type-text"]}>Generate Invite Key</div>
                 </div>
             </div>
             <div className={styles["type-box"]} onClick={() => onControlOther(true)}>
@@ -338,8 +338,8 @@ export const SelectControlType: React.FC<SelectControlTypeProps> = (props) => {
                     <ControlOtherIcon />
                 </div>
                 <div className={styles["type-content"]}>
-                    <div className={styles["type-title"]}>控制端</div>
-                    <div className={styles["type-text"]}>可通过受控端分享的密钥远程控制他的 客户端</div>
+                    <div className={styles["type-title"]}>Controller</div>
+                    <div className={styles["type-text"]}>Control via Shared Key</div>
                 </div>
             </div>
         </div>
@@ -385,19 +385,19 @@ export interface ShowUserInfoProps extends API.NewUrmResponse {
 const ShowUserInfo: React.FC<ShowUserInfoProps> = (props) => {
     const {user_name, password, onClose} = props
     const copyUserInfo = () => {
-        callCopyToClipboard(`用户名：${user_name}\n密码：${password}`)
+        callCopyToClipboard(`Username：${user_name}\nPassword：${password}`)
     }
     return (
         <div style={{padding: "0 10px"}}>
             <div>
-                用户名：<span>{user_name}</span>
+                Username：<span>{user_name}</span>
             </div>
             <div>
-                密码：<span>{password}</span>
+                Password：<span>{password}</span>
             </div>
             <div style={{textAlign: "center", paddingTop: 10}}>
                 <Button type='primary' onClick={() => copyUserInfo()}>
-                    复制
+                    Copy
                 </Button>
             </div>
         </div>
@@ -459,7 +459,7 @@ export const ControlAdminPage: React.FC<ControlAdminPageProps> = (props) => {
                     setTotal(res.pagemeta.total)
                 })
                 .catch((err) => {
-                    failed("获取远程管理列表失败：" + err)
+                    failed("Failed to Retrieve Remote Management List：" + err)
                 })
                 .finally(() => {
                     setTimeout(() => {
@@ -492,7 +492,7 @@ export const ControlAdminPage: React.FC<ControlAdminPageProps> = (props) => {
                 setTotal(res.pagemeta.total)
             })
             .catch((err) => {
-                failed("获取远程管理列表失败：" + err)
+                failed("Failed to Retrieve Remote Management List：" + err)
             })
             .finally(() => {
                 setTimeout(() => {
@@ -518,7 +518,7 @@ export const ControlAdminPage: React.FC<ControlAdminPageProps> = (props) => {
 
     const columns: VirtualColumns[] = [
         {
-            title: "控制端",
+            title: "Controller",
             render: (record) => {
                 return (
                     <div>
@@ -529,35 +529,35 @@ export const ControlAdminPage: React.FC<ControlAdminPageProps> = (props) => {
             }
         },
         {
-            title: "远程地址",
+            title: "Remote Address",
             dataIndex: "addr",
             render: (text) => <span>{text}</span>
         },
         {
-            title: "开始时间",
+            title: "Start Time",
             dataIndex: "created_at",
             render: (text) => <span>{moment.unix(text).format("YYYY-MM-DD HH:mm")}</span>
         },
         {
-            title: "结束时间",
+            title: "End Time",
             dataIndex: "updated_at",
             render: (text, record) => {
                 return <span>{record.status ? "-" : moment.unix(text).format("YYYY-MM-DD HH:mm")}</span>
             }
         },
         {
-            title: "状态",
+            title: "Status",
             dataIndex: "status",
             render: (i: boolean) => {
                 return (
                     <div className={styles["radio-status"]}>
                         {i ? (
                             <Radio className={styles["radio-status-active"]} defaultChecked={true}>
-                                远程中
+                                Remote In Progress
                             </Radio>
                         ) : (
                             <Radio disabled={true} checked={true}>
-                                已结束
+                                Ended
                             </Radio>
                         )}
                     </div>
@@ -572,15 +572,15 @@ export const ControlAdminPage: React.FC<ControlAdminPageProps> = (props) => {
                         data={[
                             {
                                 key: "all",
-                                label: "全部"
+                                label: "Deselect"
                             },
                             {
                                 key: "true",
-                                label: "远程中"
+                                label: "Remote In Progress"
                             },
                             {
                                 key: "false",
-                                label: "已结束"
+                                label: "Ended"
                             }
                         ]}
                         onClick={({key}) => setParams({...getParams(), status: key === "all" ? undefined : key})}
@@ -594,7 +594,7 @@ export const ControlAdminPage: React.FC<ControlAdminPageProps> = (props) => {
             <Spin spinning={resetLoading}>
                 <div className={styles["operation"]}>
                     <div className={styles["left-select"]}>
-                        <div className={styles["title-box"]}>远程管理</div>
+                        <div className={styles["title-box"]}>Remote Mgmt</div>
 
                         <span className={styles["total-box"]}>
                             <span className={styles["title"]}>Total</span>{" "}
@@ -622,7 +622,7 @@ export const ControlAdminPage: React.FC<ControlAdminPageProps> = (props) => {
                             />
                         </div>
                         <YakitInput.Search
-                            placeholder={"请输入用户名"}
+                            placeholder={"Enter Username"}
                             enterButton={true}
                             size='middle'
                             style={{width: 200}}
@@ -651,7 +651,7 @@ export const ControlAdminPage: React.FC<ControlAdminPageProps> = (props) => {
     )
 }
 
-/** 通知是否远程连接 */
+/** Notify of Remote Connection */
 export const remoteOperation = (status: boolean, dynamicStatus: DynamicStatusProps, userInfo?: UserInfoProps) => {
     const {id, host, port, secret, note} = dynamicStatus
     return new Promise(async (resolve, reject) => {
@@ -670,7 +670,7 @@ export const remoteOperation = (status: boolean, dynamicStatus: DynamicStatusPro
             if (data.ok) {}
         })
         .catch((err) => {
-            failed(`连接远程/取消失败:${err}`)
+            failed(`Connect Remote/Cancel Failed:${err}`)
         })
         .finally(() => {
             resolve(true)
@@ -678,12 +678,12 @@ export const remoteOperation = (status: boolean, dynamicStatus: DynamicStatusPro
     })
 }
 
-/** 数据内容不可读 */
+/** Data Unreadable */
 export const unReadable = (resultObj: ResultObjProps) => {
     return `${resultObj.id},${resultObj.note},${resultObj.port},${resultObj.host},${resultObj.pubpem},${resultObj.secret}`
 }
 
-/** 数据内容可读 */
+/** Data Readable */
 export const readable = (v: string) => {
     try {
         let arr = v.split(",")

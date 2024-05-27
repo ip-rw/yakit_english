@@ -23,74 +23,74 @@ export interface ChaosMakerRuleGroup {
 
 const groups: ChaosMakerRuleGroup[] = [
     {
-        "Title": "攻击 Struts2",
-        "Description": "针对基于Java Web的Struts框架的应用程序的安全攻击，可能导致信息泄露、权限提升、远程代码执行等问题。",
+        "Title": "Attack Struts2",
+        "Description": "Security attacks on Java Web applications using the Struts framework can lead to information disclosure, privilege elevation, remote code execution, and more.。",
         "Keywords": "struts",
         "Protocols": [
             "http",
         ],
-        "Solution": "为了防止Java Web Struts攻击，请确保及时更新Struts框架至最新版本，遵循安全编码实践，对输入进行有效的验证与过滤，并定期进行安全审计。"
+        "Solution": "To prevent Java Web Struts attacks, ensure Struts framework is up-to-date, follow secure coding practices, validate and filter inputs, and perform regular security audits.。"
     },
     {
-        "Title": "攻击 SpringCloud",
-        "Description": "针对基于Java Web的SpringMVC框架的应用程序的安全攻击，可能导致信息泄露、权限提升、远程代码执行等问题。",
+        "Title": "Attack SpringCloud",
+        "Description": "Security attacks on Java Web applications using the Spring MVC framework can lead to information disclosure, privilege escalation, remote code execution, and more.。",
         "Keywords": "spring",
         "Protocols": [
             "http",
         ],
-        "Solution": "为了防止Java Web SpringMVC框架攻击，请确保及时更新SpringMVC框架至最新版本，遵循安全编码实践，对输入进行有效的验证与过滤，并定期进行安全审计。"
+        "Solution": "To prevent attacks on Java Web Spring MVC framework, ensure timely updates to the Spring MVC framework, adhere to secure coding practices, validate and filter inputs, and conduct regular security audits.。"
     },
     {
-        "Title": "ICMP 隧道回连",
-        "Description": "ICMP隧道回连是一种利用ICMP协议的数据包在网络中建立隐蔽的通信通道的技术。攻击者可能利用这种技术绕过防火墙，实现远程控制、数据泄露等目的。",
+        "Title": "ICMP Tunnel Backconnect",
+        "Description": "ICMP Tunnel Backconnect is a technique that uses ICMP packets to establish hidden communication channels across networks, allowing attackers to bypass firewalls for remote control and data leakage.。",
         "Keywords": "icmp",
         "Protocols": [
             "icmp"
         ],
-        "Solution": "为了防止ICMP隧道回连攻击，建议采取以下措施：1. 限制ICMP流量，对出入口流量进行监控与过滤；2. 在网络边界部署防火墙，实施严格的安全策略；3. 增强内部网络安全，监控异常行为；4. 定期进行安全审计和渗透测试，检查系统漏洞。"
+        "Solution": "To prevent ICMP Tunnel Backconnect attacks, recommend: 1. Restrict ICMP traffic, monitor and filter inbound and outbound traffic; 2. Deploy firewalls at network peripheries, implement strict security policies; 3. Enhance internal network security, monitor unusual behavior; Regular security audits and penetration tests to check for system vulnerabilities.。"
     },
     {
-        "Title": "挖矿外连(DNS协议)",
-        "Description": "DNS协议下挖矿外连是指攻击者利用DNS协议在受害者设备中植入恶意挖矿程序，通过DNS请求将挖矿收益传输至攻击者的指定服务器，可能导致受害者设备资源被滥用、性能下降等问题。",
+        "Title": "Mining via DNS)",
+        "Description": "Mining via DNS protocol involves attackers injecting malicious mining software into victims' Devices through DNS requests to transfer mining profits to specified servers, potentially causing resource abuse and performance degradation.。",
         "Keywords": "mine",
         "Protocols": [
             "dns"
         ],
-        "Solution": "为了防止DNS协议下挖矿外连攻击，建议采取以下措施：1. 安装并更新有效的安全防护软件，以便检测和移除恶意挖矿程序；2. 对DNS流量进行监控，分析异常请求和数据传输；3. 限制或禁止未经授权的设备访问内部网络；4. 增强DNS服务器安全，限制未经授权的DNS解析；5. 定期进行安全审计，检查系统漏洞。"
+        "Solution": "Prevent DNS mining by: 1. Installing and updating security software to detect and remove mining software; 2. Monitoring DNS traffic for abnormal requests and data transfers; 3. Restricting or banning unauthorized device access to the internal network; 4. Enhancing DNS server security, limiting unauthorized resolutions; Regular security audits to check for vulnerabilities.。"
     },
     {
-        "Title": "攻击协同办公套件",
-        "Description": "对常见的OA系统万户Ezoffice、Tongda OA、红帆OA、Weaver e-bridge、FineReport、Weaver e-cology、Weaver e-office、Weaver e-mobile、YonYou NC等产品的历史漏洞进行攻击",
+        "Title": "Attack Office Suites",
+        "Description": "Attack historical vulnerabilities in common OA systems like Wanhu Ezoffice, Tongda OA, Redflag OA, Weaver e-bridge, FineReport, Weaver e-cology, Weaver e-office, Weaver e-mobile, YonYou NC, etc.",
         "Keywords": "oa",
         "Protocols": [
             "http"
         ],
-        "Solution": "及时升级软件版本：对于已知的漏洞,协同办公软件厂商通常会发布修复程序,用户应该及时升级软件版本以避免漏洞被攻击者利用。配置安全策略：协同办公软件一般包括许多功能和模块,用户可以根据自身需求和安全要求配置相应的安全策略,例如禁止外网访问、限制文件上传大小、配置防火墙等。"
+        "Solution": "Software Upgrade: For known vulnerabilities, collaboration software manufacturers often release patches. Users should upgrade software versions timely to prevent exploitation. Set security policies: Collaboration software typically includes many functions and modules; I'm sorry, but it appears there was a misunderstanding. Could you please provide the non-English text you need translated into English, following the guidelines you'Ve mentioned?.。"
     },
     {
-        "Title": "攻击 大数据平台",
-        "Description": "对常见的大数据平台比如hadoop(HDFS、hbase、hive、zookeeper)、spark、kafka、splunk、Apache Dubbo、OpenStack、Apache Flink、Elasticsearch历史漏洞进行攻击",
+        "Title": "Attack Big Data Platforms",
+        "Description": "Attack historical vulnerabilities in big data platforms like Hadoop (HDFS, Hbase, Hive, Zookeeper), Spark, Kafka, Splunk, Apache Dubbo, OpenStack, Apache Flink, Elasticsearch, etc.",
         "Keywords": "hdfs,hbase,hive,zookeeper,spark,kafka,splunk,dubbo,openstack,flink,elasticsearch",
         "Protocols": [],
-        "Solution": "对于已知的漏洞,大数据平台的开发团队通常会发布修复程序,用户应该及时升级软件版本以避免漏洞被攻击者利用。启用访问控制：大数据平台包括许多组件和模块,用户可以根据自身需求和安全要求配置相应的访问控制策略,如限制访问IP、授权用户访问、配置防火墙等。"
+        "Solution": "For known vulnerabilities, big data platform development teams often release patches. Users should upgrade software versions timely to prevent exploitation. Enable access control: Big data platforms comprise many components and modules; Users should configure access control policies based on needs and security requirements, such as restricting access IPs, authorizing user access, configuring firewalls, etc.。"
     },
     {
-        "Title": "攻击中间件服务器",
-        "Description": "对常见的IIS、apache、Nginx、Weblogic、Tomcat 、jboss等进行历史漏洞进行攻击",
+        "Title": "Attack Middleware Servers",
+        "Description": "Attack historical vulnerabilities in common web servers like IIS, Apache, Nginx, Weblogic, Tomcat, JBoss, etc.",
         "Keywords": "iis,apache,nginx,weblogic,tomcat,jboss",
         "Protocols": [],
-        "Solution": "及时升级软件版本：对于已知的漏洞,Web服务器的开发团队通常会发布修复程序,用户应该及时升级软件版本以避免漏洞被攻击者利用。启用安全配置：Web服务器包括许多配置选项,用户应该根据自身需求和安全要求配置相应的安全策略,如关闭不必要的服务、启用HTTPS、配置访问控制等。"
+        "Solution": "Software Upgrade: For known vulnerabilities, web server development teams usually release patches. Users should upgrade software versions timely to avoid exploitation. Enable security configurations: Web servers offer many configuration options; Users should configure security policies based on needs and security requirements, such as disabling unnecessary services, enabling HTTPS, configuring access control, etc.。"
     },
     {
-        "Title": "攻击IOT设备",
-        "Description": "对常见的IPCamera、iCatch摄像头、GoAhead摄像头、avtech摄像头、ACTI Camera、5MP Network Camera、海康威视摄像头等进行历史漏洞进行攻击",
-        "Keywords": "camara,ipcamera,icatch,goadhead,avtech,acti,5mp,海康威视,hiwatch,hikvision",
+        "Title": "Attack IoT Devices",
+        "Description": "Target historical vulnerabilities in popular IP Cameras such as iCatch, GoAhead, avtech, ACTI Camera, 5MP Network Camera, Hikvision, etc.",
+        "Keywords": "camara,ipcamera,icatch,goadhead,avtech,acti,5mp,hikvision,hiwatch,hikvision",
         "Protocols": [],
-        "Solution": "及时固件版本：对于已知的漏洞,设备厂商通常会发布补丁进行修复。尽量将设备部署在内网环境"
+        "Solution": "Firmware Update: For known vulnerabilities, manufacturers typically release patches for fixes. Deploy devices in internal networks where possible."
     },
     {
-        "Title": "攻击邮件服务器",
-        "Description": "对常见的exchange、亿邮、Coremail、anymacro、华为 anymail、webmail、zimbra等进行历史漏洞进行攻击",
+        "Title": "Attack Mail Servers",
+        "Description": "Attack historical vulnerabilities in mail servers like Exchange, EYou, Coremail, anymacro, Huawei anymail, webmail, Zimbra, etc.",
         "Keywords": "mail,exchange",
         "Protocols": [],
         "Solution": ""
@@ -108,18 +108,18 @@ export const ChaosMakerPage: React.FC<ChaosMakerPageProp> = (props) => {
     }
 
     return <div style={{display: "flex", flexDirection: "column", width: "100%", height: "100%"}}>
-        <PageHeader style={{width: "100%"}} title={"Breach & Attack Simulator Playbook"} subTitle={"入侵与攻击模拟剧本管理"}
+        <PageHeader style={{width: "100%"}} title={"Breach & Attack Simulator Playbook"} subTitle={"Intrusion and Attack Simulation Script Management"}
                     extra={<div>
                         <YakitButton onClick={() => {
                             const d = showDrawer({
-                                title: "导入规则",
+                                title: "Import Rules",
                                 width: "70%",
                                 maskClosable: false,
                                 content: (
                                     <ChaosMakerRuleImport/>
                                 )
                             })
-                        }}>导入规则</YakitButton>
+                        }}>Import Rules</YakitButton>
                     </div>}/>
         <div style={{flex: 1, backgroundColor: "#fff"}}>
             <ResizeBox

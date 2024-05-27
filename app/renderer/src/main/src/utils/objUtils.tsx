@@ -1,34 +1,34 @@
 import has from "lodash/has"
 
 export const isEqualObject = (obj1: object, obj2: object) => {
-    // 判断两个变量是否为对象类型
+    // Check if two variables are of object type
     let isObj = toString.call(obj1) === "[object Object]" && toString.call(obj2) === "[object Object]"
     if (!isObj) {
         return false
     }
 
-    // 判断两个对象的长度是否相等，不相等则直接返回 fase
+    // Check if lengths of two objects are equal, return false if not
     if (Object.keys(obj1).length !== Object.keys(obj2).length) {
         return false
     }
 
-    // 判断两个对象的每个属性值是否相等
+    // Check if every property value of two objects is equal
     for (const key in obj1) {
-        // 判断两个对象的键是否相等
+        // Check if keys of two objects are equal
         if (has(obj2, key)) {
             let obj1Type = toString.call(obj1[key])
             let obj2Type = toString.call(obj2[key])
-            // 如果值是对象，则递归
+            // If value is an object, recurse
             if (obj1Type === "[object Object]" || obj2Type === "[object Object]") {
                 if (!isEqualObject(obj1[key], obj2[key])) {
                     return false
                 }
             } else if (obj1[key] !== obj2[key]) {
-                return false // 如果不是对象，则判断值是否相等
+                return false // If value is not an object, check if values are equal
             }
         } else {
             return false
         }
     }
-    return true // 上面条件都通过，则返回 true
+    return true // If all above conditions pass, return true
 }

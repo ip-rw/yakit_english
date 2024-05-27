@@ -1,6 +1,6 @@
 /**
- * @deprecated 已废弃
- * TODO 简易版安全检测做完未完成任务的功能后，删除
+ * @Deprecated
+ * TODO Remove after completing basic security check unfinished tasks
  */
 import React, {useEffect, useMemo, useRef, useState} from "react"
 import {
@@ -67,13 +67,13 @@ const layout = {
 }
 const marks: SliderMarks = {
     1: {
-        label: <div>慢速</div>
+        label: <div>Slow</div>
     },
     2: {
-        label: <div>适中</div>
+        label: <div>Medium</div>
     },
     3: {
-        label: <div>快速</div>
+        label: <div>Fast</div>
     }
 }
 
@@ -142,16 +142,16 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
         Targets: "",
         TargetsFile: "",
         ScriptNames: openScriptNames || [],
-        // SYN 并发
+        // SYN Concurrent
         SynConcurrent: 1000,
-        // 指纹并发
+        // Fingerprint Concurrent
         Concurrent: 50,
         Active: true,
-        // 服务指纹级别
+        // Service Fingerprint Level
         ProbeMax: 100,
-        // 主动探测超时
+        // Active Detection Timeout
         ProbeTimeout: 7,
-        // web/服务/all
+        // web/Service/all
         FingerprintMode: "all",
         Proto: ["tcp"],
 
@@ -193,37 +193,37 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
         usernameValue: "",
         passwordValue: ""
     })
-    const [_, setScanType, getScanType] = useGetState<string>("基础扫描")
-    const [checkedList, setCheckedList, getCheckedList] = useGetState<CheckboxValueType[]>(["弱口令"])
+    const [_, setScanType, getScanType] = useGetState<string>("Basic Scan")
+    const [checkedList, setCheckedList, getCheckedList] = useGetState<CheckboxValueType[]>(["Weak Password"])
     const [__, setScanDeep, getScanDeep] = useGetState<number>(3)
     const isInputValue = useRef<boolean>(false)
-    // 是否已经修改速度
+    // Speed Modified?
     const isSetSpeed = useRef<number>()
 
     useEffect(() => {
         let obj: any = {}
-        if (getScanType() === "专项扫描" && !getCheckedList().includes("弱口令")) {
+        if (getScanType() === "Special Scan" && !getCheckedList().includes("Weak Password")) {
             obj.EnableBrute = false
         } else {
             obj.EnableBrute = true
         }
         switch (getScanDeep()) {
-            // 快速
+            // Fast
             case 3:
                 setPortParams({...portParams, ...obj, Ports: PresetPorts["fast"]})
                 break
-            // 适中
+            // Medium
             case 2:
                 setPortParams({...portParams, ...obj, Ports: PresetPorts["middle"]})
                 break
-            // 慢速
+            // Slow
             case 1:
                 setPortParams({...portParams, ...obj, Ports: PresetPorts["slow"]})
                 break
         }
     }, [getScanDeep(), getScanType(), getCheckedList()])
 
-    // 继续任务操作屏蔽
+    // Continue Task Block
     const [shield, setShield] = useState<boolean>(false)
 
     useEffect(() => {
@@ -241,8 +241,8 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
             let selectArr: any[] = []
             arr.map((item) => {
                 switch (item) {
-                    case "弱口令":
-                        selectArr.push("弱口令")
+                    case "Weak Password":
+                        selectArr.push("Weak Password")
                         break
                     default:
                         setScanType(item)
@@ -251,14 +251,14 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
             })
             if (selectArr.length > 0) {
                 setCheckedList(selectArr)
-                setScanType("自定义")
+                setScanType("Custom")
             }
         }
     }, [YakScriptOnlineGroup])
 
     useEffect(() => {
         if (!isInputValue.current) {
-            // 任务名称-时间戳-扫描目标
+            // TaskName-Timestamp-Target
             let taskNameTimeTarget: string = moment(new Date()).unix().toString()
             if (portParams?.Targets && portParams.Targets.length > 0) {
                 taskNameTimeTarget = portParams.Targets.split(",")[0].split(/\n/)[0]
@@ -274,18 +274,18 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
     useEffect(() => {
         if (TaskName) {
             form.setFieldsValue({
-                TaskName: TaskName || "漏洞扫描任务"
+                TaskName: TaskName || "Vulnerability Scan Task"
             })
         }
     }, [TaskName])
 
-    // 保存任务
+    // Save Task
     const saveTask = (v?: string) => {
         const cacheData = v ? JSON.parse(v) : false
         let newParams: PortScanParams = {...getPortParams()}
-        const OnlineGroup: string = getScanType() !== "专项扫描" ? getScanType() : [...checkedList].join(",")
+        const OnlineGroup: string = getScanType() !== "Special Scan" ? getScanType() : [...checkedList].join(",")
         let StartBruteParams: StartBruteParams = {...getBruteParams()}
-        // 继续任务暂存报告参数 用于恢复任务下载 --如果直接关闭Dom则无法存储报告
+        // Cache Task Report Params for Recovery -- If DOM closed directly, report can't be stored
         const ReportParams = getReportParams()
         if (oldRunParams) {
             const {LastRecord, PortScanRequest} = oldRunParams
@@ -316,7 +316,7 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
         delSimpleInfo(token)
     }
 
-    // 更新销毁参数
+    // Update Destroy Params
     useDebounceEffect(() => {
         let obj = {}
         if (oldRunParams) {
@@ -327,7 +327,7 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
             }
         } else {
             let newParams: PortScanParams = {...getPortParams()}
-            const OnlineGroup: string = getScanType() !== "专项扫描" ? getScanType() : [...checkedList].join(",")
+            const OnlineGroup: string = getScanType() !== "Special Scan" ? getScanType() : [...checkedList].join(",")
             obj = {
                 LastRecord: {
                     LastRecordPtr: filePtrValue,
@@ -342,7 +342,7 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
 
     useEffect(() => {
         return () => {
-            // 任务运行中
+            // Task Running
             SimpleCloseInfo[token]?.status && saveTask(SimpleCloseInfo[token].info)
         }
     }, [])
@@ -358,24 +358,24 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
         let StartBruteParams: StartBruteParams = {...getBruteParams()}
 
         switch (getScanDeep()) {
-            // 快速
+            // Fast
             case 3:
-                // 指纹并发
+                // Fingerprint Concurrent
                 newParams.Concurrent = 100
-                // SYN 并发
+                // SYN Concurrent
                 newParams.SynConcurrent = 2000
                 newParams.ProbeTimeout = 3
-                // 指纹详细程度
+                // Fingerprint Detail Level
                 newParams.ProbeMax = 3
                 break
-            // 适中
+            // Medium
             case 2:
                 newParams.Concurrent = 80
                 newParams.SynConcurrent = 1000
                 newParams.ProbeTimeout = 5
                 newParams.ProbeMax = 5
                 break
-            // 慢速
+            // Slow
             case 1:
                 newParams.Concurrent = 50
                 newParams.SynConcurrent = 1000
@@ -405,7 +405,7 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
     }
 
     const recoverRun = () => {
-        // 更改最新的唯一标识UUID
+        // Change Latest UUID
         const uuid: string = uuidv4()
         setNowUUID(uuid)
         reset()
@@ -417,46 +417,46 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
     const onFinish = useMemoizedFn((values) => {
         const {TaskName} = values
         if (!portParams.Targets && !portParams.TargetsFile) {
-            warn("需要设置扫描目标")
+            warn("Set Scan Target")
             return
         }
         if (TaskName.length === 0) {
-            warn("请输入任务名称")
+            warn("Enter Task Name")
             return
         }
-        if (getScanType() === "专项扫描" && getCheckedList().length === 0) {
-            warn("请选择自定义内容")
+        if (getScanType() === "Special Scan" && getCheckedList().length === 0) {
+            warn("Select Custom Content")
             return
         }
         if (portParams.Ports.length === 0) {
-            warn("请选择或输入扫描端口")
+            warn("Select or Enter Scan Ports")
             return
         }
         debugger
         let OnlineGroup: string = ""
-        if (getScanType() !== "专项扫描") {
+        if (getScanType() !== "Special Scan") {
             OnlineGroup = getScanType()
         } else {
-            // 当插件组内部没有弱口令的时候，查询插件需要排除爆破弱口令
+            // Exclude brute-force when no weak passwords in plugin group
             if (!groupWeakPwdFlag) {
-                OnlineGroup = [...checkedList].filter((name) => name !== "弱口令").join(",")
+                OnlineGroup = [...checkedList].filter((name) => name !== "Weak Password").join(",")
             } else {
                 OnlineGroup = [...checkedList].join(",")
             }
         }
 
-        // 是否仅勾选的弱口令仅代表爆破弱口令
-        const blastingWeakPwdFlag = checkedList.length === 1 && checkedList.includes("弱口令") && !groupWeakPwdFlag
-        // 继续任务 参数拦截
+        // Check if weak password is for brute-force only
+        const blastingWeakPwdFlag = checkedList.length === 1 && checkedList.includes("Weak Password") && !groupWeakPwdFlag
+        // Continue Task Param Intercept
         if (Uid) {
             recoverRun()
         }
-        // 当为跳转带参
+        // On Redirect with Params
         else if (Array.isArray(openScriptNames)) {
             run(TaskName)
         }
-        // 只勾选了爆破弱口令的选项
-        else if (blastingWeakPwdFlag && OnlineGroup !== "基础扫描") {
+        // Only brute-force weak password option checked
+        else if (blastingWeakPwdFlag && OnlineGroup !== "Basic Scan") {
             setPortParams({...getPortParams(), ScriptNames: []})
             run(TaskName)
         } else {
@@ -468,7 +468,7 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
                     run(TaskName)
                 })
                 .catch((e) => {
-                    failed(`查询扫描模式错误:${e}`)
+                    failed(`Scan Mode Query Failed:${e}`)
                 })
                 .finally(() => {})
         }
@@ -486,11 +486,11 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
     const judgeExtra = () => {
         let str: string = ""
         switch (getScanType()) {
-            case "基础扫描":
-                str = "包含合规检测、小字典弱口令检测与部分漏洞检测"
+            case "Basic Scan":
+                str = "Compliance, Weak Password, Partial Vulnerability Checks"
                 break
-            case "专项扫描":
-                str = "针对不同场景的专项漏洞检测扫描"
+            case "Special Scan":
+                str = "Special Vulnerability Scan for Various Scenarios"
                 break
         }
         return str
@@ -499,18 +499,18 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
     const simpleDetectRef = useRef<HTMLDivElement>(null)
     const [inViewport = true] = useInViewport(simpleDetectRef)
     const [plainOptions, setPlainOptions] = useState<string[]>([])
-    const [groupWeakPwdFlag, setGroupWeakPwdFlag] = useState<boolean>(false) // 标识弱口令是否是分组里面的弱口令还是固定的爆破弱口令
+    const [groupWeakPwdFlag, setGroupWeakPwdFlag] = useState<boolean>(false) // Mark whether weak password is group-specific or brute-force default
     const getPluginGroup = (callBack?: () => void) => {
         apiFetchQueryYakScriptGroupLocal(false)
             .then((group: GroupCount[]) => {
                 const copyGroup = structuredClone(group)
                 let groups: string[] = copyGroup.map((item) => item.Value)
-                if (groups.includes("基础扫描")) {
-                    groups = groups.filter((item) => item !== "基础扫描")
+                if (groups.includes("Basic Scan")) {
+                    groups = groups.filter((item) => item !== "Basic Scan")
                 }
-                if (!groups.includes("弱口令")) {
+                if (!groups.includes("Weak Password")) {
                     setGroupWeakPwdFlag(false)
-                    groups.push("弱口令") // 塞一个固定的爆破弱口令
+                    groups.push("Weak Password") // Insert default brute-force weak password
                 } else {
                     setGroupWeakPwdFlag(true)
                 }
@@ -545,28 +545,28 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
                                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                             ]
                             if (!typeArr.includes(f.type)) {
-                                failed(`${f.name}非txt、Excel文件，请上传txt、Excel格式文件！`)
+                                failed(`${f.name}Non-txt/Excel, Upload txt/Excel！`)
                                 return false
                             }
                             setUploadLoading(true)
                             const TargetsFile = getPortParams().TargetsFile
                             const absPath: string = (f as any).path
-                            // 当已有文件上传时
+                            // On File Upload
                             if (TargetsFile && TargetsFile?.length > 0) {
                                 let arr = TargetsFile.split(",")
-                                // 限制最多3个文件上传
+                                // Limit Max 3 File Uploads
                                 if (arr.length >= 3) {
-                                    info("最多支持3个文件上传")
+                                    info("Max 3 Files Upload")
                                     setUploadLoading(false)
                                     return
                                 }
-                                // 当不存在时添加
+                                // Add if Not Present
                                 if (!arr.includes(absPath)) {
                                     setPortParams({...portParams, TargetsFile: `${TargetsFile},${absPath}`})
                                 } else {
-                                    info("路径已存在，请勿重复上传")
+                                    info("Path Exists, Do Not Reupload")
                                 }
-                            } // 当未上传过文件时
+                            } // No Files Uploaded
                             else {
                                 setPortParams({...portParams, TargetsFile: absPath})
                             }
@@ -575,14 +575,14 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
                         }}
                         item={{
                             style: {textAlign: "left"},
-                            label: "扫描目标:"
+                            label: "Scan Target:"
                         }}
                         textarea={{
                             isBubbing: true,
                             setValue: (Targets) => setPortParams({...portParams, Targets}),
                             value: portParams.Targets,
                             rows: 1,
-                            placeholder: "域名/主机/IP/IP段均可，逗号分隔或按行分割",
+                            placeholder: "Domain/Host/IP/IP ranges, comma-separated or line-split",
                             disabled: executing || shield
                         }}
                         otherHelpNode={
@@ -597,13 +597,13 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
                                         }}
                                         checked={portParams.SkippedHostAliveScan}
                                     >
-                                        跳过主机存活检测
+                                        Skip Host Alive Check
                                     </Checkbox>
                                 </span>
                                 <span
                                     onClick={() => {
                                         let m = showDrawer({
-                                            title: "设置高级参数",
+                                            title: "Advanced Settings",
                                             width: "60%",
                                             onClose: () => {
                                                 isSetSpeed.current = getScanDeep()
@@ -628,7 +628,7 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
                                     }}
                                     className={styles["help-hint-title"]}
                                 >
-                                    更多参数
+                                    More Params
                                 </span>
                                 <span
                                     onClick={() => {
@@ -641,18 +641,18 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
                                     }}
                                     className={styles["help-hint-title"]}
                                 >
-                                    未完成任务
+                                    Unfinished Tasks
                                 </span>
                             </>
                         }
                         suffixNode={
                             executing ? (
                                 <Button type='primary' danger disabled={!executing} onClick={onCancel}>
-                                    立即停止任务
+                                    Stop Task Now
                                 </Button>
                             ) : (
                                 <Button type='primary' htmlType='submit' disabled={isDownloadPlugin}>
-                                    开始检测
+                                    Start Detection
                                 </Button>
                             )
                         }
@@ -690,22 +690,22 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
                     </Form.Item>
                 )}
                 <div style={executing ? {display: "none"} : {}}>
-                    <Form.Item name='scan_type' label='扫描模式' extra={judgeExtra()}>
+                    <Form.Item name='scan_type' label='Scan Mode' extra={judgeExtra()}>
                         <Radio.Group
                             buttonStyle='solid'
-                            defaultValue={"基础扫描"}
+                            defaultValue={"Basic Scan"}
                             onChange={(e) => {
                                 setScanType(e.target.value)
                             }}
                             value={getScanType()}
                             disabled={shield}
                         >
-                            <Radio.Button value='基础扫描'>基础扫描</Radio.Button>
-                            <Radio.Button value='专项扫描'>专项扫描</Radio.Button>
+                            <Radio.Button value='Basic Scan'>Basic Scan</Radio.Button>
+                            <Radio.Button value='Special Scan'>Special Scan</Radio.Button>
                         </Radio.Group>
                     </Form.Item>
 
-                    {getScanType() === "专项扫描" && (
+                    {getScanType() === "Special Scan" && (
                         <Form.Item label=' ' colon={false} style={{marginTop: "-16px"}}>
                             <CheckboxGroup
                                 disabled={shield}
@@ -717,11 +717,11 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
                     )}
 
                     <div style={{display: "none"}}>
-                        <Form.Item name='TaskName' label='任务名称'>
+                        <Form.Item name='TaskName' label='Task Name'>
                             <Input
                                 disabled={shield}
                                 style={{width: 400}}
-                                placeholder='请输入任务名称'
+                                placeholder='Enter Task Name'
                                 allowClear
                                 onChange={() => {
                                     isInputValue.current = true
@@ -730,7 +730,7 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
                         </Form.Item>
                     </div>
 
-                    <Form.Item name='scan_deep' label='扫描速度' style={{position: "relative"}}>
+                    <Form.Item name='scan_deep' label='Scan Speed' style={{position: "relative"}}>
                         <Slider
                             tipFormatter={null}
                             value={getScanDeep()}
@@ -742,7 +742,7 @@ export const SimpleDetectForm: React.FC<SimpleDetectFormProps> = (props) => {
                             disabled={shield}
                         />
                         <div style={{position: "absolute", top: 26, fontSize: 12, color: "gray"}}>
-                            扫描速度越慢，扫描结果就越详细，可根据实际情况进行选择
+                            Slower Scan, More Detailed Results
                         </div>
                     </Form.Item>
                 </div>
@@ -783,18 +783,18 @@ export const SimpleDetectTable: React.FC<SimpleDetectTableProps> = React.forward
 
     const [openPorts, setOpenPorts] = useState<YakitPort[]>([])
     const openPort = useRef<YakitPort[]>([])
-    // 下载报告Modal
+    // Download Report Modal
     const [reportModalVisible, setReportModalVisible] = useState<boolean>(false)
-    const [reportName, setReportName] = useState<string>(runTaskName || "默认报告名称")
+    const [reportName, setReportName] = useState<string>(runTaskName || "Default Report Name")
     const [reportLoading, setReportLoading] = useState<boolean>(false)
     const [_, setReportId, getReportId] = useGetState<number>()
-    // 是否允许更改TaskName
+    // Allow TaskName Change?
     const isSetTaskName = useRef<boolean>(true)
-    // 报告token
+    // Report Token
     const [reportToken, setReportToken] = useState(randomString(40))
-    // 是否展示报告生成进度
+    // Show Report Gen. Progress?
     const [showReportPercent, setShowReportPercent] = useState<boolean>(false)
-    // 报告生成进度
+    // Report Gen. Progress
     const [reportPercent, setReportPercent] = useState(0)
 
     useEffect(() => {
@@ -806,7 +806,7 @@ export const SimpleDetectTable: React.FC<SimpleDetectTableProps> = React.forward
     }, [reportModalVisible])
 
     useEffect(() => {
-        // 报告生成成功
+        // Report Gen. Successful
         if (getReportId()) {
             setReportLoading(false)
             setShowReportPercent(false)
@@ -824,7 +824,7 @@ export const SimpleDetectTable: React.FC<SimpleDetectTableProps> = React.forward
             openPort.current = []
             executing && setOpenPorts([])
         }
-        // 重新执行任务 重置已输入报告名
+        // Re-execute Task, Reset Report Name Entered
         runTaskName && setReportName(runTaskName)
         isSetTaskName.current = true
     }, [executing])
@@ -845,13 +845,13 @@ export const SimpleDetectTable: React.FC<SimpleDetectTableProps> = React.forward
 
                     if (logInfo.isOpen) {
                         openPort.current.unshift(logInfo)
-                        // 限制20条数据
+                        // Limit 20 Records
                         openPort.current = openPort.current.slice(0, 20)
                     } else {
                         // closedPort.current.unshift(logInfo)
                     }
                 } catch (e) {
-                    failed("解析端口扫描结果失败...")
+                    failed("Failed to Parse Port Scan Results...")
                 }
             }
         })
@@ -877,15 +877,15 @@ export const SimpleDetectTable: React.FC<SimpleDetectTableProps> = React.forward
             ipcRenderer.removeAllListeners(`${token}-end`)
         }
     }, [])
-    /** 通知软件打开管理页面 */
+    /** Open Management Page in App */
     const openMenu = () => {
         ipcRenderer.invoke("open-route-page", {route: YakitRoute.DB_Risk})
     }
-    /** 获取生成报告返回结果 */
+    /** Fetch Report Gen. Result */
     useEffect(() => {
         ipcRenderer.on(`${reportToken}-data`, (e, data: ExecResult) => {
             if (data.IsMessage) {
-                // console.log("获取生成报告返回结果", new Buffer(data.Message).toString())
+                // console.log("Fetch Report Gen. Result", new Buffer(data.Message).toString())
                 const obj = JSON.parse(new Buffer(data.Message).toString())
                 if (obj?.type === "progress") {
                     setReportPercent(obj.content.progress)
@@ -897,13 +897,13 @@ export const SimpleDetectTable: React.FC<SimpleDetectTableProps> = React.forward
             ipcRenderer.removeAllListeners(`${reportToken}-data`)
         }
     }, [reportToken])
-    /** 通知生成报告 */
+    /** Notify Report Gen. */
     const creatReport = () => {
         setReportId(undefined)
         setReportModalVisible(true)
     }
 
-    /** 获取扫描主机数 扫描端口数 */
+    /** Fetch Scanned Hosts & Ports Count */
     const getCardForId = (id: string) => {
         const item = infoState.statusState.filter((item) => item.tag === id)
         if (item.length > 0) {
@@ -912,16 +912,16 @@ export const SimpleDetectTable: React.FC<SimpleDetectTableProps> = React.forward
         return null
     }
 
-    /** 区分继续任务与新任务 获取扫描主机数 Ping存活主机数 */
-    const getCardByJudgeOld = (v: "扫描主机数" | "Ping存活主机数") => {
+    /** Differentiate Continue/New Task, Get Scan Hosts, Ping Alive Hosts */
+    const getCardByJudgeOld = (v: "Scanned Hosts Count" | "Alive Hosts Count") => {
         if (oldRunParams && oldRunParams.LastRecord.ExtraInfo) {
             let oldCards = JSON.parse(oldRunParams.LastRecord.ExtraInfo).statusCards
             const oldItem: StatusCardInfoProps[] = oldCards.filter((item) =>
-                ["存活主机数/扫描主机数"].includes(item.tag)
+                ["Alive Hosts Count/Scanned Hosts Count"].includes(item.tag)
             )
             if (oldItem.length > 0) {
                 let strArr: string[] = oldItem[0].info[0].Data.split("/")
-                if (v === "Ping存活主机数") return strArr[0]
+                if (v === "Alive Hosts Count") return strArr[0]
                 else return strArr[strArr.length - 1]
             }
             return getCardForId(v)
@@ -930,20 +930,20 @@ export const SimpleDetectTable: React.FC<SimpleDetectTableProps> = React.forward
         }
     }
 
-    /** 下载报告 */
+    /** Download Report */
     const downloadReport = () => {
-        // 脚本数据
+        // Script Data
         const scriptData = CreatReportScript
         let Params = [
             {Key: "task_name", Value: runTaskNameEx},
             {Key: "runtime_id", Value: getCardForId("RuntimeIDFromRisks")},
             {Key: "report_name", Value: reportName},
             {Key: "plugins", Value: runPluginCount},
-            {Key: "host_total", Value: getCardByJudgeOld("扫描主机数")},
-            {Key: "ping_alive_host_total", Value: getCardByJudgeOld("Ping存活主机数")},
-            {Key: "port_total", Value: getCardForId("扫描端口数")}
+            {Key: "host_total", Value: getCardByJudgeOld("Scanned Hosts Count")},
+            {Key: "ping_alive_host_total", Value: getCardByJudgeOld("Alive Hosts Count")},
+            {Key: "port_total", Value: getCardForId("Scanned Ports Count")}
         ]
-        // 老报告生成
+        // Old Report Generation
         if (oldRunParams && isLastReport) {
             let oldParams: CacheReportParamsProps[] = (JSON.parse(oldRunParams.LastRecord.ExtraInfo) || [])?.Params
             if (oldParams) {
@@ -957,9 +957,9 @@ export const SimpleDetectTable: React.FC<SimpleDetectTableProps> = React.forward
         ipcRenderer.invoke("ExecYakCode", reqParams, reportToken)
     }
 
-    // 缓存报告参数 - 用于继续任务生成报告
-    // 使用 forwardRef 将子组件传递到父组件中。
-    // 通过 ref 回调函数将子组件的实例传递给 childRef。
+    // Cache Report Params - For Report Generation
+    // Pass child component via forwardYes to parent。
+    // Pass child component ref to childRef via ref callback。
     React.useImperativeHandle(ref, () => ({
         getReportParams: () => {
             return [
@@ -967,9 +967,9 @@ export const SimpleDetectTable: React.FC<SimpleDetectTableProps> = React.forward
                 {Key: "runtime_id", Value: getCardForId("RuntimeIDFromRisks")},
                 {Key: "report_name", Value: reportName},
                 {Key: "plugins", Value: runPluginCount},
-                {Key: "host_total", Value: getCardByJudgeOld("扫描主机数")},
-                {Key: "ping_alive_host_total", Value: getCardByJudgeOld("Ping存活主机数")},
-                {Key: "port_total", Value: getCardForId("扫描端口数")}
+                {Key: "host_total", Value: getCardByJudgeOld("Scanned Hosts Count")},
+                {Key: "ping_alive_host_total", Value: getCardByJudgeOld("Alive Hosts Count")},
+                {Key: "port_total", Value: getCardForId("Scanned Ports Count")}
             ]
         }
     }))
@@ -984,21 +984,21 @@ export const SimpleDetectTable: React.FC<SimpleDetectTableProps> = React.forward
                         <div>
                             {!executing && allowDownloadReport ? (
                                 <div className={styles["hole-text"]} onClick={creatReport}>
-                                    生成报告
+                                    Generate Report
                                 </div>
                             ) : (
-                                <div className={styles["disable-hole-text"]}>生成报告</div>
+                                <div className={styles["disable-hole-text"]}>Generate Report</div>
                             )}
                         </div>
                     }
                 >
                     {!!infoState.riskState && infoState.riskState.length > 0 && (
-                        <Tabs.TabPane tab={`漏洞与风险`} key={"risk"} forceRender>
+                        <Tabs.TabPane tab={`Stop Answering`} key={"risk"} forceRender>
                             <AutoCard
                                 bodyStyle={{overflowY: "auto"}}
                                 extra={
                                     <div className={styles["hole-text"]} onClick={openMenu}>
-                                        查看完整漏洞
+                                        View Full Vulnerability
                                     </div>
                                 }
                             >
@@ -1011,7 +1011,7 @@ export const SimpleDetectTable: React.FC<SimpleDetectTableProps> = React.forward
                         </Tabs.TabPane>
                     )}
 
-                    <Tabs.TabPane tab={"扫描端口列表"} key={"scanPort"} forceRender>
+                    <Tabs.TabPane tab={"Scan Port List"} key={"scanPort"} forceRender>
                         <div style={{width: "100%", height: "100%", overflow: "hidden auto"}}>
                             <Row style={{marginTop: 6}} gutter={6}>
                                 <Col span={24}>
@@ -1020,7 +1020,7 @@ export const SimpleDetectTable: React.FC<SimpleDetectTableProps> = React.forward
                             </Row>
                         </div>
                     </Tabs.TabPane>
-                    {/* <Tabs.TabPane tab={"插件日志"} key={"pluginPort"} forceRender>
+                    {/* <Tabs.TabPane tab={"Plugin Logs"} key={"pluginPort"} forceRender>
                         <div style={{width: "100%", height: "100%", overflow: "hidden auto"}}>
                             <PluginResultUI
                                 loading={false}
@@ -1035,13 +1035,13 @@ export const SimpleDetectTable: React.FC<SimpleDetectTableProps> = React.forward
                 </Tabs>
             </div>
             <Modal
-                title='下载报告'
+                title='Download Report'
                 visible={reportModalVisible}
                 footer={null}
                 onCancel={() => {
                     setReportModalVisible(false)
                     if (reportPercent < 1 && reportPercent > 0) {
-                        warn("取消生成报告")
+                        warn("Cancel Report Gen.")
                     }
                 }}
             >
@@ -1049,7 +1049,7 @@ export const SimpleDetectTable: React.FC<SimpleDetectTableProps> = React.forward
                     <div style={{textAlign: "center"}}>
                         <Input
                             style={{width: 400}}
-                            placeholder='请输入任务名称'
+                            placeholder='Enter Task Name'
                             allowClear
                             value={reportName}
                             onChange={(e) => {
@@ -1072,11 +1072,11 @@ export const SimpleDetectTable: React.FC<SimpleDetectTableProps> = React.forward
                             onClick={() => {
                                 setReportModalVisible(false)
                                 if (reportPercent < 1 && reportPercent > 0) {
-                                    warn("取消生成报告")
+                                    warn("Cancel Report Gen.")
                                 }
                             }}
                         >
-                            取消
+                            Cancel
                         </Button>
                         <Button
                             loading={reportLoading}
@@ -1087,7 +1087,7 @@ export const SimpleDetectTable: React.FC<SimpleDetectTableProps> = React.forward
                                 setShowReportPercent(true)
                             }}
                         >
-                            确定
+                            Confirm
                         </Button>
                     </div>
                 </div>
@@ -1106,11 +1106,11 @@ interface DownloadAllPluginProps {
 export const DownloadAllPlugin: React.FC<DownloadAllPluginProps> = (props) => {
     const {setDownloadPlugin, onClose, delAllPlugins} = props
     const type = props.type || "default"
-    // 全局登录状态
+    // Global Login Status
     const {userInfo} = useStore()
-    // 全部添加进度条
+    // Add All Progress Bar
     const [addLoading, setAddLoading] = useState<boolean>(false)
-    // 全部添加进度
+    // Add All Progress
     const [percent, setPercent, getPercent] = useGetState<number>(0)
     const [taskToken, setTaskToken] = useState(randomString(40))
     useEffect(() => {
@@ -1138,10 +1138,10 @@ export const DownloadAllPlugin: React.FC<DownloadAllPluginProps> = (props) => {
     }, [taskToken])
     const AddAllPlugin = useMemoizedFn(() => {
         if (!userInfo.isLogin) {
-            warn("我的插件需要先登录才能下载，请先登录")
+            warn("Download my plugins after login")
             return
         }
-        // 全部添加
+        // Add All
         setAddLoading(true)
         setDownloadPlugin && setDownloadPlugin(true)
         const addParams: DownloadOnlinePluginsRequest = {ListType: ""}
@@ -1149,26 +1149,26 @@ export const DownloadAllPlugin: React.FC<DownloadAllPluginProps> = (props) => {
             .invoke("DownloadOnlinePlugins", addParams, taskToken)
             .then(() => {})
             .catch((e) => {
-                failed(`添加失败:${e}`)
+                failed(`Add Failed:${e}`)
             })
     })
     const StopAllPlugin = () => {
         onClose && onClose()
         setAddLoading(false)
         ipcRenderer.invoke("cancel-DownloadOnlinePlugins", taskToken).catch((e) => {
-            failed(`停止添加失败:${e}`)
+            failed(`Stop Adding Failed:${e}`)
         })
     }
     const onRemoveAllLocalPlugin = () => {
-        // 全部删除
+        // Delete All
         ipcRenderer
             .invoke("DeleteLocalPluginsByWhere", {})
             .then(() => {
                 delAllPlugins && delAllPlugins()
-                success("全部删除成功")
+                success("All Deleted Successfully")
             })
             .catch((e) => {
-                failed(`删除所有本地插件错误:${e}`)
+                failed(`Error Deleting All Local Plugins:${e}`)
             })
     }
     if (type === "modal") {
@@ -1176,7 +1176,7 @@ export const DownloadAllPlugin: React.FC<DownloadAllPluginProps> = (props) => {
             <div className={styles["download-all-plugin-modal"]}>
                 {addLoading ? (
                     <div>
-                        <div>下载进度</div>
+                        <div>Download Progress</div>
                         <div className={styles["filter-opt-progress-modal"]}>
                             <Progress
                                 size='small'
@@ -1186,16 +1186,16 @@ export const DownloadAllPlugin: React.FC<DownloadAllPluginProps> = (props) => {
                         </div>
                         <div style={{textAlign: "center", marginTop: 10}}>
                             <Button type='primary' onClick={StopAllPlugin}>
-                                取消
+                                Cancel
                             </Button>
                         </div>
                     </div>
                 ) : (
                     <div>
-                        <div>检测到本地未下载任何插件，无法进行安全检测，请点击“一键导入”进行插件下载</div>
+                        <div>No plugins downloaded, can't perform security check, click here“One-Click Import”Download Plugins</div>
                         <div style={{textAlign: "center", marginTop: 10}}>
                             <Button type='primary' onClick={AddAllPlugin}>
-                                一键导入
+                                One-Click Import
                             </Button>
                         </div>
                     </div>
@@ -1216,29 +1216,29 @@ export const DownloadAllPlugin: React.FC<DownloadAllPluginProps> = (props) => {
             )}
             {addLoading ? (
                 <Button style={{marginLeft: 12}} size='small' type='primary' danger onClick={StopAllPlugin}>
-                    停止
+                    Exec Plugin Names Array
                 </Button>
             ) : (
                 <Popconfirm
-                    title={"确定将插件商店所有数据导入到本地吗?"}
+                    title={"Confirm importing all data from store to local??"}
                     onConfirm={AddAllPlugin}
                     okText='Yes'
                     cancelText='No'
                     placement={"left"}
                 >
-                    <div className={styles["operation-text"]}>一键导入插件</div>
+                    <div className={styles["operation-text"]}>One-Click Import Plugins</div>
                 </Popconfirm>
             )}
             {userInfo.role !== "admin" && (
                 <Popconfirm
-                    title={"确定将插件商店所有本地数据清除吗?"}
+                    title={"Confirm clearing all local plug-in store data??"}
                     onConfirm={onRemoveAllLocalPlugin}
                     okText='Yes'
                     cancelText='No'
                     placement={"left"}
                 >
                     <YakitButton type='text' colors='danger' className={styles["clean-local-plugin"]}>
-                        一键清除插件
+                        One-Click Clear Plugins
                     </YakitButton>
                 </Popconfirm>
             )}
@@ -1271,22 +1271,22 @@ export const OldSimpleDetect: React.FC<SimpleDetectProps> = (props) => {
     const [executing, setExecuting] = useState<boolean>(false)
     const [token, setToken] = useState(randomString(20))
     const [loading, setLoading] = useState<boolean>(false)
-    // 打开新页面任务参数
+    // Open New Page with Task Params
     const [openScriptNames, setOpenScriptNames] = useState<string[]>()
     const [oldRunParams, setOldRunParams] = useState<OldRunParamsProps>()
 
     const [isDownloadPlugin, setDownloadPlugin] = useState<boolean>(false)
 
-    // 点击运行任务的最新TaskName
+    // Click to run latest TaskName
     const [runTaskName, setRunTaskName] = useState<string>()
-    // 获取最新的唯一标识UUID
+    // Fetch Latest UUID
     const uuid: string = uuidv4()
     const [___, setNowUUID, getNowUUID] = useGetState<string>(uuid)
-    // 获取运行任务插件数
+    // Fetch Running Task Plugin Count
     const [runPluginCount, setRunPluginCount] = useState<number>()
-    // 是否允许下载报告
+    // Allow Report Download?
     const [allowDownloadReport, setAllowDownloadReport] = useState<boolean>(false)
-    // 是否使用生成之前任务的参数生成报告
+    // Use Previous Task Params for Report?
     const [isLastReport, setIsLastReport] = useState<boolean>(false)
     const [infoState, {reset, setXtermRef, resetAll}] = useHoldingIPCRStream(
         "simple-scan",
@@ -1296,23 +1296,23 @@ export const OldSimpleDetect: React.FC<SimpleDetectProps> = (props) => {
         () => {},
         (obj, content) => content.data.indexOf("isOpen") > -1 && content.data.indexOf("port") > -1
     )
-    // 缓存最新的报告参数 用于继续任务时生成报告
+    // Cache Latest Report Params for Report Generation
     const childRef = useRef<any>()
 
-    // 是否拖动ResizeBox
+    // Drag ResizeBox?
     const isResize = useRef<boolean>(false)
-    // 设置ResizeBox高度
+    // Set ResizeBox Height
     const [__, setResizeBoxSize, getResizeBoxSize] = useGetState<string>("430px")
 
-    // 是否显示之前的卡片
+    // Show Previous Cards?
     const [showOldCard, setShowOldCard] = useState<boolean>(false)
 
-    // 下载完插件 需要刷新获取插件组接口
+    // Refresh to get plugin group after downloading plugins
     const [refreshPluginGroup, setRefreshPluginGroup] = useState<number>(Math.random())
 
-    const statusErrorCards = infoState.statusState.filter((item) => ["加载插件失败", "SYN扫描失败"].includes(item.tag))
+    const statusErrorCards = infoState.statusState.filter((item) => ["Plugin Load Failed", "SYN Scan Failed"].includes(item.tag))
     const statusSucceeCards = infoState.statusState.filter((item) =>
-        ["加载插件", "漏洞/风险/指纹", "开放端口数/已扫主机数", "存活主机数/扫描主机数"].includes(item.tag)
+        ["Load Plugins", "Vulnerability/Risk/Parse content in plugin backend stream", "Open Ports Count/Scanned Hosts Count", "Alive Hosts Count/Scanned Hosts Count"].includes(item.tag)
     )
     const statusCards = useMemo(() => {
         if (statusErrorCards.length > 0) {
@@ -1321,27 +1321,27 @@ export const OldSimpleDetect: React.FC<SimpleDetectProps> = (props) => {
         return statusSucceeCards
     }, [statusErrorCards, statusSucceeCards])
 
-    // 区分新老卡片渲染
+    // Distinguish Card Rendering
     const Cards = useMemo(() => {
         if (showOldCard && oldRunParams && oldRunParams.LastRecord.ExtraInfo) {
             let oldCards = JSON.parse(oldRunParams.LastRecord.ExtraInfo).statusCards
             return Array.isArray(oldCards) ? oldCards : []
         }
-        // 继续任务运行时 保持之前的 存活主机数/扫描主机数 数据
+        // Continue running task, keep previous alive hosts count/Scan Host Data
         else if (oldRunParams && oldRunParams.LastRecord.ExtraInfo) {
             let oldCards = JSON.parse(oldRunParams.LastRecord.ExtraInfo).statusCards
             const oldItem: StatusCardInfoProps[] = oldCards.filter((item) =>
-                ["存活主机数/扫描主机数"].includes(item.tag)
+                ["Alive Hosts Count/Scanned Hosts Count"].includes(item.tag)
             )
             const nowStatusCards: StatusCardInfoProps[] = statusCards.filter(
-                (item) => item.tag !== "存活主机数/扫描主机数"
+                (item) => item.tag !== "Alive Hosts Count/Scanned Hosts Count"
             )
             return [...oldItem, ...nowStatusCards]
         }
         return statusCards
     }, [statusCards, showOldCard, oldRunParams])
 
-    const filePtr = infoState.statusState.filter((item) => ["当前文件指针"].includes(item.tag))
+    const filePtr = infoState.statusState.filter((item) => ["Current File Pointer"].includes(item.tag))
     const filePtrValue: number = Array.isArray(filePtr) ? parseInt(filePtr[0]?.info[0]?.Data) : 0
 
     const [runTaskNameEx, setRunTaskNameEx] = useState<string>()
@@ -1430,7 +1430,7 @@ export const OldSimpleDetect: React.FC<SimpleDetectProps> = (props) => {
         .splice(0, 3)
     return (
         <>
-            {loading && <Spin tip={"正在恢复未完成的任务"} />}
+            {loading && <Spin tip={"Resuming unfinished tasks"} />}
             <div className={styles["simple-detect"]} style={loading ? {display: "none"} : {}}>
                 <ResizeBox
                     isVer={true}
@@ -1457,7 +1457,7 @@ export const OldSimpleDetect: React.FC<SimpleDetectProps> = (props) => {
                                 {(percent > 0 || executing) && (
                                     <Col span={6}>
                                         <div style={{display: "flex"}}>
-                                            <span style={{marginRight: 10}}>任务进度:</span>
+                                            <span style={{marginRight: 10}}>Task Progress:</span>
                                             <div style={{flex: 1}}>
                                                 <Progress
                                                     status={executing ? "active" : undefined}
@@ -1503,7 +1503,7 @@ export const OldSimpleDetect: React.FC<SimpleDetectProps> = (props) => {
                                         nowUUID={getNowUUID()}
                                         setNowUUID={setNowUUID}
                                         setAllowDownloadReport={setAllowDownloadReport}
-                                        // 卡片存储
+                                        // Card Storage
                                         statusCards={statusCards}
                                         getReportParams={() => {
                                             if (childRef.current) {

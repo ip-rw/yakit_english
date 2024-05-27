@@ -7,12 +7,12 @@ export interface CustomizeMenuProps {
 }
 
 /**
- * @name 一级菜单项
- * @property menuData 菜单数据
+ * @Top Menu Item
+ * @menuData Menu Data
  * @property setMenuData
  * @property currentFirstMenu
  * @property onSelect
- * @property onRemove 删除该项
+ * @onRemove Delete Item
  */
 export interface FirstMenuProps {
     menuData: EnhancedCustomRouteMenuProps[]
@@ -22,14 +22,14 @@ export interface FirstMenuProps {
     onRemove: (s: EnhancedCustomRouteMenuProps) => void
 }
 /**
- * @name 一级菜单项
- * @property index 位置
- * @property menuItem 菜单项
- * @property currentMenuItem 当前选中
- * @property isDragging 拖拽中
- * @property onSelect 选中
- * @property destinationDrag 拖拽的目的地
- * @property onRemove 删除该项
+ * @Top Menu Item
+ * @index Position
+ * @menuItem Menu Item
+ * @currentMenuItem Selected Item
+ * @isDragging Dragging
+ * @onSelect Select
+ * @destinationDrag Drag Destination
+ * @onRemove Delete Item
  */
 export interface FirstMenuItemProps {
     menuItem: EnhancedCustomRouteMenuProps
@@ -41,13 +41,13 @@ export interface FirstMenuItemProps {
 }
 
 /**
- * @name 一级菜单项
- * @property currentFirstMenu 父级菜单
- * @property setCurrentFirstMenu 修改父级菜单
- * @property subMenuData 当前二级菜单
- * @property onRemoveFirstMenu 删除一级菜单
- * @property onRemoveSecondMenu 删除二级菜单
- * @property onEdit 编辑二级菜单
+ * @Top Menu Item
+ * @currentFirstMenu Parent Menu
+ * @setCurrentFirstMenu Update Parent Menu
+ * @subMenuData Current Submenu
+ * @onRemoveFirstMenu Delete Top Menu
+ * @onRemoveSecondMenu Delete Submenu
+ * @onEdit Edit Submenu
  */
 export interface SecondMenuProps {
     currentFirstMenu?: EnhancedCustomRouteMenuProps
@@ -58,11 +58,11 @@ export interface SecondMenuProps {
     onEdit: (m: EnhancedCustomRouteMenuProps) => void
 }
 /**
- * @name 二级菜单项
- * @property menuItem 菜单项
- * @property 拖拽中
- * @property onRemoveSecondMenu 删除二级菜单
- * @property onEdit 编辑二级菜单
+ * @Submenu Item
+ * @menuItem Menu Item
+ * @Dragging
+ * @onRemoveSecondMenu Delete Submenu
+ * @onEdit Edit Submenu
  */
 export interface SecondMenuItemProps {
     menuItem: EnhancedCustomRouteMenuProps
@@ -72,13 +72,13 @@ export interface SecondMenuItemProps {
 }
 
 /**
- * @name 右边的系统功能和插件模块
- * @property destinationDrag 当前的拖拽目的地
- * @property setPluginList 当前最新的本地插件list
- * @property onAddMenuData 添加二级菜单
- * @property subMenuData 二级菜单
- * @property onRemoveMenu 删除二级菜单
- * @property SystemRouteMenuData 系统所有二级菜单
+ * @Right System & Plugin Modules
+ * @destinationDrag Drag Destination
+ * @setPluginList Update Plugin List
+ * @onAddMenuData Add Submenu
+ * @subMenuData Submenu
+ * @onRemoveMenu Remove Submenu
+ * @SystemRouteMenuData All System Submenus
  */
 export interface FeaturesAndPluginProps {
     destinationDrag: string
@@ -90,14 +90,14 @@ export interface FeaturesAndPluginProps {
 }
 
 /**
- * @name 系统功能模块列表
- * @property keywords 搜索关键词
- * @property isSearch 搜索
- * @property destinationDrag 当前的拖拽目的地
- * @property onAddMenuData 添加二级菜单
- * @property subMenuData 二级菜单
- * @property onRemoveMenu 删除二级菜单
- * @property SystemRouteMenuData 系统所有二级菜单
+ * @System Features List
+ * @keywords Search Keywords
+ * @isSearch Search
+ * @destinationDrag Drag Destination
+ * @onAddMenuData Add Submenu
+ * @subMenuData Submenu
+ * @onRemoveMenu Remove Submenu
+ * @SystemRouteMenuData All System Submenus
  */
 export interface SystemFunctionListProps {
     keywords: string
@@ -110,13 +110,13 @@ export interface SystemFunctionListProps {
 }
 
 /**
- * @name 系统功能小组件
- * @property item 当前菜单数据
- * @property isDragging 是否拖拽中
- * @property destinationDrag 当前的拖拽目的地
- * @property onAddMenuData 添加二级菜单
- * @property isDragDisabled 是否可以被拖拽
- * @property onRemoveMenu 删除二级菜单
+ * @System Widgets
+ * @item Current Menu Data
+ * @isDragging Dragging
+ * @destinationDrag Drag Destination
+ * @onAddMenuData Add Submenu
+ * @isDragDisabled Drag Disabled
+ * @onRemoveMenu Remove Submenu
  */
 export interface SystemRouteMenuDataItemProps {
     item: EnhancedCustomRouteMenuProps
@@ -128,14 +128,14 @@ export interface SystemRouteMenuDataItemProps {
 }
 
 /**
- * @name 插件本地功能模块列表
- * @property keywords 搜索关键词
- * @property isSearch 搜索
- * @property destinationDrag 当前的拖拽目的地
- * @property setPluginList 当前最新的本地插件list
- * @property onAddMenuData 添加二级菜单
- * @property subMenuData 二级菜单
- * @property onRemoveMenu 删除二级菜单
+ * @Plugin Local Features List
+ * @keywords Search Keywords
+ * @isSearch Search
+ * @destinationDrag Drag Destination
+ * @setPluginList Update Plugin List
+ * @onAddMenuData Add Submenu
+ * @subMenuData Submenu
+ * @onRemoveMenu Remove Submenu
  */
 export interface PluginLocalListProps {
     keywords: string
@@ -148,13 +148,13 @@ export interface PluginLocalListProps {
 }
 
 /**
- * @name 本地插件功能小组件
- * @property plugin 当前插件
- * @property isDragging 是否拖拽中
- * @property destinationDrag 当前的拖拽目的地
- * @property onAddMenuData 添加二级菜单
- * @property isDragDisabled 是否可以被拖拽
- * @property onRemoveMenu 删除二级菜单
+ * @Local Plugin Widgets
+ * @plugin Current Plugin
+ * @isDragging Dragging
+ * @destinationDrag Drag Destination
+ * @onAddMenuData Add Submenu
+ * @isDragDisabled Drag Disabled
+ * @onRemoveMenu Remove Submenu
  */
 export interface PluginLocalItemProps {
     plugin: YakScript

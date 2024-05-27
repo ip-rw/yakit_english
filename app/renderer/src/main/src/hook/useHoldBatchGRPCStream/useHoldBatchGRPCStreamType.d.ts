@@ -4,7 +4,7 @@ import {HoldGRPCStreamInfo, StreamResult} from "../useHoldGRPCStream/useHoldGRPC
 
 export type TaskStatus = "executing" | "paused" | "done" | "error" | "default"
 export interface HoldBatchGRPCStreamParams extends HoldGRPCStreamParams {
-    /**获取输入值 */
+    /**Get Input Value */
     onGetInputValue?: (params: HybridScanControlAfterRequest) => void
     setTaskStatus?: (s: TaskStatus) => void
 }

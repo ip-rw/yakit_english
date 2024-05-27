@@ -77,7 +77,7 @@ export const ReverseServer_New: React.FC<FacadeOptionsProp> = (props) => {
     const [generaterRequest, setGeneraterRequest] = useState<YsoGeneraterRequest>({Gadget: "", Class: "", Options: []})
     const [facadesLoading, setFacadesLoading] = useState(false)
     const [yakCode, SetYakCode] = useState<string>("")
-    // facades参数
+    // Facade Params
     const [token, _, getToken] = useGetState(randomString(40))
     const [logs, setLogs, getLogs] = useGetState<ReverseNotification[]>([])
     const [formInstance] = Form.useForm()
@@ -241,7 +241,7 @@ export const ReverseServer_New: React.FC<FacadeOptionsProp> = (props) => {
                 ipcRenderer.removeAllListeners(`${token}-end`)
                 ipcRenderer.removeAllListeners(`${token}-error`)
                 ipcRenderer.removeAllListeners(`${token}-data`)
-                info("FacadeServer已关闭")
+                info("FacadeServer Closed")
             }
 
             // }
@@ -264,7 +264,7 @@ export const ReverseServer_New: React.FC<FacadeOptionsProp> = (props) => {
                 Token: token
             }
             if (startFacadeParams.IsRemote) {
-                // 这里应该做个加载提示
+                // Load Indicator Needed
                 ipcRenderer
                     .invoke("GetTunnelServerExternalIP", {
                         Addr: params.BridgeParam.Addr,
@@ -278,19 +278,19 @@ export const ReverseServer_New: React.FC<FacadeOptionsProp> = (props) => {
                             .then(() => {
                                 setFacadesLoading(true)
                                 setFacadesIsConnect(true)
-                                info("启动FacadeServer")
+                                info("Start FacadeServer")
                                 loadAllClassForSelect()
                                 resolve()
                             })
                             .catch((e: any) => {
-                                failed("启动FacadeServer失败: " + `${e}`)
+                                failed("Start FacadeServer failed: " + `${e}`)
                                 setFacadesIsConnect(false)
                                 reject(e)
                             })
                             .finally()
                     })
                     .catch((e: any) => {
-                        failed("获取远程地址失败: " + `${e}`)
+                        failed("Failed to get remote address: " + `${e}`)
                         ipcRenderer.invoke("cancel-StartFacadesWithYsoObject", token)
                         setFacadesIsConnect(false)
                         reject(e)
@@ -303,14 +303,14 @@ export const ReverseServer_New: React.FC<FacadeOptionsProp> = (props) => {
                     .then(() => {
                         setFacadesLoading(true)
                         setFacadesIsConnect(true)
-                        info("启动FacadeServer")
+                        info("Start FacadeServer")
                         setIsClearLog(true)
                         setLogs([])
                         loadAllClassForSelect()
                         resolve()
                     })
                     .catch((e: any) => {
-                        failed("启动FacadeServer失败: " + `${e}`)
+                        failed("Start FacadeServer failed: " + `${e}`)
                         setFacadesIsConnect(false)
                         reject(e)
                     })
@@ -344,10 +344,10 @@ export const ReverseServer_New: React.FC<FacadeOptionsProp> = (props) => {
                 Token: token
             })
             .then((res) => {
-                info("应用到FacadeServer成功")
+                info("Applied to FacadeServer successfully")
             })
             .catch((err) => {
-                failed(`应用到FacadeServer失败${err}`)
+                failed(`Failed to apply to FacadeServer${err}`)
             })
     })
     return (
@@ -366,7 +366,7 @@ export const ReverseServer_New: React.FC<FacadeOptionsProp> = (props) => {
                     <Col span={6} style={{overflowY: "auto"}}>
                         <Form labelCol={{span: 6}} wrapperCol={{span: 24}}>
                             <Form.Item style={{margin: "1rem"}}>
-                                <Space style={{fontSize: "18px"}}>反连资源</Space>
+                                <Space style={{fontSize: "18px"}}>Callback Resources</Space>
                                 <PoweroffOutlined
                                     style={{color: "red", fontSize: "18px", float: "right", marginTop: "6px"}}
                                     onClick={() => {
@@ -377,7 +377,7 @@ export const ReverseServer_New: React.FC<FacadeOptionsProp> = (props) => {
                                     }}
                                 />
                             </Form.Item>
-                            <Form.Item label='恶意类' name='select'>
+                            <Form.Item label='Malicious class' name='select'>
                                 <YakitSelect options={options} onChange={loadClassGeneraterOptions}></YakitSelect>
                             </Form.Item>
                             <Form
@@ -439,11 +439,11 @@ export const ReverseServer_New: React.FC<FacadeOptionsProp> = (props) => {
                                                             applyClassOptions(vals)
                                                         })
                                                         .catch(() => {
-                                                            failed("获取form参数错误")
+                                                            failed("Error Getting Form Params")
                                                         })
                                                 }}
                                             >
-                                                应用
+                                                Application
                                             </Button>
                                             <Button
                                                 type='primary'
@@ -462,21 +462,21 @@ export const ReverseServer_New: React.FC<FacadeOptionsProp> = (props) => {
                             <Form.Item>
                                 <Space direction={"vertical"}>
                                     <Space direction={"vertical"}>
-                                        HTTP反连地址
+                                        HTTP Callback URL
                                         <CopyableField
                                             text={`http://${reverseAddr}/${generaterRequest.Class}`}
                                             style={{color: "blue", marginTop: "-12px"}}
                                         />
                                     </Space>
                                     <Space direction={"vertical"}>
-                                        RMI反连地址
+                                        RMI Callback URL
                                         <CopyableField
                                             text={`rmi://${reverseAddr}/${generaterRequest.Class}`}
                                             style={{color: "blue", marginTop: "-12px"}}
                                         />
                                     </Space>
                                     <Space direction={"vertical"}>
-                                        LDAP反连地址
+                                        LDAP Callback URL
                                         <CopyableField
                                             text={`ldap://${reverseAddr}/${generaterRequest.Class}`}
                                             style={{color: "blue", marginTop: "-12px"}}

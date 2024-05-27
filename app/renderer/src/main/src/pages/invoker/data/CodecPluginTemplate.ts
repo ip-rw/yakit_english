@@ -1,9 +1,9 @@
 export const CodecPluginTemplate = `# codec plugin
 
 /*
-Codec Plugin 可以支持在 Codec 中自定义编码解码，自定义 Bypass 与字符串处理函数
+Codec Plugin supports custom encoding/decoding in Codec, custom Bypass, and string handling functions.
 
-函数定义非常简单
+Function definitions are very simple.
 
 func(i: string) string
 */
@@ -32,7 +32,7 @@ Host: target
         )~
         _, body = poc.Split(rsp.RawPacket)
         subdomain, token = "", ""
-        // 处理逻辑
+        // Processing logic
         return subdomain,token
 }
 
@@ -49,7 +49,7 @@ Host: target.com
     _, body = poc.Split(rsp.RawPacket)
     events = []
     if len(body)> 0 {
-        // 处理逻辑
+        // Processing logic
         return events
     }
 

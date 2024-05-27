@@ -2,107 +2,107 @@ const {ipcMain} = require("electron")
 const isDev = require("electron-is-dev")
 const exec = require("child_process").exec
 module.exports = (win, getClient) => {
-    // 刷新主页面左侧菜单内容 / refresh the menu content on the right side of the main page
+    // Refresh main page's left menu / refresh the menu content on the right side of the main page
     ipcMain.handle("change-main-menu", async (e) => {
         win.webContents.send("fetch-new-main-menu")
     })
-    // 刷新public版本菜单
+    // Refresh public version menu
     ipcMain.handle("refresh-public-menu", async (e) => {
         win.webContents.send("refresh-public-menu-callback")
     })
-    // 远程打开一个工具页面 / open a tool page remotely
+    // Remotely open a tool page / open a tool page remotely
     ipcMain.handle("send-to-tab", async (e, params) => {
         win.webContents.send("fetch-send-to-tab", params)
     })
-    // 请求包通过通信打开一个数据包插件执行弹窗
+    // Open packet plugin via request packet
     ipcMain.handle("send-to-packet-hack", async (e, params) => {
         win.webContents.send("fetch-send-to-packet-hack", params)
     })
-    // 缓存fuzzer内数据和配置通信
+    // Cache data & config comm in fuzzer
     // ipcMain.handle("send-fuzzer-setting-data", async (e, params) => {
     //     win.webContents.send("fetch-fuzzer-setting-data", params)
     // })
-    // 发送插件信息到YakRunning页面
+    // Send plugin info to YakRunning page
     ipcMain.handle("send-to-yak-running", async (e, params) => {
         win.webContents.send("fetch-send-to-yak-running", params)
     })
 
-    // 本地环境(打包/开发)
+    // Local environment (packaged)/Development)
     ipcMain.handle("is-dev", () => {
         return isDev
     })
 
     /**
-     * @name ipc通信-远程关闭一级页面
+     * @name ipc comm - close top-level page remotely
      * @param {object} params
-     * @param {YakitRoute} params.router 页面路由
-     * @param {string} params.name 选填-router是YakitRoute.Plugin_OP时必须传入插件名称
+     * @param {YakitRoute} params.router Page router
+     * @param {string} params.name optional, required for YakitRoute.Plugin_OP - plugin name needed
      */
     ipcMain.handle("send-close-tab", async (e, params) => {
         win.webContents.send("fetch-close-tab", params)
     })
     /**
-     * @name 远程通信打开一个页面
-     * @param {object} params 打开页面的信息
+     * @name Remotely open a page via comm
+     * @param {object} params Page opening info
      *
-     * @param {YakitRoute} params.route 页面的路由
-     * @param {number} pluginId 插件id(本地)
-     * @param {string} pluginName 插件名称
+     * @param {YakitRoute} params.route Page route
+     * @param {number} pluginId Plugin ID (local))
+     * @param {string} pluginName Plugin name
      */
     ipcMain.handle("open-route-page", (e, params) => {
         win.webContents.send("open-route-page-callback", params)
     })
 
-    // tab 新建插件后，刷新插件仓库的本地插件列表
+    // Refresh local plugin list after tab creates a plugin
     ipcMain.handle("send-local-script-list", async (e, params) => {
         win.webContents.send("ref-local-script-list", params)
     })
 
-    /** 方向日志的打开通信 */
+    /** Open comm for direction log */
     ipcMain.handle("direction-console-log", async (e, params) => {
         win.webContents.send("callback-direction-console-log", params)
     })
-    // 打开自定义菜单
+    // Open custom menu
     ipcMain.handle("open-customize-menu", (e, params) => {
         win.webContents.send("fetch-open-customize-menu", params)
     })
-    /** 风车切换引擎 */
+    /** Switch engine with pinwheel */
     ipcMain.handle("switch-conn-refresh", (e, params) => {
         if (!params) {
-            // 关闭所有菜单
+            // Close all menus
             win.webContents.send("fetch-close-all-tab")
         }
         win.webContents.send("fetch-switch-conn-refresh", params)
     })
-    /** License验证通信 */
+    /** License validation comm */
     ipcMain.handle("update-judge-license", (e, params) => {
         win.webContents.send("fetch-judge-license", params)
     })
 
-    /** 网络检测 */
+    /** Network check */
     ipcMain.handle("try-network-detection", async (e, ip) => {
         return await new Promise((resolve, reject) => {
             reject("Unimplemented - use advanced network diagnose")
         })
     })
 
-    /** 简易企业版-打开固定报告 */
+    /** Simplified Enterprise - open fixed report */
     ipcMain.handle("simple-open-report", async (e, params) => {
         win.webContents.send("fetch-simple-open-report", params)
     })
 
-    /** 打开录屏 */
+    /** Open screen recording */
     ipcMain.handle("send-open-screenCap-modal", async (e, params) => {
         win.webContents.send("open-screenCap-modal")
     })
 
-    // 定位HTTP History
+    // Locate HTTP History
     ipcMain.handle("send-positioning-http-history", (e, params) => {
         win.webContents.send("fetch-positioning-http-history", params)
     })
 
 
-    // 新建组 onAddGroup
+    // Create group onAddGroup
     ipcMain.handle("send-add-group", (e, params) => {
         win.webContents.send("fetch-add-group", params)
     })

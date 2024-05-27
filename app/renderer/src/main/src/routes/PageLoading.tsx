@@ -13,7 +13,7 @@ export const PageLoading: React.FC<PageLoadingProps> = memo((props) => {
                         <div className={styles["page-loading-wrapper"]}></div>
                     </YakitSpin>
                 </div>
-                <div className={styles["spin-title-body"]}>页面正在加载中 ...</div>
+                <div className={styles["spin-title-body"]}>Page Loading ...</div>
             </div>
         </div>
     )

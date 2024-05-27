@@ -13,11 +13,11 @@ export const defYakitAutoCompleteRef = {
 }
 
 /**
- * @description YakitAutoCompleteProps 的属性
- * @augments YakitAutoCompleteProps 继承antd的 AutoCompleteProps 默认属性
- * @param {"small" | "middle" | "large" } size  默认middle
- * @param {string} cacheHistoryDataKey 用来缓存/获取历史数据的setRemoteValue/getRemoteValue,默认缓存 options 和 defaultValue
- * @param {number} cacheHistoryListLength 缓存的历史记录list长度
+ * @YakitAutoCompleteProps attributes
+ * @Inherits AutoCompleteProps default attributes
+ * @param {"small" | "middle" | "large" } Size (default: middle)
+ * @param {string} Cache Key/setRemoteValue for Historical Data/Defaults: cache options & defaultValue
+ * @param {number} History cache length
  */
 export const YakitAutoComplete: React.FC<YakitAutoCompleteProps> = React.forwardRef((props, ref) => {
     const {
@@ -55,7 +55,7 @@ export const YakitAutoComplete: React.FC<YakitAutoCompleteProps> = React.forward
         }),
         [cacheHistoryData, restProps.value, loading]
     )
-    /**@description 缓存 cacheHistoryDataKey 对应的数据 */
+    /**@Cache data getter */
     const onSetRemoteValues = useMemoizedFn((newValue: string) => {
         if (!cacheHistoryDataKey) return
         onSetRemoteValuesBase({cacheHistoryDataKey, newValue, isCacheDefaultValue}).then((value) => {
@@ -65,7 +65,7 @@ export const YakitAutoComplete: React.FC<YakitAutoCompleteProps> = React.forward
             })
         })
     })
-    /**@description 获取 cacheHistoryDataKey 对应的数据 */
+    /**@Get cached data */
     const onGetRemoteValues = useMemoizedFn((init?: boolean) => {
         if (!cacheHistoryDataKey) return
         if (init) setLoading(true)
@@ -73,17 +73,17 @@ export const YakitAutoComplete: React.FC<YakitAutoCompleteProps> = React.forward
             .then((cacheData) => {
                 let value = cacheData.defaultValue ? cacheData.defaultValue : ""
                 let newOption = cacheData.options || props.options || []
-                // 当缓存不存在的时候，若有初始默认值
+                // If no cache and default exists
                 if (cacheData.firstUse && initValue) {
                     value = initValue
                     newOption = [{value: initValue, label: initValue}]
-                    // 主要是删缓存需要
+                    // For cache deletion
                     onSetRemoteValues(initValue)
                 } else {
                     setCacheHistoryData({defaultValue: value, options: newOption})
                 }
-                //非form表单时,设置value
-                // 在表单使用时，如果该值为true，这设置值的优先级高于组件外部直接使用form.setfeildvalue设置(场景：初始化)
+                //SetValue outside form
+                // Overwrite form.setFieldValue if true)
                 if (isCacheDefaultValue) {
                     if (props.onChange) props.onChange(value, newOption)
                 }

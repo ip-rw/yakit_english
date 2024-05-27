@@ -61,7 +61,7 @@ export const YakitLogFormatter: React.FC<YakitLogFormatterProp> = (props) => {
                         extra={<Space>
                             <Button size={"small"} onClick={() => {
                                 callCopyToClipboard(obj.path)
-                            }}>复制文件名</Button>
+                            }}>Copy Filename</Button>
                             <Button
                                 type={"primary"}
                                 size={"small"}
@@ -69,7 +69,7 @@ export const YakitLogFormatter: React.FC<YakitLogFormatterProp> = (props) => {
                                 onClick={() => {
                                     openABSFileLocated(obj.path)
                                 }}
-                            >打开文件位置</Button>
+                            >Open File Location</Button>
                         </Space>}
                     >
                         <Space direction={"vertical"}>
@@ -77,8 +77,8 @@ export const YakitLogFormatter: React.FC<YakitLogFormatterProp> = (props) => {
                                 {obj.description}
                             </div>}
                             <Space>
-                                {!obj.is_existed && <Tag color={"red"}>未创建成功</Tag>}
-                                {obj.is_dir ? <Tag color={"orange"}>文件夹</Tag> : <Tag>非文件夹</Tag>}
+                                {!obj.is_existed && <Tag color={"red"}>Not Successfully Created</Tag>}
+                                {obj.is_dir ? <Tag color={"orange"}>Folder</Tag> : <Tag>Non-Folder</Tag>}
                                 {obj.file_size && <Tag color={"geekblue"}>{obj.file_size}</Tag>}
                             </Space>
                             <div>{obj.path}</div>
@@ -105,15 +105,15 @@ export const YakitLogFormatter: React.FC<YakitLogFormatterProp> = (props) => {
                         <Tag color={"geekblue"}>{formatTimestamp(props.timestamp, props.onlyTime)}</Tag>}
                 </div>
                 <pre style={{
-                    backgroundColor: '#f4f4f4', // 设置背景色
-                    border: '1px solid #ddd', // 设置边框
-                    borderRadius: '5px', // 设置边框圆角
-                    padding: '10px', // 设置内边距
-                    whiteSpace: 'pre-wrap', // 保留换行符
-                    fontFamily: 'Courier New, Courier, monospace', // 设置字体
-                    fontSize: '14px', // 设置字号
-                    lineHeight: '1.5', // 设置行高
-                    overflowX: 'auto' // 水平滚动条
+                    backgroundColor: '#f4f4f4', // Set Background Color
+                    border: '1px solid #ddd', // Set Border
+                    borderRadius: '5px', // Set Border Radius
+                    padding: '10px', // Set Padding
+                    whiteSpace: 'pre-wrap', // Preserve Newlines
+                    fontFamily: 'Courier New, Courier, monospace', // Set Font
+                    fontSize: '14px', // Set Font Size
+                    lineHeight: '1.5', // Set Line Height
+                    overflowX: 'auto' // Horizontal Scrollbar
                 }}>{props.data}</pre>
 1            </div>
         case "markdown":
@@ -128,7 +128,7 @@ export const YakitLogFormatter: React.FC<YakitLogFormatterProp> = (props) => {
             return <Space direction={"vertical"} style={{width: "100%"}}>
                 {props.timestamp > 0 &&
                     <Tag color={"geekblue"}>{formatTimestamp(props.timestamp, props.onlyTime)}</Tag>}
-                <Card size={"small"} title={<Tag color={"green"}>模块执行结果</Tag>}>
+                <Card size={"small"} title={<Tag color={"green"}>Module Execution Result</Tag>}>
                     {props.data}
                 </Card>
             </Space>
@@ -138,10 +138,10 @@ export const YakitLogFormatter: React.FC<YakitLogFormatterProp> = (props) => {
                 {props.timestamp > 0 &&
                     <Tag color={"geekblue"}>{formatTimestamp(props.timestamp, props.onlyTime)}</Tag>}
                 <Card
-                    size={"small"} title={<Tag color={"green"}>直接结果(表格)</Tag>}
+                    size={"small"} title={<Tag color={"green"}>Direct Result (Table))</Tag>}
                     extra={[
                         <Button onClick={e => showModal({
-                            title: "JSON 数据",
+                            title: "JSON Data",
                             content: <>
                                 {JSON.stringify(obj)}
                             </>
@@ -182,10 +182,10 @@ export const YakitLogFormatter: React.FC<YakitLogFormatterProp> = (props) => {
                 {props.timestamp > 0 &&
                     <Tag color={"geekblue"}>{formatTimestamp(props.timestamp, props.onlyTime)}</Tag>}
                 <Card
-                    size={"small"} title={<Tag color={"green"}>直接结果(图)</Tag>}
+                    size={"small"} title={<Tag color={"green"}>Direct Result (Chart))</Tag>}
                     extra={[
                         <Button onClick={e => showModal({
-                            title: "JSON 数据",
+                            title: "JSON Data",
                             content: <>
                                 {JSON.stringify(graphData)}
                             </>

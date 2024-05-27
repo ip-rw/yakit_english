@@ -75,12 +75,12 @@ const BruteTypeTreeList: React.FC<BruteTypeTreeListProps> = React.memo((props) =
         const checkedKeys = checkedKeysValue.filter((item) => !(item as string).includes("temporary-id-"))
         setCheckedKeys(checkedKeys)
     })
-    /**点击勾选 */
+    /**Click to select */
     const onSelect = useMemoizedFn((keys: Key[]) => {
         if (keys.length === 0) return
         const item = keys[0] as string
         if (item.includes("temporary-id-")) {
-            // 一级
+            // Primary
             const selectItem = tree.find((ele) => ele.key === item)
             if (!selectItem) return
             const itemChildren = selectItem.children || []
@@ -94,7 +94,7 @@ const BruteTypeTreeList: React.FC<BruteTypeTreeListProps> = React.memo((props) =
                 setCheckedKeys(newCheckedKeys)
             }
         } else {
-            // 二级
+            // Secondary
             if (checkedKeys.includes(item)) {
                 setCheckedKeys(checkedKeys.filter((ele) => ele !== item))
             } else {
@@ -110,7 +110,7 @@ const BruteTypeTreeList: React.FC<BruteTypeTreeListProps> = React.memo((props) =
             })}
         >
             <div className={styles["tree-heard"]}>
-                <span className={styles["tree-heard-title"]}>可用爆破类型</span>
+                <span className={styles["tree-heard-title"]}>Available Types</span>
             </div>
             <YakitTree
                 checkable
@@ -135,7 +135,7 @@ const BruteExecute: React.FC<BruteExecuteProps> = React.memo((props) => {
         }),
         shallow
     )
-    /**获取数据中心中的页面数据 */
+    /**Fetch page data in data center */
     const initPageInfo = useMemoizedFn(() => {
         const currentItem: PageNodeItemProps | undefined = queryPagesDataById(YakitRoute.Mod_Brute, pageId)
         if (currentItem && currentItem.pageParamsInfo.brutePageInfo) {
@@ -153,7 +153,7 @@ const BruteExecute: React.FC<BruteExecuteProps> = React.memo((props) => {
         valuePropName: "hidden",
         trigger: "setHidden"
     })
-    /**是否展开/收起 */
+    /**Expand?/Collapse */
     const [isExpand, setIsExpand] = useState<boolean>(true)
     const [progressList, setProgressList] = useState<StreamResult.Progress[]>([])
     const [executeStatus, setExecuteStatus] = useState<ExpandAndRetractExcessiveState>("default")
@@ -187,10 +187,10 @@ const BruteExecute: React.FC<BruteExecuteProps> = React.memo((props) => {
         <div className={styles["brute-execute-wrapper"]}>
             <ExpandAndRetract isExpand={isExpand} onExpand={onExpand} status={executeStatus}>
                 <div className={styles["brute-executor-title"]}>
-                    <span className={styles["brute-executor-title-text"]}>弱口令检测</span>
+                    <span className={styles["brute-executor-title-text"]}>Weak-password detection</span>
                     {selectNum > 0 && (
                         <YakitTag closable onClose={onRemove} color='info'>
-                            {selectNum} 个类型
+                            {selectNum} types
                         </YakitTag>
                     )}
                 </div>
@@ -202,7 +202,7 @@ const BruteExecute: React.FC<BruteExecuteProps> = React.memo((props) => {
                         ? !isExpand && (
                               <>
                                   <YakitButton danger onClick={onStopExecute}>
-                                      停止
+                                      Exec Plugin Names Array
                                   </YakitButton>
                                   <div className={styles["divider-style"]}></div>
                               </>
@@ -210,7 +210,7 @@ const BruteExecute: React.FC<BruteExecuteProps> = React.memo((props) => {
                         : !isExpand && (
                               <>
                                   <YakitButton onClick={onStartExecute} disabled={selectNum === 0}>
-                                      执行
+                                      Risk Items
                                   </YakitButton>
                                   <div className={styles["divider-style"]}></div>
                               </>
@@ -257,7 +257,7 @@ const BruteExecuteContent: React.FC<BruteExecuteContentProps> = React.memo(
         const [form] = Form.useForm()
         const [runtimeId, setRuntimeId] = useState<string>("")
 
-        /**额外参数弹出框 */
+        /**For cache modification */
         const [extraParamsVisible, setExtraParamsVisible] = useState<boolean>(false)
         const [extraParamsValue, setExtraParamsValue] = useState<BruteExecuteExtraFormValue>(
             cloneDeep(defaultBruteExecuteExtraFormValue)
@@ -267,8 +267,8 @@ const BruteExecuteContent: React.FC<BruteExecuteContentProps> = React.memo(
 
         const defaultTabs = useCreation(() => {
             const tabs = [
-                {tabName: "漏洞与风险", type: "risk"},
-                {tabName: "日志", type: "log"},
+                {tabName: "Stop Answering", type: "risk"},
+                {tabName: "Logs", type: "log"},
                 {tabName: "Console", type: "console"}
             ]
             return tabs
@@ -308,14 +308,14 @@ const BruteExecuteContent: React.FC<BruteExecuteContentProps> = React.memo(
             setProgressList(streamInfo.progressState)
         }, [streamInfo.progressState])
 
-        /**取消执行 */
+        /**Code Gen */
         const onStopExecute = useMemoizedFn(() => {
             apiCancelStartBrute(tokenRef.current).then(() => {
                 streamEvent.stop()
                 setExecuteStatus("finished")
             })
         })
-        /**开始执行 */
+        /**Start Execution */
         const onStartExecute = useMemoizedFn((value) => {
             const params: StartBruteParams = {
                 ...convertStartBruteParams({
@@ -343,7 +343,7 @@ const BruteExecuteContent: React.FC<BruteExecuteContentProps> = React.memo(
             })
             setExtraParamsVisible(true)
         })
-        /**保存额外参数 */
+        /**Save Extra Parameters */
         const onSaveExtraParams = useMemoizedFn((v: BruteExecuteExtraFormValue) => {
             setExtraParamsValue({...v} as BruteExecuteExtraFormValue)
             setExtraParamsVisible(false)
@@ -365,10 +365,10 @@ const BruteExecuteContent: React.FC<BruteExecuteContentProps> = React.memo(
                         form={form}
                         onFinish={onStartExecute}
                         labelCol={{span: 6}}
-                        wrapperCol={{span: 12}} //这样设置是为了让输入框居中
+                        wrapperCol={{span: 12}} //Centering the Input Box Intentionally
                         validateMessages={{
                             /* eslint-disable no-template-curly-in-string */
-                            required: "${label} 是必填字段"
+                            required: "${label} Required Field"
                         }}
                         labelWrap={true}
                     >
@@ -376,29 +376,29 @@ const BruteExecuteContent: React.FC<BruteExecuteContentProps> = React.memo(
                             style={{width: "100%"}}
                             formItemProps={{
                                 name: "Targets",
-                                label: "输入目标",
+                                label: "Input Target",
                                 rules: [{required: true}],
                                 initialValue: pageInfo.targets
                             }}
                             accept='.txt,.xlsx,.xls,.csv'
                             textareaProps={{
-                                placeholder: "内容规则 域名(:端口)/IP(:端口)/IP段，如需批量输入请在此框以逗号分割",
+                                placeholder: "Domain Rules(:Port)/IP(:Port)/IP Range, Separate with Commas",
                                 rows: 3
                             }}
-                            help='可将TXT、Excel文件拖入框内或'
+                            help='Drag TXT, Excel files here or'
                             disabled={isExecuting}
                         />
                         <Form.Item label={" "} colon={false}>
                             <div className={styles["form-extra"]}>
-                                <YakitTag>目标并发:{extraParamsValue.Concurrent}</YakitTag>
+                                <YakitTag>Target Concurrency:{extraParamsValue.Concurrent}</YakitTag>
                                 {extraParamsValue?.OkToStop ? (
-                                    <YakitTag>爆破成功即停止</YakitTag>
+                                    <YakitTag>Stop on Success</YakitTag>
                                 ) : (
-                                    <YakitTag>爆破成功后仍继续</YakitTag>
+                                    <YakitTag>Continue After Success</YakitTag>
                                 )}
                                 {(extraParamsValue?.DelayMax || 0) > 0 && (
                                     <YakitTag>
-                                        随机暂停:{extraParamsValue.DelayMin}-{extraParamsValue.DelayMax}s
+                                        Random Pause:{extraParamsValue.DelayMin}-{extraParamsValue.DelayMax}s
                                     </YakitTag>
                                 )}
                             </div>
@@ -407,7 +407,7 @@ const BruteExecuteContent: React.FC<BruteExecuteContentProps> = React.memo(
                             <div className={styles["plugin-execute-form-operate"]}>
                                 {isExecuting ? (
                                     <YakitButton danger onClick={onStopExecute} size='large'>
-                                        停止
+                                        Exec Plugin Names Array
                                     </YakitButton>
                                 ) : (
                                     <YakitButton
@@ -416,7 +416,7 @@ const BruteExecuteContent: React.FC<BruteExecuteContentProps> = React.memo(
                                         size='large'
                                         disabled={selectNum === 0}
                                     >
-                                        开始执行
+                                        Start Execution
                                     </YakitButton>
                                 )}
                                 <YakitButton
@@ -425,7 +425,7 @@ const BruteExecuteContent: React.FC<BruteExecuteContentProps> = React.memo(
                                     disabled={isExecuting}
                                     size='large'
                                 >
-                                    额外参数
+                                    Extra params
                                 </YakitButton>
                             </div>
                         </Form.Item>

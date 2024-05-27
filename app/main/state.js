@@ -1,8 +1,8 @@
 // user info
 const USER_INFO = {
-    /** 是否登录 */
+    /** LoggedIn? */
     isLogin: false,
-    /** 登录平台 */
+    /** LoginPlatform */
     platform: null,
     githubName: null,
     githubHeadImg: null,
@@ -12,11 +12,11 @@ const USER_INFO = {
     companyHeadImg: null,
     qqName: null,
     qqHeadImg: null,
-    /** 角色 */
+    /** Role */
     role: null,
     token: null,
     user_id: 0,
-    /** 是否有插件管理权限 */
+    /** PluginMgmtPermission? */
     checkPlugin: false
 }
 const HttpSetting = {
@@ -24,11 +24,11 @@ const HttpSetting = {
 }
 
 /**
- * yak引擎状态和配置参数
- * @property {Boolean} status 引擎是否启动
- * @property {String} defaultYakGRPCAddr 引擎启动地址(本地或者远端)
- * @property {String} password 暂时位置属性
- * @property {String} caPem 远端引擎证书密钥
+ * YakEngineStatusConfig
+ * @property {Boolean} EngineStarted?
+ * @property {String} DefaultYakGRPCAddr)
+ * @property {String} TempLocationProperty
+ * @property {String} RemoteEngineCertKey
  */
 const GLOBAL_YAK_SETTING = {
     status: false,

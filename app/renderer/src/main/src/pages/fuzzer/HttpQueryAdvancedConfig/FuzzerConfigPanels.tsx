@@ -49,7 +49,7 @@ export const MatchersPanel: React.FC<MatchersPanelProps> = React.memo((props) =>
         })
         onChangeValue(newMatchers)
     })
-    /** setFieldsValue不会触发Form onValuesChange，抛出去由外界自行解决 */
+    /** setFieldsValue Does Not Trigger Form onValuesChange, Throw to External Solution */
     const onChangeValue = useMemoizedFn((restValue) => {
         if (onSetValue) {
             const v = form.getFieldsValue()
@@ -76,11 +76,11 @@ export const MatchersPanel: React.FC<MatchersPanelProps> = React.memo((props) =>
                 {...restProps}
                 header={
                     <div className={styles["matchers-panel"]}>
-                        匹配器
+                        Matcher
                         <div className={styles["matchers-number"]}>{matchers?.length}</div>
                     </div>
                 }
-                key='匹配器'
+                key='Matcher'
                 extra={
                     <>
                         <YakitButton
@@ -98,7 +98,7 @@ export const MatchersPanel: React.FC<MatchersPanelProps> = React.memo((props) =>
                             }}
                             size='small'
                         >
-                            重置
+                            Reset
                         </YakitButton>
                         <Divider type='vertical' style={{margin: 0}} />
                         <YakitButton
@@ -110,7 +110,7 @@ export const MatchersPanel: React.FC<MatchersPanelProps> = React.memo((props) =>
                             }}
                             className={styles["btn-padding-right-0"]}
                         >
-                            添加/调试
+                            Add/Debug
                             <HollowLightningBoltIcon />
                         </YakitButton>
                     </>
@@ -161,7 +161,7 @@ export const ExtractorsPanel: React.FC<ExtractorsPanelProps> = React.memo((props
         })
         onChangeValue(newExtractors)
     })
-    /** setFieldsValue不会触发Form onValuesChange，抛出去由外界自行解决 */
+    /** setFieldsValue Does Not Trigger Form onValuesChange, Throw to External Solution */
     const onChangeValue = useMemoizedFn((restValue) => {
         if (onSetValue) {
             const v = form.getFieldsValue()
@@ -185,11 +185,11 @@ export const ExtractorsPanel: React.FC<ExtractorsPanelProps> = React.memo((props
                 {...restProps}
                 header={
                     <div className={styles["matchers-panel"]}>
-                        数据提取器
+                        Data Extractor
                         <div className={styles["matchers-number"]}>{extractors?.length}</div>
                     </div>
                 }
-                key='数据提取器'
+                key='Data Extractor'
                 extra={
                     <>
                         <YakitButton
@@ -204,7 +204,7 @@ export const ExtractorsPanel: React.FC<ExtractorsPanelProps> = React.memo((props
                             }}
                             size='small'
                         >
-                            重置
+                            Reset
                         </YakitButton>
                         <Divider type='vertical' style={{margin: 0}} />
                         <YakitButton
@@ -216,7 +216,7 @@ export const ExtractorsPanel: React.FC<ExtractorsPanelProps> = React.memo((props
                             }}
                             className={styles["btn-padding-right-0"]}
                         >
-                            添加/调试
+                            Add/Debug
                             <HollowLightningBoltIcon />
                         </YakitButton>
                     </>
@@ -269,7 +269,7 @@ export const VariablePanel: React.FC<VariablePanelProps> = React.memo((props) =>
             params: newParams
         })
     })
-    /** @description 变量预览 */
+    /** @description Variable Preview */
     const onRenderVariables = useMemoizedFn((e: React.MouseEvent<HTMLElement, MouseEvent>) => {
         e.stopPropagation()
         ipcRenderer
@@ -279,7 +279,7 @@ export const VariablePanel: React.FC<VariablePanelProps> = React.memo((props) =>
             })
             .then((rsp: {Results: {Key: string; Value: string}[]}) => {
                 showYakitModal({
-                    title: "渲染后变量内容",
+                    title: "Rendered Variable Content",
                     footer: <></>,
                     width: "60%",
                     content: (
@@ -292,11 +292,11 @@ export const VariablePanel: React.FC<VariablePanelProps> = React.memo((props) =>
                 })
             })
             .catch((err) => {
-                yakitNotify("error", "预览失败:" + err)
+                yakitNotify("error", "Preview Failed:" + err)
             })
     })
     const onAddPrams = useMemoizedFn(() => {
-        onAdd("设置变量")
+        onAdd("Set Variable")
         const index = params.findIndex((ele: {Key: string; Value: string}) => !ele || (!ele.Key && !ele.Value))
         if (index === -1) {
             const newParams = [...params, {Key: "", Value: "", Type: "raw"}]
@@ -308,7 +308,7 @@ export const VariablePanel: React.FC<VariablePanelProps> = React.memo((props) =>
             })
             onSetActiveKey()
         } else {
-            yakitFailed(`请将已添加【变量${index}】设置完成后再进行添加`)
+            yakitFailed(`Please Add Variable${index}】Pre-Add Settings`)
         }
     })
 
@@ -325,7 +325,7 @@ export const VariablePanel: React.FC<VariablePanelProps> = React.memo((props) =>
             params: newParams
         })
     })
-    /** setFieldsValue不会触发Form onValuesChange，抛出去由外界自行解决 */
+    /** setFieldsValue Does Not Trigger Form onValuesChange, Throw to External Solution */
     const onChangeValue = useMemoizedFn((restValue) => {
         if (onSetValue) {
             const v = form.getFieldsValue()
@@ -339,8 +339,8 @@ export const VariablePanel: React.FC<VariablePanelProps> = React.memo((props) =>
         <>
             <YakitPanel
                 {...restProps}
-                header='设置变量'
-                key='设置变量'
+                header='Set Variable'
+                key='Set Variable'
                 extra={
                     <>
                         <YakitButton
@@ -352,11 +352,11 @@ export const VariablePanel: React.FC<VariablePanelProps> = React.memo((props) =>
                             }}
                             size='small'
                         >
-                            重置
+                            Reset
                         </YakitButton>
                         <Divider type='vertical' style={{margin: 0}} />
                         <YakitButton type='text' onClick={onRenderVariables} size='small'>
-                            预览
+                            Preview
                         </YakitButton>
                         <Divider type='vertical' style={{margin: 0}} />
                         <YakitButton
@@ -368,7 +368,7 @@ export const VariablePanel: React.FC<VariablePanelProps> = React.memo((props) =>
                             className={styles["btn-padding-right-0"]}
                             size='small'
                         >
-                            添加
+                            Add
                             <OutlinePlusIcon />
                         </YakitButton>
                     </>

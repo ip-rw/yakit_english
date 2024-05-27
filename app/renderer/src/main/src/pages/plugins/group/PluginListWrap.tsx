@@ -5,21 +5,21 @@ import {OutlineViewgridIcon, OutlineViewlistIcon} from "@/assets/icon/outline"
 import {YakitCheckbox} from "@/components/yakitUI/YakitCheckbox/YakitCheckbox"
 
 interface PluginListWrapProps {
-    /** 全选框状态 */
+    /** Select All Checkbox Status */
     checked: boolean
-    /** 设置全选框 */
+    /** Set Select All Checkbox */
     onCheck: (value: boolean) => void
-    /** 列表名字 */
+    /** List Name */
     title: string
-    /** 插件总数 */
+    /** Total Plugins */
     total: number
-    /** 已勾选插件数量 */
+    /** Selected Plugins Count */
     selected: number
-    /** 插件展示(列表|网格) */
+    /** Plugin Display (List)|Grid) */
     isList: boolean
-    /** 设置插件展示(列表|网格) */
+    /** Set Plugin Display (List)|Grid) */
     setIsList: (value: boolean) => void
-    /** 表头拓展元素 */
+    /** Expand Table Header */
     extraHeader?: ReactNode
     children: ReactNode
 }
@@ -27,7 +27,7 @@ interface PluginListWrapProps {
 export const PluginListWrap: React.FC<PluginListWrapProps> = memo((props) => {
     const {checked, onCheck, title, total, selected, children, isList, setIsList, extraHeader} = props
 
-    /** 全选框是否为半选状态 */
+    /** Indeterminate State Checkbox */
     const checkIndeterminate = useMemo(() => {
         if (checked) return false
         if (!checked && selected > 0) return true
@@ -45,7 +45,7 @@ export const PluginListWrap: React.FC<PluginListWrapProps> = memo((props) => {
                             checked={checked}
                             onChange={(e) => onCheck(e.target.checked)}
                         />
-                        全选
+                        Fixes failure to iterate load_content on missing older version data
                     </div>
                     <div className={styles["body-total-selected"]}>
                         <div>
@@ -63,7 +63,7 @@ export const PluginListWrap: React.FC<PluginListWrapProps> = memo((props) => {
                         <Tooltip
                             className='plugins-tooltip'
                             placement='topRight'
-                            title={isList ? "切换至宫格视图" : "切换至列表视图"}
+                            title={isList ? "Switch to Grid View" : "Switch to List View"}
                         >
                             <div className={styles["is-list-btn"]} onClick={() => setIsList(!isList)}>
                                 {isList ? <OutlineViewgridIcon /> : <OutlineViewlistIcon />}

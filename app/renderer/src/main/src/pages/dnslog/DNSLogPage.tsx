@@ -76,20 +76,20 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
     const [isLocal, setIsLocal, getIsLocal] = useGetState(true)
     const [expandRows, setExpandRows] = useState<string[]>([])
     const [dnsLogType, setDnsLogType, getDnsLogType] = useGetState<"builtIn" | "custom">("builtIn")
-    const [selectedMode, setSelectedMode, getSelectedMode] = useGetState<string>() // 在组件状态中保存选中的值
+    const [selectedMode, setSelectedMode, getSelectedMode] = useGetState<string>() // Save Selected in Component Status
     const DNS_LOG_PAGE_UPDATE_TOKEN_CACHE = "DNS_LOG_PAGE_UPDATE_TOKEN_CACHE"
     const DNS_LOG_PAGE_UPDATE_TOKEN_SCRIPT_CACHE = "DNS_LOG_PAGE_UPDATE_TOKEN_SCRIPT_CACHE"
     const openDetails = useRef<DNSLogEvent>()
 
     useEffect(() => {
-        // 初始化-查看菜单是否开启dnslog并请求获取参数fDNS_LOG_PAGE_UPDATE_TOKEN_SCRIPT_CACHE
+        // Init-Check Menu for DNSLog & Fetch Params
         ipcRenderer.invoke("dnslog-page-to-menu")
-        // 获取菜单发送的配置参数
+        // Fetch Config Params from Menu
         ipcRenderer.on(
             "dnslog-menu-to-page-callback",
             (e, data: DnslogMenuToPage) => {
                 if(data.isReset){
-                    // 重置
+                    // Reset
                     reset()
                 }
                 else{
@@ -106,7 +106,7 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
                 
             }
         )
-        // 查看单条数据的详情
+        // View Detail of Single Record
         ipcRenderer.on("dnslog-info-details-callback", (e, info: DNSLogEvent) => {
             openDetails.current = info
             if(getRecords().length>0){
@@ -124,7 +124,7 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
         }
     }, [])
 
-    // 重置
+    // Reset
     const reset = useMemoizedFn(()=>{
         setToken("")
         setDomain("")
@@ -135,7 +135,7 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
         setExpandRows([])
     })
 
-    // 打开单条数据
+    // Open Single Record
     const openDetailsItem = useMemoizedFn(() => {
 
         if (openDetails.current) {
@@ -150,7 +150,7 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
 
     })
 
-    // 同步给菜单里dnslog新的参数
+    // Sync New Params to Menu DNSLog
     const sendMenuDnslog = useMemoizedFn((data:SendMenuDnslogProps) => {
         ipcRenderer.invoke("dnslog-page-change-menu", data)
     })
@@ -159,7 +159,7 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
         setBtnLoading(true)
         setLoading(true)
         const DNSMode = selectedMode || ""
-        const UseLocal = selectedMode === "内置" ? false : isLocal
+        const UseLocal = selectedMode === "Built-in" ? false : isLocal
 
         ipcRenderer
             .invoke("RequireDNSLogDomain", {
@@ -178,17 +178,17 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
                 setDomain("")
             })
             .finally(() => {
-                // 用于 MenuDNSLog 生成域名时读取此处数据
+                // For MenuDNSLog Domain Generation
                 setRemoteValue(
                     DNS_LOG_PAGE_UPDATE_TOKEN,
                     JSON.stringify({
                         type: "builtIn",
                         Addr: "",
                         DNSMode,
-                        UseLocal: DNSMode === "内置" ? false : UseLocal,
+                        UseLocal: DNSMode === "Built-in" ? false : UseLocal,
                     })
                 )
-                // 用于缓存历史勾选项
+                // Cache Selected History
                 setRemoteValue(
                     DNS_LOG_PAGE_UPDATE_TOKEN_CACHE,
                     JSON.stringify({DNSMode: selectedMode || "", UseLocal: isLocal})
@@ -207,7 +207,7 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
             .invoke("QueryDNSLogByToken", {
                 Token: getToken(),
                 DNSMode: getSelectedMode() || "",
-                UseLocal: getSelectedMode() === "内置" ? false : getIsLocal()
+                UseLocal: getSelectedMode() === "Built-in" ? false : getIsLocal()
             })
             .then((rsp: { Events: DNSLogEvent[] }) => {
                 setRecords(
@@ -234,12 +234,12 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
     const [platforms, setPlatforms] = useState<string[]>([])
 
     const querySupportedDnsLogPlatforms = () => {
-        // 调用后端API获取支持的平台
+        // Fetch Supported Platforms from Backend API
         ipcRenderer
             .invoke("QuerySupportedDnsLogPlatforms", {})
             .then((rsp) => {
                 if (rsp && rsp.Platforms) {
-                    let newArr: string[] = ["内置", ...rsp.Platforms]
+                    let newArr: string[] = ["Built-in", ...rsp.Platforms]
                     setPlatforms(newArr)
                     getRemoteValue(DNS_LOG_PAGE_UPDATE_TOKEN_CACHE).then((data) => {
                         if (!data) {
@@ -274,12 +274,12 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
             })
     }
 
-    // 您可以在组件加载时调用此函数
+    // Invoke This on Component Load
     useEffect(() => {
         querySupportedDnsLogPlatforms()
     }, [])
     const [params, setParams] = useState<string>()
-    const [scriptNamesList, setScriptNamesList] = useState<SelectOptionProps[]>([]) // 代理代表
+    const [scriptNamesList, setScriptNamesList] = useState<SelectOptionProps[]>([]) // Proxy Delegate
     useEffect(() => {
         queryYakScriptList(
             "yak",
@@ -338,9 +338,9 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
             })
             .finally(() => {
                 if (params && params?.length > 0) {
-                    // 用于 MenuDNSLog 生成域名时读取此处数据
+                    // For MenuDNSLog Domain Generation
                     setRemoteValue(DNS_LOG_PAGE_UPDATE_TOKEN, JSON.stringify({type: "custom", ScriptName: params}))
-                    // 用于缓存历史勾选项
+                    // Cache Selected History
                     setRemoteValue(DNS_LOG_PAGE_UPDATE_TOKEN_SCRIPT_CACHE, JSON.stringify({ScriptName: params}))
                 }
                 setTimeout(() => {
@@ -393,7 +393,7 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
                 <div>
                     <Space>
                         DNSLog
-                        <div style={{color: "#999"}}>使用 {getReleaseEditionName()} 自带的 DNSLog 反连服务</div>
+                        <div style={{color: "#999"}}>Use {getReleaseEditionName()} Built-in DNSLog Service</div>
                     </Space>
                     <div
                         style={{
@@ -414,11 +414,11 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
                             options={[
                                 {
                                     value: "builtIn",
-                                    label: "内置"
+                                    label: "Built-in"
                                 },
                                 {
                                     value: "custom",
-                                    label: "自定义"
+                                    label: "Custom"
                                 }
                             ]}
                         />
@@ -431,16 +431,16 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
                                 layout='inline'
                                 size={"small"}
                             >
-                                <Form.Item label={<span>内置DNSLog</span>}>
+                                <Form.Item label={<span>Built-in DNSLog</span>}>
                                     <YakitSelect
                                         showSearch
-                                        placeholder='请选择...'
+                                        placeholder='Please Select...'
                                         optionFilterProp='children'
                                         value={selectedMode}
                                         onChange={(value) => {
                                             setToken("")
                                             setSelectedMode(value)
-                                        }} // 保存选中的值
+                                        }} // Save Selected
                                         style={{width: 240}}
                                         size='small'
                                     >
@@ -451,12 +451,12 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
                                         ))}
                                     </YakitSelect>
                                 </Form.Item>
-                                {selectedMode !== "内置" && <Form.Item
+                                {selectedMode !== "Built-in" && <Form.Item
                                     style={{
                                         marginBottom: 0,
-                                        marginRight: 10 // 添加右侧间隔isLocal
+                                        marginRight: 10 // Add Right Margin isLocal
                                     }}
-                                    label={"使用本地"}
+                                    label={"Use Local"}
                                 >
                                     <YakitSwitch checked={isLocal} onChange={setIsLocal}/>
                                 </Form.Item>}
@@ -470,7 +470,7 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
                                         htmlType='submit'
                                         loading={btnLoading}
                                     >
-                                        生成一个可用域名
+                                        Generate a Domain
                                     </YakitButton>
                                 </Form.Item>
                             </Form>
@@ -484,11 +484,11 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
                                 }}
                                 size={"small"}
                             >
-                                <Form.Item label={<span>DNSLog插件</span>}>
+                                <Form.Item label={<span>DNSLog Plugin</span>}>
                                     <YakitSelect
                                         showSearch
                                         options={scriptNamesList}
-                                        placeholder='请选择...'
+                                        placeholder='Please Select...'
                                         size='small'
                                         value={params}
                                         onChange={(ScriptNames) => {
@@ -508,7 +508,7 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
                                         htmlType='submit'
                                         loading={btnLoading}
                                     >
-                                        生成一个可用域名
+                                        Generate a Domain
                                     </YakitButton>
                                 </Form.Item>
                             </Form>
@@ -516,7 +516,7 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
                     </div>
                     {token !== "" && (
                         <Row style={{marginTop: 5}} align="bottom">
-                            <Col style={{fontSize: 12}}>当前激活域名为：</Col>
+                            <Col style={{fontSize: 12}}>Current Active Domain：</Col>
                             <Col>
                                 <YakitTag enableCopy={true} color='blue' copyText={tokenDomain}></YakitTag>
                             </Col>
@@ -535,9 +535,9 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
                             <Form.Item
                                 style={{
                                     marginBottom: 0,
-                                    marginRight: 10 // 添加右侧间隔
+                                    marginRight: 10 // Add Right Margin
                                 }}
-                                label={"只看A记录"}
+                                label={"Show Only A Records"}
                             >
                                 <YakitSwitch
                                     checked={onlyARecord}
@@ -550,9 +550,9 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
                             <Form.Item
                                 style={{
                                     marginBottom: 0,
-                                    marginRight: 10 // 添加右侧间隔
+                                    marginRight: 10 // Add Right Margin
                                 }}
-                                label={"自动刷新记录"}
+                                label={"Auto Refresh Records"}
                             >
                                 <YakitSwitch checked={autoQuery} onChange={(val)=>{
                                     setAutoQuery(val)
@@ -567,7 +567,7 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
                             type={"text"}
                             onClick={() => {
                                 if (token.length === 0) {
-                                    warn("请先生成可用域名")
+                                    warn("Generate a Domain First")
                                     return
                                 }
                                 dnsLogType === "builtIn" ? queryDNSLogByToken() : queryDNSLogTokenByScript()
@@ -597,9 +597,9 @@ export const DNSLogPage: React.FC<DNSLogPageProp> = (props) => {
                     }}
                     pagination={false}
                     columns={[
-                        {title: "域名", dataIndex: "Domain"},
-                        {title: "类型", dataIndex: "DNSType"},
-                        {title: "远端IP", dataIndex: "RemoteIP"},
+                        {title: "Domain", dataIndex: "Domain"},
+                        {title: "Type", dataIndex: "DNSType"},
+                        {title: "Remote IP", dataIndex: "RemoteIP"},
                         {
                             title: "Timestamp",
                             render: (i: DNSLogEvent) => {

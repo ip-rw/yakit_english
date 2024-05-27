@@ -53,11 +53,11 @@ export const SelectIcon: React.FC = (props: any) => {
 }
 const OfficialYakitLogo = () => (
     <svg width='1em' height='1em' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg'>
-        <title>官方插件</title>
-        <g id='页面-1' stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
-            <g id='官网首页设计备份-4' transform='translate(-484.000000, -766.000000)' fill='#EF5B26'>
-                <g id='组件/卡片/插件样式01' transform='translate(384.000000, 748.000000)'>
-                    <g id='其他/插件卡片标题' transform='translate(16.000000, 17.000000)'>
+        <title>Official Plugin</title>
+        <g id='Page-1' stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
+            <g id='Official Site Home Design Backup - 4' transform='translate(-484.000000, -766.000000)' fill='#EF5B26'>
+                <g id='Component/Card/Plugin Style 01' transform='translate(384.000000, 748.000000)'>
+                    <g id='Other/Plugin Card Title' transform='translate(16.000000, 17.000000)'>
                         <g id='icon/tag/logo' transform='translate(84.000000, 1.000000)'>
                             <path
                                 d='M12.7795775,3.98894 L11.1888775,3.988815 C11.1101275,3.988815 11.0383275,4.034015 11.0043275,4.10504 L9.7688525,6.737615 L8.5284025,4.105165 C8.4943775,4.034165 8.4226275,3.988965 8.3438775,3.988965 L7.0554025,3.988965 C6.9033275,3.988965 6.8044025,4.149015 6.8724275,4.285065 L8.9729775,8.43349 L7.5929025,11.37419 C7.5656025,11.431165 7.5661525,11.497565 7.5944275,11.554065 L8.2813525,12.92789 C8.3567525,13.07869 8.5719275,13.07869 8.6473275,12.92789 L12.9625775,4.28504 C13.0305775,4.149015 12.9316775,3.98894 12.7795775,3.98894 L12.7795775,3.98894 Z M7.3032275,7.728765 L5.5957275,4.105165 C5.5617275,4.034165 5.4899525,3.988965 5.4112025,3.988965 L4.1227525,3.988965 C3.9706525,3.988965 3.8717275,4.149015 3.9397525,4.285065 L6.4362275,9.215365 C6.5123525,9.367615 6.7302275,9.365765 6.8037525,9.212265 L7.2984025,8.17959 L7.3664525,8.037515 C7.3932275,7.98164 7.3932275,7.91664 7.3664525,7.86074 L7.3032275,7.728765 Z M14.2865275,3.988815 L15.8772525,3.98894 C16.0293525,3.98894 16.1282525,4.149015 16.0602525,4.28504 L10.2037275,15.99809 C10.1283275,16.14889 9.9131275,16.14889 9.8377275,15.99809 L9.1508275,14.62424 C9.1225525,14.56774 9.1220025,14.50134 9.1493025,14.444365 L14.1020025,4.10504 C14.1360275,4.034015 14.2077775,3.988815 14.2865275,3.988815 L14.2865275,3.988815 Z'
@@ -77,18 +77,18 @@ export const OfficialYakitLogoIcon: React.FC = (props: any) => {
 
 const OnlineThumbsUp = () => (
     <svg width='1em' height='1em' viewBox='0 0 24 24' version='1.1' xmlns='http://www.w3.org/2000/svg'>
-        <title>切片</title>
-        <g id='Yak-官网' stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
-            <g id='社区/首页/评论交互' transform='translate(-976.000000, -2752.000000)'>
-                <g id='社区内容/视频' transform='translate(384.000000, 2228.000000)'>
-                    <g id='编组-6' transform='translate(24.000000, 24.000000)'>
-                        <g id='icon/操作编辑类/文件夹打开备份-2' transform='translate(568.000000, 500.000000)'>
+        <title>Slice</title>
+        <g id='Yak - Official Site' stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
+            <g id='Community/Home/Comment Interaction' transform='translate(-976.000000, -2752.000000)'>
+                <g id='Community Content/Video' transform='translate(384.000000, 2228.000000)'>
+                    <g id='Group-6' transform='translate(24.000000, 24.000000)'>
+                        <g id='icon/Operation Edit/Folder Open Backup - 2' transform='translate(568.000000, 500.000000)'>
                             <path
                                 d='M12.9565746,3.825 C11.4543589,3.825 10.3179828,4.98519155 10.3187578,6.51572659 C10.2766831,8.11166262 9.11230127,9.42350007 7.61041261,9.60839699 L7.45912779,9.623099 L5.22709156,9.63465 C4.49424279,9.63465 3.89151589,10.202563 3.83577509,10.9210191 L3.83156847,11.0298644 L3.825,18.681675 C3.825,19.425478 4.47647616,20.109947 5.2139885,20.1706347 L5.31987163,20.175 L16.9395491,20.175 C17.4456531,20.175 17.9382373,20.0327029 18.3634821,19.7633457 C18.7686811,19.5076797 19.0978245,19.1443805 19.3151296,18.7133064 L19.3436953,18.6444432 L19.4008075,18.4698658 L19.4740013,18.2142315 L19.5945974,17.7560127 L19.8191823,16.8414493 L20.0879192,15.6900612 L20.3812787,14.3867453 L20.8020861,12.4284795 L20.8851665,12.0081915 C21.0065172,11.3534647 20.8467204,10.6355132 20.4604665,10.1071469 C19.9737801,9.44105445 19.2744663,9.05608045 18.475844,9.01056062 L18.3148289,9.006 L15.6570494,9.006 L15.5831586,8.91814868 C15.6738852,8.39650178 15.7167037,7.77128715 15.7167037,6.913875 C15.7167037,5.14298227 14.4188684,3.825 12.9565746,3.825 Z M12.9565746,5.325 C13.6062239,5.325 14.2245785,5.97256533 14.2245785,6.913875 L14.2208124,7.33701673 L14.2092034,7.71150466 L14.1892857,8.04422691 C14.1529447,8.51543011 14.0869895,8.86892161 13.9843448,9.20931493 L13.946114,9.33050359 L13.53375,10.506 L18.3148289,10.506 C18.9728875,10.506 19.4892836,11.079433 19.4360708,11.6459217 L19.4228728,11.735225 L18.9384406,14.0051858 L18.5400327,15.805023 L18.274972,16.9486609 L18.1554367,17.4342364 L18.0818305,17.7137569 L18.0406472,17.8584081 L17.9910331,18.0109995 L17.9662563,18.0687293 C17.7822278,18.4111572 17.4274068,18.6352364 17.0413436,18.670205 L16.9353839,18.675 L8.67631549,18.6684 L8.60137542,18.5933925 L8.60214264,10.9652127 L8.6532752,10.8941193 C10.5033847,10.2730674 11.7034148,8.6265985 11.8123176,6.47373463 C11.8628198,5.7581852 12.2974481,5.325 12.9565746,5.325 Z M7.03379632,11.1239264 L7.10925028,11.198925 L7.10925028,18.592575 L7.03417492,18.667575 L5.39204978,18.665925 L5.31712517,18.5908583 L5.32369367,11.2087583 L5.39823968,11.1338264 L7.03379632,11.1239264 Z'
-                                id='形状'
+                                id='Shape'
                                 fill='currentColor'
                             ></path>
-                            <rect id='矩形-copy-66' x='0' y='0' width='24' height='24'></rect>
+                            <rect id='Rectangle - copy - 66' x='0' y='0' width='24' height='24'></rect>
                         </g>
                     </g>
                 </g>
@@ -103,17 +103,17 @@ export const OnlineThumbsUpIcon: React.FC = (props: any) => {
 
 const OnlineComment = () => (
     <svg width='1em' height='1em' viewBox='0 0 16 16' version='1.1' xmlns='http://www.w3.org/2000/svg'>
-        <title>切片</title>
+        <title>Slice</title>
         <defs>
             <polygon id='path-1' points='2.98427553e-16 0 14 0 14 14 2.98427553e-16 14'></polygon>
         </defs>
-        <g id='页面-1' stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
-            <g id='官网/资源/插件详情页-蓝色' transform='translate(-1451.000000, -854.000000)'>
-                <g id='用户评论' transform='translate(384.000000, 622.000000)'>
-                    <g id='编组-5' transform='translate(0.000000, 176.000000)'>
-                        <g id='其他/插件卡片/下载量备份' transform='translate(1065.000000, 54.000000)'>
-                            <g id='icon/基础/star-默认' transform='translate(2.000000, 2.000000)'>
-                                <g id='编组' transform='translate(1.000000, 1.000000)'>
+        <g id='Page-1' stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
+            <g id='Official Site/Resources/Plugin Details - Blue' transform='translate(-1451.000000, -854.000000)'>
+                <g id='User Comment' transform='translate(384.000000, 622.000000)'>
+                    <g id='Group-5' transform='translate(0.000000, 176.000000)'>
+                        <g id='Other/Plugin Card/Download Backup' transform='translate(1065.000000, 54.000000)'>
+                            <g id='icon/Basic/star - Default' transform='translate(2.000000, 2.000000)'>
+                                <g id='Group' transform='translate(1.000000, 1.000000)'>
                                     <mask id='mask-2' fill='white'>
                                         <use xlinkHref='#path-1'></use>
                                     </mask>
@@ -139,18 +139,18 @@ export const OnlineSurfaceIcon: React.FC = (props: any) => {
 
 const OnlineSurface = () => (
     <svg width='1em' height='1em' viewBox='0 0 24 24' version='1.1' xmlns='http://www.w3.org/2000/svg'>
-        <title>切片</title>
-        <g id='Yak-官网' stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
-            <g id='社区/首页/评论交互' transform='translate(-976.000000, -996.000000)'>
-                <g id='社区内容/图文-9宫格' transform='translate(384.000000, 376.000000)'>
-                    <g id='编组-6' transform='translate(24.000000, 24.000000)'>
-                        <g id='icon/操作编辑类/文件夹打开备份-2' transform='translate(568.000000, 596.000000)'>
+        <title>Slice</title>
+        <g id='Yak - Official Site' stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
+            <g id='Community/Home/Comment Interaction' transform='translate(-976.000000, -996.000000)'>
+                <g id='Community Content/Pic-Text - Grid9' transform='translate(384.000000, 376.000000)'>
+                    <g id='Group-6' transform='translate(24.000000, 24.000000)'>
+                        <g id='icon/Operation Edit/Folder Open Backup - 2' transform='translate(568.000000, 596.000000)'>
                             <path
                                 d='M12.9565746,3.825 C11.4543589,3.825 10.3179828,4.98519155 10.3187578,6.51572659 C10.2766831,8.11166262 9.11230127,9.42350007 7.61041261,9.60839699 L7.45912779,9.623099 L5.22709156,9.63465 C4.49424279,9.63465 3.89151589,10.202563 3.83577509,10.9210191 L3.83156847,11.0298644 L3.825,18.681675 C3.825,19.425478 4.47647616,20.109947 5.2139885,20.1706347 L5.31987163,20.175 L16.9395491,20.175 C17.4456531,20.175 17.9382373,20.0327029 18.3634821,19.7633457 C18.7686811,19.5076797 19.0978245,19.1443805 19.3151296,18.7133064 L19.3436953,18.6444432 L19.4008075,18.4698658 L19.4740013,18.2142315 L19.5945974,17.7560127 L19.8191823,16.8414493 L20.0879192,15.6900612 L20.3812787,14.3867453 L20.8020861,12.4284795 L20.8851665,12.0081915 C21.0065172,11.3534647 20.8467204,10.6355132 20.4604665,10.1071469 C19.9737801,9.44105445 19.2744663,9.05608045 18.475844,9.01056062 L18.3148289,9.006 L15.6570494,9.006 L15.5831586,8.91814868 C15.6738852,8.39650178 15.7167037,7.77128715 15.7167037,6.913875 C15.7167037,5.14298227 14.4188684,3.825 12.9565746,3.825 Z M7.03379632,11.1239264 L7.10925028,11.198925 L7.10925028,18.592575 L7.03417492,18.667575 L5.39204978,18.665925 L5.31712517,18.5908583 L5.32369367,11.2087583 L5.39823968,11.1338264 L7.03379632,11.1239264 Z'
-                                id='形状'
+                                id='Shape'
                                 fill='currentColor'
                             ></path>
-                            <rect id='矩形-copy-66' x='0' y='0' width='24' height='24'></rect>
+                            <rect id='Rectangle - copy - 66' x='0' y='0' width='24' height='24'></rect>
                         </g>
                     </g>
                 </g>
@@ -218,7 +218,7 @@ export const ShareImportIcon: React.FC = (props: any) => {
 
 const Recycle = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
-        <title>回收站</title>
+        <title>Recycle Bin</title>
         <path
             d='M21.2749 11.3943C22.0799 13.1893 20.5899 14.9593 19.8899 14.9743H18.1499L15.5349 10.3293L19.3949 8.09432L21.2499 11.2993L21.2749 11.3943ZM11.3399 3.09932C11.0299 2.59932 10.6149 2.51932 10.3499 2.50932H10.1549C10.1649 2.50932 10.1749 2.50932 10.1849 2.50932H10.0349C9.18993 2.49432 8.15993 2.79432 7.55493 3.66432L7.50993 3.73932L5.65493 6.93932L9.51493 9.17432L12.2549 4.69432L11.3399 3.09932ZM7.70993 19.4493C5.74993 19.2493 4.88993 17.2493 5.22493 16.6243L6.01493 14.9993H11.7949L11.5049 19.4643H7.79993L7.70993 19.4493Z'
             fill='#2E7D32'
@@ -249,7 +249,7 @@ export const UploadIcon: React.FC = (props: any) => {
     return <Icon component={Upload} {...props} />
 }
 
-// 企业版-管理员
+// Enterprise - Admin
 const EnterpriseLoginInfo = () => (
     <svg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'>
         <path
@@ -275,7 +275,7 @@ export const EnterpriseLoginInfoIcon: React.FC = (props: any) => {
     return <Icon component={EnterpriseLoginInfo} {...props} />
 }
 
-// 远程控制 - 受控端
+// Remote Ctrl - Controllee
 const ControlMyself = () => (
     <svg width='80' height='80' viewBox='0 0 80 80' fill='none' xmlns='http://www.w3.org/2000/svg'>
         <path
@@ -348,7 +348,7 @@ export const ControlMyselfIcon: React.FC = (props: any) => {
     return <Icon component={ControlMyself} {...props} />
 }
 
-// 远程控制 - 控制端
+// Remote Ctrl - Controller
 const ControlOther = () => (
     <svg width='80' height='80' viewBox='0 0 80 80' fill='none' xmlns='http://www.w3.org/2000/svg'>
         <path

@@ -6,11 +6,11 @@ const {ipcRenderer} = window.require("electron")
 export interface QueryYakScriptGroupRequest {
     All?: boolean
     PageId: string
-    /** 默认是false， 目前中有专项漏洞这里的关键词组传 true 才会返回数据，插件管理里面不传就不会返回 poc 这边的内置组 */
+    /** Default is false, for specialized vulnerabilities keyword groups pass true to return data, not passing in plugin management won't return poc built-in groups */
     IsPocBuiltIn?: boolean
     ExcludeType?: string[]
 }
-/**poc按关键词搜索的组数据 */
+/**poc keyword search group data */
 export const apiFetchQueryYakScriptGroupLocalByPoc: (params: QueryYakScriptGroupRequest) => Promise<GroupCount[]> = (
     params
 ) => {
@@ -28,7 +28,7 @@ export const apiFetchQueryYakScriptGroupLocalByPoc: (params: QueryYakScriptGroup
             })
             .catch((e) => {
                 reject(e)
-                yakitNotify("error", "获取关键词组失败：" + e)
+                yakitNotify("error", "Failed to retrieve keyword groups：" + e)
             })
     })
 }

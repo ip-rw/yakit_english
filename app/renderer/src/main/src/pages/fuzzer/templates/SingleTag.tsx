@@ -45,7 +45,7 @@ export const SingleTag: React.FC<SingleTagProp> = (props) => {
     return (
         <>
             {props.help && (
-                <Form.Item label={"标签介绍"}>
+                <Form.Item label={"Label Intro"}>
                     <Text mark={true}>{props.help}</Text>
                 </Form.Item>
             )}
@@ -87,7 +87,7 @@ export const EncodeTag: React.FC<EncodeTagProp> = (props) => {
     return (
         <>
             {props.help && (
-                <Form.Item label={"编码标签介绍"}>
+                <Form.Item label={"Encoding Label Intro"}>
                     <Text mark={true}>{props.help}</Text>
                 </Form.Item>
             )}

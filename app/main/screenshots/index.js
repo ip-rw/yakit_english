@@ -8,51 +8,51 @@ const path = require("path")
 const {NodeScreenshots} = require("./nodeScreenshots")
 
 /**
- * @typedef {Object} Display - 窗口坐标和宽高相关信息
- * @property {number} x - 显示窗口的原点中x坐标
- * @property {number} y - 显示窗口的原点中y坐标
- * @property {number} width - 显示窗口的宽
- * @property {number} height - 显示窗口的高
- * @property {number} id - 与显示相关联的唯一的标志符
- * @property {number} scaleFactor - 输出设备的像素比例因子
+ * @typedef {Object} operation_redo_title - Redo Title
+ * @property {number} On Linux, the Display object id returned by screen.getDisplayNearestPoint
+ * @property {number} focusable must be true to respond to esc and allow text input
+ * @property {number} width - Window Width
+ * @property {number} height - Window Height
+ * @property {number} Bind IPC Event Handlers
+ * @property {number} operation_rectangle_title - Rectangle Title
  */
 /**
- * @typedef {Object} Bounds - 显示窗口的界限信息
- * @property {number} x - 显示窗口的原点中x坐标
- * @property {number} y - 显示窗口的原点中y坐标
- * @property {number} width - 显示窗口的宽
- * @property {number} height - 显示窗口的高
+ * @typedef {Object} display - Window Origin Y
+ * @property {number} On Linux, the Display object id returned by screen.getDisplayNearestPoint
+ * @property {number} focusable must be true to respond to esc and allow text input
+ * @property {number} width - Window Width
+ * @property {number} height - Window Height
  */
 /**
- * @typedef {Object} ScreenshotsData - 显示窗口的对应坐标信息
- * @property {Bounds} bounds - 显示窗口的原点中x坐标
- * @property {Display} display - 显示窗口的原点中y坐标
+ * @typedef {Object} ScreenshotsData - Window Coordinates Info
+ * @property {Bounds} bounds - Window Origin X
+ * @property {Display} isShowLog - Log Screenshot Function to Terminal
  */
 /**
- * @typedef {Object} Lang - 坐标展示前缀,截图功能按钮title提示信息
- * @property {string} magnifier_position_label - 坐标信息展示前缀
- * @property {string} operation_ok_title - OK按钮的title
- * @property {string} operation_cancel_title - Cancel按钮的title
- * @property {string} operation_save_title - Save按钮的title
- * @property {string} operation_redo_title - 回复撤销按钮的title
- * @property {string} operation_undo_title - 撤销按钮的title
- * @property {string} operation_mosaic_title - 马赛克按钮的title
- * @property {string} operation_text_title - 文字按钮的title
- * @property {string} operation_brush_title - 画笔按钮的title
- * @property {string} operation_arrow_title - 箭头按钮的title
- * @property {string} operation_ellipse_title - 圆形按钮的title
- * @property {string} operation_rectangle_title - 矩形按钮的title
+ * @typedef {Object} Bounds - Window Bounds Info
+ * @property {string} operation_brush_title - Brush Title
+ * @property {string} x - Window Origin X
+ * @property {string} id - Unique Identifier for Display
+ * @property {string} operation_save_title - Save Title
+ * @property {string} magnifier_position_label - Coordinates Prefix
+ * @property {string} singleWindow - Cancel Title
+ * @property {string} operation_mosaic_title - Mosaic Button Title
+ * @property {string} operation_mosaic_title - Mosaic Title
+ * @property {string} Initialize Window
+ * @property {string} Platform Specific
+ * @property {string} operation_arrow_title - Arrow Title
+ * @property {string} Issue with x-y coordinates prevents correct screenshot capture in multi-screen setups with differing resolutions and scale factors
  */
 /**
- * @typedef {Object} ScreenshotsOpts - 截图功能初始化可配置信息
- * @property {Lang} lang - 坐标展示前缀,截图功能按钮title提示信息
- * @property {boolean} singleWindow - Cancel按钮的title
- * @property {boolean} isShowLog - 是否在终端打印截图功能日志
+ * @typedef {Object} scaleFactor - Pixel Scale Factor
+ * @property {Lang} lang - Prefix for Coordinates, Tooltip for Screenshot Button
+ * @property {boolean} Set Language
+ * @property {boolean} y - Window Origin Y
  */
 
 class Screenshots extends Events {
     /**
-     * @name 截图窗口对象
+     * @name - Screenshot Object
      * @type {BrowserWindow | null}
      */
     $win = null
@@ -65,7 +65,7 @@ class Screenshots extends Events {
             contextIsolation: true
         }
     })
-    // 日志打印方法
+    // Log Method
     logger = (...args) => {
         const content = []
         for (let item of args) {
@@ -105,7 +105,7 @@ class Screenshots extends Events {
     }
 
     /**
-     * 开始截图
+     * Start Screenshot
      * @return {Promise}
      */
     async startCapture() {
@@ -121,7 +121,7 @@ class Screenshots extends Events {
     }
 
     /**
-     * 结束截图
+     * ScreenshotsOpts - Screenshot Configuration
      */
     async endCapture() {
         this.logger("endCapture")
@@ -131,7 +131,7 @@ class Screenshots extends Events {
             return
         }
 
-        // 先清除 Kiosk 模式，然后取消全屏才有效
+        // Display - Window Coordinates and Size Info
         this.$win.setKiosk(false)
         this.$win.blur()
         this.$win.blurWebView()
@@ -146,7 +146,7 @@ class Screenshots extends Events {
     }
 
     /**
-     * 设置语言
+     * Reset Screenshot Area
      */
     async setLang(lang) {
         this.logger("setLang", lang)
@@ -157,10 +157,10 @@ class Screenshots extends Events {
     }
 
     async reset() {
-        // 重置截图区域
+        // Lang - Prefix for Coordinates, Tooltip for Screenshot Button
         this.$view.webContents.send("SCREENSHOTS:reset")
 
-        // 保证 UI 有足够的时间渲染
+        // operation_ellipse_title - Ellipse Title
         await Promise.race([
             new Promise((resolve) => {
                 setTimeout(() => resolve(), 500)
@@ -172,15 +172,15 @@ class Screenshots extends Events {
     }
 
     /**
-     * 初始化窗口
+     * operation_text_title - Text Button Title
      * @param {Display} display
      * @return {Promise}
      */
     async createWindow(display) {
-        // 重置截图区域
+        // Lang - Prefix for Coordinates, Tooltip for Screenshot Button
         await this.reset()
 
-        // 复用未销毁的窗口
+        // End Screenshot
         if (!this.$win || this.$win?.isDestroyed?.()) {
             const systemType = {
                 darwin: "panel",
@@ -203,7 +203,7 @@ class Screenshots extends Events {
                 movable: false,
                 minimizable: false,
                 maximizable: false,
-                // focusable 必须设置为 true, 否则窗口不能及时响应esc按键，输入框也不能输入
+                // Clear Kiosk then cancel fullscreen to work
                 focusable: true,
                 skipTaskbar: true,
                 alwaysOnTop: true,
@@ -214,7 +214,7 @@ class Screenshots extends Events {
                 titleBarStyle: "hidden",
                 hasShadow: false,
                 paintWhenInitiallyHidden: false,
-                // mac 特有的属性
+                // Reuse Windows
                 roundedCorners: false,
                 enableLargerThanScreen: false,
                 acceptFirstMouse: true
@@ -232,7 +232,7 @@ class Screenshots extends Events {
 
         this.$win.setBrowserView(this.$view)
 
-        // 适定平台
+        // CANCEL Event
         if (process.platform === "darwin") {
             this.$win.setWindowButtonVisibility(false)
         }
@@ -265,9 +265,9 @@ class Screenshots extends Events {
 
         try {
             /**
-             * 有些小问题：
-             * 1、在某些windows系统的多屏下，electorn获取的屏幕信息里，
-             *    x-y坐标数据有问题，导致无法使用截图库正确截取目标屏幕图片(出现场景-多屏并且屏幕分辨率和缩放比都不一样且都不为100%的时候)
+             * operation_ok_title - OK Title：
+             * 1. Under multi-screen setups on some Windows systems, there are minor issues with screen info retrieved by electron，
+             *    However, if there's only one display, simply returning it works)
              */
             const capturer = NodeScreenshots.fromPoint(display.x + display.width / 2, display.y + display.height / 2)
             this.logger("SCREENSHOTS:capture NodeScreenshots.fromPoint arguments", display)
@@ -305,9 +305,9 @@ class Screenshots extends Events {
             })
 
             let source
-            // Linux系统上，screen.getDisplayNearestPoint 返回的 Display 对象的 id
-            // 和这里 source 对象上的 display_id(Linux上，这个值是空字符串) 或 id 的中间部分，都不一致
-            // 但是，如果只有一个显示器的话，其实不用判断，直接返回就行
+            // Ensure UI has time to render
+            // Mismatch with source object display_id (empty on Linux) or id
+            // operation_undo_title - Undo Title
             if (sources.length === 1) {
                 source = sources[0]
             } else {
@@ -326,11 +326,11 @@ class Screenshots extends Events {
     }
 
     /**
-     * 绑定ipc时间处理
+     * mac-Specific Attributes
      */
     listenIpc() {
         /**
-         * OK事件
+         * OK Event
          * @param {Buffer} buffer
          * @param {ScreenshotsData} data
          */
@@ -345,7 +345,7 @@ class Screenshots extends Events {
             clipboard.writeImage(nativeImage.createFromBuffer(buffer))
             this.endCapture()
         })
-        // CANCEL事件
+        // operation_cancel_title - Cancel Title
         ipcMain.on("SCREENSHOTS:cancel", () => {
             this.logger("SCREENSHOTS:cancel")
 
@@ -358,7 +358,7 @@ class Screenshots extends Events {
         })
 
         /**
-         * SAVE事件
+         * SAVE Event
          * @param {Buffer} buffer
          * @param {ScreenshotsData} data
          */

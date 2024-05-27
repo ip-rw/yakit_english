@@ -33,10 +33,10 @@ interface PluginOnlineGroupListProps {
 }
 export const PluginOnlineGroupList: React.FC<PluginOnlineGroupListProps> = (props) => {
     const {pluginsGroupsInViewport, onOnlineGroupLen, activeOnlineGroup, onActiveGroup} = props
-    const [groupList, setGroupList] = useState<GroupListItem[]>([]) // 组数据
+    const [groupList, setGroupList] = useState<GroupListItem[]>([]) // Group Data
     const [menuOpen, setMenuOpen] = useState<boolean>(false)
-    const [editGroup, setEditGroup] = useState<GroupListItem>() // 编辑插件组
-    const [delGroup, setDelGroup] = useState<GroupListItem>() // 删除插件组
+    const [editGroup, setEditGroup] = useState<GroupListItem>() // Edit Plugin Group
+    const [delGroup, setDelGroup] = useState<GroupListItem>() // Delete Plugin Group
     const [delGroupConfirmPopVisible, setDelGroupConfirmPopVisible] = useState<boolean>(false)
     const delGroupConfirmPopRef = useRef<any>()
 
@@ -60,23 +60,23 @@ export const PluginOnlineGroupList: React.FC<PluginOnlineGroupListProps> = (prop
 
     const assemblyExtraField = (isDefault: boolean, groupName: string, field: string) => {
         const noGroupItem = {
-            全部: {icon: <SolidViewgridIcon />, iconColor: "#56c991", showOptBtns: false},
-            未分组: {icon: <SolidQuestionmarkcircleIcon />, iconColor: "#8863f7", showOptBtns: false}
+            Deselect: {icon: <SolidViewgridIcon />, iconColor: "#56c991", showOptBtns: false},
+            Ungrouped: {icon: <SolidQuestionmarkcircleIcon />, iconColor: "#8863f7", showOptBtns: false}
         }
         const groupItem = {icon: <SolidFolderopenIcon />, iconColor: "#ffb660", showOptBtns: true}
         return isDefault ? noGroupItem[groupName][field] : groupItem[field]
     }
 
-    // 获取组列表数据
+    // Get Group List Data
     const getGroupList = () => {
         apiFetchQueryYakScriptGroupOnline().then((res: API.GroupResponse) => {
             const copyGroup = structuredClone(res.data)
-            // 便携版 若未返回基础扫描 前端自己筛一个进去
+            // Portable: Add filter if no basic scan 
             if (isEnpriTraceAgent()) {
-                const findBasicScanningIndex = copyGroup.findIndex((item) => item.value === "基础扫描")
-                const findNotGroupIndex = copyGroup.findIndex((item) => item.value === "未分组" && item.default)
+                const findBasicScanningIndex = copyGroup.findIndex((item) => item.value === "Basic Scan")
+                const findNotGroupIndex = copyGroup.findIndex((item) => item.value === "Ungrouped" && item.default)
                 if (findBasicScanningIndex === -1) {
-                    copyGroup.splice(findNotGroupIndex + 1, 0, {value: "基础扫描", total: 0, default: false})
+                    copyGroup.splice(findNotGroupIndex + 1, 0, {value: "Basic Scan", total: 0, default: false})
                 } else {
                     const removedItem = copyGroup.splice(findBasicScanningIndex, 1)
                     copyGroup.splice(findNotGroupIndex + 1, 0, removedItem[0])
@@ -92,8 +92,8 @@ export const PluginOnlineGroupList: React.FC<PluginOnlineGroupListProps> = (prop
                     showOptBtns: assemblyExtraField(item.default, item.value, "showOptBtns"),
                     default: item.default
                 }
-                // 便携版 基础扫描不允许编辑删除操作
-                if (isEnpriTraceAgent() && item.value === "基础扫描") {
+                // Portable: Basic scans cannot be edited or deleted
+                if (isEnpriTraceAgent() && item.value === "Basic Scan") {
                     obj.showOptBtns = false
                 }
                 return obj
@@ -103,7 +103,7 @@ export const PluginOnlineGroupList: React.FC<PluginOnlineGroupListProps> = (prop
         })
     }
 
-    // 插件组名input失焦
+    // Group Name Input Focus Out
     const onEditGroupNameBlur = (groupItem: GroupListItem, newName: string, successCallback: () => void) => {
         setEditGroup(undefined)
         if (!newName || newName === groupItem.name) return
@@ -117,7 +117,7 @@ export const PluginOnlineGroupList: React.FC<PluginOnlineGroupListProps> = (prop
         })
     }
 
-    // 点击删除
+    // Click Delete
     const onClickBtn = (groupItem: GroupListItem) => {
         setDelGroup(groupItem)
         getRemoteValue(RemoteGV.PluginGroupDelNoPrompt).then((result: string) => {
@@ -131,15 +131,15 @@ export const PluginOnlineGroupList: React.FC<PluginOnlineGroupListProps> = (prop
         })
     }
 
-    // 插件组删除
+    // Plugin Group Deleted
     const onGroupDel = (groupItem: GroupListItem, callBack?: () => void) => {
         const params: PluginGroupDel = {group: groupItem.name}
         apiFetchDeleteYakScriptGroupOnline(params).then(() => {
             getGroupList()
-            // 发送事件到组件 <PluginGroup></PluginGroup>
+            // Send Event to Component <PluginGroup></PluginGroup>
             emiter.emit("onRefpluginGroupSelectGroup", "true")
-            // 如果当前选中组为固定的未分组 刷新右侧插件列表
-            if (activeOnlineGroup?.default && activeOnlineGroup.id === "未分组") {
+            // If selected group is "Ungrouped", refresh plugin list
+            if (activeOnlineGroup?.default && activeOnlineGroup.id === "Ungrouped") {
                 emiter.emit("onRefPluginGroupMagOnlinePluginList", "")
             }
             callBack && callBack()
@@ -180,7 +180,7 @@ export const PluginOnlineGroupList: React.FC<PluginOnlineGroupListProps> = (prop
                                             label: (
                                                 <div className={styles["extra-opt-menu"]}>
                                                     <OutlinePencilaltIcon />
-                                                    <div className={styles["extra-opt-name"]}>重命名</div>
+                                                    <div className={styles["extra-opt-name"]}>Rename</div>
                                                 </div>
                                             )
                                         },
@@ -189,7 +189,7 @@ export const PluginOnlineGroupList: React.FC<PluginOnlineGroupListProps> = (prop
                                             label: (
                                                 <div className={styles["extra-opt-menu"]}>
                                                     <OutlineTrashIcon />
-                                                    <div className={styles["extra-opt-name"]}>删除</div>
+                                                    <div className={styles["extra-opt-name"]}>Delete</div>
                                                 </div>
                                             ),
                                             type: "danger"
@@ -231,7 +231,7 @@ export const PluginOnlineGroupList: React.FC<PluginOnlineGroupListProps> = (prop
                 ></PluginGroupList>
             )}
 
-            {/* 删除确认框 */}
+            {/* Delete Confirmation */}
             <DelGroupConfirmPop
                 ref={delGroupConfirmPopRef}
                 visible={delGroupConfirmPopVisible}
@@ -285,15 +285,15 @@ export const DelGroupConfirmPop: React.FC<DelGroupConfirmPopProps> = React.forwa
     return (
         <YakitHint
             visible={visible}
-            title='删除组'
-            content={`是否确认删除插件组 “${delGroupName}”`}
+            title='Delete Group'
+            content={`Confirm Delete Plugin Group? “${delGroupName}”`}
             footerExtra={
                 <YakitCheckbox
                     value={delGroupConfirmNoPrompt}
                     checked={delGroupConfirmNoPrompt}
                     onChange={(e) => setDelGroupConfirmNoPrompt(e.target.checked)}
                 >
-                    下次不再提醒
+                    Do not remind again
                 </YakitCheckbox>
             }
             onOk={onOk}

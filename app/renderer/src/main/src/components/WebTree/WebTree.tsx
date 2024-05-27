@@ -20,29 +20,29 @@ import styles from "./WebTree.module.scss"
 
 type TreeNodeType = "dir" | "file" | "query" | "path"
 export interface TreeNode extends DataNode {
-    data?: YakURLResource // 树节点其他额外数据
+    data?: YakURLResource // Additional Node Data
 }
 
 interface WebTreeProp {
     ref?: React.Ref<any>
-    height: number // 树高度 用于虚拟滚动
-    searchVal?: string // 搜索树值
+    height: number // Tree Height for Virtual Scroll
+    searchVal?: string // Search Tree Value
     searchInputDisabled?: boolean
-    searchPlaceholder?: string // 搜索框提示文案
-    treeExtraQueryparams: string // 树查询参数是一个json字符串
-    refreshTreeWithSearchVal?: boolean // 是否带搜索条件刷新树
-    refreshTreeFlag?: boolean // 选中树节点后 表格参数改变导致树查询参数改变 是否需要刷新树 默认->不刷新
-    onSelectNodes?: (selectedNodes: TreeNode[]) => void // 选中节点得nodes
-    onSelectKeys?: (selectedKeys: TreeKey[]) => void // 选中节点得keys
-    onGetUrl?: (searchURL: string, includeInUrl: string) => void // 获取选中后节点得url信息 用于表格查询
-    resetTableAndEditorShow?: (table: boolean, editor: boolean) => void // 重置 表格显示-编辑器不显示
+    searchPlaceholder?: string // Search Placeholder
+    treeExtraQueryparams: string // Tree Query Params as JSON String
+    refreshTreeWithSearchVal?: boolean // Refresh Tree with Search Conditions?
+    refreshTreeFlag?: boolean // On Table Params Change, Refresh Tree?->Do Not Refresh
+    onSelectNodes?: (selectedNodes: TreeNode[]) => void // Selected Node's Nodes
+    onSelectKeys?: (selectedKeys: TreeKey[]) => void // Selected Node's Keys
+    onGetUrl?: (searchURL: string, includeInUrl: string) => void // Get Selected Node's URL for Table Query
+    resetTableAndEditorShow?: (table: boolean, editor: boolean) => void // Reset Table Display - Hide Editor
 
-    /** runtime-id 网站树的过滤条件(runtime_id) */
+    /** runtime-id Filter for Web Tree) */
     runTimeId?: string
 }
 
 /**
- * 该网站树暂不支持复选框 select选中只支持单选
+ * Checkbox Not Supported, Select Single Mode Only
  */
 export const WebTree: React.FC<WebTreeProp> = React.forwardRef((props, ref) => {
     const {
@@ -50,7 +50,7 @@ export const WebTree: React.FC<WebTreeProp> = React.forwardRef((props, ref) => {
         searchVal = "",
         searchInputDisabled = false,
         refreshTreeWithSearchVal = false,
-        searchPlaceholder = "请输入关键词搜索",
+        searchPlaceholder = "Enter Keywords",
         treeExtraQueryparams,
         refreshTreeFlag = false,
         onSelectNodes,
@@ -61,17 +61,17 @@ export const WebTree: React.FC<WebTreeProp> = React.forwardRef((props, ref) => {
     } = props
 
     const [treeLoading, setTreeLoading] = useState<boolean>(false)
-    // 未搜索情况时的网站树
+    // Web Tree Before Search
     const [webTreeData, setWebTreeData] = useState<TreeNode[]>([])
-    // 已搜索情况时的网站树
+    // Web Tree After Search
     const [searchWebTreeData, setSearchWebTreeData] = useState<TreeNode[]>([])
-    /** 判断当前是否为已搜索的情况 */
+    /** Check if Searched */
     const searchTreeFlag = useRef<boolean>(!!searchVal)
 
     const [searchValue, setSearchValue] = useState<string>(searchVal)
-    const [expandedKeys, setExpandedKeys] = useState<TreeKey[]>([]) // 展开树节点key集合
-    const [selectedKeys, setSelectedKeys] = useState<TreeKey[]>([]) // select树节点key集合
-    const [selectedNodes, setSelectedNodes] = useState<TreeNode[]>([]) // select树节点数据集合
+    const [expandedKeys, setExpandedKeys] = useState<TreeKey[]>([]) // Expand Node Key Set
+    const [selectedKeys, setSelectedKeys] = useState<TreeKey[]>([]) // Select Node Key Set
+    const [selectedNodes, setSelectedNodes] = useState<TreeNode[]>([]) // Select Node Data Set
     const webTreeRef = useRef<any>()
     const [inViewport] = useInViewport(webTreeRef)
 
@@ -91,7 +91,7 @@ export const WebTree: React.FC<WebTreeProp> = React.forwardRef((props, ref) => {
     const getTreeData = useMemoizedFn((yakurl: string) => {
         if(treeLoading)return
 
-        // 由于这里会有闭包 30毫秒后再掉接口
+        // Debounce, Call API after 30ms
         setTreeLoading(true)
         setTimeout(() => {
             let params: string = ""
@@ -113,7 +113,7 @@ export const WebTree: React.FC<WebTreeProp> = React.forwardRef((props, ref) => {
             }
 
             loadFromYakURLRaw(`${yakurl}?${params}${search}${runTime_id}`, (res) => {
-                // 判断是否是搜索树
+                // Check if Search Tree
                 if (searchTreeFlag.current) {
                     setSearchWebTreeData(assembleFirstTreeNode(res.Resources))
                 } else {
@@ -124,12 +124,12 @@ export const WebTree: React.FC<WebTreeProp> = React.forwardRef((props, ref) => {
                 }, 50)
             }).catch((error) => {
                 setTreeLoading(false)
-                yakitFailed(`加载失败: ${error}`)
+                yakitFailed(`Loading Failed: ${error}`)
             })
         }, 30)
     })
 
-    // 树节点第一层组装树
+    // First Layer Tree Nodes
     const assembleFirstTreeNode = (arr: YakURLResource[]) => {
         return arr.map((item, index) => {
             const id = item.VerboseName
@@ -171,7 +171,7 @@ export const WebTree: React.FC<WebTreeProp> = React.forwardRef((props, ref) => {
         return arr
     })
 
-    // 树子节点异步加载组装树
+    // Async Load Child Nodes
     const onLoadWebTreeData = ({key, children, data}: any) => {
         return new Promise<void>((resolve, reject) => {
             if (data === undefined) {
@@ -215,7 +215,7 @@ export const WebTree: React.FC<WebTreeProp> = React.forwardRef((props, ref) => {
                             }
                         }
                     })
-                    // 判断是否是搜索树
+                    // Check if Search Tree
                     if (searchTreeFlag.current) {
                         setSearchWebTreeData((origin) => refreshChildrenByParent(origin, key, newNodes))
                     } else {
@@ -228,7 +228,7 @@ export const WebTree: React.FC<WebTreeProp> = React.forwardRef((props, ref) => {
         })
     }
 
-    // 搜索树
+    // Search Tree
     const onSearchTree = useMemoizedFn((value: string) => {
         const val = value.trim()
         const flag = val === "/" ? false : !!val.trim()
@@ -272,9 +272,9 @@ export const WebTree: React.FC<WebTreeProp> = React.forwardRef((props, ref) => {
         }
     }, [treeExtraQueryparams, refreshTreeFlag, inViewport])
 
-    // 刷新网站树
+    // Refresh Web Tree
     const refreshTree = useMemoizedFn(() => {
-        // 当表格查询参数带搜索条件时
+        // When Table Query Includes Search Conditions
         if (selectedNodes.length) {
             resetTableAndEditorShow && resetTableAndEditorShow(true, false)
         }
@@ -288,7 +288,7 @@ export const WebTree: React.FC<WebTreeProp> = React.forwardRef((props, ref) => {
         getTreeData("website://" + `${refreshTreeWithSearchVal ? `${searchValue ? searchValue : "/"}` : "/"}`)
     })
 
-    // 网站树跳转 -> 带到搜索框查询
+    // Web Tree Navigation -> Query in Search Bar
     const onJumpWebTree = (value: string) => {
         searchTreeFlag.current = true
         setSelectedKeys([])
@@ -296,7 +296,7 @@ export const WebTree: React.FC<WebTreeProp> = React.forwardRef((props, ref) => {
         getTreeData("website://" + value)
     }
 
-    // 点击Select选中树
+    // Click to Select Node
     const onSelectedKeys = useMemoizedFn(
         (
             selectedKeys: TreeKey[],
@@ -318,7 +318,7 @@ export const WebTree: React.FC<WebTreeProp> = React.forwardRef((props, ref) => {
             if (urlItem && urlItem.Value) {
                 try {
                     const url = new URL(urlItem.Value)
-                    // 获取 URL 的查询字符串（不包括 '?'）
+                    // Get URL Query String (Excluding '?'）
                     const query = url.search.substring(1)
                     onGetUrl && onGetUrl(url.origin + url.pathname, query ? `${query}` : "")
                 } catch (_) {
@@ -337,7 +337,7 @@ export const WebTree: React.FC<WebTreeProp> = React.forwardRef((props, ref) => {
     }, [selectedKeys])
 
     /**
-     * 计算树头部高度
+     * Calculate Tree Header Height
      */
     const treeTopWrapRef = useRef<any>()
     const [treeTopWrapHeight, setTreeTopWrapHeight] = useState<number>(0)
@@ -353,7 +353,7 @@ export const WebTree: React.FC<WebTreeProp> = React.forwardRef((props, ref) => {
         }
     }, [treeTopWrapRef.current])
 
-    // 搜索框
+    // Search Box
     const onSearchChange = useMemoizedFn((e: {target: {value: string}}) => {
         const value = e.target.value
         setSearchValue(value)

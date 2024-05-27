@@ -41,14 +41,14 @@ export const WebFuzzerResponseExtractor: React.FC<WebFuzzerResponseExtractorProp
 
     const [loading, setLoading] = useState<boolean>(false)
 
-    // 用户匹配数据前后缀提取正则
+    // User Prefix/Suffix Regex Extraction
     const [prefix, setPrefix] = useState("")
     const [suffix, setSuffix] = useState("")
 
-    // 用户选择的数据转换成的正则
+    // Regex from user-selected data
     const [matchedRegexp, setMatchedRegexp] = useState<string>("")
 
-    // 存放提取出来的数据
+    // Store Extracted Data
     const [extracted, setExtracted] = useState<string[]>([])
 
     // stream token
@@ -71,10 +71,10 @@ export const WebFuzzerResponseExtractor: React.FC<WebFuzzerResponseExtractorProp
                 }
 
                 setResponseStr(model.getValue())
-                // 这里能获取到选择到的内容
+                // Selected content accessible
                 setSelected(model.getValueInRange(selection))
             } catch (e) {
-                console.info("提取选择数据错误")
+                console.info("Data selection error")
                 console.info(e)
             }
         }
@@ -104,7 +104,7 @@ export const WebFuzzerResponseExtractor: React.FC<WebFuzzerResponseExtractorProp
                     setMatchedRegexp(e.SelectedRegexp)
                 })
                 .catch((e) => {
-                    failed(`无法生成数据提取规则: ${e}`)
+                    failed(`Failed to generate extraction rule: ${e}`)
                 })
         },
         [selected],
@@ -170,18 +170,18 @@ export const WebFuzzerResponseExtractor: React.FC<WebFuzzerResponseExtractorProp
                     size={"small"}
                     title={
                         <Space>
-                            <div>自动生成提取规则</div>
+                            <div>Auto-Generate Extraction Rules</div>
                             <YakitRadioButtons
                                 value={mode}
                                 onChange={(e) => setMode(e.target.value)}
                                 size='small'
                                 options={[
                                     {
-                                        label: "前后缀正则提取",
+                                        label: "Prefix/Suffix Regex Extraction",
                                         value: "regexp-between"
                                     },
                                     {
-                                        label: "单正则提取",
+                                        label: "Single Regex Extraction",
                                         value: "regexp"
                                     }
                                 ]}
@@ -191,7 +191,7 @@ export const WebFuzzerResponseExtractor: React.FC<WebFuzzerResponseExtractorProp
                     }
                     extra={
                         <Space>
-                            <YakitTag>共{responses.length}个响应</YakitTag>
+                            <YakitTag>Total{responses.length}A Response</YakitTag>
                             <YakitButton
                                 type={"primary"}
                                 size={"small"}
@@ -219,7 +219,7 @@ export const WebFuzzerResponseExtractor: React.FC<WebFuzzerResponseExtractorProp
                                     })
                                 }}
                             >
-                                提取数据
+                                Extract Data
                             </YakitButton>
                         </Space>
                     }
@@ -227,7 +227,7 @@ export const WebFuzzerResponseExtractor: React.FC<WebFuzzerResponseExtractorProp
                     {mode === "regexp-between" && (
                         <Space direction={"vertical"} style={{ width: "100%", justifyContent: "center" }}>
                             <div className={styles["space-item"]}>
-                                <span>前缀(正则)：</span>
+                                <span>Prefix (Regex)：</span>
                                 <div style={{ flex: 1, maxWidth: "90%" }}>
                                     <RegexpInput
                                         initialTagShow={true}
@@ -238,7 +238,7 @@ export const WebFuzzerResponseExtractor: React.FC<WebFuzzerResponseExtractorProp
                                 </div>
                             </div>
                             <div className={styles["space-item"]}>
-                                <span>后缀(正则)：</span>
+                                <span>Suffix (Regex)：</span>
                                 <div style={{ flex: 1, maxWidth: "90%" }}>
                                     <RegexpInput
                                         initialTagShow={true}
@@ -256,7 +256,7 @@ export const WebFuzzerResponseExtractor: React.FC<WebFuzzerResponseExtractorProp
                                         iconColor='var(--yakit-primary-5)'
                                     />
                                 ) : (
-                                    <YakitTag>未选中提取规则</YakitTag>
+                                    <YakitTag>Extraction Rule Not Selected</YakitTag>
                                 )}
                             </Space>
                         </Space>
@@ -264,7 +264,7 @@ export const WebFuzzerResponseExtractor: React.FC<WebFuzzerResponseExtractorProp
                     {mode === "regexp" && (
                         <Space direction={"vertical"} style={{ width: "100%" }}>
                             <div className={styles["space-item"]}>
-                                <span>自动提取正则：</span>
+                                <span>Auto-Extract Regex：</span>
                                 <div style={{ flex: 1, maxWidth: "90%" }}>
                                     <RegexpInput
                                         initialTagShow={true}
@@ -299,7 +299,7 @@ export const WebFuzzerResponseExtractor: React.FC<WebFuzzerResponseExtractorProp
                                 title={
                                     <Space>
                                         <YakitTag>
-                                            已提/总量：
+                                            Extracted/Total：
                                             {extracted.length}/{responses.length}
                                         </YakitTag>
                                     </Space>
@@ -307,14 +307,14 @@ export const WebFuzzerResponseExtractor: React.FC<WebFuzzerResponseExtractorProp
                                 extra={
                                     <>
                                         <YakitPopconfirm
-                                            title={"确定要清除已提取数据？"}
+                                            title={"Confirm Clear Extracted Data?？"}
                                             onConfirm={() => {
                                                 setToken(randomString(46))
                                                 setExtracted([])
                                             }}
                                         >
                                             <YakitButton size={"small"} type='outline1' colors="danger">
-                                                清空
+                                                Clear
                                             </YakitButton>
                                         </YakitPopconfirm>
                                         <YakitButton
@@ -325,7 +325,7 @@ export const WebFuzzerResponseExtractor: React.FC<WebFuzzerResponseExtractorProp
                                             }}
                                             style={{ marginLeft: 6 }}
                                         >
-                                            下载文件
+                                            Download file
                                         </YakitButton>
                                         {extractedMap.size > 0 && (
                                             <YakitButton
@@ -335,14 +335,14 @@ export const WebFuzzerResponseExtractor: React.FC<WebFuzzerResponseExtractorProp
                                                     ipcRenderer
                                                         .invoke("send-extracted-to-table", { type: sendPayloadsType, extractedMap })
                                                         .then(() => {
-                                                            info("数据发送成功")
+                                                            info("Data Send Success")
                                                         })
                                                         .catch((err) => {
-                                                            yakitFailed("数据发送失败" + err)
+                                                            yakitFailed("Data Send Failed" + err)
                                                         })
                                                 }}
                                             >
-                                                在表中展示
+                                                Show in Table
                                             </YakitButton>
                                         )}
                                     </>

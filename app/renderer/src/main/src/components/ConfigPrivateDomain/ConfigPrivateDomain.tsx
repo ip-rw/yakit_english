@@ -34,9 +34,9 @@ const layout = {
 interface ConfigPrivateDomainProps {
     onClose?: () => void
     onSuccee?: () => void
-    // 是否为企业登录
+    // Enterprise login?
     enterpriseLogin?: boolean | undefined
-    // 是否展示跳过
+    // Show skip option?
     skipShow?: boolean
 }
 
@@ -60,7 +60,7 @@ export const ConfigPrivateDomain: React.FC<ConfigPrivateDomainProps> = React.mem
     useEffect(() => {
         getHttpSetting()
     }, [])
-    // 全局监听登录状态
+    // Global listen to login status
     const {userInfo, setStoreUserInfo} = useStore()
 
     const syncLoginOut = async () => {
@@ -68,7 +68,7 @@ export const ConfigPrivateDomain: React.FC<ConfigPrivateDomainProps> = React.mem
             await loginOut(userInfo)
         } catch (error) {}
     }
-    // 企业登录
+    // Enterprise Login
     const loginUser = useMemoizedFn(() => {
         const {user_name, pwd} = getFormValue()
         NetWorkApi<API.UrmLoginRequest, API.UserData>({
@@ -101,11 +101,11 @@ export const ConfigPrivateDomain: React.FC<ConfigPrivateDomainProps> = React.mem
                     if (data?.next) {
                         aboutLoginUpload(res.token)
                         loginHTTPFlowsToOnline(res.token)
-                        success("企业登录成功")
+                        success("Enterprise login successful")
                         onClose && onClose()
                         onSuccee && onSuccee()
                     }
-                    // 首次登录强制修改密码
+                    // Force password change on first login
                     if (!res.loginTime) {
                         ipcRenderer.invoke("reset-password", {...res})
                     }
@@ -113,7 +113,7 @@ export const ConfigPrivateDomain: React.FC<ConfigPrivateDomainProps> = React.mem
             })
             .catch((err) => {
                 setTimeout(() => setLoading(false), 300)
-                failed("企业登录失败：" + err)
+                failed("Enterprise login failed：" + err)
             })
             .finally(() => {})
     })
@@ -137,13 +137,13 @@ export const ConfigPrivateDomain: React.FC<ConfigPrivateDomainProps> = React.mem
                 setFormValue(values)
                 if (!enterpriseLogin) {
                     ipcRenderer.invoke("ipc-sign-out")
-                    success("私有域设置成功")
+                    success("Private domain set successfully")
                     syncLoginOut()
                     onClose && onClose()
                 }
                 ipcRenderer.send("edit-baseUrl", {baseUrl: values.BaseUrl})
                 if (v?.pwd) {
-                    // 加密
+                    // Encrypt
                     ipcRenderer
                         .invoke("Codec", {Type: "base64", Text: v.pwd, Params: [], ScriptName: ""})
                         .then((res) => {
@@ -156,7 +156,7 @@ export const ConfigPrivateDomain: React.FC<ConfigPrivateDomainProps> = React.mem
             })
             .catch((e: any) => {
                 // !enterpriseLogin && setTimeout(() => setLoading(false), 300)
-                failed("设置私有域失败:" + e)
+                failed("Failed to set private domain:" + e)
             })
             .finally(() => {
                 setTimeout(() => setLoading(false), 300)
@@ -165,7 +165,7 @@ export const ConfigPrivateDomain: React.FC<ConfigPrivateDomainProps> = React.mem
     useEffect(() => {
         ipcRenderer.on("edit-baseUrl-status", (e, res: any) => {
             enterpriseLogin && loginUser()
-            emiter.emit("onSwitchPrivateDomain", "") // 修改私有域成功后发送的信号
+            emiter.emit("onSwitchPrivateDomain", "") // Signal sent after successfully modifying private domain
         })
         return () => {
             ipcRenderer.removeAllListeners("edit-baseUrl-status")
@@ -180,7 +180,7 @@ export const ConfigPrivateDomain: React.FC<ConfigPrivateDomainProps> = React.mem
             const value = JSON.parse(setting)
             setDefaultHttpUrl(value.BaseUrl)
             if (value?.pwd && value.pwd.length > 0) {
-                // 解密
+                // Decrypt
                 ipcRenderer
                     .invoke("Codec", {Type: "base64-decode", Text: value.pwd, Params: [], ScriptName: ""})
                     .then((res) => {
@@ -199,11 +199,11 @@ export const ConfigPrivateDomain: React.FC<ConfigPrivateDomainProps> = React.mem
             }
         })
     })
-    /**@description 增加代理list历史 */
+    /**@Add proxy list history to description */
     const addProxyList = useMemoizedFn((url) => {
         httpProxyRef.current.onSetRemoteValues(url)
     })
-    // 判断输入内容是否通过
+    // Check if input passes
     const judgePass = () => [
         {
             validator: (_, value) => {
@@ -212,22 +212,22 @@ export const ConfigPrivateDomain: React.FC<ConfigPrivateDomainProps> = React.mem
                 if (re.test(value)) {
                     return Promise.resolve()
                 } else {
-                    return Promise.reject("密码为8-20位，且必须包含大小写字母、数字及特殊字符")
+                    return Promise.reject("Password 8-20 chars, incl. upper/lowercase, digits, special chars")
                 }
             }
         }
     ]
-    // 判断是否为网址
+    // Check if URL
     const judgeUrl = () => [
         {
             validator: (_, value) => {
                 let re = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/
                 if (/\s/.test(value)) {
-                    return Promise.reject("私有域地址存在空格")
+                    return Promise.reject("Private domain address contains spaces")
                 } else if (re.test(value)) {
                     return Promise.resolve()
                 } else {
-                    return Promise.reject("请输入符合要求的私有域地址")
+                    return Promise.reject("Enter a valid private domain address")
                 }
             }
         }
@@ -239,20 +239,20 @@ export const ConfigPrivateDomain: React.FC<ConfigPrivateDomainProps> = React.mem
                     <div className='icon-box'>
                         <img src={yakitImg} className='type-icon-img' />
                     </div>
-                    <div className='title-box'>企业登录</div>
+                    <div className='title-box'>Enterprise Login</div>
                 </div>
             )}
             <Form {...layout} form={form} name='control-hooks' onFinish={(v) => onFinish(v)} size='small'>
                 <Form.Item
                     name='BaseUrl'
-                    label='私有域地址'
-                    rules={[{required: true, message: "该项为必填"}, ...judgeUrl()]}
+                    label='Private Domain Address'
+                    rules={[{required: true, message: "Required field"}, ...judgeUrl()]}
                 >
                     <YakitAutoComplete
                         ref={httpHistoryRef}
                         cacheHistoryDataKey={CacheDropDownGV.ConfigBaseUrl}
                         initValue={defaultHttpUrl}
-                        placeholder='请输入你的私有域地址'
+                        placeholder='Enter your private domain address'
                         defaultOpen={!enterpriseLogin}
                     />
                 </Form.Item>
@@ -261,9 +261,9 @@ export const ConfigPrivateDomain: React.FC<ConfigPrivateDomainProps> = React.mem
                         name='Proxy'
                         label={
                             <span className='form-label'>
-                                设置代理
+                                Set Proxy
                                 <Tooltip
-                                    title='特殊情况无法访问插件商店时，可设置代理进行访问'
+                                    title='Set proxy when unable to access plugin store'
                                     overlayStyle={{width: 150}}
                                 >
                                     <InformationCircleIcon className='info-icon' />
@@ -274,22 +274,22 @@ export const ConfigPrivateDomain: React.FC<ConfigPrivateDomainProps> = React.mem
                         <YakitAutoComplete
                             ref={httpProxyRef}
                             cacheHistoryDataKey={CacheDropDownGV.ConfigProxy}
-                            placeholder='设置代理'
+                            placeholder='Set Proxy'
                         />
                     </Form.Item>
                 )}
                 {enterpriseLogin && (
-                    <Form.Item name='user_name' label='用户名' rules={[{required: true, message: "该项为必填"}]}>
-                        <YakitInput placeholder='请输入你的用户名' allowClear />
+                    <Form.Item name='user_name' label='Username' rules={[{required: true, message: "Required field"}]}>
+                        <YakitInput placeholder='Enter your username' allowClear />
                     </Form.Item>
                 )}
                 {enterpriseLogin && (
                     <Form.Item
                         name='pwd'
-                        label='密码'
-                        rules={[{required: true, message: "该项为必填"}, ...judgePass()]}
+                        label='Password'
+                        rules={[{required: true, message: "Required field"}, ...judgePass()]}
                     >
-                        <YakitInput.Password placeholder='请输入你的密码' allowClear />
+                        <YakitInput.Password placeholder='Enter your password' allowClear />
                     </Form.Item>
                 )}
                 {enterpriseLogin ? (
@@ -302,7 +302,7 @@ export const ConfigPrivateDomain: React.FC<ConfigPrivateDomainProps> = React.mem
                                 }}
                                 size='large'
                             >
-                                跳过
+                                Skip
                             </YakitButton>
                         )}
                         <YakitButton
@@ -312,16 +312,16 @@ export const ConfigPrivateDomain: React.FC<ConfigPrivateDomainProps> = React.mem
                             style={{width: 165, marginLeft: skipShow ? 0 : 43}}
                             loading={loading}
                         >
-                            登录
+                            Login
                         </YakitButton>
                     </Form.Item>
                 ) : (
                     <div className='form-btns'>
                         <YakitButton type='outline2' onClick={(e) => onClose && onClose()}>
-                            取消
+                            Cancel
                         </YakitButton>
                         <YakitButton type='primary' htmlType='submit' loading={loading}>
-                            确定
+                            Confirm
                         </YakitButton>
                     </div>
                 )}

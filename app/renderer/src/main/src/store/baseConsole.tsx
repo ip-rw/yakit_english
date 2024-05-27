@@ -1,11 +1,11 @@
 /**
- * @description 引擎Console
+ * @description Engine Console
  */
 
 import {create} from "zustand"
 
 interface StoreProps {
-    /**@name console缓存信息 */
+    /**@name Console Cache Info */
     consoleLog: string
     isFirst: boolean
     setConsoleInfo: (info: string) => void

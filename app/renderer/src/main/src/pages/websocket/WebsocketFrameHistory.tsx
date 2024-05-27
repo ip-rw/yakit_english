@@ -66,7 +66,7 @@ export const WebsocketFrameHistory: React.FC<WebsocketFrameHistoryProp> = (props
     }, [])
 
     return <AutoCard
-        title={"Websocket 数据帧"} size={"small"} bodyStyle={{overflowY: "auto", padding: 0}}
+        title={"Websocket Data Frame"} size={"small"} bodyStyle={{overflowY: "auto", padding: 0}}
     >
         <Table
             className={styles['websocket-table-wrapper']}
@@ -90,10 +90,10 @@ export const WebsocketFrameHistory: React.FC<WebsocketFrameHistoryProp> = (props
                 }
             }}
             columns={[
-                {title: "顺序", width: 50, render: (i: WebsocketFlow) => i.FrameIndex},
+                {title: "Order", width: 50, render: (i: WebsocketFlow) => i.FrameIndex},
                 {
-                    title: "数据方向", width: 100, render: (i: WebsocketFlow) => {
-                        return i.FromServer ? <Tag color={"green"}>服务端响应</Tag> : <Tag color={"orange"}>客户端请求</Tag>
+                    title: "Data Direction", width: 100, render: (i: WebsocketFlow) => {
+                        return i.FromServer ? <Tag color={"green"}>Server Response</Tag> : <Tag color={"orange"}>Client Request</Tag>
                     }
                 },
                 {
@@ -105,7 +105,7 @@ export const WebsocketFrameHistory: React.FC<WebsocketFrameHistoryProp> = (props
                     }
                 },
                 {
-                    title: "预览", render: (i: WebsocketFlow) => {
+                    title: "Preview", render: (i: WebsocketFlow) => {
                         return <>
                             {i.DataVerbose}
                         </>

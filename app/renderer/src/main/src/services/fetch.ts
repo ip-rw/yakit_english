@@ -13,7 +13,7 @@ interface AxiosResponseInfoProps {
     userInfo?: UserInfoProps
 }
 
-// 批量覆盖
+// Bulk overwrite
 type Merge<M, N> = Omit<M, Extract<keyof M, keyof N>> & N
 
 type AxiosResponseProps<T = any, D = any> = Merge<
@@ -26,7 +26,7 @@ type AxiosResponseProps<T = any, D = any> = Merge<
 
 export interface requestConfig<T = any> extends AxiosRequestConfig<T> {
     params?: T
-    /** @name 自定义接口域名 */
+    /** @Custom API domain */
     diyHome?: string
 }
 
@@ -36,7 +36,7 @@ export function NetWorkApi<T, D>(params: requestConfig<T>): Promise<D> {
         ipcRenderer
             .invoke("axios-api", params)
             .then((res) => {
-                // 埋点接口 不论结果如何 不可影响页面及交互
+                // Tracking, must not affect UI/interaction
                 if(params.url==="tourist"&&params.method==="POST"){
                     resolve("" as any)
                     return
@@ -52,10 +52,10 @@ export function NetWorkApi<T, D>(params: requestConfig<T>): Promise<D> {
 
 export const handleAxios = (res: AxiosResponseProps<AxiosResponseInfoProps>, resolve, reject) => {
     const {code, message, data} = res
-    // console.log("返回", res)
+    // console.log("Back", res)
     if (!code) {
-        failed("请求超时，请重试")
-        reject("请求超时，请重试")
+        failed("Timeout, retry")
+        reject("Timeout, retry")
         return
     }
     switch (code) {
@@ -75,11 +75,11 @@ export const handleAxios = (res: AxiosResponseProps<AxiosResponseInfoProps>, res
     }
 }
 
-// token过期，退出
+// Token expired, logout
 const tokenOverdue = (res) => {
     if (res.userInfo) loginOutLocal(res.userInfo)
-    // 异常过期 无法通过接口更新连接状态 故只作退出远程处理
+    // Expired, cannot update status, remote logout only
     ipcRenderer.invoke("lougin-out-dynamic-control",{loginOut:false})
     globalUserLogout()
-    failed("401,登录过期/未登录，请重新登录")
+    failed("401, session expired/Not logged in, please login again")
 }

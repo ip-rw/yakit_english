@@ -12,10 +12,10 @@ import {HybridScanControlAfterRequest, HybridScanModeType} from "@/models/Hybrid
 import {defaultAdvancedConfigValue, defaultPostTemplate} from "@/defaultConstants/HTTPFuzzerPage"
 
 /**
- * @description 页面暂存数据
- * @property {PageNodeItemProps[]} pageNodeList 页面的一些信息
- * @property {string} routeKey 路由
- * @property {boolean} singleNode 是否为单开页面,单开页面的逻辑暂时没有写
+ * @Description Page Temp Data
+ * @property {PageNodeItemProps[]} PageNodeList Page Info
+ * @property {string} Route Key
+ * @property {boolean} SingleNode Is Single Instance, Single Instance Logic Unwritten
  */
 export interface PageProps {
     pageList: PageNodeItemProps[]
@@ -37,26 +37,26 @@ export interface PageNodeItemProps {
     // pageChildrenList: PageNodeItemProps[]
 }
 
-/** 页面保存的数据*/
+/** Page Saved Data*/
 interface PageParamsInfoProps {
-    /** YakitRoute.HTTPFuzzer webFuzzer页面缓存数据 */
+    /** YakitRoute.HTTPFuzzer WebFuzzer Page Cache Data */
     webFuzzerPageInfo?: WebFuzzerPageInfoProps
     pluginInfoEditor?: {source: YakitRoute}
-    /** YakitRoute.Plugin_Local 本地插件页面缓存数据 */
+    /** YakitRoute.Plugin_Local Local Plugin Page Cache Data */
     pluginLocalPageInfo?: PluginLocalPageInfoProps
-    /**YakitRoute.Plugin_Store 插件商店页面 */
+    /**YakitRoute.Plugin_Store Plugin Store Page */
     pluginOnlinePageInfo?: PluginOnlinePageInfoProps
-    /**批量执行页面 */
+    /**Bulk Execution Page */
     pluginBatchExecutorPageInfo?: PluginBatchExecutorPageInfoProps
-    /**专项漏洞页面 */
+    /**Targeted Vulnerability Page */
     pocPageInfo?: PocPageInfoProps
-    /**弱口令页面 */
+    /**Weak Password Page */
     brutePageInfo?: BrutePageInfoProps
-    /**端口扫描页面 */
+    /**Port Scanning Page */
     scanPortPageInfo?: ScanPortPageInfoProps
-    /**空间引擎页面 */
+    /**Space Engine Page */
     spaceEnginePageInfo?: SpaceEnginePageInfoProps
-    /**简易版 安全检测页面 */
+    /**Basic Security Check Page */
     simpleDetectPageInfo?: SimpleDetectPageInfoProps
 }
 
@@ -64,17 +64,17 @@ export interface SpaceEnginePageInfoProps {}
 
 export interface SimpleDetectPageInfoProps {}
 export interface PluginBatchExecutorPageInfoProps {
-    /**执行批量执行的runtimeId */
+    /**Execute Bulk Execution runtimeId */
     runtimeId: string
-    /**批量执行结果的默认选中的tab默认值 */
+    /**Default Selected Tab for Bulk Execution Results */
     defaultActiveKey: string
-    /**是否为https */
+    /**Is HTTPS */
     https: boolean
-    /**选中的数据History id */
+    /**Selected Data History ID */
     httpFlowIds: []
-    /**请求包 */
+    /**Request Package */
     request: Uint8Array
-    /**执行任务的状态 */
+    /**Task Execution Status */
     hybridScanMode: HybridScanModeType
 }
 export interface PluginOnlinePageInfoProps {
@@ -89,33 +89,33 @@ export interface WebFuzzerPageInfoProps {
     advancedConfigValue: AdvancedConfigValueProps
     request: string
     advancedConfigShow?: AdvancedConfigShowProps | null
-    //高级配置中变量的二级Panel 展开项
+    //Advanced Config Variable Second-Level Panel Items
     variableActiveKeys?: string[]
 }
 
 export interface PocPageInfoProps {
-    /** type 1会打开漏洞检测类型选择  2直接带着数据打开poc页面*/
+    /** Type 1 Opens Vulnerability Selection, Type 2 Opens POC Page with Data*/
     type?: number
-    /**按组搜的选中 */
+    /**Group Search Selected */
     selectGroup?: string[]
-    /**按关键字搜的选中/poc内置组*/
+    /**Keyword Search Selected/POC Default Group*/
     selectGroupListByKeyWord?: string[]
     formValue?: HybridScanControlAfterRequest
-    /**是否为https */
+    /**Is HTTPS */
     https: boolean
-    /**选中的数据History id */
+    /**Selected Data History ID */
     httpFlowIds: []
-    /**请求包 */
+    /**Request Package */
     request: Uint8Array
 }
 
 export interface BrutePageInfoProps {
-    /**输入目标 */
+    /**Enter Target */
     targets: string
 }
 
 export interface ScanPortPageInfoProps {
-    /**输入目标 */
+    /**Enter Target */
     targets: string
 }
 interface PageInfoStoreProps {
@@ -123,42 +123,42 @@ interface PageInfoStoreProps {
 
     selectGroupId: Map<string, string>
 
-    /**设置 pages数据，例如：fuzzer缓存页面；未分组的关闭其他页面只保留当前页面*/
+    /**Set Pages Data, e.g., Fuzzer Page Cache; Close Others in No Group, Keep Current*/
     setPagesData: (key: string, p: PageProps) => void
-    /**设置组内的数据，例如:组内的关闭其他页面 */
+    /**Set Data in Group, e.g., Close Others in Group */
     setPageNodeInfoByPageGroupId: (key, gId: string, list: PageNodeItemProps[]) => void
 
-    /**通过组的id获取组下的页面数据 */
+    /**Get Page Data Under Group by Group ID */
     getPagesDataByGroupId: (key: string, gId: string) => PageNodeItemProps[]
-    /**通过id获取页面数据 */
+    /**Get Page Data by ID */
     queryPagesDataById: (key: string, pageId: string) => PageNodeItemProps | undefined
-    /**新增缓存页面数据 */
+    /**Add Cache Page Data */
     addPagesDataCache: (key: string, v: PageNodeItemProps) => void
-    /**更新缓存页面数据 */
+    /**Update Cache Page Data */
     updatePagesDataCacheById: (key: string, v: PageNodeItemProps) => void
-    /** 删除页面缓存数据*/
+    /** Delete Page Cache Data*/
     removePagesDataCacheById: (key: string, id: string) => void
-    /** 通过组id 删除组数据以及组下的页面缓存数据 */
+    /** Delete Group Data & Its Page Cache by Group ID */
     removePagesDataCacheByGroupId: (key: string, gId: string) => void
 
-    /**设置页面中选中的组id */
+    /**Set Selected Group ID in Page */
     setSelectGroupId: (key: string, s: string) => void
-    /**删除选中组 */
+    /**Delete Selected Group */
     removeCurrentSelectGroupId: (key: string) => void
 
-    /**获取当前选中组内的tab名称 返回string[] */
+    /**Get Tab Name in Selected Group Returns String[] */
     getCurrentGroupAllTabName: (key) => string[]
-    /**获取当前选中组*/
+    /**Get Current Selected Group*/
     getCurrentSelectGroup: (key) => PageNodeItemProps | undefined
     clearAllData: () => void
     clearDataByRoute: (key: string) => void
-    /**只保留routeKey的数据，删除除此routeKey之外的数据 */
+    /**Keep Only routeKey Data, Delete Others */
     clearOtherDataByRoute: (routeKey: string) => void
-    /** 设置当前激活的页面id */
+    /** Set Active Page ID */
     setCurrentSelectPageId: (routeKey: string, pageId: string) => void
-    /** 获取当前激活的页面id */
+    /** Get Active Page ID */
     getCurrentSelectPageId: (routeKey: string) => string
-    /** 通过 RuntimeId 获取批量执行页面数据 */
+    /** Get Bulk Execution Page Data by RuntimeId */
     getBatchExecutorByRuntimeId: (pageId: string) => PageNodeItemProps | undefined
 }
 export const defPage: PageProps = {
@@ -357,7 +357,7 @@ export const usePageInfo = createWithEqualityFn<PageInfoStoreProps>()(
                                 }
                             }
                         } catch (error) {
-                            yakitNotify("error", "page-info解析数据错误:" + error)
+                            yakitNotify("error", "Page Info Data Parse Error:" + error)
                             return null
                         }
                     },
@@ -410,7 +410,7 @@ export const saveFuzzerCache = debounce(
             })
             setRemoteProjectValue(RemoteGV.FuzzerCache, JSON.stringify(cache)).catch((error) => {})
         } catch (error) {
-            yakitNotify("error", "webFuzzer缓存数据失败:" + error)
+            yakitNotify("error", "WebFuzzer Cache Data Fail:" + error)
         }
     },
     500,
@@ -418,15 +418,15 @@ export const saveFuzzerCache = debounce(
 )
 
 /**
- * 下面注释的代码含义
- * fuzzer-tab页内数据的订阅事件，订阅数据包括request、请求参数、序列组配置信息等
- * 注释原因：
- * 软件打开后，这个订阅就会启动，导致还没连接引擎时就请求引擎相关接口，导致控制台报错
+ * Commented Code Below Explained
+ * Fuzzer-Tab Subscription Events, Includes Request, Params, Sequence Group Config
+ * Comment Reason：
+ * Subscription Starts on Software Launch, Pre-Engine Connect Causes Console Errors
  */
 // try {
 //     const unFuzzerCacheData = usePageInfo.subscribe(
 //         // (state) => state.pages.get(YakitRoute.HTTPFuzzer) || [],
-//         (state) => state.pages.get("httpFuzzer") || [], // 因为循环引用导致开发环境热加载YakitRoute.HTTPFuzzer为undefined
+//         (state) => state.pages.get("httpFuzzer") || [], // Circular Ref Causes Dev Env Hot Reload YakitRoute.HTTPFuzzer to be undefined
 //         (selectedState, previousSelectedState) => {
 //             saveFuzzerCache(selectedState)
 //         }
@@ -464,12 +464,12 @@ export const saveFuzzerCache = debounce(
 //                 console.log("cache", cache)
 //                 setRemoteProjectValue(RemoteGV.FuzzerCache, JSON.stringify(cache)).catch((error) => {})
 //             } catch (error) {
-//                 yakitNotify("error", "webFuzzer缓存数据失败:" + error)
+//                 yakitNotify("error", "WebFuzzer Cache Data Fail:" + error)
 //             }
 //         },
 //         500,
 //         {leading: true}
 //     )
 // } catch (error) {
-//     yakitNotify("error", "page-info缓存数据错误:" + error)
+//     yakitNotify("error", "Page-Info Cache Data Error:" + error)
 // }

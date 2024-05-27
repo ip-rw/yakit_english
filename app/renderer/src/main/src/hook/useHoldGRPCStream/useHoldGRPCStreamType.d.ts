@@ -1,55 +1,55 @@
 import { HybridScanActiveTask } from "@/models/HybridScan"
 import {Risk as RiskProps} from "@/pages/risks/schema"
 
-/** @name hooks逻辑数据 */
+/** @Hooks Logic Data */
 export declare namespace HoldGRPCStreamProps {
-    /** @name 缓冲区数据-卡片类 */
+    /** @Buffer Data - Card */
     export interface CacheCard {
         Id: string
         Data: string
         Timestamp: number
         Tags?: string[]
     }
-    /** @name 缓冲区数据-表格数据类 */
+    /** @Buffer Data - Table Data Type */
     export interface CacheTable {
         name: string
         columns: {title: string; dataKey: string}[]
         data: Map<string, Record<string, any>>
     }
 
-    /** @name hook输出数据信息-卡片类 */
+    /** @Hook Data Info - Card Type */
     export interface InfoCard {
         Id: string
         Data: string
         Timestamp: number
         Tag?: string
     }
-    /** @name hook输出数据信息-卡片集合 */
+    /** @Hook Data Info - Card Collection */
     export interface InfoCards {
         tag: string
         info: InfoCard[]
     }
 
-    /** @name hook输出数据信息-自定义tabs页 */
+    /** @Hook Data Info - Custom Tabs */
     export interface InfoTab {
         tabName: string
         type: string
     }
 
-    /** @name hook输出数据信息-自定义table */
+    /** @Hook Data Info - Custom Table */
     export interface InfoTable {
         name: string
         columns: {title: string; dataKey: string}[]
         data: Record<string, any>[]
     }
 
-    /** @name hook输出数据信息-自定义text */
+    /** @Hook Data Info - Custom Text */
     export interface InfoText {
         content: string
     }
 }
 
-/** @name hook输出的数据流信息集合 */
+/** @Hook DataFlow Info Collection */
 export interface HoldGRPCStreamInfo {
     progressState: StreamResult.Progress[]
     cardState: HoldGRPCStreamProps.InfoCards[]
@@ -61,9 +61,9 @@ export interface HoldGRPCStreamInfo {
     logState: StreamResult.Log[]
 }
 
-/** @name 数据流结果 */
+/** @DataFlow Result */
 export declare namespace StreamResult {
-    /** @name 数据流结果(进度条) */
+    /** @DataFlow Result (Progress Bar)) */
     export interface BaseProsp {
         Hash: string
         OutputJson: string
@@ -75,39 +75,39 @@ export declare namespace StreamResult {
         RuntimeID?: string
     }
 
-    /** @name 数据流结果(进度条) */
+    /** @DataFlow Result (Progress Bar)) */
     export interface Progress {
         progress: number
         id: string
     }
 
-    /** @name 数据流结果(卡片类) */
+    /** @DataFlow Result (Card Type)) */
     export interface Card {
         id: string
         data: string
         tags?: string[]
     }
 
-    /** @name 数据流结果(日志信息类) */
+    /** @DataFlow Result (Log Info Type)) */
     export interface Log {
         level: string
-        /** @name 数据流信息(json化) */
+        /** @DataFlow Info (JSON)) */
         data: string | any
         timestamp: number
     }
 
-    /** @name 数据流结果(数据结构) */
+    /** @DataFlow Result (Data Structure)) */
     export interface Message {
         type: "log" | "progress" | string
         content: Log | Progress
     }
 
-    /** @name 数据流结果(自增表格构建信息) */
+    /** @DataFlow Result (Auto-Increment Table Build Info)) */
     export interface Table {
         columns: string[]
         table_name: string
     }
-    /** @name 数据流结果(自增表格数据) */
+    /** @DataFlow Result (Auto-Increment Table Data)) */
     export interface TableDataOpt {
         table_name: string
         data: {
@@ -116,30 +116,30 @@ export declare namespace StreamResult {
         }
     }
 
-    /** @name 数据流结果(网站树数据) */
+    /** @DataFlow Result (Site Tree Data)) */
     export interface WebSite {
         refresh_interval: number
         targets: string
     }
 
-    /** @name 数据流结果(text类构建信息) */
+    /** @DataFlow Result (Text Build Info)) */
     export interface Text {
         at_head: boolean
         tab_name: string
     }
 
-    /** @name 数据流结果(text类数据) */
+    /** @DataFlow Result (Text Data)) */
     export interface TextData {
         data: string
         table_name: string
     }
 
-    /** @name 数据流结果(风险数据) */
+    /** @DataFlow Result (Risk Data)) */
     export interface Risk extends Omit<RiskProps, "Id"> {}
 
-    /** @name 数据流结果(批量执行中得插件执行日志) */
+    /** @DataFlow Result (Plugin Exec Log in Batch)) */
     export interface PluginExecuteLog extends HybridScanActiveTask {
-        /**第一次接受到该id得时间,前端记录 */
+        /**First Time Received ID, Frontend Log */
         startTime: number
     }
 }

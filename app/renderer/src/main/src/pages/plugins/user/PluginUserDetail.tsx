@@ -54,17 +54,17 @@ export const PluginUserDetail: React.FC<PluginUserDetailProps> = React.memo(
         const [selectList, setSelectList] = useState<string[]>(defaultSelectList)
         const [loading, setLoading] = useState<boolean>(false)
         const [spinLoading, setSpinLoading] = useState<boolean>(false)
-        const [recalculation, setRecalculation] = useState<boolean>(false) // 更新item后刷新虚拟列表
+        const [recalculation, setRecalculation] = useState<boolean>(false) // Refresh Virtual List After Item Update
         const [filters, setFilters] = useState<PluginFilterParams>(cloneDeep(defaultFilter))
 
         const [allCheck, setAllCheck] = useState<boolean>(defaultAllCheck)
 
-        // 因为组件 RollingLoadList 的定向滚动功能初始不执行，所以设置一个初始变量跳过初始状态
+        // Skip initial state due to non-execution of directional scroll in RollingLoadList
         const [scrollTo, setScrollTo] = useState<number>(0)
 
         const userInfo = useStore((s) => s.userInfo)
 
-        // 选中插件的数量
+        // Selected Plugin Count
         const selectNum = useMemo(() => {
             if (allCheck) return response.pagemeta.total
             else return selectList.length
@@ -81,23 +81,23 @@ export const PluginUserDetail: React.FC<PluginUserDetailProps> = React.memo(
         useEffect(() => {
             if (info) {
                 setPlugin({...info})
-                // 必须加上延时，不然本次操作会成为组件(RollingLoadList)的初始数据
+                // Add delay to prevent operation from being initial data for RollingLoadList
                 setTimeout(() => {
                     setScrollTo(currentIndex)
                 }, 100)
             } else setPlugin(undefined)
         }, [info])
 
-        /**刷新我的插件列表 */
+        /**Refresh My Plugin List */
         const onRecalculation = useMemoizedFn(() => {
             setRecalculation(!recalculation)
         })
-        /**去使用，跳转到本地插件详情页面 */
+        /**Go to Use, Navigate to Local Plugin Details */
         const onUse = useMemoizedFn(() => {
             if (!plugin) return
             onlineUseToLocalDetail(plugin.uuid, "mine")
         })
-        // 返回
+        // Back
         const onPluginBack = useMemoizedFn(() => {
             onBack({
                 search,
@@ -125,10 +125,10 @@ export const PluginUserDetail: React.FC<PluginUserDetailProps> = React.memo(
             const isPrivate: boolean = !plugin.is_private
             let status: number = 0
             if (userInfo.role === "ordinary") {
-                // 为待审核
+                // Pending Review
                 status = 0
             } else {
-                // 为审核通过
+                // Approved
                 if (!isPrivate) status = 1
             }
             const editPlugin = {...plugin, is_private: isPrivate, status}
@@ -150,27 +150,27 @@ export const PluginUserDetail: React.FC<PluginUserDetailProps> = React.memo(
                 setLoading(false)
             }, 300)
         })
-        /** 单项副标题组件 */
+        /** Extra Params Modal */
         const optExtra = useMemoizedFn((data: YakitPluginOnlineDetail) => {
             return data.is_private ? <SolidPrivatepluginIcon className='icon-svg-16' /> : statusTag[`${data.status}`]
         })
-        /** 单项勾选|取消勾选 */
+        /** Single-Select|Deselect */
         const optCheck = useMemoizedFn((data: YakitPluginOnlineDetail, value: boolean) => {
             try {
-                // 全选情况时的取消勾选
+                // Fetch loading char with regex
                 if (allCheck) {
                     setSelectList(response.data.map((item) => item.uuid).filter((item) => item !== data.uuid))
                     setAllCheck(false)
                     return
                 }
-                // 单项勾选回调
+                // No history fetched if CS or vuln unselected by user
                 if (value) setSelectList([...selectList, data.uuid])
                 else setSelectList(selectList.filter((item) => item !== data.uuid))
             } catch (error) {
-                yakitNotify("error", "勾选失败:" + error)
+                yakitNotify("error", "Auto-rename to first QA if unchanged:" + error)
             }
         })
-        /**全选 */
+        /**Fixes failure to iterate load_content on missing older version data */
         const onCheck = useMemoizedFn((value: boolean) => {
             setSelectList([])
             setAllCheck(value)
@@ -191,14 +191,14 @@ export const PluginUserDetail: React.FC<PluginUserDetailProps> = React.memo(
                 setSpinLoading(false)
             }, 200)
         })
-        /** 新建插件 */
+        /** Create New Plugin */
         const onNewAddPlugin = useMemoizedFn(() => {
             emiter.emit(
                 "openPage",
                 JSON.stringify({route: YakitRoute.AddYakitScript, params: {source: YakitRoute.Plugin_Owner}})
             )
         })
-        /**搜索需要清空勾选 */
+        /**Clear Selection for Search */
         const onSearch = useMemoizedFn(async () => {
             setSpinLoading(true)
             try {
@@ -210,14 +210,14 @@ export const PluginUserDetail: React.FC<PluginUserDetailProps> = React.memo(
                 setSpinLoading(false)
             }, 200)
         })
-        /**详情批量删除 */
+        /**Detail Bulk Delete */
         // const onBatchRemove = useMemoizedFn(async () => {
         //     const params: UserBackInfoProps = {allCheck, selectList, search, filter: filters, selectNum}
         //     onDetailsBatchRemove(params)
         //     setAllCheck(false)
         //     setSelectList([])
         // })
-        /**详情批量下载 */
+        /**Batch Download Details */
         const onBatchDownload = useMemoizedFn(async () => {
             const params: UserBackInfoProps = {allCheck, selectList, search, filter: filters, selectNum}
             onDetailsBatchDownload(params)
@@ -228,7 +228,7 @@ export const PluginUserDetail: React.FC<PluginUserDetailProps> = React.memo(
         return (
             <>
                 <PluginDetails<YakitPluginOnlineDetail>
-                    title='我的云端插件'
+                    title='My Cloud Plugin'
                     pageWrapId={wrapperId}
                     filterExtra={
                         <div className={"details-filter-extra-wrapper"}>
@@ -237,7 +237,7 @@ export const PluginUserDetail: React.FC<PluginUserDetailProps> = React.memo(
                             {downloadLoading ? (
                                 <LoadingOutlined className='loading-icon' />
                             ) : (
-                                <Tooltip title='下载插件' overlayClassName='plugins-tooltip'>
+                                <Tooltip title='Download Plugin' overlayClassName='plugins-tooltip'>
                                     <YakitButton
                                         type='text2'
                                         icon={<OutlineClouddownloadIcon />}
@@ -246,12 +246,12 @@ export const PluginUserDetail: React.FC<PluginUserDetailProps> = React.memo(
                                 </Tooltip>
                             )}
                             {/* <div style={{height: 12}} className='divider-style'></div>
-                        <Tooltip title='删除插件' overlayClassName='plugins-tooltip'>
+                        <Tooltip title='Delete Plugin' overlayClassName='plugins-tooltip'>
                             <YakitButton type='text2' icon={<OutlineTrashIcon />} onClick={onBatchRemove} />
                         </Tooltip> */}
                             <div style={{height: 12}} className='divider-style'></div>
                             <YakitButton type='text' onClick={onNewAddPlugin}>
-                                新建插件
+                                Create New Plugin
                             </YakitButton>
                         </div>
                     }
@@ -302,7 +302,7 @@ export const PluginUserDetail: React.FC<PluginUserDetailProps> = React.memo(
                 >
                     <div className={styles["details-content-wrapper"]}>
                         <PluginTabs tabPosition='right'>
-                            <TabPane tab='源 码' key='code'>
+                            <TabPane tab='Source Code' key='code'>
                                 <div className={styles["plugin-info-wrapper"]}>
                                     <PluginDetailHeader
                                         pluginName={plugin.script_name}
@@ -319,7 +319,7 @@ export const PluginUserDetail: React.FC<PluginUserDetailProps> = React.memo(
                                                 <FuncBtn
                                                     maxWidth={1100}
                                                     icon={<OutlineCursorclickIcon />}
-                                                    name={"去使用"}
+                                                    name={"Go to Use"}
                                                     onClick={onUse}
                                                 />
                                             </div>
@@ -340,7 +340,7 @@ export const PluginUserDetail: React.FC<PluginUserDetailProps> = React.memo(
                                     </div>
                                 </div>
                             </TabPane>
-                            <TabPane tab='日志' key='log'>
+                            <TabPane tab='Logs' key='log'>
                                 <PluginLog uuid={plugin.uuid || ""} getContainer={wrapperId} />
                             </TabPane>
                         </PluginTabs>

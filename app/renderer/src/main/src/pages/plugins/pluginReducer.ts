@@ -2,8 +2,8 @@ import {YakitPluginListOnlineResponse, YakitPluginOnlineDetail} from "./online/P
 import {QueryYakScriptsResponse, YakScript} from "../invoker/schema"
 import cloneDeep from "lodash/cloneDeep"
 
-// ----------------------- 线上
-// 初始 state
+// ----------------------- Online
+// Initial state
 export const initialOnlineState: YakitPluginListOnlineResponse = {
     data: [],
     pagemeta: {
@@ -16,7 +16,7 @@ export const initialOnlineState: YakitPluginListOnlineResponse = {
 
 type OnlinePluginType = "add" | "update" | "remove" | "unLikeAndLike" | "download" | "clear"
 
-// 定义 action 的类型
+// Define action type
 export interface OnlinePluginAppAction {
     type: OnlinePluginType
     payload: {
@@ -26,7 +26,7 @@ export interface OnlinePluginAppAction {
     }
 }
 
-/**大于1000，变为k，例如:1290转为1.2k */
+/**>1000, to k, e.g.: 1290 to 1.2k */
 export const thousandthConversion = (n: number): string => {
     const number = n
     let shortString = ""
@@ -162,7 +162,7 @@ export const pluginOnlineReducer = (
 
 // -----------------------
 
-// ----------------------- 本地
+// ----------------------- Local
 export const initialLocalState: QueryYakScriptsResponse = {
     Data: [],
     Pagination: {
@@ -176,7 +176,7 @@ export const initialLocalState: QueryYakScriptsResponse = {
 
 type LocalPluginType = "add" | "update" | "remove" | "unshift"
 
-// 定义 action 的类型
+// Define action type
 export interface LocalPluginAppAction {
     type: LocalPluginType
     payload: {

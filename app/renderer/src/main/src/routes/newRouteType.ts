@@ -1,34 +1,34 @@
-/** @name 传给数据库一级菜单项属性 */
+/** @name Primary Menu Item Attrs */
 export interface SendDatabaseFirstMenuProps {
-    /** @name 一级菜单展示名 */
+    /** @name Primary Menu Display Name */
     Group: string
-    /** @name 二级菜单项集合 */
+    /** @name Submenu Items */
     Items: SendDatabaseSecondMenuProps[]
-    /** @name 一级菜单顺序位 */
+    /** @name Primary Menu Order */
     GroupSort: number
-    /** @name 菜单模式 */
+    /** @name Menu Mode */
     Mode: string
-    /** @name 一级菜单初始值 */
+    /** @name Primary Menu Initial Val */
     GroupLabel: string
 }
-/** @name 传给数据库二级菜单项属性 */
+/** @name Submenu Item Attrs */
 export interface SendDatabaseSecondMenuProps {
-    /** @name 插件名称 */
+    /** @name Plugin Name */
     YakScriptName: string
-    /** @name 菜单模式 */
+    /** @name Menu Mode */
     Mode: string
-    /** @name 二级菜单顺序位 */
+    /** @name Submenu Order */
     VerboseSort: number
-    /** @name 一级菜单顺序位 */
+    /** @name Primary Menu Order */
     GroupSort: number
-    /** @name 二级菜单路由 */
+    /** @name Submenu Route */
     Route: string
-    /** @name 二级菜单展示名 */
+    /** @name Submenu Display Name */
     Verbose: string
-    /** @name 二级菜单初始值 */
+    /** @name Submenu Initial Val */
     VerboseLabel: string
-    /** @name 一级菜单展示名 */
+    /** @name Primary Menu Display Name */
     Group: string
-    /** @name 一级菜单初始值 */
+    /** @name Primary Menu Initial Val */
     GroupLabel: string
 }

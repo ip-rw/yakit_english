@@ -50,11 +50,11 @@ export const YakitModalConfirm = (props: YakitModalConfirmProps) => {
                         <ErrorBoundary
                             FallbackComponent={({error, resetErrorBoundary}) => {
                                 if (!error) {
-                                    return <div>未知错误</div>
+                                    return <div>Unknown Error</div>
                                 }
                                 return (
                                     <div>
-                                        <p>弹框内逻辑性崩溃，请关闭重试！</p>
+                                        <p>Logic failure within dialog, please close and retry！</p>
                                         <pre>{error?.message}</pre>
                                     </div>
                                 )
@@ -136,7 +136,7 @@ const YakitBaseModal: React.FC<YakitBaseModalProp> = (props) => {
                         }}
                         {...props.cancelButtonProps}
                     >
-                        {props.onCancelText || "取消"}
+                        {props.onCancelText || "Cancel"}
                     </YakitButton>
                     <YakitButton
                         onClick={(e) => {
@@ -150,7 +150,7 @@ const YakitBaseModal: React.FC<YakitBaseModalProp> = (props) => {
                         loading={loading}
                         {...props.okButtonProps}
                     >
-                        {props.onOkText || "确定"}
+                        {props.onOkText || "Confirm"}
                     </YakitButton>
                 </div>
             }
@@ -179,7 +179,7 @@ const YakitBaseModal: React.FC<YakitBaseModalProp> = (props) => {
 
 export const debugYakitModal = (y: any) => {
     const m = showYakitModal({
-        title: "调试信息",
+        title: "Debug Info",
         width: "50%",
         content: (
             <div style={{marginLeft: 20, marginRight: 20, marginTop: 16, marginBottom: 20}}>{JSON.stringify(y)}</div>
@@ -192,7 +192,7 @@ export const debugYakitModal = (y: any) => {
 
 export const debugYakitModalAny = (y: any) => {
     const m = showYakitModal({
-        title: "调试信息",
+        title: "Debug Info",
         width: "50%",
         content: <div style={{marginLeft: 20, marginRight: 20, marginTop: 16, marginBottom: 20}}>{y}</div>,
         onOk: () => {
@@ -232,11 +232,11 @@ export const showYakitModal = (props: ShowModalProps) => {
                         <ErrorBoundary
                             FallbackComponent={({error, resetErrorBoundary}) => {
                                 if (!error) {
-                                    return <div>未知错误</div>
+                                    return <div>Unknown Error</div>
                                 }
                                 return (
                                     <div>
-                                        <p>弹框内逻辑性崩溃，请关闭重试！</p>
+                                        <p>Logic failure within dialog, please close and retry！</p>
                                         <pre>{error?.message}</pre>
                                     </div>
                                 )

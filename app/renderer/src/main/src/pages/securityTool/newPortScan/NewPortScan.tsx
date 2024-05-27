@@ -60,7 +60,7 @@ const {ipcRenderer} = window.require("electron")
 
 export const NewPortScan: React.FC<NewPortScanProps> = React.memo((props) => {
     const {id} = props
-    // 隐藏插件列表
+    // Hide Plugin List
     const [hidden, setHidden] = useState<boolean>(false)
     const [search, setSearch] = useState<PluginSearchParams>(cloneDeep(defaultSearch))
     const [filters, setFilters] = useState<PluginFilterParams>({
@@ -88,7 +88,7 @@ export const NewPortScan: React.FC<NewPortScanProps> = React.memo((props) => {
             setFilters={setFilters}
             fixFilterList={[
                 {
-                    groupName: "插件类型",
+                    groupName: "Plugin type",
                     groupKey: "plugin_type",
                     sort: 1,
                     data: pluginTypeFilterList
@@ -123,7 +123,7 @@ const NewPortScanExecute: React.FC<NewPortScanExecuteProps> = React.memo((props)
         }),
         shallow
     )
-    /**获取数据中心中的页面数据 */
+    /**Fetch Data Center Page Data */
     const initPageInfo = useMemoizedFn(() => {
         const currentItem: PageNodeItemProps | undefined = queryPagesDataById(YakitRoute.Mod_ScanPort, pageId)
         if (currentItem && currentItem.pageParamsInfo.scanPortPageInfo) {
@@ -142,7 +142,7 @@ const NewPortScanExecute: React.FC<NewPortScanExecuteProps> = React.memo((props)
         trigger: "setHidden"
     })
 
-    /**是否展开/收起 */
+    /**Expand?/Collapse */
     const [isExpand, setIsExpand] = useState<boolean>(true)
     const [progressList, setProgressList] = useState<StreamResult.Progress[]>([])
     const [executeStatus, setExecuteStatus] = useState<ExpandAndRetractExcessiveState>("default")
@@ -187,10 +187,10 @@ const NewPortScanExecute: React.FC<NewPortScanExecuteProps> = React.memo((props)
         <div className={styles["port-scan-execute-wrapper"]}>
             <ExpandAndRetract isExpand={isExpand} onExpand={onExpand} status={executeStatus}>
                 <div className={styles["port-scan-executor-title"]}>
-                    <span className={styles["port-scan-executor-title-text"]}>端口指纹扫描</span>
+                    <span className={styles["port-scan-executor-title-text"]}>Port Fingerprint Scan</span>
                     {selectNum > 0 && (
                         <YakitTag closable onClose={onRemove} color='info'>
-                            {selectNum} 个插件
+                            {selectNum} plugins
                         </YakitTag>
                     )}
                 </div>
@@ -202,14 +202,14 @@ const NewPortScanExecute: React.FC<NewPortScanExecuteProps> = React.memo((props)
                         ? !isExpand && (
                               <>
                                   <YakitButton danger onClick={onStopExecute}>
-                                      停止
+                                      Exec Plugin Names Array
                                   </YakitButton>
                                   <div className={styles["divider-style"]}></div>
                               </>
                           )
                         : !isExpand && (
                               <>
-                                  <YakitButton onClick={onStartExecute}>执行</YakitButton>
+                                  <YakitButton onClick={onStartExecute}>Risk Items</YakitButton>
                                   <div className={styles["divider-style"]}></div>
                               </>
                           )}
@@ -220,7 +220,7 @@ const NewPortScanExecute: React.FC<NewPortScanExecuteProps> = React.memo((props)
                                 disabled={disabledReport}
                                 onClick={onCreateReport}
                             >
-                                生成报告
+                                Generate Report
                             </YakitButton>
                             <div className={styles["divider-style"]}></div>
                         </>
@@ -279,7 +279,7 @@ export const defPortScanExecuteExtraFormValue: PortScanExecuteExtraFormValue = {
     HostAliveConcurrent: 20,
     LinkPluginConfig: cloneDeep(defaultLinkPluginConfig),
     BasicCrawlerEnableJSParser: false,
-    /**@description 前端使用,扫描协议 */
+    /**@Description for Frontend, Scan Protocol */
     scanProtocol: "tcp"
 }
 
@@ -300,7 +300,7 @@ const NewPortScanExecuteContent: React.FC<NewPortScanExecuteContentProps> = Reac
         const [form] = Form.useForm()
 
         const [runtimeId, setRuntimeId] = useState<string>("")
-        /**额外参数弹出框 */
+        /**For cache modification */
         const [extraParamsVisible, setExtraParamsVisible] = useState<boolean>(false)
         const [extraParamsValue, setExtraParamsValue] = useState<PortScanExecuteExtraFormValue>(
             cloneDeep(defPortScanExecuteExtraFormValue)
@@ -315,10 +315,10 @@ const NewPortScanExecuteContent: React.FC<NewPortScanExecuteContentProps> = Reac
 
         const defaultTabs = useCreation(() => {
             return [
-                {tabName: "扫描端口列表", type: "port"},
-                {tabName: "HTTP 流量", type: "http"},
-                {tabName: "漏洞与风险", type: "risk"},
-                {tabName: "日志", type: "log"},
+                {tabName: "Scan Port List", type: "port"},
+                {tabName: "Cache Result", type: "http"},
+                {tabName: "Stop Answering", type: "risk"},
+                {tabName: "Logs", type: "log"},
                 {tabName: "Console", type: "console"}
             ]
         }, [])
@@ -367,7 +367,7 @@ const NewPortScanExecuteContent: React.FC<NewPortScanExecuteContentProps> = Reac
             })
         }, [])
         useEffect(() => {
-            //  pageInfo.targets 目前情况下只有初始的时候才会变，给Targets设置初始值
+            //  pageInfo.targets init only, Set Targets initial value
             form.setFieldsValue({
                 Targets: pageInfo.targets
             })
@@ -377,7 +377,7 @@ const NewPortScanExecuteContent: React.FC<NewPortScanExecuteContentProps> = Reac
             if (executeStatus === "process") return true
             return false
         }, [executeStatus])
-        /**生成报告 */
+        /**Generate Report */
         const onCreateReport = useMemoizedFn(() => {
             if (executeStatus === "default") return
             const params: CreateReportContentProps = {
@@ -387,7 +387,7 @@ const NewPortScanExecuteContent: React.FC<NewPortScanExecuteContentProps> = Reac
             onCreateReportModal(params)
         })
 
-        /**开始执行 */
+        /**Start Execution */
         const onStartExecute = useMemoizedFn((value) => {
             const filters = {...pluginListSearchInfo.filters}
             if (filters.plugin_type?.length === 0) {
@@ -404,7 +404,7 @@ const NewPortScanExecuteContent: React.FC<NewPortScanExecuteContentProps> = Reac
             setRuntimeId("")
             if (isEnpriTrace()) {
                 uuidRef.current = uuidv4()
-                const taskName = `${executeParams.Targets.split(",")[0].split(/\n/)[0]}风险评估报告`
+                const taskName = `${executeParams.Targets.split(",")[0].split(/\n/)[0]}Risk Assessment Report`
                 taskNameRef.current = taskName
                 let PortScanRequest = {...executeParams, TaskName: `${taskName}-${uuidRef.current}`}
                 const simpleDetectPrams: RecordPortScanRequest = {
@@ -423,7 +423,7 @@ const NewPortScanExecuteContent: React.FC<NewPortScanExecuteContentProps> = Reac
                 })
             }
         })
-        /**取消执行 */
+        /**Code Gen */
         const onStopExecute = useMemoizedFn(() => {
             if (isEnpriTrace()) {
                 apiCancelSimpleDetect(tokenRef.current).then(() => {
@@ -444,7 +444,7 @@ const NewPortScanExecuteContent: React.FC<NewPortScanExecuteContentProps> = Reac
             })
             setExtraParamsVisible(true)
         })
-        /**保存额外参数 */
+        /**Save Extra Parameters */
         const onSaveExtraParams = useMemoizedFn((v: PortScanExecuteExtraFormValue) => {
             setExtraParamsValue({...v} as PortScanExecuteExtraFormValue)
             setExtraParamsVisible(false)
@@ -470,10 +470,10 @@ const NewPortScanExecuteContent: React.FC<NewPortScanExecuteContentProps> = Reac
                         form={form}
                         onFinish={onStartExecute}
                         labelCol={{span: 6}}
-                        wrapperCol={{span: 12}} //这样设置是为了让输入框居中
+                        wrapperCol={{span: 12}} //Center Input Field
                         validateMessages={{
                             /* eslint-disable no-template-curly-in-string */
-                            required: "${label} 是必填字段"
+                            required: "${label} Required Field"
                         }}
                         labelWrap={true}
                     >
@@ -487,7 +487,7 @@ const NewPortScanExecuteContent: React.FC<NewPortScanExecuteContentProps> = Reac
                             <div className={styles["plugin-execute-form-operate"]}>
                                 {isExecuting ? (
                                     <YakitButton danger onClick={onStopExecute} size='large'>
-                                        停止
+                                        Exec Plugin Names Array
                                     </YakitButton>
                                 ) : (
                                     <YakitButton
@@ -495,7 +495,7 @@ const NewPortScanExecuteContent: React.FC<NewPortScanExecuteContentProps> = Reac
                                         htmlType='submit'
                                         size='large'
                                     >
-                                        开始执行
+                                        Start Execution
                                     </YakitButton>
                                 )}
                                 <YakitButton
@@ -504,7 +504,7 @@ const NewPortScanExecuteContent: React.FC<NewPortScanExecuteContentProps> = Reac
                                     disabled={isExecuting}
                                     size='large'
                                 >
-                                    额外参数
+                                    Extra params
                                 </YakitButton>
                             </div>
                         </Form.Item>
@@ -555,15 +555,15 @@ const NewPortScanExecuteForm: React.FC<NewPortScanExecuteFormProps> = React.memo
     const onSetTemplatePort = useMemoizedFn(() => {
         const ports = form.getFieldValue("Ports")
         if (!ports) {
-            yakitNotify("error", "请输入端口后再保存")
+            yakitNotify("error", "Enter Port Before Saving")
             return
         }
         ipcRenderer.invoke("set-local-cache", ScanPortTemplate, ports).then(() => {
-            yakitNotify("success", "保存成功")
+            yakitNotify("success", "Save Successful")
             setTemplatePort(ports)
         })
     })
-    /**选择预设端口设置Ports值 */
+    /**Select Preset Ports */
     const onCheckPresetPort = useMemoizedFn((checkedValue: CheckboxValueType[]) => {
         let res: string = (checkedValue || [])
             .map((i) => {
@@ -583,33 +583,33 @@ const NewPortScanExecuteForm: React.FC<NewPortScanExecuteFormProps> = React.memo
             <YakitFormDraggerContent
                 formItemProps={{
                     name: "Targets",
-                    label: "扫描目标",
+                    label: "Scan Target",
                     rules: [{required: true}]
                 }}
                 accept='.txt,.xlsx,.xls,.csv'
                 textareaProps={{
-                    placeholder: "域名/主机/IP/IP段均可，逗号分隔或按行分割",
+                    placeholder: "Domain/Host/IP/IP Ranges, Comma or Line Separated",
                     rows: 3
                 }}
-                help='可将TXT、Excel文件拖入框内或'
+                help='Drag TXT, Excel files here or'
                 disabled={disabled}
             />
-            <Form.Item label='预设端口' name='presetPort'>
+            <Form.Item label='Preset Ports' name='presetPort'>
                 <Checkbox.Group
                     className={styles["preset-port-group-wrapper"]}
                     onChange={onCheckPresetPort}
                     disabled={disabled}
                 >
-                    <YakitCheckbox value={"top100"}>常见100端口</YakitCheckbox>
-                    <YakitCheckbox value={"topweb"}>常见 Web 端口</YakitCheckbox>
-                    <YakitCheckbox value={"top1000+"}>常见一两千</YakitCheckbox>
-                    <YakitCheckbox value={"topdb"}>常见数据库与 MQ</YakitCheckbox>
-                    <YakitCheckbox value={"topudp"}>常见 UDP 端口</YakitCheckbox>
-                    {templatePort && <YakitCheckbox value={"template"}>模板</YakitCheckbox>}
+                    <YakitCheckbox value={"top100"}>Common 100 Ports</YakitCheckbox>
+                    <YakitCheckbox value={"topweb"}>Common Web Ports</YakitCheckbox>
+                    <YakitCheckbox value={"top1000+"}>Common 1-2k</YakitCheckbox>
+                    <YakitCheckbox value={"topdb"}>Common DB & MQ Ports</YakitCheckbox>
+                    <YakitCheckbox value={"topudp"}>Common UDP Ports</YakitCheckbox>
+                    {templatePort && <YakitCheckbox value={"template"}>Template</YakitCheckbox>}
                 </Checkbox.Group>
             </Form.Item>
             <Form.Item
-                label='扫描端口'
+                label='Scan Ports'
                 name='Ports'
                 extra={
                     <div className={styles["ports-form-extra"]}>
@@ -619,7 +619,7 @@ const NewPortScanExecuteForm: React.FC<NewPortScanExecuteFormProps> = React.memo
                             style={{paddingLeft: 0}}
                             onClick={onSetTemplatePort}
                         >
-                            存为模块
+                            Save as Module
                         </YakitButton>
                         <div className={styles["divider-style"]}></div>
                         <YakitButton
@@ -628,7 +628,7 @@ const NewPortScanExecuteForm: React.FC<NewPortScanExecuteFormProps> = React.memo
                             onClick={onResetPort}
                             disabled={disabled}
                         >
-                            默认配置
+                            Default Config
                         </YakitButton>
                     </div>
                 }
@@ -639,10 +639,10 @@ const NewPortScanExecuteForm: React.FC<NewPortScanExecuteFormProps> = React.memo
             <Form.Item label={" "} colon={false}>
                 <div className={styles["form-extra"]}>
                     <Form.Item name='SkippedHostAliveScan' valuePropName='checked' noStyle>
-                        <YakitCheckbox disabled={disabled}>跳过主机存活检测</YakitCheckbox>
+                        <YakitCheckbox disabled={disabled}>Skip Host Alive Check</YakitCheckbox>
                     </Form.Item>
-                    <YakitTag>扫描模式：{ScanKind[extraParamsValue.Mode]}</YakitTag>
-                    <YakitTag>指纹扫描并发：{extraParamsValue.Concurrent}</YakitTag>
+                    <YakitTag>Scan Mode：{ScanKind[extraParamsValue.Mode]}</YakitTag>
+                    <YakitTag>Fingerprint Scan Concurrency：{extraParamsValue.Concurrent}</YakitTag>
                 </div>
             </Form.Item>
         </>

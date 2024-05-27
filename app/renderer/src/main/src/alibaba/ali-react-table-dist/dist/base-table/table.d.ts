@@ -7,65 +7,65 @@ import { LoadingContentWrapperProps } from './loading';
 import { BaseTableCSSVariables } from './styles';
 export declare type PrimaryKey = string | ((row: any) => string);
 export interface BaseTableProps {
-    /** 主键 */
+    /** Primary Key */
     primaryKey?: PrimaryKey;
-    /** 表格展示的数据源 */
+    /** Table data source */
     dataSource: any[];
-    /** 表格页脚数据源 */
+    /** Table footer data source */
     footerDataSource?: any[];
-    /** 表格的列配置 */
+    /** Table column configuration */
     columns: ArtColumn[];
-    /** 是否开启虚拟滚动 */
+    /** Enable Virtual Scrolling */
     useVirtual?: VirtualEnum | {
         horizontal?: VirtualEnum;
         vertical?: VirtualEnum;
         header?: VirtualEnum;
     };
-    /** 虚拟滚动开启情况下，表格中每一行的预估高度 */
+    /** Estimated row height in virtual scrolling */
     estimatedRowHeight?: number;
-    /** @deprecated 表格头部是否置顶，默认为 true。请使用 isStickyHeader 代替 */
+    /** @Deprecated: Use isStickyHeader, default true */
     isStickyHead?: boolean;
-    /** 表格头部是否置顶，默认为 true */
+    /** Sticky Header, default true */
     isStickyHeader?: boolean;
-    /** 表格置顶后，距离顶部的距离 */
+    /** Sticky Header Top Offset */
     stickyTop?: number;
-    /** 表格页脚是否置底，默认为 true */
+    /** Sticky Footer, default true */
     isStickyFooter?: boolean;
-    /** 表格页脚置底后，距离底部的距离 */
+    /** Sticky Footer Bottom Offset */
     stickyBottom?: number;
-    /** 自定义类名 */
+    /** Custom class name */
     className?: string;
-    /** 自定义内联样式 */
+    /** Custom inline style */
     style?: CSSProperties & BaseTableCSSVariables;
-    /** 表格是否具有头部 */
+    /** Table has header */
     hasHeader?: boolean;
-    /** 表格是否具有横向的粘性滚动条 */
+    /** Table has horizontal sticky scrollbar */
     hasStickyScroll?: boolean;
-    /** 横向粘性滚动条高度 */
+    /** Horizontal Sticky Scrollbar Height */
     stickyScrollHeight?: 'auto' | number;
-    /** 使用来自外层 div 的边框代替单元格的外边框 */
+    /** Use outer div border instead of cell border */
     useOuterBorder?: boolean;
-    /** 表格是否在加载中 */
+    /** Table loading */
     isLoading?: boolean;
-    /** 数据为空时，单元格的高度 */
+    /** Empty cell height */
     emptyCellHeight?: number;
-    /** @deprecated 数据为空时，表格的展示内容。请使用 components.EmptyContent 代替 */
+    /** @Deprecated: Use components.EmptyContent for empty data display */
     emptyContent?: ReactNode;
-    /** 覆盖表格内部用到的组件 */
+    /** Override internal components */
     components?: {
-        /** 表格加载时，表格内容的父组件 */
+        /** Table content parent on load */
         LoadingContentWrapper?: React.ComponentType<LoadingContentWrapperProps>;
-        /** 表格加载时的加载图标 */
+        /** Table loading icon */
         LoadingIcon?: React.ComponentType;
-        /** 数据为空时，表格的展示内容。*/
+        /** Empty data display content。*/
         EmptyContent?: React.ComponentType;
-        /** 覆盖内部渲染 tbody>tr 元素的组件，一般用于在 tr 上设置 context */
+        /** Override internal tbody render>tr component for context on tr */
         Row?: React.ComponentType<{
             row: any;
             rowIndex: number;
             trProps: unknown;
         }>;
-        /** 覆盖内部渲染 tbody>td 元素的组件，一般用于在 td 上设置 context */
+        /** Override internal tbody render>td component for context on td */
         Cell?: React.ComponentType<{
             row: any;
             rowIndex: number;
@@ -73,36 +73,36 @@ export interface BaseTableProps {
             tdProps: unknown;
             column: ArtColumn;
         }>;
-        /** 覆盖内部渲染 tbody 元素的组件 */
+        /** Override tbody component */
         TableBody?: React.ComponentType<{
             tbodyProps: unknown;
         }>;
     };
-    /** 列的默认宽度 */
+    /** Default column width */
     defaultColumnWidth?: number;
     /**
      * @deprecated
-     * flowRoot 在表格 v2.4 后不再需要提供，请移除该属性
+     * Remove flowRoot post v2.4
      * */
     flowRoot?: never;
-    /** 虚拟滚动调试标签，用于表格内部调试使用 */
+    /** Virtual Scroll Debug Label */
     virtualDebugLabel?: string;
     getRowProps?(row: any, rowIndex: number): React.HTMLAttributes<HTMLTableRowElement>;
 }
 interface BaseTableState {
-    /** 是否要展示自定义滚动条(stickyScroll) */
+    /** Show custom scrollbar (stickyScroll)) */
     hasScroll: boolean;
-    /** 是否需要渲染 lock sections
-     * 当表格较宽时，所有的列都能被完整的渲染，此时不需要渲染 lock sections
-     * 只有当「整个表格的宽度」小于「每一列渲染宽度之和」时，lock sections 才需要被渲染 */
+    /** Render lock sections needed
+     * No lock sections if all columns fully rendered in wide tables
+     * Lock sections needed if total width < sum column widths */
     needRenderLock: boolean;
-    /** 纵向虚拟滚动偏移量 */
+    /** Vertical Scroll Offset */
     offsetY: number;
-    /** 纵向虚拟滚动 最大渲染尺寸 */
+    /** Vertical Max Render Size */
     maxRenderHeight: number;
-    /** 横向虚拟滚动偏移量 */
+    /** Horizontal Scroll Offset */
     offsetX: number;
-    /** 横向虚拟滚动 最大渲染尺寸 */
+    /** Horizontal Max Render Size */
     maxRenderWidth: number;
 }
 export declare class BaseTable extends React.Component<BaseTableProps, BaseTableState> {
@@ -128,15 +128,15 @@ export declare class BaseTable extends React.Component<BaseTableProps, BaseTable
     private rootSubscription;
     private lastInfo;
     private props$;
-    /** @deprecated BaseTable.getDoms() 已经过时，请勿调用 */
+    /** @Deprecated: Do not use BaseTable.getDoms() */
     getDoms(): TableDOMHelper;
     constructor(props: Readonly<BaseTableProps>);
-    /** 自定义滚动条宽度为table宽度，使滚动条滑块宽度相同 */
+    /** Custom scrollbar width matches table */
     private updateStickyScroll;
     private renderTableHeader;
     private updateOffsetX;
     private syncHorizontalScrollFromTableBody;
-    /** 同步横向滚动偏移量 */
+    /** Sync Horizontal Scroll Offset */
     private syncHorizontalScroll;
     getVerticalRenderRange(useVirtual: ResolvedUseVirtual): VerticalRenderRange;
     private renderTableBody;
@@ -150,10 +150,10 @@ export declare class BaseTable extends React.Component<BaseTableProps, BaseTable
     private updateScrollLeftWhenLayoutChanged;
     private initSubscriptions;
     componentWillUnmount(): void;
-    /** 更新 DOM 节点的引用，方便其他方法直接操作 DOM */
+    /** Update DOM refs for direct manipulation */
     private updateDOMHelper;
     private updateRowHeightManager;
-    /** 计算表格所有列的渲染宽度之和，判断表格是否需要渲染锁列 */
+    /** Check if lock columns needed by summing column widths */
     private adjustNeedRenderLock;
 }
 export {};

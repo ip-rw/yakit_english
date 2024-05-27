@@ -29,7 +29,7 @@ const SetPassword: React.FC<SetPasswordProps> = (props) => {
     const onFinish = useMemoizedFn((values:API.UpUserInfoRequest) => {
         const {old_pwd,pwd,confirm_pwd} = values
         if(getFieldValue("confirm_pwd")!==getFieldValue("pwd")){
-            warn("新密码两次输入内容不匹配，请检查重试")
+            warn("New passwords do not match, please retry")
         }
         else{
             NetWorkApi<API.UpUserInfoRequest, API.ActionSucceeded>({
@@ -43,7 +43,7 @@ const SetPassword: React.FC<SetPasswordProps> = (props) => {
                 })
                 .then((result) => {
                     if(result.ok){
-                        success("密码修改成功,请重新登录")
+                        success("Password changed successfully, please re-login")
                         onCancel()
                         if(dynamicStatus.isDynamicStatus){
                             ipcRenderer.invoke("lougin-out-dynamic-control",{loginOut:true})
@@ -56,13 +56,13 @@ const SetPassword: React.FC<SetPasswordProps> = (props) => {
                 })
                 .catch((err) => {
                     setLoading(false)
-                    failed("密码修改失败：" + err)
+                    failed("Pwd change failed:" + err)
                 })
                 .finally(() => {
                 })
         }
     })
-    // 判断输入内容是否通过
+    // Input validation
     const judgePass = () => [
         {
             validator: (_, value) => {
@@ -70,7 +70,7 @@ const SetPassword: React.FC<SetPasswordProps> = (props) => {
                 if (re.test(value)) {
                     return Promise.resolve()
                 } else {
-                    return Promise.reject("密码为8-20位，且必须包含大小写字母、数字及特殊字符")
+                    return Promise.reject("Password: 8-20 characters, must include uppercase, lowercase, digit, special char")
                 }
             }
         }
@@ -79,26 +79,26 @@ const SetPassword: React.FC<SetPasswordProps> = (props) => {
     return (
         <div>
             <Form {...layout} form={form} onFinish={onFinish}>
-                <Form.Item name='old_pwd' label='旧密码' rules={[{required: true, message: "该项为必填"}]}>
-                    <Input.Password placeholder='请输入你的旧密码' allowClear />
+                <Form.Item name='old_pwd' label='Old Password' rules={[{required: true, message: "Required Field"}]}>
+                    <Input.Password placeholder='Enter your old password' allowClear />
                 </Form.Item>
                 <Form.Item
                     name='pwd'
-                    label='新密码'
-                    rules={[{required: true, message: "该项为必填"}, ...judgePass()]}
+                    label='New Password'
+                    rules={[{required: true, message: "Required Field"}, ...judgePass()]}
                 >
-                    <Input.Password placeholder='请输入你的新密码' allowClear />
+                    <Input.Password placeholder='Enter new password' allowClear />
                 </Form.Item>
                 <Form.Item
                     name='confirm_pwd'
-                    label='确认密码'
-                    rules={[{required: true, message: "该项为必填"}, ...judgePass()]}
+                    label='Confirm Password'
+                    rules={[{required: true, message: "Required Field"}, ...judgePass()]}
                 >
-                    <Input.Password placeholder='请确认你的密码' allowClear />
+                    <Input.Password placeholder='Confirm your password' allowClear />
                 </Form.Item>
                 <div style={{textAlign: "center"}}>
                     <Button type='primary' htmlType='submit' loading={loading}>
-                        修改密码
+                        Change Password
                     </Button>
                 </div>
             </Form>

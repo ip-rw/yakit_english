@@ -1,3 +1,3 @@
 import { TableTransform } from '../interfaces';
-/** @deprecated transform 用法已经过时，请使用 pipeline 来对表格进行拓展 */
+/** @deprecated transform usage outdated, please use pipeline to expand table */
 export declare function makeBuildTreeTransform(idProp: string, parentIdProp: string): TableTransform;

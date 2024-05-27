@@ -46,7 +46,7 @@ export const OnlinePluginList: React.FC<PluginOnlineGroupsListProps> = React.mem
     const [allCheck, setAllCheck] = useState<boolean>(false)
     const [selectList, setSelectList] = useState<string[]>([])
     const showPluginIndex = useRef<number>(0)
-    const [isList, setIsList] = useState<boolean>(false) // 判断是网格还是列表
+    const [isList, setIsList] = useState<boolean>(false) // Determine Grid or List
     const [search, setSearch] = useState<PluginSearchParams>(
         cloneDeep({
             ...defaultSearch,
@@ -58,20 +58,20 @@ export const OnlinePluginList: React.FC<PluginOnlineGroupsListProps> = React.mem
     const [response, dispatch] = useReducer(pluginOnlineReducer, initialOnlineState)
     const [loading, setLoading] = useState<boolean>(false)
     const latestLoadingRef = useLatest(loading)
-    const isLoadingRef = useRef<boolean>(true) // 是否为初次加载
+    const isLoadingRef = useRef<boolean>(true) // Is First Load
     const pluginsOnlineGroupsListRef = useRef<HTMLDivElement>(null)
     const [inViewport = true] = useInViewport(pluginsOnlineGroupsListRef)
     const [initTotal, setInitTotal] = useState<number>(0)
     const [hasMore, setHasMore] = useState<boolean>(true)
-    const [groupList, setGroupList] = useState<UpdateGroupListItem[]>([]) // 组数据
+    const [groupList, setGroupList] = useState<UpdateGroupListItem[]>([]) // Group Data
     const updateGroupListRef = useRef<any>()
 
-    // 导入分组Modal
+    // Import Group Modal
     const [groupVisible, setGroupVisible] = useState<boolean>(false)
 
     useUpdateEffect(() => {
         const groups =
-            activeGroup.default && activeGroup.id === "全部"
+            activeGroup.default && activeGroup.id === "Deselect"
                 ? []
                 : [{value: activeGroup.name, count: activeGroup.number, label: activeGroup.name}]
         setFilters({...filters, plugin_group: groups})
@@ -85,7 +85,7 @@ export const OnlinePluginList: React.FC<PluginOnlineGroupsListProps> = React.mem
         getInitTotal()
     }, [userInfo.isLogin, inViewport])
 
-    // 获取total
+    // Fetch Total
     const getInitTotal = useMemoizedFn(() => {
         apiFetchOnlineList({
             page: 1,
@@ -116,17 +116,17 @@ export const OnlinePluginList: React.FC<PluginOnlineGroupsListProps> = React.mem
         fetchList(true)
     }
 
-    // 切换私有域，刷新初始化的total和列表数据
+    // Switch to Private Domain, Refresh Initial Total and List Data
     const onSwitchPrivateDomainRefOnlinePluginInit = useMemoizedFn(() => {
         onRefListAndTotal()
     })
 
-    // 滚动更多加载
+    // Scroll for More Loading
     const onUpdateList = useMemoizedFn(() => {
         fetchList()
     })
 
-    // 点击刷新按钮
+    // Click Refresh Button
     const onRefListAndTotal = useMemoizedFn(() => {
         getInitTotal()
         refreshOnlinePluginList()
@@ -135,7 +135,7 @@ export const OnlinePluginList: React.FC<PluginOnlineGroupsListProps> = React.mem
     const queryFetchList = useRef<PluginsQueryProps>()
     const fetchList = useDebounceFn(
         useMemoizedFn(async (reset?: boolean) => {
-            // if (latestLoadingRef.current) return //先注释，会影响详情的更多加载
+            // if (latestLoadingRef.current) return //Comment Out, Affects More Loading in Details
             if (reset) {
                 isLoadingRef.current = true
                 setShowPluginIndex(0)
@@ -151,10 +151,10 @@ export const OnlinePluginList: React.FC<PluginOnlineGroupsListProps> = React.mem
             const querySearch = search
             const query: PluginsQueryProps = {
                 ...convertPluginsRequestParams(queryFilters, querySearch, params),
-                excludePluginTypes: ["yak", "codec"] // 过滤条件 插件组需要过滤Yak、codec
+                excludePluginTypes: ["yak", "codec"] // Filter Conditions, Exclude Yak, codec from Plugin Groups
             }
-            // 未分组插件查询
-            if (activeGroup.default && activeGroup.id === "未分组" && query.pluginGroup) {
+            // Unsorted Plugin Query
+            if (activeGroup.default && activeGroup.id === "Unsorted" && query.pluginGroup) {
                 query.pluginGroup.unSetGroup = true
             }
             queryFetchList.current = query
@@ -182,7 +182,7 @@ export const OnlinePluginList: React.FC<PluginOnlineGroupsListProps> = React.mem
         {wait: 200, leading: true}
     ).run
 
-    // 搜索
+    // Search
     const onSearch = useMemoizedFn((val) => {
         setSearch(val)
         setTimeout(() => {
@@ -190,46 +190,46 @@ export const OnlinePluginList: React.FC<PluginOnlineGroupsListProps> = React.mem
         }, 200)
     })
 
-    // 全选
+    // Fixes failure to iterate load_content on missing older version data
     const onCheck = useMemoizedFn((value: boolean) => {
         setSelectList([])
         setAllCheck(value)
     })
 
-    // 单项勾选|取消勾选
+    // Single-Select|Deselect
     const optCheck = useMemoizedFn((data: YakitPluginOnlineDetail, value: boolean) => {
         try {
-            // 全选情况时的取消勾选
+            // Fetch loading char with regex
             if (allCheck) {
                 setSelectList(response.data.map((item) => item.uuid).filter((item) => item !== data.uuid))
                 setAllCheck(false)
                 return
             }
-            // 单项勾选回调
+            // No history fetched if CS or vuln unselected by user
             if (value) setSelectList([...selectList, data.uuid])
             else setSelectList(selectList.filter((item) => item !== data.uuid))
         } catch (error) {
-            yakitNotify("error", "勾选失败:" + error)
+            yakitNotify("error", "Auto-rename to first QA if unchanged:" + error)
         }
     })
 
-    // 选中插件的数量
+    // Selected Plugin Count
     const selectNum = useMemo(() => {
         if (allCheck) return response.pagemeta.total
         else return selectList.length
     }, [allCheck, selectList, response.pagemeta.total])
 
-    // 用于网格 列表 插件切换定位
+    // For Grid, List, Plugin Switching Positioning
     const setShowPluginIndex = useMemoizedFn((index: number) => {
         showPluginIndex.current = index
     })
 
-    // 单项点击回调
+    // Single Item Callback
     const optClick = useMemoizedFn((data: YakitPluginOnlineDetail, index: number) => {
         setShowPluginIndex(index)
     })
 
-    // 单项副标题组件
+    // Extra Params Modal
     const optSubTitle = useMemoizedFn((data: YakScript) => {
         if (data.isLocalPlugin) return <></>
         if (data.OnlineIsPrivate) {
@@ -239,7 +239,7 @@ export const OnlinePluginList: React.FC<PluginOnlineGroupsListProps> = React.mem
         }
     })
 
-    // 线上获取插件所在插件组和其他插件组
+    // Fetch Online Plugin's Current and Other Groups
     const pluginUuidRef = useRef<string[]>([])
     const getYakScriptGroupOnline = (uuid: string[]) => {
         pluginUuidRef.current = uuid
@@ -252,13 +252,13 @@ export const OnlinePluginList: React.FC<PluginOnlineGroupsListProps> = React.mem
                 checked: true
             }))
             let copyAllGroup = Array.isArray(res.allGroup) ? [...res.allGroup] : []
-            // 便携版 如果没有基础扫描 塞基础扫描
+            // Portable Version, Add Basic Scan if Absent
             if (isEnpriTraceAgent()) {
-                const index = copySetGroup.findIndex((name) => name === "基础扫描")
-                const index2 = copyAllGroup.findIndex((name) => name === "基础扫描")
+                const index = copySetGroup.findIndex((name) => name === "Basic Scan")
+                const index2 = copyAllGroup.findIndex((name) => name === "Basic Scan")
 
                 if (index === -1 && index2 === -1) {
-                    copyAllGroup = [...copyAllGroup, "基础扫描"]
+                    copyAllGroup = [...copyAllGroup, "Basic Scan"]
                 }
             }
             const newAllGroup = copyAllGroup.map((name) => ({
@@ -269,15 +269,15 @@ export const OnlinePluginList: React.FC<PluginOnlineGroupsListProps> = React.mem
         })
     }
 
-    // 更新组数据
+    // Update Group Data
     const updateGroupList = () => {
         const latestGroupList: UpdateGroupListItem[] = updateGroupListRef.current.latestGroupList
 
-        // 新
+        // New
         const checkedGroup = latestGroupList.filter((item) => item.checked).map((item) => item.groupName)
         const unCheckedGroup = latestGroupList.filter((item) => !item.checked).map((item) => item.groupName)
 
-        // 旧
+        // Old
         const originCheckedGroup = groupList.filter((item) => item.checked).map((item) => item.groupName)
 
         let saveGroup: string[] = []
@@ -298,15 +298,15 @@ export const OnlinePluginList: React.FC<PluginOnlineGroupsListProps> = React.mem
             removeGroup
         }
         apiFetchSaveYakScriptGroupOnline(params).then(() => {
-            if (activeGroup.id !== "全部") {
+            if (activeGroup.id !== "Deselect") {
                 refreshOnlinePluginList()
             }
-            emiter.emit("onRefLocalPluginList", "") // 刷新线上插件列表
+            emiter.emit("onRefLocalPluginList", "") // Refresh Online Plugin List
             emiter.emit("onRefPluginGroupMagOnlineQueryYakScriptGroup", "")
         })
     }
 
-    // 单项额外操作
+    // Single Item Extra Action
     const optExtraNode = useMemoizedFn((data, index) => {
         return (
             <div onClick={(e) => e.stopPropagation()}>
@@ -367,11 +367,11 @@ export const OnlinePluginList: React.FC<PluginOnlineGroupsListProps> = React.mem
                                 maxWidth={1050}
                                 icon={<SolidPluscircleIcon />}
                                 size='large'
-                                name='添加到组...'
+                                name='Add to Group...'
                             />
                         </YakitPopover>
                         <YakitButton type='primary' size='large' onClick={() => setGroupVisible(true)}>
-                            导入分组
+                            Import Group
                         </YakitButton>
                         <div className='divider-style'></div>
                         <FuncSearch value={search} onChange={setSearch} onSearch={onSearch} />
@@ -441,10 +441,10 @@ export const OnlinePluginList: React.FC<PluginOnlineGroupsListProps> = React.mem
                     />
                 ) : (
                     <div className={styles["plugin-online-empty"]}>
-                        <YakitEmpty title='暂无数据' style={{marginTop: 80}} />
+                        <YakitEmpty title='No Data Available' style={{marginTop: 80}} />
                         <div className={styles["plugin-online-buttons"]}>
                             <YakitButton type='outline1' icon={<OutlineRefreshIcon />} onClick={onRefListAndTotal}>
-                                刷新
+                                Refresh
                             </YakitButton>
                         </div>
                     </div>
@@ -452,7 +452,7 @@ export const OnlinePluginList: React.FC<PluginOnlineGroupsListProps> = React.mem
             </PluginListWrap>
             {groupVisible && (
                 <YakitModal
-                    title='导入分组'
+                    title='Import Group'
                     // hiddenHeader={true}
                     closable={true}
                     visible={groupVisible}
@@ -492,12 +492,12 @@ const UploadGroupModal: React.FC<UploadGroupModalProps> = (props) => {
                 .then((res) => {
                     if (res.code === 200 && !isCancelRef.current) {
                         emiter.emit("onRefpluginGroupList")
-                        yakitNotify("success", "导入分组上传成功")
+                        yakitNotify("success", "Import Group Upload Success")
                         onClose()
                     }
                 })
                 .catch((err) => {
-                    !isCancelRef.current && yakitNotify("error", "导入分组上传失败")
+                    !isCancelRef.current && yakitNotify("error", "Import Group Upload Failed")
                 })
                 .finally(() => {
                     isCancelRef.current && setTimeout(() => setLoading(false), 200)
@@ -527,7 +527,7 @@ const UploadGroupModal: React.FC<UploadGroupModalProps> = (props) => {
                             ]
                             if (!typeArr.includes(suffix)) {
                                 setFile(undefined)
-                                yakitNotify("warning", "上传文件格式错误，请重新上传")
+                                yakitNotify("warning", "File Upload Error, Retry")
                                 return false
                             }
                             setFile(f)
@@ -543,10 +543,10 @@ const UploadGroupModal: React.FC<UploadGroupModalProps> = (props) => {
                             ) : (
                                 <div className={styles["content"]}>
                                     <div className={styles["title"]}>
-                                        可将文件拖入框内，或
-                                        <span className={styles["hight-light"]}>点击此处导入</span>
+                                        Drag Files Here, or
+                                        <span className={styles["hight-light"]}>Click to Import</span>
                                     </div>
-                                    <div className={styles["sub-title"]}>仅支持excel文件类型</div>
+                                    <div className={styles["sub-title"]}>Supports Only Excel Files</div>
                                 </div>
                             )}
                         </div>
@@ -564,7 +564,7 @@ const UploadGroupModal: React.FC<UploadGroupModalProps> = (props) => {
                             setLoading(false)
                         }}
                     >
-                        取消
+                        Cancel
                     </YakitButton>
                 ) : (
                     <YakitButton
@@ -576,7 +576,7 @@ const UploadGroupModal: React.FC<UploadGroupModalProps> = (props) => {
                             UploadDataPackage()
                         }}
                     >
-                        确定
+                        Confirm
                     </YakitButton>
                 )}
             </div>

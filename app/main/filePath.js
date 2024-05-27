@@ -5,25 +5,25 @@ const path = require("path")
 const process = require("process")
 const fs = require("fs")
 
-/** 软件根目录 */
+/** Root Directory */
 const appPath = app.isPackaged ? path.dirname(app.getPath("exe")) : app.getAppPath()
-/** 系统用户根路径 */
+/** System User Home */
 const osHome = os.homedir()
-/** 软件关联数据文件夹名 */
+/** Data Folder Name */
 const projectName = "yakit-projects"
 
-/** 软件关联数据路径设置逻辑 Start */
-// 数据文件夹路径
+/** Data Path Logic Setting Start */
+// Data Folder Path
 let project_path = ""
-// os-home环境 项目文件夹路径
+// OS-Home Proj Folder Path
 const osHomeProjectPath = path.join(osHome, projectName)
-// 软件环境 项目文件夹路径
+// Software Env Proj Folder Path
 const appProjectPath = path.join(appPath, projectName)
 
 try {
     /**
-     * 开发环境，win系统会优先查找环境变量的指定地址，mac和linux指定为os-home
-     * 发布环境，win系统指定为软件根目录下，mac和linux指定为os-home
+     * Dev Env, WIN searches Env Var first, MAC/Linux to OS-Home
+     * Release Env, WIN set to root, MAC/Linux to OS-Home
      */
     if (process.platform === "win32") {
         if (electronIsDev) {
@@ -39,14 +39,14 @@ try {
         project_path = osHomeProjectPath
     }
 } catch (error) {
-    console.log(`读取项目数据文件夹失败，${error}`)
+    console.log(`Project Data Folder Load Failed，${error}`)
 }
-/** 软件关联数据路径设置逻辑 End */
+/** Data Path Logic Setting End */
 
 /**
- * @name 软件关联项目相关目录路径
- * 在新版本中，windows自定义安装路径会将os-home目录的yakit-projects迁移到软件根目录下
- * 如果获取项目关联文件夹路径错误时，将自动设置为系统用户下面(容灾处理)
+ * @name Project-Related Dir Path
+ * In new versions, custom WIN installation paths migrate yakit-projects from OS-Home to root
+ * On project-related folder path retrieval error, will auto-set to system user's directory (Disaster Recovery))
  */
 const YakitProjectPath = project_path || osHomeProjectPath
 
@@ -56,13 +56,13 @@ console.log(`os-home-path: ${osHome}`)
 console.log(`yakit-projects-path: ${YakitProjectPath}`)
 console.log(`---------- Global-Path End ----------`)
 
-/** 引擎文件夹路径 */
+/** Engine Folder Path */
 const yaklangEngineDir = path.join(YakitProjectPath, "yak-engine")
 
-/** yakit安装包路径 */
+/** Yakit Install Path */
 const yakitInstallDir = path.join(os.homedir(), "Downloads")
 
-/** 引擎文件路径 */
+/** Engine Path */
 const getLocalYaklangEngine = () => {
     switch (process.platform) {
         case "darwin":
@@ -73,7 +73,7 @@ const getLocalYaklangEngine = () => {
     }
 }
 
-/** 生成软件根目录+参数的完成路径 */
+/** Generates Root Dir + Param Path */
 const loadExtraFilePath = (s) => {
     if (electronIsDev) {
         return s
@@ -91,34 +91,34 @@ const loadExtraFilePath = (s) => {
     }
 }
 
-/** 基础缓存数据文件夹 */
+/** Base Cache Data Folder */
 const basicDir = path.join(YakitProjectPath, "base")
-/** 本地缓存数据文件地址 */
+/** Local Cache Data Path */
 const localCachePath = path.join(basicDir, "yakit-local.json")
-/** 本地缓存数据(扩展数据)文件地址 */
+/** Local Cache (Extended) Data Path */
 const extraLocalCachePath = path.join(basicDir, "yakit-extra-local.json")
 
-/** 引擎错误日志 */
+/** Engine Error Log */
 const engineLog = path.join(YakitProjectPath, "engine-log")
-/** 渲染端错误日志 */
+/** Rendering Error Log */
 const renderLog = path.join(YakitProjectPath, "render-log")
-/** 可以问题的打印日志 */
+/** Loggable Issues */
 const printLog = path.join(YakitProjectPath, "print-log")
 
-/** 远程连接配置信息储存文件夹 */
+/** Remote Config Storage Folder */
 const remoteLinkDir = path.join(YakitProjectPath, "auth")
-/** 远程连接引擎配置数据文件地址 */
+/** Remote Engine Config Data Path */
 const remoteLinkFile = path.join(remoteLinkDir, "yakit-remote.json")
 
-/** yak code文件夹路径 */
+/** Yak Code Folder Path */
 const codeDir = path.join(YakitProjectPath, "code")
 
-/** Html模板文件地址 */
+/** HTML Template Path */
 // const yakitDir = path.join(os.homedir(), "AppData","Local","Programs","yakit")
 // const htmlTemplateDir = path.join(yakitDir, "report")
 const htmlTemplateDir = loadExtraFilePath(path.join("report"))
 
-/** 窗口缓存文件路径 */
+/** Window Cache File Path */
 const windowStatePatch = path.join(basicDir)
 
 module.exports = {

@@ -17,6 +17,6 @@ export enum MITMConsts {
     MITMDefaultEtcHosts = "YAKIT_MITMDefaultEtcHosts",
     MITMDefaultFilterWebsocket = "YAKIT_MITMDefaultFilterWebsocket",
 
-    // 时间戳记录
+    // Timestamp Log
     MITMStartTimeStamp = "YAKIT_MITMStartTimeStamp"
 }

@@ -1,8 +1,8 @@
 export type RefreshDataEventProps = {
-    // 通知QueryHTTPFlows轮询更新
+    // Notify QueryHTTPFlows to Poll Updates
     onRefreshQueryHTTPFlows?: string
-    // 通知QueryYakScript轮询更新
+    // Notify QueryYakScript to Poll Updates
     onRefreshQueryYakScript?: string
-    // 通知QueryNewRisk轮询更新
+    // Notify QueryNewRisk to Poll Updates
     onRefreshQueryNewRisk?: string
 }

@@ -269,7 +269,7 @@ export const PrivateSolidWebsocketFuzzerIcon = (props: Partial<CustomIconCompone
     return <Icon component={PrivateSolidWebsocketFuzzer} {...props} />
 }
 /**
- * @name Brute 爆破与未授权[重命名后: 弱口令]
+ * @name Brute Brute/Unauthorized-to-WeakPwd]
  */
 const PrivateOutlineBrute = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -353,7 +353,7 @@ export const PrivateSolidBruteIcon = (props: Partial<CustomIconComponentProps>) 
     return <Icon component={PrivateSolidBrute} {...props} />
 }
 /**
- * @name Basic-Crawler 基础爬虫
+ * @name Basic-Crawler Basic Crawler
  */
 const PrivateOutlineBasicCrawler = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -437,7 +437,7 @@ export const PrivateSolidBasicCrawlerIcon = (props: Partial<CustomIconComponentP
     return <Icon component={PrivateSolidBasicCrawler} {...props} />
 }
 /**
- * @name Space-Engine 空间引擎集成版本
+ * @name Space-Engine Space Engine Integration
  */
 const PrivateOutlineSpaceEngine = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -503,7 +503,7 @@ export const PrivateSolidSpaceEngineIcon = (props: Partial<CustomIconComponentPr
     return <Icon component={PrivateSolidSpaceEngine} {...props} />
 }
 /**
- * @name Scan-Port 端口/指纹扫描
+ * @name Scan-Port Port/description: Fingerprint Scan
  */
 const PrivateOutlineScanPort = () => (
     <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>
@@ -572,7 +572,7 @@ export const PrivateSolidScanPortIcon = (props: Partial<CustomIconComponentProps
     return <Icon component={PrivateSolidScanPort} {...props} />
 }
 /**
- * @name SubDomain-Collection 子域名收集
+ * @name SubDomain-Collection Subdomain Collect
  */
 const PrivateOutlineSubDomainCollection = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -647,7 +647,7 @@ export const PrivateSolidSubDomainCollectionIcon = (props: Partial<CustomIconCom
     return <Icon component={PrivateSolidSubDomainCollection} {...props} />
 }
 /**
- * @name Directory-Scanning 综合目录扫描与爆破
+ * @name Directory-Scanning Dir Scan & Brute
  */
 const PrivateOutlineDirectoryScanning = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -720,7 +720,7 @@ export const PrivateSolidDirectoryScanningIcon = (props: Partial<CustomIconCompo
     return <Icon component={PrivateSolidDirectoryScanning} {...props} />
 }
 /**
- * @name Poc 专项漏洞检测
+ * @name Poc Vuln Detection
  */
 const PrivateOutlinePoc = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -786,7 +786,7 @@ export const PrivateSolidPocIcon = (props: Partial<CustomIconComponentProps>) =>
     return <Icon component={PrivateSolidPoc} {...props} />
 }
 /**
- * @name Plugin-Store 插件商店
+ * @name Plugin-Store Plugin Store
  */
 const PrivateOutlinePluginStore = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -890,7 +890,7 @@ export const PrivateSolidPluginStoreIcon = (props: Partial<CustomIconComponentPr
     return <Icon component={PrivateSolidPluginStore} {...props} />
 }
 /**
- * @name Plugin-Owner 我的插件
+ * @name Plugin-Owner My Plugins
  */
 const PrivateOutlinePluginOwner = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -969,7 +969,7 @@ export const PrivateSolidPluginOwnerIcon = (props: Partial<CustomIconComponentPr
     return <Icon component={PrivateSolidPluginOwner} {...props} />
 }
 /**
- * @name Plugin-Local 本地插件
+ * @name Plugin-Local Local Plugin
  */
 const PrivateOutlinePluginLocal = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -1034,7 +1034,7 @@ export const PrivateSolidPluginLocalIcon = (props: Partial<CustomIconComponentPr
     return <Icon component={PrivateSolidPluginLocal} {...props} />
 }
 /**
- * @name Batch-Plugin 插件批量执行
+ * @name Batch-Plugin Batch Plugin Exec
  */
 const PrivateOutlineBatchPlugin = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -1134,7 +1134,7 @@ export const PrivateSolidBatchPluginIcon = (props: Partial<CustomIconComponentPr
     return <Icon component={PrivateSolidBatchPlugin} {...props} />
 }
 /**
- * @name Shell-Receiver 端口监听器
+ * @name Shell-Receiver Port Listener
  */
 const PrivateOutlineShellReceiver = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -1216,7 +1216,7 @@ export const PrivateSolidShellReceiverIcon = (props: Partial<CustomIconComponent
     return <Icon component={PrivateSolidShellReceiver} {...props} />
 }
 /**
- * @name Reverse-Server 反连服务器
+ * @name Reverse-Server Reverse Server
  */
 const PrivateOutlineReverseServer = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -1787,7 +1787,7 @@ export const PrivateSolidCodecIcon = (props: Partial<CustomIconComponentProps>) 
     return <Icon component={PrivateSolidCodec} {...props} />
 }
 /**
- * @name Data-Compare 数据对比
+ * @name Data-Compare Data Comparison
  */
 const PrivateOutlineDataCompare = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -1860,7 +1860,7 @@ export const PrivateSolidDataCompareIcon = (props: Partial<CustomIconComponentPr
     return <Icon component={PrivateSolidDataCompare} {...props} />
 }
 /**
- * @name Report 报告
+ * @name Report Report
  */
 const PrivateOutlineReport = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -1932,7 +1932,7 @@ export const PrivateSolidReportIcon = (props: Partial<CustomIconComponentProps>)
     return <Icon component={PrivateSolidReport} {...props} />
 }
 /**
- * @name Ports 端口资产
+ * @name Ports Port Assets
  */
 const PrivateOutlinePorts = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -2011,7 +2011,7 @@ export const PrivateSolidPortsIcon = (props: Partial<CustomIconComponentProps>) 
     return <Icon component={PrivateSolidPorts} {...props} />
 }
 /**
- * @name Risk 漏洞与风险[重命名后: 漏洞]
+ * @name Risk Vuln & Risk-to-Vuln]
  */
 const PrivateOutlineRisk = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -2091,7 +2091,7 @@ export const PrivateSolidRiskIcon = (props: Partial<CustomIconComponentProps>) =
     return <Icon component={PrivateSolidRisk} {...props} />
 }
 /**
- * @name Domain 域名资产
+ * @name Domain Domain Assets
  */
 const PrivateOutlineDomain = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -2235,7 +2235,7 @@ export const PrivateSolidDomainIcon = (props: Partial<CustomIconComponentProps>)
     return <Icon component={PrivateSolidDomain} {...props} />
 }
 /**
- * @name WebsiteTree 网站树
+ * @name WebsiteTree Website Tree
  */
 const PrivateOutlineWebsiteTree = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -2316,7 +2316,7 @@ export const PrivateSolidWebsiteTreeIcon = (props: Partial<CustomIconComponentPr
     return <Icon component={PrivateSolidWebsiteTree} {...props} />
 }
 /**
- * @name HTTP-History 数据对比
+ * @name HTTP-History Data Comparison
  */
 const PrivateOutlineHTTPHistory = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -2421,7 +2421,7 @@ export const PrivateSolidHTTPHistoryIcon = (props: Partial<CustomIconComponentPr
     return <Icon component={PrivateSolidHTTPHistory} {...props} />
 }
 /**
- * @name CVE CVE 管理
+ * @name CVE CVE Mgmt
  */
 const PrivateOutlineCVE = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -2494,7 +2494,7 @@ export const PrivateSolidCVEIcon = (props: Partial<CustomIconComponentProps>) =>
     return <Icon component={PrivateSolidCVE} {...props} />
 }
 /**
- * @name Yak-Runner Yak-Runner 管理
+ * @name Yak-Runner Yak-Runner Mgmt
  */
 const PrivateSolidYakRunner = () => (
     <svg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -2578,7 +2578,7 @@ export const PrivateSolidPayloadManagerIcon = (props: Partial<CustomIconComponen
     return <Icon component={PrivateSolidPayloadManager} {...props} />
 }
 /**
- * @name 默认插件
+ * @name Default Plugin
  */
 const PrivateSolidDefaultPlugin = () => (
     <svg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'>

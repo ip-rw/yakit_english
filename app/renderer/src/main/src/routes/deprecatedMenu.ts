@@ -1,45 +1,45 @@
 /**
- * @description 社区版
- * 废弃的一级菜单
+ * @description Community Edition
+ * Deprecated Primary Menu
  * */
 export const CommunityDeprecatedFirstMenu: string[] = []
 
 /**
- * @description 社区版
- * 废弃的二级菜单
+ * @description Community Edition
+ * Deprecated Secondary Menu
  * */
 export const CommunityDeprecatedSecondMenu: string[] = [
-    "api提取",
-    "空间引擎集成版本",
-    "域名、IP提取",
-    "域名批量转IP并查CDN",
-    "IP反查域名",
-    "批量备案查询",
-    "空间引擎集成版本",
-    "网站信息获取",
-    "主域名提取",
-    "杀软匹配tasklist /svc",
-    "网站树",
-    "crt子域名收集",
-    "纯暴力子域名收集",
-    "SEO综合查询",
-    "被动子域名收集"
+    "API Extract",
+    "Space Engine Integrated Version",
+    "Domain, IP Extract",
+    "Domain Batch to IP & Check CDN",
+    "IP Reverse Lookup Domain",
+    "Batch Record Query",
+    "Space Engine Integrated Version",
+    "Website Info Retrieval",
+    "Main Domain Extract",
+    "AV Tasklist Match /svc",
+    "Site Tree",
+    "crt Subdomain Collection",
+    "Pure Brute Force Subdomain Collection",
+    "SEO Comprehensive Query",
+    "Passive Subdomain Collection"
 ]
 
 /**
- * @description 企业版
- * 废弃的一级菜单
+ * @description Enterprise Edition
+ * Deprecated Primary Menu
  * */
 export const EnterpriseDeprecatedFirstMenu: string[] = []
 
 /**
- * @description 企业版
- * 废弃的二级菜单
+ * @description Enterprise Edition
+ * Deprecated Secondary Menu
  * */
 export const EnterpriseDeprecatedSecondMenu: string[] = [
-    "项目管理(Beta*)",
-    "插件执行结果",
-    "api提取",
-    "空间引擎集成版本",
-    "网站树"
+    "Project Management (Beta*)",
+    "Plugin Execution Result",
+    "API Extract",
+    "Space Engine Integrated Version",
+    "Site Tree"
 ]

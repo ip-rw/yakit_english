@@ -4,33 +4,33 @@ import {PortAsset} from "../models"
 import {QueryPortsRequest} from "../PortAssetPage"
 
 export interface PortTableRefProps {
-    /**内置的删除方法 */
+    /**Built-in Delete Method */
     onRemove: () => Promise
 }
 export interface PortTableProps {
     ref?: React.ForwardedRef<PortTableRefProps>
-    /**计时器开关 true 开，false关 */
+    /**Timer Toggle: True On, False Off */
     isStop?: boolean
     isRefresh?: boolean
     setIsRefresh?: (b: boolean) => void
     query: QueryPortsRequest
     setQuery: (t: QueryPortsRequest) => void
-    /**表格头部 */
+    /**Table Header */
     tableTitle?: ReactNode
-    /**表格头部右侧操作区 */
+    /**Table Header Right Actions */
     tableTitleExtraOperate: ReactNode
-    /**表格部分的body类 */
+    /**Table Body Class */
     containerClassName?: string
-    /**表格heard部分的类 */
+    /**Table Header Class */
     tableTitleClassName?: string
-    /**第二部分，详情的body类 */
+    /**Section 2, Detail Body Class */
     detailBodyClassName?: string
     btnSize: YakitButtonProp["size"]
-    /**顶部实时刷新的缓存数据 */
+    /**Top Real-time Refresh Cache Data */
     offsetDataInTop?: PortAsset[]
-    /**顶部实时刷新的数据变化回调 */
+    /**Top Real-time Data Refresh Callback */
     setOffsetDataInTop?: (t: PortAsset[]) => void
-    /**选中数据条数的回调 */
+    /**Selected Rows Callback */
     setSelectNumber?: (n: number) => void
     setTotal?: (n: number) => void
 }

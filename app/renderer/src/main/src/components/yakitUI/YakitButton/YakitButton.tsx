@@ -6,14 +6,14 @@ import classNames from "classnames"
 
 export interface YakitButtonProp extends Omit<ButtonProps, "size" | "type" | "ghost" | "shape"> {
     type?: "primary" | "secondary2" | "outline1" | "outline2" | "text" | "text2"
-    /** 当colors和danger同时存在，以colors为准 */
+    /** Prefer colors over danger when both present */
     colors?: "success" | "danger" | "primary"
     size?: "small" | "middle" | "large" | "max"
     isHover?: boolean
     isActive?: boolean
 }
 
-/** @name Yakit 主题按钮组件 */
+/** @Yakit Theme Button Component */
 export const YakitButton: React.FC<YakitButtonProp> = React.memo((props) => {
     const {size, type, colors, isHover, isActive, children, className, danger, ...resePopover} = props
 

@@ -20,12 +20,12 @@ export const defaultBruteExecuteExtraFormValue: BruteExecuteExtraFormValue = {
     Usernames: [],
     UsernamesDict: [],
     ReplaceDefaultUsernameDict: false,
-    // 前端展示使用  ------start
+    // Frontend Display Use ------start
     usernames: "",
     passwords: "",
     replaceDefaultPasswordDict: true,
     replaceDefaultUsernameDict: true
-    // 前端展示使用  ------end
+    // Frontend Display Use ------end
 }
 
 export const defaultBrutePageInfo: BrutePageInfoProps = {

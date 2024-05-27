@@ -9,12 +9,12 @@ const fs = require("fs")
 const path = require("path")
 const {getNowTime} = require("../toolsFunc")
 
-/** 引擎错误日志 */
+/** Engine error log */
 const logPath = path.join(engineLog, `engine-log-${getNowTime()}.txt`)
 let out = null
 fs.open(logPath, "a", (err, fd) => {
     if (err) {
-        console.log("获取本地引擎日志错误：", err)
+        console.log("Get local engine error log：", err)
     } else {
         out = fd
     }
@@ -22,7 +22,7 @@ fs.open(logPath, "a", (err, fd) => {
 
 let dbFile = undefined
 
-/** 本地引擎随机端口启动重试次数(防止无限制的随机重试，最大重试次数: 5) */
+/** Local engine retries with random port (max retries: 5) */
 let engineCount = 0
 
 function isPortAvailable(port) {
@@ -48,12 +48,12 @@ function isPortOpen(port) {}
 
 const isWindows = process.platform === "win32"
 
-/** @name 生成windows系统的管理员权限命令 */
+/** @name Generate admin command for Windows */
 // function generateWindowsSudoCommand(file, args) {
 //     const cmds = args === "" ? `"'${file}'"` : `"'${file}'" "'${args}'"`
 //     return `powershell.exe start-process -verb runas -WindowStyle hidden -filepath ${cmds}`
 // }
-/** @name 以管理员权限执行命令 */
+/** @name Execute command as admin */
 // function sudoExec(cmd, opt, callback) {
 //     if (isWindows) {
 //         childProcess.exec(cmd, {maxBuffer: 1000 * 1000 * 1000}, (err, stdout, stderr) => {
@@ -80,12 +80,12 @@ const engineLogOutputFactory = (win) => (message) => {
 const ECHO_TEST_MSG = "Hello Yakit!"
 
 module.exports = (win, callback, getClient, newClient) => {
-    // 输出到欢迎页面的 output 中
+    // Output to welcome page
     const toStdout = engineStdioOutputFactory(win)
-    // 输出到日志中
+    // Log to file
     const toLog = engineLogOutputFactory(win)
 
-    /** 获取本地引擎版本号 */
+    /** Get local engine version */
     ipcMain.handle("fetch-yak-version", () => {
         try {
             getClient().Version({}, async (err, data) => {
@@ -139,17 +139,17 @@ module.exports = (win, callback, getClient, newClient) => {
     }
     ipcMain.handle("is-port-available", async (e, port) => {
         /**
-         * @port: 判断端口是否是可以被监听的
+         * @port: Check if port is listenable
          */
         return await asyncIsPortAvailable(port)
     })
 
     /**
-     * @name 手动启动yaklang引擎进程
+     * @name Manually launch Yaklang engine process
      * @param {Object} params
-     * @param {Boolean} params.sudo 是否使用管理员权限启动yak
-     * @param {Number} params.port 本地缓存数据里的引擎启动端口号
-     * @param {Boolean} params.isEnpriTraceAgent 本地缓存数据里的引擎启动端口号
+     * @param {Boolean} params.sudo Launch yak with admin rights?
+     * @param {Number} params.port Engine start port in local cache
+     * @param {Boolean} params.isEnpriTraceAgent Engine start port in local cache
      */
     const asyncStartLocalYakEngineServer = (win, params) => {
         engineCount += 1
@@ -157,7 +157,7 @@ module.exports = (win, callback, getClient, newClient) => {
         const {port, isEnpriTraceAgent} = params
         return new Promise((resolve, reject) => {
             try {
-                toLog("已启动本地引擎进程")
+                toLog("Local engine process started")
                 const log = out ? out : "ignore"
 
                 const grpcPort = ["grpc", "--port", `${port}`]
@@ -177,19 +177,19 @@ module.exports = (win, callback, getClient, newClient) => {
 
                 // subprocess.unref()
                 process.on("exit", () => {
-                    // 终止子进程
+                    // Terminate subprocess
                     subprocess.kill()
                 })
                 subprocess.on("error", (err) => {
-                    toLog(`本地引擎遭遇错误，错误原因为：${err}`)
-                    win.webContents.send("start-yaklang-engine-error", `本地引擎遭遇错误，错误原因为：${err}`)
+                    toLog(`Local engine error occurred, reason：${err}`)
+                    win.webContents.send("start-yaklang-engine-error", `Local engine error occurred, reason：${err}`)
                     reject(err)
                 })
                 subprocess.on("close", async (e) => {
-                    toLog(`本地引擎退出，退出码为：${e}`)
+                    toLog(`Local engine exited, exit code：${e}`)
                     fs.readFile(engineLog, (err, data) => {
                         if (err) {
-                            console.log("读取引擎文件失败", err)
+                            console.log("Read engine file failed", err)
                         } else {
                             toStdout(data)
                             setTimeout(() => {
@@ -209,15 +209,15 @@ module.exports = (win, callback, getClient, newClient) => {
         })
     }
 
-    /** 本地启动yaklang引擎 */
+    /** Launch local Yaklang engine */
     ipcMain.handle("start-local-yaklang-engine", async (e, params) => {
         if (!params["port"]) {
-            throw Error("启动本地引擎必须指定端口")
+            throw Error("Start local engine requires port")
         }
         return await asyncStartLocalYakEngineServer(win, params)
     })
 
-    /** 判断远程缓存端口是否已开启引擎 */
+    /** Check if remote cache port has engine running */
     const judgeRemoteEngineStarted = (win, params) => {
         return new Promise((resolve, reject) => {
             try {
@@ -236,22 +236,22 @@ module.exports = (win, callback, getClient, newClient) => {
             }
         })
     }
-    /** 远程连接引擎 */
+    /** Remote Connect Engine */
     ipcMain.handle("start-remote-yaklang-engine", async (e, params) => {
         return await judgeRemoteEngineStarted(win, params)
     })
 
-    /** 连接引擎 */
+    /** Connect Engine */
     ipcMain.handle("connect-yaklang-engine", async (e, params) => {
         /**
-         * connect yaklang engine 实际上是为了设置参数，实际上他是不知道远程还是本地
-         * params 中的参数应该有如下：
-         *  @Host: 主机名，可能携带端口
-         *  @Port: 端口
-         *  @Sudo: 是否是管理员权限
-         *  @IsTLS?: 是否是 TLS 加密的
-         *  @PemBytes?: Uint8Array 是 CaPem
-         *  @Password?: 登陆密码
+         * connect Yaklang engine is for setting parameters, actually unaware of remote or local
+         * params should include the following：
+         *  @Host: Hostname, may include port
+         *  @Port: Port
+         *  @Sudo: Admin rights?
+         *  @IsTLS?: TLS encrypted?
+         *  @PemBytes?: Uint8Array is CaPem
+         *  @Password?: Login password
          */
         const hostRaw = `${params["Host"] || "127.0.0.1"}`
         let portFromRaw = `${params["Port"] || 8087}`
@@ -261,8 +261,8 @@ module.exports = (win, callback, getClient, newClient) => {
             hostFormatted = `${hostRaw.substr(0, hostRaw.lastIndexOf(":"))}`
         }
         const addr = `${hostFormatted}:${portFromRaw}`
-        toLog(`原始参数为: ${JSON.stringify(params)}`)
-        toLog(`开始连接引擎地址为：${addr} Host: ${hostRaw} Port: ${portFromRaw}`)
+        toLog(`Original parameters: ${JSON.stringify(params)}`)
+        toLog(`Start connect to engine at：${addr} Host: ${hostRaw} Port: ${portFromRaw}`)
         GLOBAL_YAK_SETTING.defaultYakGRPCAddr = addr
 
         callback(
@@ -285,18 +285,18 @@ module.exports = (win, callback, getClient, newClient) => {
         })
     })
 
-    /** 断开引擎(暂未使用) */
+    /** Disconnect engine (not used) */
     ipcMain.handle("break-yaklalng-engine", () => {})
 
-    /** 输出到欢迎界面的日志中 */
+    /** Log to welcome screen */
     ipcMain.handle("output-log-to-welcome-console", (e, msg) => {
         toLog(`${msg}`)
     })
 
-    /** 调用命令生成运行节点 */
+    /** Invoke command to create runtime node */
     ipcMain.handle("call-command-generate-node", (e, params) => {
         return new Promise((resolve, reject) => {
-            // 运行节点
+            // Runtime node
             const subprocess = childProcess.spawn(getLocalYaklangEngine(), [
                 "mq",
                 "--server",
@@ -317,7 +317,7 @@ module.exports = (win, callback, getClient, newClient) => {
             })
         })
     })
-    /** 删除运行节点 */
+    /** Delete runtime node */
     ipcMain.handle("kill-run-node", (e, params) => {
         return new Promise((resolve, reject) => {
             if (isWindows) {

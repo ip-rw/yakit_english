@@ -2,8 +2,8 @@ const {ipcMain} = require("electron")
 
 module.exports = (win, callback, getClient) => {
     /**
-     * 对引擎进程进行连接检测
-     * err情况下有部分状态码的详细描述错误内容
+     * Connectivity check on engine process
+     * Detailed error content for some status codes under err
      */
     ipcMain.handle("echo-yak", async (e, txt) => {
         let client = getClient()
@@ -13,15 +13,15 @@ module.exports = (win, callback, getClient) => {
                     switch (err.code) {
                         case 2:
                             if ((err.details || "").includes("secret verify failed...")) {
-                                win.webContents.send("client-echo-yak", false, `Yak Server 认证密码错误`)
+                                win.webContents.send("client-echo-yak", false, `Yak Server Auth Password Error`)
                                 return
                             }
-                            win.webContents.send("client-echo-yak", false, `Yak Server 错误: ${err.details}`)
+                            win.webContents.send("client-echo-yak", false, `Yak Server Error: ${err.details}`)
                         case 14:
-                            win.webContents.send("client-echo-yak", false, `Yak Server 未启动或网络不通，或证书不匹配`)
+                            win.webContents.send("client-echo-yak", false, `Yak Server Not Started, Network Down, or Cert Mismatch`)
                             return
                         case 16:
-                            win.webContents.send("client-echo-yak", false, `Yak Server 认证失败`)
+                            win.webContents.send("client-echo-yak", false, `Yak Server Auth Failure`)
                             return
                         default:
                             win.webContents.send("client-echo-yak", false, `${err}`)

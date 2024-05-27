@@ -13,7 +13,7 @@ export interface ReadOnlyBatchExecutorByRecoverUidProp {
     Uid?: string
     BaseProgress?: number
 }
-/**@deprecated 感觉是没有用到了，但是批量执行那边还没有做任务列表得功能，所以暂时保留，到时候做参考 */
+/**@Deprecated appears unused, but batch execution lacks task listing, so retain for now as reference */
 export const ReadOnlyBatchExecutorByRecoverUid: React.FC<ReadOnlyBatchExecutorByRecoverUidProp> = (props: ReadOnlyBatchExecutorByRecoverUidProp) => {
     const [target, setTarget] = useState<string>("");
     const [query, setQuery] = useState<SimpleQueryYakScriptSchema>({
@@ -37,13 +37,13 @@ export const ReadOnlyBatchExecutorByRecoverUid: React.FC<ReadOnlyBatchExecutorBy
     }, [props.Uid])
 
     if (!props.Uid) {
-        return <Empty description={"恢复未完成的批量执行任务需要额外 UID"}>
+        return <Empty description={"Resuming unfinished batch tasks requires extra UID"}>
 
         </Empty>
     }
 
     if (loading) {
-        return <Spin tip={"正在恢复未完成的任务"}/>
+        return <Spin tip={"Resuming unfinished tasks"}/>
     }
 
     return <AutoCard size={"small"} bordered={false}

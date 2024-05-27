@@ -78,7 +78,7 @@ export const RiskStatsTag: React.FC<RiskStatsTagProp> = React.memo((props) => {
                                </>
                            })
                        }}
-        >所有漏洞与风险</Button>
+        >All Vulnerabilities & Risks</Button>
     });
 
     const calcCriticalDelta = useMemoizedFn(() => {
@@ -111,33 +111,33 @@ export const RiskStatsTag: React.FC<RiskStatsTagProp> = React.memo((props) => {
 
     return <Space size={0}>
         <Popover
-            title={"漏洞与风险计数"}
+            title={"Vulnerabilities & Risks Count"}
             content={<Space>
                 <Button onClick={() => {
                     setOriginTotal(0)
                     setOriginCriticalOrHigh(0)
-                }} size={"small"}>标为已读(全部)</Button>
+                }} size={"small"}>Mark as Read (All)</Button>
                 {viewAll("high|critical")}
             </Space>}
         >
             <Tag
                 color={criticalDelta > 0 ? "red" : undefined}
-            >高危/严重{criticalDelta > 0 ? `(+${criticalDelta})` : `(无新增)`}
+            >High Risk/Severe{criticalDelta > 0 ? `(+${criticalDelta})` : `(No New Additions)`}
             </Tag>
         </Popover>
         {ordinaryDelta > 0 && props.professionalMode && <Popover
-            title={"漏洞与风险计数"}
+            title={"Vulnerabilities & Risks Count"}
             content={<Space>
                 <Button onClick={() => {
                     setOriginTotal(0)
                     setOriginCriticalOrHigh(0)
-                }} size={"small"}>标为已读(全部)</Button>
+                }} size={"small"}>Mark as Read (All)</Button>
                 {viewAll()}
             </Space>}
         >
             <Tag
                 color={ordinaryDelta > 0 ? "orange" : undefined}
-            >中低危/指纹{ordinaryDelta > 0 ? `(+${ordinaryDelta})` : `(无新增)`}
+            >Mid-Low Risk/Parse content in plugin backend stream{ordinaryDelta > 0 ? `(+${ordinaryDelta})` : `(No New Additions)`}
             </Tag>
         </Popover>}
     </Space>

@@ -34,12 +34,12 @@ module.exports = (win, getClient) => {
             throw Error("listened port");
         }
         stream = getClient().OpenPort();
-        // 如果有问题，重置
+        // If problem, reset
         stream.on("error", (e) => {
             removeStreamPort(addr)
         })
 
-        // 发送回数据
+        // Send back data
         stream.on("data", data => {
             if (data.control) {
                 if (win && data.waiting) {

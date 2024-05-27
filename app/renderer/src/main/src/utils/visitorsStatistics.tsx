@@ -4,7 +4,7 @@ import {isCommunityEdition} from "@/utils/envfile"
 const {ipcRenderer} = window.require("electron")
 let MachineID: string = ""
 
-/** 获取机器码 */
+/** Get Machine Code */
 const getMachineIDOperation = () => {
     return new Promise(async (resolve, reject) => {
         ipcRenderer
@@ -36,7 +36,7 @@ const visitorsStatisticsOperation = () => {
     })
 }
 
-/** 游客信息统计 */
+/** Visitor Info Stats */
 export const visitorsStatisticsFun = async () => {
     return new Promise(async (resolve, reject) => {
         try {

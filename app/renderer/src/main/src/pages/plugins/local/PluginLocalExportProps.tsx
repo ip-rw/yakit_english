@@ -31,7 +31,7 @@ export const PluginLocalExport: React.FC<PluginLocalExportProps> = (props) => {
         () => {
             let timer
             if (visible) {
-                // 发送导出流信号
+                // Send Export Stream Signal
                 const sendExportSignal = async () => {
                     try {
                         await ipcRenderer.invoke("ExportLocalYakScriptStream", exportLocalParams)
@@ -41,16 +41,16 @@ export const PluginLocalExport: React.FC<PluginLocalExportProps> = (props) => {
                 }
                 sendExportSignal()
 
-                // 每200毫秒渲染一次数据
+                // Render Data Every 200ms
                 timer = setInterval(() => {
                     setLocalStreamData(localStreamDataRef.current)
                     setLocallogListInfo([...locallogListInfoRef.current])
                 }, 200)
 
-                // 接收导出返回的流数据
+                // Receive Exported Stream Data
                 ipcRenderer.on("export-yak-script-data", (e, data: ExportYakScriptLocalResponse) => {
                     localStreamDataRef.current = {Progress: data.Progress}
-                    // 只展示错误日志和最后一条日志
+                    // Display Only Error Logs & Last Log
                     if (data.MessageType === "error" || data.Progress === 1) {
                         locallogListInfoRef.current.unshift({
                             message: data.Message,
@@ -58,7 +58,7 @@ export const PluginLocalExport: React.FC<PluginLocalExportProps> = (props) => {
                             key: uuidv4()
                         })
                     }
-                    // 导出成功或状态为finished自动关闭弹窗
+                    // Auto-Close on Success or Status Finished
                     if (["success", "finished"].includes(data.MessageType) && data.Progress === 1) {
                         setTimeout(() => {
                             handleExportLocalPluginFinish()
@@ -94,7 +94,7 @@ export const PluginLocalExport: React.FC<PluginLocalExportProps> = (props) => {
             visible={visible}
             getContainer={getContainer}
             type='white'
-            title='导出本地插件'
+            title='Export Local Plugin'
             onCancel={handleExportLocalPluginFinish}
             width={680}
             closable={true}
@@ -104,13 +104,13 @@ export const PluginLocalExport: React.FC<PluginLocalExportProps> = (props) => {
             footerStyle={{justifyContent: "flex-end"}}
             footer={
                 <YakitButton type={"outline2"} onClick={handleExportLocalPluginFinish}>
-                    {localStreamData?.Progress === 1 ? "完成" : "取消"}
+                    {localStreamData?.Progress === 1 ? "Complete" : "Cancel"}
                 </YakitButton>
             }
         >
             <div style={{padding: "0 16px"}}>
                 <ImportAndExportStatusInfo
-                    title='导出中'
+                    title='Exporting'
                     showDownloadDetail={false}
                     streamData={localStreamData || {Progress: 0}}
                     logListInfo={locallogListInfo}

@@ -58,7 +58,7 @@ export const MenuDNSLog: React.FC<MenuDNSLogProps> = React.memo((props) => {
         setRemoteValue(RemoteGV.GlobalDNSLogOnlyARecord, onlyARecord + "")
     }, [onlyARecord])
 
-    // 生成传递给页面的配置信息
+    // Generate Configuration for Page
     const generateData = useMemoizedFn(() => {
         return {
             token,
@@ -68,17 +68,17 @@ export const MenuDNSLog: React.FC<MenuDNSLogProps> = React.memo((props) => {
             useLocal
         }
     })
-    // 同步给页面里dnslog新的参数
+    // Sync New dnslog Parameters to Page
     const sendPageDnslog = useMemoizedFn((data: DnslogMenuToPage) => {
         ipcRenderer.invoke("dnslog-menu-to-page", data)
     })
 
     useEffect(() => {
-        // 接收dnslog页面发送的请求获取参数请求
+        // Receive Request Parameters Sent from dnslog Page
         ipcRenderer.on("dnslog-page-to-menu-callback", () => {
             sendPageDnslog(generateData())
         })
-        // 接收dnslog页面改变参数后的新参数
+        // Receive New Parameters after dnslog Page Changes
         ipcRenderer.on("dnslog-page-change-menu-callback", (e, data: SendMenuDnslogProps) => {
             const {dnsLogType, onlyARecord, token, domain, DNSMode, UseLocal} = data
             setOnlyARecord(onlyARecord)
@@ -180,15 +180,15 @@ export const MenuDNSLog: React.FC<MenuDNSLogProps> = React.memo((props) => {
     const update = useMemoizedFn(() => {
         getRemoteValue(DNS_LOG_PAGE_UPDATE_TOKEN).then((data) => {
             if (!data) {
-                // 默认内置
+                // Built-in Default
                 updateToken()
             } else {
                 let obj = JSON.parse(data)
-                // 内置
+                // Built-in
                 if (obj.type === "builtIn") {
                     updateToken(obj)
                 }
-                // 自定义
+                // Custom
                 else if (obj.type === "custom" && obj.ScriptName.length > 0) {
                     updateTokenByScript(obj)
                 } else {
@@ -264,7 +264,7 @@ export const MenuDNSLog: React.FC<MenuDNSLogProps> = React.memo((props) => {
         })
     })
 
-    // 重置
+    // Reset
     const reset = useMemoizedFn(() => {
         setToken("")
         setDomain("")
@@ -277,7 +277,7 @@ export const MenuDNSLog: React.FC<MenuDNSLogProps> = React.memo((props) => {
         sendPageDnslog({...generateData(), isReset: true})
     })
 
-    // 是否隐藏 dnslog 列表框
+    // Hide dnslog List?
     const [isHide, setIsHide] = useState<boolean>(false)
 
     const [listShow, setListShow] = useState<boolean>(false)
@@ -286,13 +286,13 @@ export const MenuDNSLog: React.FC<MenuDNSLogProps> = React.memo((props) => {
             <div className={styles["list-info-wrapper"]}>
                 <div className={styles["list-header-wrapper"]}>
                     <div className={styles["header-body"]}>
-                        <div className={styles["title-style"]}>访问记录</div>
+                        <div className={styles["title-style"]}>Access Logs</div>
                         <div className={styles["sub-title-style"]}>
                             Total <span className={styles["total-style"]}>{total}</span>
                         </div>
                     </div>
                     <div className={styles["extra-header-body"]}>
-                        只看 A 记录
+                        A Records Only
                         <YakitSwitch
                             wrapperClassName={styles["switch-style"]}
                             checked={onlyARecord}
@@ -306,10 +306,10 @@ export const MenuDNSLog: React.FC<MenuDNSLogProps> = React.memo((props) => {
 
                 <div className={styles["list-body"]}>
                     <div className={styles["body-header"]}>
-                        <div className={classNames(styles["opt-style"], styles["opt-type"])}>类型</div>
-                        <div className={classNames(styles["opt-style"], styles["opt-ip"])}>远端IP</div>
-                        <div className={classNames(styles["opt-style"], styles["opt-time"])}>时间</div>
-                        <div className={classNames(styles["opt-style"], styles["opt-btn"])}>操作</div>
+                        <div className={classNames(styles["opt-style"], styles["opt-type"])}>Type</div>
+                        <div className={classNames(styles["opt-style"], styles["opt-ip"])}>Remote IP</div>
+                        <div className={classNames(styles["opt-style"], styles["opt-time"])}>Time</div>
+                        <div className={classNames(styles["opt-style"], styles["opt-btn"])}>Action</div>
                     </div>
                     <div className={styles["body-container"]}>
                         <div className={styles["container-body"]}>
@@ -329,7 +329,7 @@ export const MenuDNSLog: React.FC<MenuDNSLogProps> = React.memo((props) => {
                                             className={classNames(styles["opt-style"], styles["opt-btn"])}
                                             onClick={() => onInfoDetails(item)}
                                         >
-                                            详情
+                                            Details
                                         </div>
                                     </div>
                                 )
@@ -358,14 +358,14 @@ export const MenuDNSLog: React.FC<MenuDNSLogProps> = React.memo((props) => {
 
             <div className={styles["dnslog-generate-host"]}>
                 <div className={!!domain ? styles["generated-wrapper"] : styles["generate-wrapper"]}>
-                    <div className={styles["title-style"]}>使用 Yakit 自带 DNSLog 反连服务</div>
+                    <div className={styles["title-style"]}>Use Yakit Built-in DNSLog Callback Service</div>
                     {!!domain ? (
                         <YakitButton key={"close"} danger size='small' icon={<QuitIcon />} onClick={reset}>
-                            关闭
+                            Close
                         </YakitButton>
                     ) : (
                         <YakitButton key={"create"} size='small' loading={tokenLoading} onClick={update}>
-                            生成域名
+                            Generate Domain
                         </YakitButton>
                     )}
                 </div>
@@ -374,10 +374,10 @@ export const MenuDNSLog: React.FC<MenuDNSLogProps> = React.memo((props) => {
                         {domain}
                     </YakitTag>
                 )}
-                {/* 显示条件：已生成域名 & 有历史数据 & 宽度过小 */}
+                {/* Display Conditions: Domain Generated & Historical Data & Too Narrow */}
                 {!!domain && isHide && records.length > 0 && (
                     <YakitButton type='text' onClick={onInfoAll}>
-                        查看访问记录
+                        View Access Logs
                     </YakitButton>
                 )}
             </div>
@@ -389,19 +389,19 @@ export const MenuDNSLog: React.FC<MenuDNSLogProps> = React.memo((props) => {
                             <>
                                 {loading ? (
                                     <>
-                                        加载中&nbsp;&nbsp;<LoadingOutlined style={{color: "var(--yakit-primary-5)"}} />
+                                        Loading&nbsp;&nbsp;<LoadingOutlined style={{color: "var(--yakit-primary-5)"}} />
                                     </>
                                 ) : (
                                     <>
                                         <YakitButton
                                             type='text2'
                                             onClick={getQueryDNSLogByToken}
-                                        >手动刷新<RefreshIcon /></YakitButton>
+                                        >Manual Refresh<RefreshIcon /></YakitButton>
                                     </>
                                 )}
                             </>
                         ) : (
-                            "访问记录"
+                            "Access Logs"
                         )}
                     </div>
                     <div className={styles["icon-style"]}>
@@ -429,7 +429,7 @@ export const MenuDNSLog: React.FC<MenuDNSLogProps> = React.memo((props) => {
                                     className={classNames(styles["opt-style"], styles["opt-btn"])}
                                     onClick={() => onInfoDetails(item)}
                                 >
-                                    详情
+                                    Details
                                 </div>
                             </div>
                         )

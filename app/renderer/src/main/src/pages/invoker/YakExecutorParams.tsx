@@ -25,7 +25,7 @@ export const YakExecutorParams: React.FC<YakExecutorParamsProp> = (props) => {
 
     const deleteButton = (i: YakExecutorParam) => {
         return <Popconfirm
-            title={"确认删除该参数？"} onConfirm={() => deleteParams(i.Key)}
+            title={"Confirm Delete Param？"} onConfirm={() => deleteParams(i.Key)}
         >
             <Button
                 size={"small"} style={{margin: 0, padding: 0}}
@@ -38,14 +38,14 @@ export const YakExecutorParams: React.FC<YakExecutorParamsProp> = (props) => {
     return <div style={{width: "100%"}}>
         <Form style={{width: "100%", marginLeft: 8, marginBottom: 14}}>
             <Form.Item
-                label={"最终执行 Yak 命令行"} style={{width: "100%"}}
+                label={"Execute Yak CMD"} style={{width: "100%"}}
                 help={<>
                     {(params || []).length > 0 ? params.map(i => {
                         if (!i.Value) {
                             return <Tag color={"orange"} style={{marginTop: 3}}>{i.Key}: true {deleteButton(i)}</Tag>
                         }
                         return <Tag color={"geekblue"}>{i.Key}: {i.Value} {deleteButton(i)}</Tag>
-                    }) : <Tag>无参数</Tag>}
+                    }) : <Tag>No Params</Tag>}
                 </>}
             >
                 <Row style={{width: "100%"}} gutter={4}>
@@ -89,7 +89,7 @@ export const YakExecutorParams: React.FC<YakExecutorParamsProp> = (props) => {
                                 })
                             }}
                         >
-                            添加参数
+                            Add Param
                         </Button>
                     </Space>
                 </Row>
@@ -117,16 +117,16 @@ const Param: React.FC<ParamProp> = (props) => {
                 props.onCreated(key, isBool ? "" : value)
             }}
         >
-            <SelectOne label={"参数类型"} data={[
-                {value: true, text: "Bool 类型"},
-                {value: false, text: "普通参数"},
+            <SelectOne label={"Param Type"} data={[
+                {value: true, text: "Bool Type"},
+                {value: false, text: "General Params"},
             ]} value={isBool} setValue={setIsBool}/>
-            <InputItem label={"参数名"} value={key} setValue={setKey} required={true}/>
+            <InputItem label={"Parameter Name"} value={key} setValue={setKey} required={true}/>
             {!isBool && <InputItem
-                label={"参数值"} value={value} setValue={setValue} required={true}
+                label={"Param Value"} value={value} setValue={setValue} required={true}
             />}
             <Form.Item label={" "} colon={false}>
-                <Button type={"primary"} htmlType={"submit"}>添加参数</Button>
+                <Button type={"primary"} htmlType={"submit"}>Add Param</Button>
             </Form.Item>
         </Form>
     </>

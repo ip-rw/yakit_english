@@ -17,7 +17,7 @@ interface HelpDocProps {
     engineLink: boolean
 }
 
-/** @name Yakit软件更新下载弹窗 */
+/** @name Yakit Update Download Prompt */
 export const HelpDoc: React.FC<HelpDocProps> = React.memo((props) => {
     const {system, arch, engineLink} = props
 
@@ -58,13 +58,13 @@ export const HelpDoc: React.FC<HelpDocProps> = React.memo((props) => {
             data={[
                 {
                     key: "official_website",
-                    label: "官方网站"
+                    label: "Official Website"
                 },
                 {
                     key: "Github",
                     label: "Github",
                     children: [
-                        {label: "功能建议", key: "feature_request"},
+                        {label: "Feature Suggestion", key: "feature_request"},
                         {label: "BUG", key: "report_bug"}
                     ]
                 }
@@ -79,14 +79,14 @@ export const HelpDoc: React.FC<HelpDocProps> = React.memo((props) => {
                 const bug_tpl = ReportBug(info)
                 ipcRenderer.invoke(
                     "open-url",
-                    `https://github.com/yaklang/yakit/issues/new?title=【BUG】问题标题&body=${bug_tpl}&labels=bug`
+                    `https://github.com/yaklang/yakit/issues/new?title=[BUG]Issue Title&body=${bug_tpl}&labels=bug`
                 )
                 return
             case "feature_request":
                 let feature_tpl = FeatureRequest()
                 ipcRenderer.invoke(
                     "open-url",
-                    `https://github.com/yaklang/yakit/issues/new?title=【需求】需求标题&body=${feature_tpl}&labels=enhancement`
+                    `https://github.com/yaklang/yakit/issues/new?title=[REQ]Req Title&body=${feature_tpl}&labels=enhancement`
                 )
                 return
             case "official_website":

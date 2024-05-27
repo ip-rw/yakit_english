@@ -33,28 +33,28 @@ export const ExecuteTaskHistory = "execute-task-history"
 
 /*
 * message ExecBatchYakScriptRequest {
-  // 目标会被自动拆分
+  // Targets Will Be Auto-Split
   string Target = 1;
   string TargetFile = 11;
 
-  // 额外参数可以被添加
+  // Additional Params Can Be Added
   repeated ExecParamItem ExtraParams = 7;
 
-  // 筛选与限制
+  // Filters and Limitations
   string Keyword = 2;
   string ExcludedYakScript = 22;
   int64 Limit = 3;
 
-  // 默认总用时
+  // Default Total Duration
   int64 TotalTimeoutSeconds = 4;
 
-  // 模块类型，默认为 nuclei
+  // Module Type, Default to Nuclei
   string Type = 5;
 
-  // 并发
+  // Concurrency
   int64 Concurrent = 6;
 
-  // 精确使用脚本名称
+  // Use Script Name Precisely
   repeated string ScriptNames = 8;
 }
 * */
@@ -129,7 +129,7 @@ export const ExecSelectedPlugins: React.FC<ExecSelectedPluginsProp> = React.memo
                 onSubmitCapture={(e) => {
                     e.preventDefault()
                     if (!target.target && !target.targetFile) {
-                        failed("请输入目标或上传目标文件夹绝对路径!")
+                        failed("Enter Target or Upload Target Folder Absolute Path!")
                         return
                     }
                     props.onSubmit(target)
@@ -141,7 +141,7 @@ export const ExecSelectedPlugins: React.FC<ExecSelectedPluginsProp> = React.memo
                     textareaRow={2}
                     textarea={true}
                     value={target.target}
-                    label={"输入目标"}
+                    label={"Input Target"}
                     setValue={(targetRaw) => setTarget({...target, target: targetRaw})}
                     suffixNode={
                         <div style={{display: "inline-block", marginLeft: 5, marginBottom: 4}}>
@@ -152,7 +152,7 @@ export const ExecSelectedPlugins: React.FC<ExecSelectedPluginsProp> = React.memo
                                     disabled={executing ? false : disableStartButton}
                                     onClick={props.onCancel}
                                 >
-                                    停止执行
+                                    Stop Execution
                                 </Button>
                             ) : (
                                 <Button
@@ -161,7 +161,7 @@ export const ExecSelectedPlugins: React.FC<ExecSelectedPluginsProp> = React.memo
                                     disabled={executing ? false : disableStartButton}
                                     loading={loading}
                                 >
-                                    执行任务
+                                    Execute Task
                                 </Button>
                             )}
                         </div>
@@ -170,19 +170,19 @@ export const ExecSelectedPlugins: React.FC<ExecSelectedPluginsProp> = React.memo
 
                 <div style={{paddingLeft: 70}}>
                     <Space>
-                        {target.proxy && <Tag>代理: {target.proxy}</Tag>}
-                        {/*<Tag>进程: {target.concurrent}</Tag>*/}
-                        <Tag>总超时: {target.totalTimeout}s</Tag>
+                        {target.proxy && <Tag>Proxy: {target.proxy}</Tag>}
+                        {/*<Tag>Process: {target.concurrent}</Tag>*/}
+                        <Tag>Total Timeout: {target.totalTimeout}s</Tag>
                         {target.targetFile && (
                             <Tag color={"geekblue"}>
                                 <Space>
-                                    目标文件：
+                                    Target File：
                                     <CopyableField text={target.targetFile} maxWidth={100} tooltip={true} />
                                 </Space>
                             </Tag>
                         )}
                         <Popover
-                            title={"额外配置"}
+                            title={"Extra Config"}
                             content={
                                 <div style={{width: 500}}>
                                     <Form
@@ -193,7 +193,7 @@ export const ExecSelectedPlugins: React.FC<ExecSelectedPluginsProp> = React.memo
                                         wrapperCol={{span: 14}}
                                     >
                                         <InputItem
-                                            label={"代理"}
+                                            label={"Proxy"}
                                             value={target.proxy}
                                             setValue={(t) => {
                                                 setTarget({...target, proxy: t})
@@ -207,31 +207,31 @@ export const ExecSelectedPlugins: React.FC<ExecSelectedPluginsProp> = React.memo
                                             style={{marginBottom: 4}}
                                         />
                                         <InputInteger
-                                            label={"并发进程"}
+                                            label={"Concurrent Processes"}
                                             value={target.concurrent}
                                             setValue={(c) => setTarget({...target, concurrent: c})}
                                             formItemStyle={{marginBottom: 4}}
                                         />
                                         <InputInteger
-                                            label={"每个进程任务数"}
+                                            label={"Tasks Per Process"}
                                             value={target.progressTaskCount}
                                             setValue={(e) => setTarget({...target, progressTaskCount: e})}
                                             formItemStyle={{marginBottom: 4}}
                                         />
                                         <InputInteger
-                                            label={"总超时时间"}
+                                            label={"Total Timeout"}
                                             value={target.totalTimeout}
                                             setValue={(t) => setTarget({...target, totalTimeout: t})}
                                             formItemStyle={{marginBottom: 4}}
                                         />
                                         <SwitchItem
-                                            label={"允许 Fuzz 语法"}
+                                            label={"Allow Fuzz Syntax"}
                                             value={target.allowFuzz}
                                             setValue={(e) => setTarget({...target, allowFuzz: e})}
                                             formItemStyle={{marginBottom: 4}}
                                         />
                                         <InputFileNameItem
-                                            label={"上传目标文件"}
+                                            label={"Upload Target File"}
                                             filename={target.targetFile}
                                             accept={["text/plain"]}
                                             setFileName={(e) => setTarget({...target, targetFile: e})}
@@ -243,7 +243,7 @@ export const ExecSelectedPlugins: React.FC<ExecSelectedPluginsProp> = React.memo
                         >
                             <Button type='link' style={{padding: 4}}>
                                 {" "}
-                                额外配置{" "}
+                                Extra Config{" "}
                             </Button>
                         </Popover>
                         <Button
@@ -257,11 +257,11 @@ export const ExecSelectedPlugins: React.FC<ExecSelectedPluginsProp> = React.memo
                                 })
                             }}
                         >
-                            未完成的任务
+                            Incomplete Tasks
                         </Button>
                         {/*{history.length !== 0 && (*/}
                         {/*    <Popover*/}
-                        {/*        title={"历史任务(选择后可回显目标与poc)"}*/}
+                        {/*        title={"Historical Tasks (Selection Restores Target & PoC)"}*/}
                         {/*        trigger={["click"]}*/}
                         {/*        placement='bottom'*/}
                         {/*        content={*/}
@@ -274,7 +274,7 @@ export const ExecSelectedPlugins: React.FC<ExecSelectedPluginsProp> = React.memo
                         {/*                            onClick={() => {*/}
                         {/*                                if (executing) return*/}
                         {/*                                if (!item.simpleQuery) {*/}
-                        {/*                                    failed("该条历史记录无法使用!")*/}
+                        {/*                                    failed("This Record Cannot Be Used!")*/}
                         {/*                                    return*/}
                         {/*                                }*/}
                         {/*                                executeHistory(item)*/}
@@ -289,7 +289,7 @@ export const ExecSelectedPlugins: React.FC<ExecSelectedPluginsProp> = React.memo
                         {/*        }*/}
                         {/*    >*/}
                         {/*        <Button type='link' style={{padding: 4}}>*/}
-                        {/*            历史任务*/}
+                        {/*            Historical Tasks*/}
                         {/*        </Button>*/}
                         {/*    </Popover>*/}
                         {/*)}*/}
@@ -341,12 +341,12 @@ export const Timer: React.FC<TimerProp> = React.memo((props) => {
     if (!props.executing)
         return (
             <Tag style={{maxWidth: 103}} color={"red"}>
-                已中断
+                Interrupted
             </Tag>
         )
     return (
         <Tag style={{maxWidth: 103}} color={props.color || "green"}>
-            已运行{duration}秒
+            Running{duration}Seconds
         </Tag>
     )
 })

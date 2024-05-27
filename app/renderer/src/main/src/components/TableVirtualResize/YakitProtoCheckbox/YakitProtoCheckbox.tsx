@@ -12,7 +12,7 @@ export interface YakitProtoCheckboxProps {
     wrapperStyle?: React.CSSProperties
 }
 /**
- * @description: 原生 多选框
+ * @description: Native Checkbox
  */
 export const YakitProtoCheckbox: React.FC<YakitProtoCheckboxProps> = React.memo((props) => {
     const {wrapperClassName, indeterminate, wrapperStyle,...resProps} = props

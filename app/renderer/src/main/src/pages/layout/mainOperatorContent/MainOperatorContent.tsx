@@ -100,7 +100,7 @@ const PageItem = React.lazy(() => import("./renderSubPage/RenderSubPage"))
 const {Content} = Layout
 const {ipcRenderer} = window.require("electron")
 
-/** 关闭组的提示缓存字段 */
+/** Close group prompt cache field */
 const Close_Group_Tip = "close-group_tip"
 
 const colorList = ["purple", "blue", "lakeBlue", "green", "red", "orange", "bluePurple", "grey"]
@@ -108,41 +108,41 @@ const droppable = "droppable"
 const droppableGroup = "droppableGroup"
 const pageTabItemRightOperation: YakitMenuItemType[] = [
     {
-        label: "重命名",
+        label: "Rename",
         key: "rename"
     },
     {
-        label: "将标签页移动到组",
+        label: "Move tab into group",
         key: "addToGroup",
         children: [
             {
-                label: "新建组",
+                label: "Create Group",
                 itemIcon: <OutlinePlusIcon />,
                 key: "newGroup"
             }
         ]
     },
-    // 组内的tab才有下面这个菜单
+    // Only tabs in a group have the following menu
     // {
-    //     label: "从组中移出",
+    //     label: "Remove from group",
     //     key: "removeFromGroup"
     // },
     {
         type: "divider"
     },
     {
-        label: "关闭当前标签页",
+        label: "Name: Extra processing logic for multi-opening page (specific to web-fuzzer page)",
         key: "remove"
     },
     {
-        label: "关闭其他标签页",
+        label: "Close other tabs",
         key: "removeOtherItems"
     }
 ]
 
 /**
- * 生成组id
- * @returns {string} 生成的组id
+ * Generate group id
+ * @returns {string} Click to manage groups and create a new group
  */
 export const generateGroupId = (gIndex?: number) => {
     const time = (new Date().getTime() + (gIndex || 0)).toString()
@@ -151,7 +151,7 @@ export const generateGroupId = (gIndex?: number) => {
 }
 
 /**
- * @description 通过id在subPage中找到对应的item
+ * @Description: Find the corresponding item in subPage by id
  * @returns {currentItem:MultipleNodeInfo,index:number,subIndex:number}
  * */
 const getPageItemById = (subPage: MultipleNodeInfo[], id: string) => {
@@ -189,24 +189,24 @@ const getPageItemById = (subPage: MultipleNodeInfo[], id: string) => {
     return {current, index, subIndex}
 }
 /**
- * @description 获取组的个数
+ * @Description: Get the number of groups
  * @param subPage
- * @returns {number} 组的个数
+ * @returns {number} Count of groups
  */
 const getGroupLength = (subPage) => {
     return subPage.filter((ele) => ele.groupChildren && ele.groupChildren.length > 0).length
 }
 /**
- * @description 获取当前组的颜色
+ * @Description: Get current group's color
  * @param subPage
- * @returns {string} 返回颜色
+ * @returns {string} Return color
  */
 const getColor = (subPage) => {
     const groupLength = getGroupLength(subPage)
     const randNum = groupLength % colorList.length
     return colorList[randNum] || "purple"
 }
-// 软件初始化时的默认打开页面数据
+// Tabs
 export const getInitPageCache: () => PageCache[] = () => {
     if (isEnpriTraceAgent()) {
         return []
@@ -216,7 +216,7 @@ export const getInitPageCache: () => PageCache[] = () => {
         return [
             {
                 routeKey: routeConvertKey(YakitRoute.DB_ChaosMaker, ""),
-                verbose: "入侵模拟",
+                verbose: "Penetration Testing",
                 menuName: YakitRouteToPageInfo[YakitRoute.DB_ChaosMaker].label,
                 route: YakitRoute.DB_ChaosMaker,
                 singleNode: true,
@@ -228,7 +228,7 @@ export const getInitPageCache: () => PageCache[] = () => {
     return [
         {
             routeKey: routeConvertKey(YakitRoute.NewHome, ""),
-            verbose: "首页",
+            verbose: "Homepage",
             menuName: YakitRouteToPageInfo[YakitRoute.NewHome].label,
             route: YakitRoute.NewHome,
             singleNode: true,
@@ -245,7 +245,7 @@ export const getInitPageCache: () => PageCache[] = () => {
     ]
 }
 
-// 软件初始化时的默认当前打开页面的key
+// Default current open page key on software initialization
 export const getInitActiveTabKey = () => {
     if (isEnpriTraceAgent()) {
         return ""
@@ -257,7 +257,7 @@ export const getInitActiveTabKey = () => {
     return YakitRoute.NewHome
 }
 
-/**@description 拖拽样式 */
+/**@Description: Drag styling */
 const getItemStyle = (isDragging, draggableStyle) => {
     let transform: string = draggableStyle["transform"] || ""
     if (isDragging) {
@@ -278,7 +278,7 @@ const reorder = (list: any[], startIndex: number, endIndex: number) => {
 }
 
 /**
- * 获取二级菜单所有打开的tab标签页个数
+ * Get count of all opened tabs in secondary menu
  * @returns {number} total
  */
 const getSubPageTotal = (subPage) => {
@@ -311,31 +311,31 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
             shallow
         )
 
-    // tab数据
+    // If dragging is an item, it can sort or combine
     const [pageCache, setPageCache, getPageCache] = useGetState<PageCache[]>(_.cloneDeepWith(getInitPageCache()) || [])
     const [currentTabKey, setCurrentTabKey] = useState<YakitRoute | string>(getInitActiveTabKey())
 
-    // 发送到专项漏洞检测modal-show变量
+    // Send to vulnerability detection modal-show variable
     const [bugTestShow, setBugTestShow] = useState<boolean>(false)
     const [bugList, setBugList] = useState<GroupCount[]>([])
     const [bugTestValue, setBugTestValue] = useState<string>()
     const [bugUrl, setBugUrl] = useState<string>("")
 
-    // 在组件启动的时候，执行一次，用于初始化服务端推送（DuplexConnection）
+    // On component start, initialize server push (DuplexConnection) once）
     useEffect(() => {
         startupDuplexConn()
         return () => {
-            // 当组件销毁的时候，关闭DuplexConnection
+            // Close DuplexConnection when component destroys
             closeDuplexConn()
         }
     }, [])
 
-    /** ---------- 新逻辑 start ---------- */
+    /** ---------- WebFuzzer Serialization ---------- */
 
     /**
-     * @name 渲染端通信-从顶部菜单里打开一个指定页面
-     * @description 本通信方法 替换 老方法"open-route-page-callback"(ipc通信)
-     * @description 作用：快速打开一个页面，不带参
+     * @Name: Render-side Communication - Open a specified page from top menu
+     * @Description: This communication method replaces old one"open-route-page-callback"(IPC communication)
+     * @Description: Quick open a page without parameters
      */
     useEffect(() => {
         emiter.on("menuOpenPage", menuOpenPage)
@@ -358,11 +358,11 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
         extraOpenMenuPage(data)
     })
 
-    // (创建|更新)-(新建|编辑)-插件编辑器页面的缓存信息
+    // (Create|New logic - start|Edit)-Plugin editor page cache information
     /**
-     * @param source 触发打开页面的父路由
-     * @param isUpdate 是否更新缓存数据(不更新则为创建缓存)
-     * @param isModify 新建插件还是编辑插件页面
+     * @Description: Set spatial engine page cache data
+     * @Param isUpdate: Whether to update cache data (not updating means creation))
+     * @Param isModify: Creating or editing a plugin page
      */
     const cuPluginEditorStorage = useMemoizedFn((source: YakitRoute, isModify?: boolean) => {
         const route: YakitRoute = isModify ? YakitRoute.ModifyYakitScript : YakitRoute.AddYakitScript
@@ -389,9 +389,9 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
     })
 
     /**
-     * @name 渲染端通信-打开一个指定页面
-     * @description 本通信方法 替换 老方法"fetch-send-to-tab"(ipc通信)
-     * @description 作用：快速打开一个页面，带参
+     * @Name: Render-side Communication - Open a specified page
+     * @Description: This communication method replaces old one"fetch-send-to-tab"(IPC communication)
+     * @Add tab page - start
      */
     useEffect(() => {
         emiter.on("openPage", onOpenPage)
@@ -433,7 +433,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
                 addScanPort(params)
                 break
             case YakitRoute.PoC:
-                /** type 1会打开漏洞检测类型选择  2直接带着数据打开poc页面*/
+                /** Description: Click to use in Plugin Store and My Plugins details, passing online UUID to use in local details*/
                 if (params.type !== 2) {
                     addBugTest(1, params)
                 } else {
@@ -455,7 +455,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
             }
         )
     })
-    /**弱口令 */
+    /**Weak password */
     const addBrute = useMemoizedFn((data) => {
         openMenuPage(
             {route: YakitRoute.Mod_Brute},
@@ -466,17 +466,17 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
             }
         )
     })
-    /**批量执行 */
+    /**Batch execution */
     const addBatchExecutorPage = useMemoizedFn((data) => {
         openMenuPage({route: YakitRoute.BatchExecutorPage}, {pageParams: {pluginBatchExecutorPageInfo: data}})
     })
-    /**专项漏洞 */
+    /**SubIndex === -1 not in group */
     const addPoC = useMemoizedFn((data) => {
         openMenuPage({route: YakitRoute.PoC}, {pageParams: {pocPageInfo: data}})
     })
     /**
-     * @name 新建插件
-     * @param source 触发打开页面的父页面路由
+     * @Name: Create Plugin
+     * @Param source: Parent page route triggering page opening
      */
     const addYakScript = useMemoizedFn((data: {source: YakitRoute}) => {
         const {source} = data || {}
@@ -492,8 +492,8 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
         openMenuPage({route: YakitRoute.AddYakitScript})
     })
     /**
-     * @name 编辑插件
-     * @param source 触发打开页面的父页面路由
+     * @Name: Edit Plugin
+     * @Param source: Parent page route triggering page opening
      */
     const modifyYakScript = useMemoizedFn((data: {source: YakitRoute; id: number}) => {
         const {source, id} = data || {}
@@ -509,20 +509,20 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
         openMenuPage({route: YakitRoute.ModifyYakitScript}, {pageParams: {editPluginId: id}})
     })
     /**
-     * @name 本地插件
-     * @description 插件商店和我的插件详情中点击去使用,传线上的UUID,传入本地详情进行使用
-     * @param uuid 用于本地插件定位uuid对应的插件详情位置
+     * @Name: Local Plugin
+     * @When the source item of the drag is a group and the destination item is also a group, merge - Deprecated
+     * @Param uuid: For locating plugin details with UUID in local plugin
      */
     const pluginLocal = useMemoizedFn((data: {uuid: string}) => {
         const {uuid} = data || {}
 
         if (uuid) {
-            // uuid存在的，先将数据缓存至数据中心,后再打开页面
+            // If UUID exists, cache data to data center before opening page
             const newPageNode: PageNodeItemProps = {
                 id: `${randomString(8)}`,
                 routeKey: YakitRoute.Plugin_Local,
                 pageGroupId: "0",
-                pageId: YakitRoute.Plugin_Local, // 用路由key作为页面id
+                pageId: YakitRoute.Plugin_Local, // Use route key as page id
                 pageName: YakitRouteToPageInfo[YakitRoute.Plugin_Local]?.label || "",
                 pageParamsInfo: {
                     pluginLocalPageInfo: {
@@ -543,21 +543,21 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
         openMenuPage({route: YakitRoute.Plugin_Local})
     })
     /**
-     * @name 插件商店
-     * @description 首页的统计模块，点击需要携带搜索参数跳转插件商店页面
-     * @param {string} keyword 携带的关键字搜索条件
-     * @param {string} plugin_type 携带的插件类型搜索条件
+     * @Plugin_type carried plugin type search condition
+     * @Description: Home statistics module, click to carry search parameters to plugin store page
+     * @param {string} Carried keyword search condition
+     * @param {string} Next as a group, select the first one inside
      */
     const pluginStore = useMemoizedFn((data: {keyword: string; plugin_type: string}) => {
         const {keyword, plugin_type} = data || {}
 
         if (keyword || plugin_type) {
-            // 缓存搜索条件
+            // Cache search criteria
             const newPageNode: PageNodeItemProps = {
                 id: `${randomString(8)}`,
                 routeKey: YakitRoute.Plugin_Store,
                 pageGroupId: "0",
-                pageId: YakitRoute.Plugin_Store, // 用路由key作为页面id
+                pageId: YakitRoute.Plugin_Store, // Use route key as page id
                 pageName: YakitRouteToPageInfo[YakitRoute.Plugin_Store]?.label || "",
                 pageParamsInfo: {
                     pluginOnlinePageInfo: {
@@ -590,7 +590,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
         )
     })
 
-    /** @name 渲染端通信-关闭一个指定页面 */
+    /** @Name: Render-side Communication - Close a specified page */
     useEffect(() => {
         emiter.on("closePage", onClosePage)
         return () => {
@@ -608,7 +608,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
         switch (route) {
             case YakitRoute.AddYakitScript:
             case YakitRoute.ModifyYakitScript:
-                // 判断页面是由谁触发打开的
+                // Determine the trigger source of the page opening
                 const targetCache: PageNodeItemProps = (pages.get(route)?.pageList || [])[0]
                 let next: YakitRoute | undefined = undefined
                 if (targetCache?.pageParamsInfo && targetCache.pageParamsInfo?.pluginInfoEditor) {
@@ -622,11 +622,11 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
         }
     })
 
-    /** ---------- 新逻辑 end ---------- */
+    /** ---------- New logic - end ---------- */
 
-    // 打开tab页面
+    // Open tab page
     useEffect(() => {
-        // 写成HOC是否好点呢，现在一个页面启动就是一个函数
+        // Consider writing as HOC, currently starts as a function
         ipcRenderer.on("fetch-send-to-tab", (e, res: any) => {
             const {type, data = {}} = res
             if (type === "fuzzer") addFuzzer(data)
@@ -654,7 +654,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
                 if (flag === 0) {
                     openMenuPage({route: YakitRoute.Plugin_Store})
                 } else {
-                    // 该方法在能保证route不是YakitRoute.Plugin_OP时,menuName可以传空字符
+                    // The method can pass an empty string for menuName when route isn't YakitRoute.Plugin_OP
                     removeMenuPage({route: YakitRoute.AddYakitScript, menuName: ""})
                     setTimeout(() => ipcRenderer.invoke("send-local-script-list"), 50)
                 }
@@ -704,8 +704,8 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
             )
         }
     })
-    /** ---------- 增加tab页面 start ---------- */
-    /** Global Sending Function(全局发送功能|通过发送新增功能页面)*/
+    /** ---------- Close all tabs ---------- */
+    /** Global Sending Function|Delete within group)*/
     const addFuzzer = useMemoizedFn(async (res: any) => {
         const {isHttps, isGmTLS, request, advancedConfigValue, openFlag = true, isCache = true} = res || {}
         const cacheData: FuzzerCacheDataProps = (await getFuzzerCacheData()) || {
@@ -728,7 +728,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
         let newIsHttps = !!isHttps
         let newIsGmTLS = !!isGmTLS
         let newRequest = request || defaultPostTemplate
-        // 有分享内容，数据以分享内容为准
+        // Data prioritized by shared content
         if (res.hasOwnProperty("shareContent")) {
             try {
                 const shareContent: ShareValueProps = JSON.parse(res.shareContent)
@@ -739,7 +739,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
                 newAdvancedConfigValue = shareContent.advancedConfiguration
                 newAdvancedConfigShow = shareContent.advancedConfigShow
                 if (shareContent.hasOwnProperty("advancedConfig")) {
-                    // 兼容只有【配置】的时候的高级配置显隐,低版本分享给高版本
+                    // Update)-(Create
                     newAdvancedConfigShow = {
                         config: shareContent["advancedConfig"],
                         rule: true
@@ -764,7 +764,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
             }
         )
     })
-    /** websocket fuzzer 和 Fuzzer 类似 */
+    /** Similar to WebSocket Fuzzer and Fuzzer */
     const addWebsocketFuzzer = useMemoizedFn(
         (res: {tls: boolean; request: Uint8Array; openFlag?: boolean; toServer?: Uint8Array}) => {
             openMenuPage(
@@ -780,7 +780,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
             )
         }
     )
-    /** 数据对比*/
+    /** Data Comparison*/
     const addDataCompare = useMemoizedFn((res: {leftData: string; rightData: string}) => {
         openMenuPage(
             {route: YakitRoute.DataCompare},
@@ -802,7 +802,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
                     setBugList(res)
                     setBugTestShow(true)
                 })
-                .catch((err) => yakitNotify("error", "获取插件组失败:" + err))
+                .catch((err) => yakitNotify("error", "Failed to fetch plugin group:" + err))
         }
         if (type === 2) {
             openMenuPage(
@@ -884,7 +884,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
             )
         }
     })
-    /** 插件调试 */
+    /** Plugin debugging */
     const addPluginDebugger = useMemoizedFn((res: any) => {
         const {generateYamlTemplate = false, YamlContent = "", scriptName = ""} = res || {}
         openMenuPage(
@@ -899,7 +899,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
         )
     })
     /**
-     * @name 远程通信打开一个页面(新逻辑)
+     * @Name: Remote Communication Open a page (New logic))
      */
     useEffect(() => {
         ipcRenderer.on("open-route-page-callback", (e, info: RouteToPageProps) => {
@@ -909,10 +909,10 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
             ipcRenderer.removeAllListeners("open-route-page-callback")
         }
     }, [])
-    /** ---------- 增加tab页面 end ---------- */
+    /** ---------- Add tab page - end ---------- */
 
-    /** ---------- 远程关闭一级页面 end ---------- */
-    // 没看过逻辑
+    /** ---------- Remotely close a primary page - end ---------- */
+    // Logic not reviewed
     useEffect(() => {
         ipcRenderer.on("fetch-close-tab", (e, res: any) => {
             const {router, name} = res
@@ -928,11 +928,11 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
             ipcRenderer.removeAllListeners("fetch-close-all-tab")
         }
     }, [])
-    /** ---------- 远程关闭一级页面 end ---------- */
+    /** ---------- Remotely close a primary page - end ---------- */
 
-    /** ---------- @name 全局功能快捷键 Start ---------- */
+    /** ---------- @Name: Global Function Shortcut Start ---------- */
     const documentKeyDown = useMemoizedFn((e: KeyboardEvent) => {
-        // ctrl/command + w 关闭当前页面
+        // ctrl/Command + W to close current page
         e.stopPropagation()
         if (e.code === "KeyW" && (e.ctrlKey || e.metaKey)) {
             e.preventDefault()
@@ -959,19 +959,19 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
             document.removeEventListener("keydown", documentKeyDown)
         }
     }, [])
-    /** ---------- @name 全局功能快捷键 End ---------- */
+    /** ---------- @Ids in merge ---------- */
 
-    /** ---------- 操作系统 start ---------- */
-    // 系统类型
+    /** ---------- Name: Global Function Shortcut End ---------- */
+    // System type
     const [system, setSystem] = useState<string>("")
     useEffect(() => {
         ipcRenderer.invoke("fetch-system-name").then((res) => setSystem(res))
     }, [])
-    /** ---------- 操作系统 end ---------- */
+    /** ---------- Param source: Parent route triggering page opening ---------- */
 
-    /** ---------- 一级页面的逻辑 start ---------- */
+    /** ---------- Primary page logic - start ---------- */
 
-    /** @name 打开一个菜单项页面(只负责打开，如果判断页面是否打开，应在执行该方法前判断) */
+    /** @Name: Open a menu item page (Responsible for opening only, check if the page is already open before execution)) */
     const openMenuPage = useMemoizedFn(
         (
             routeInfo: RouteToPageProps,
@@ -983,20 +983,20 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
             }
         ) => {
             const {route, pluginId = 0, pluginName = ""} = routeInfo
-            // 默认会打开新菜单
+            // Default opens new menu
             let openFlag = true
             if (nodeParams?.openFlag !== undefined) {
                 openFlag = nodeParams?.openFlag
             }
-            // 菜单在代码内的名字
+            // Menu's code name
             const menuName = route === YakitRoute.Plugin_OP ? pluginName : YakitRouteToPageInfo[route]?.label || ""
             if (!menuName) return
 
             const filterPage = pageCache.filter((item) => item.route === route && item.menuName === menuName)
-            // 单开页面
+            // Open single page
             if (SingletonPageRoute.includes(route)) {
                 const key = routeConvertKey(route, pluginName)
-                // 如果存在，设置为当前页面
+                // If existing, set as the current page
                 if (filterPage.length > 0) {
                     openFlag && setCurrentTabKey(key)
                     return
@@ -1016,7 +1016,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
                 ])
                 openFlag && setCurrentTabKey(key)
             } else {
-                // 多开页面
+                // Open multiple pages
                 const key = routeConvertKey(route, pluginName)
                 let tabName = routeKeyToLabel.get(key) || menuName
 
@@ -1027,7 +1027,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
                     nodeParams?.verbose ||
                     `${tabName}-[${filterPage.length > 0 ? (filterPage[0].multipleLength || 0) + 1 : 1}]`
                 if (route === YakitRoute.HTTPFuzzer) {
-                    // webFuzzer页面二级tab名称改为WF，特殊
+                    // Change WF page name in webFuzzer to special acronym
                     verbose =
                         nodeParams?.verbose ||
                         `WF-[${filterPage.length > 0 ? (filterPage[0].multipleLength || 0) + 1 : 1}]`
@@ -1058,7 +1058,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
                         }
                         pages.push({...eleItem})
                     })
-                    //  请勿随意调整执行顺序，先加页面的数据，再新增页面，以便于设置页面初始值
+                    //  Do not adjust the order arbitrarily; add page data first, then add the page to set initial values
                     switch (route) {
                         case YakitRoute.HTTPFuzzer:
                             addFuzzerList(node.id, node, order)
@@ -1087,7 +1087,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
                     setPageCache([...pages])
                     openFlag && setCurrentTabKey(key)
                 } else {
-                    //  请勿随意调整执行顺序，先加页面的数据，再新增页面，以便于设置页面初始值
+                    //  Do not adjust the order arbitrarily; add page data first, then add the page to set initial values
 
                     switch (route) {
                         case YakitRoute.HTTPFuzzer:
@@ -1192,7 +1192,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
         }
         addPagesDataCache(YakitRoute.Mod_ScanPort, newPageNode)
     })
-    /** @name 多开页面的额外处理逻辑(针对web-fuzzer页面) */
+    /** @Merge group ---------start) */
     const openMultipleMenuPage = useMemoizedFn((routeInfo: RouteToPageProps) => {
         switch (routeInfo.route) {
             case YakitRoute.HTTPFuzzer:
@@ -1204,7 +1204,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
                 break
         }
     })
-    /** @name 判断页面是否打开，打开则定位该页面，未打开则打开页面 */
+    /** @Web-fuzzer caching logic - start */
     const extraOpenMenuPage = useMemoizedFn((routeInfo: RouteToPageProps) => {
         if (SingletonPageRoute.includes(routeInfo.route)) {
             const flag =
@@ -1230,7 +1230,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
         }),
         shallow
     )
-    /** @description 多开页面的一级页面关闭事件 */
+    /** @Update pageCache and subPage to ensure order does not change after a new second-level tab */
     const onBeforeRemovePage = useMemoizedFn((data: OnlyPageCache) => {
         switch (data.route) {
             case YakitRoute.AddYakitScript:
@@ -1246,11 +1246,11 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
         }
     })
     /**
-     * @name 移除一级页面
-     * @param assignRoute 删除页面后指定某个页面展示(如果指定页面未打开则执行正常流程)
+     * @Name: Remove a primary page
+     * @Param assignRoute: After deleting a page, designate a page to display (follow normal process if the page isn't opened))
      */
     const removeMenuPage = useMemoizedFn((data: OnlyPageCache, assignPage?: OnlyPageCache) => {
-        // 获取需要关闭页面的索引
+        // Get index of page to be closed
         const index = pageCache.findIndex((item) => {
             if (data.route === YakitRoute.Plugin_OP) {
                 return item.route === data.route && item.menuName === data.menuName
@@ -1262,7 +1262,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
 
         let activeIndex: number = -1
 
-        // 如果有指定关闭后展示的页面，执行该逻辑
+        // Execute logic for designated display page after closing
         if (assignPage) {
             activeIndex = pageCache.findIndex((item) => {
                 if (assignPage.route === YakitRoute.Plugin_OP) {
@@ -1277,7 +1277,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
             if (index === 0 && getPageCache()[index + 1]) activeIndex = index + 1
         }
 
-        // 获取关闭页面后展示页面的信息
+        // Retrieve display info of page after closing
         const {route, pluginId = 0, pluginName = ""} = getPageCache()[activeIndex]
         const key = routeConvertKey(route, pluginName)
         if (currentTabKey === routeConvertKey(data.route, data.pluginName)) {
@@ -1295,16 +1295,16 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
             })
         )
         removeSubscribeClose(data.route)
-        // 关闭一级页面时,清除缓存
+        // Close primary page, clear cache
         clearDataByRoute(data.route)
         if (data.route === YakitRoute.HTTPFuzzer) {
             clearFuzzerSequence()
         }
     })
 
-    /** ---------- 一级页面的逻辑 end ---------- */
+    /** ---------- Primary page logic - end ---------- */
 
-    /** ---------- 登录状态变化的逻辑 start ---------- */
+    /** ---------- Login Status Change Start ---------- */
     const {userInfo, setStoreUserInfo} = useStore()
     const IsEnpriTrace = shouldVerifyEnpriTraceLogin()
     useEffect(() => {
@@ -1312,13 +1312,13 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
             setStoreUserInfo(defaultUserInfo)
             if (IsEnpriTrace) {
                 ipcRenderer.invoke("update-judge-license", true)
-                // 只要路由不是Plugin_OP,可以把menuName设置为空字符
+                // If route isn't Plugin_OP, set menuName to an empty string
                 removeMenuPage({route: YakitRoute.AccountAdminPage, menuName: ""})
                 removeMenuPage({route: YakitRoute.RoleAdminPage, menuName: ""})
                 removeMenuPage({route: YakitRoute.HoleCollectPage, menuName: ""})
                 removeMenuPage({route: YakitRoute.ControlAdminPage, menuName: ""})
             } else {
-                // 只要路由不是Plugin_OP,可以把menuName设置为空字符
+                // If route isn't Plugin_OP, set menuName to an empty string
                 removeMenuPage({route: YakitRoute.LicenseAdminPage, menuName: ""})
                 removeMenuPage({route: YakitRoute.TrustListPage, menuName: ""})
             }
@@ -1328,7 +1328,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
             ipcRenderer.removeAllListeners("login-out")
         }
     }, [])
-    // 登录用户非高权限时，软件已打开的高权限页面需自动关闭
+    // Auto-close high privilege pages for non-high privilege login users
     useEffect(() => {
         const {isLogin} = userInfo
         if (!isLogin) {
@@ -1337,13 +1337,13 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
             }
         }
     }, [userInfo])
-    /** ---------- 登录状态变化的逻辑 end ---------- */
-    /** ---------- 简易企业版 start ---------- */
+    /** ---------- Login Status Change End ---------- */
+    /** ---------- Simplified Enterprise Edition - start ---------- */
     useEffect(() => {
         if (isEnpriTraceAgent()) {
-            // 简易企业版页面控制
+            // Simplified Enterprise Edition page control
             extraOpenMenuPage({route: YakitRoute.SimpleDetect})
-            // 简易企业版判断本地插件数-导入弹窗
+            // Simplified Enterprise Edition check local plugin count- Import popup
             const newParams = {
                 Type: "yak,mitm,codec,packet-hack,port-scan",
                 Keyword: "",
@@ -1353,7 +1353,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
             ipcRenderer.invoke("QueryYakScript", newParams).then((item: QueryYakScriptsResponse) => {
                 if (item.Data.length === 0) {
                     const m = showYakitModal({
-                        title: "导入插件",
+                        title: "Tab data",
                         type: "white",
                         content: <DownloadAllPlugin onClose={() => m.destroy()} />,
                         bodyStyle: {padding: 24},
@@ -1368,9 +1368,9 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
             extraOpenMenuPage({route: YakitRoute.DB_ChaosMaker})
         }
     }, [])
-    /** ---------- 简易企业版 end ---------- */
+    /** ---------- Simplified Enterprise Edition - end ---------- */
 
-    /** ---------- web-fuzzer 缓存逻辑 start ---------- */
+    /** ---------- Dragging item ---------- */
     const {setFuzzerSequenceCacheData, clearFuzzerSequence, addFuzzerSequenceCacheData} = useFuzzerSequence(
         (s) => ({
             setFuzzerSequenceCacheData: s.setFuzzerSequenceCacheData,
@@ -1379,16 +1379,16 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
         }),
         shallow
     )
-    // fuzzer-tab页数据订阅事件
+    // Subscribe to fuzzer-tab page data events
     const unFuzzerCacheData = useRef<any>(null)
-    // web-fuzzer多开页面缓存数据
+    // Multi-opening page cache data of web-fuzzer
     useEffect(() => {
         if (!isEnpriTraceAgent()) {
-            // 触发获取web-fuzzer的缓存
+            // Trigger web-fuzzer cache retrieval
             fetchFuzzerList()
         }
         getFuzzerSequenceCache()
-        // 开启fuzzer-tab页内数据的订阅事件
+        // Subscribe to fuzzer-tab page data events
         if (unFuzzerCacheData.current) {
             unFuzzerCacheData.current()
         }
@@ -1400,7 +1400,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
         )
 
         return () => {
-            // 注销fuzzer-tab页内数据的订阅事件
+            // Unsubscribe from fuzzer-tab page data events
             if (unFuzzerCacheData.current) {
                 unFuzzerCacheData.current()
                 unFuzzerCacheData.current = null
@@ -1415,15 +1415,15 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
                 const cache = JSON.parse(res || "[]")
                 setFuzzerSequenceCacheData(cache)
             } catch (error) {
-                yakitNotify("error", "webFuzzer序列化获取缓存数据解析失败:" + error)
+                yakitNotify("error", "Failed parsing webFuzzer cache data:" + error)
             }
         })
     })
 
-    // 获取数据库中缓存的web-fuzzer页面信息
+    // Retrieve cached web-fuzzer page information from database
     const fetchFuzzerList = useMemoizedFn(async () => {
         try {
-            // 如果路由中已经存在webFuzzer页面，则不需要再从缓存中初始化页面
+            // If webFuzzer page already exists in the route, don't need to initialize from cache again
             if (pageCache.findIndex((ele) => ele.route === YakitRoute.HTTPFuzzer) !== -1) return
 
             setLoading(true)
@@ -1444,7 +1444,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
                 .then((res: any) => {
                     clearAllData()
                     const cache = JSON.parse(res || "[]")
-                    // 菜单在代码内的名字
+                    // Menu's code name
                     const menuName = YakitRouteToPageInfo[YakitRoute.HTTPFuzzer]?.label || ""
                     const key = routeConvertKey(YakitRoute.HTTPFuzzer, "")
                     const tabName = routeKeyToLabel.get(key) || menuName
@@ -1553,18 +1553,18 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
                     setCurrentTabKey(key)
                     const lastPage = multipleNodeList[multipleNodeList.length - 1]
                     if (lastPage && lastPage.id.includes("group")) {
-                        // 最后一个是组的时候，需要设置当前选中组
+                        // Close current tab
                         setSelectGroupId(YakitRoute.HTTPFuzzer, lastPage.id)
                     }
                 })
                 .catch((e) => {})
                 .finally(() => setTimeout(() => setLoading(false), 200))
         } catch (error) {
-            yakitNotify("error", "fetchFuzzerList失败:" + error)
+            yakitNotify("error", "Failed to fetchFuzzerList:" + error)
         }
     })
-    // 新增缓存数据
-    /**@description 新增缓存数据 目前最新只缓存 request isHttps verbose */
+    // Add cache data
+    /**@Description: Add cache data - Currently only caches request isHttps verbose */
     const addFuzzerList = useMemoizedFn((key: string, node: MultipleNodeInfo, order: number) => {
         const newPageNode: PageNodeItemProps = {
             id: `${randomString(8)}-${order}`,
@@ -1588,7 +1588,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
         addPagesDataCache(YakitRoute.HTTPFuzzer, newPageNode)
     })
 
-    // 序列导入更新菜单
+    // Sequence import updates menu
     useEffect(() => {
         emiter.on("onFuzzerSequenceImportUpdateMenu", onFuzzerSequenceImportUpdateMenu)
         return () => {
@@ -1601,14 +1601,14 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
             const index = pageCache.findIndex((ele) => ele.route === YakitRoute.HTTPFuzzer)
             if (index === -1) return
             const fuzzerMenuItem = structuredClone(pageCache[index])
-            newGroupItem.verbose = `未命名[${getGroupLength(fuzzerMenuItem.multipleNode)}]`
+            newGroupItem.verbose = `Unnamed[${getGroupLength(fuzzerMenuItem.multipleNode)}]`
             newGroupItem.sortFieId = fuzzerMenuItem.multipleNode.length + 1
             newGroupItem.color = getColor(fuzzerMenuItem.multipleNode)
             fuzzerMenuItem.multipleNode.push(newGroupItem)
             pageCache[index] = fuzzerMenuItem
             setPageCache([...pageCache])
 
-            // 页面数据
+            // Page Data
             const groupChildrenLen = newGroupItem.groupChildren?.length || 0
             const pageList: PageNodeItemProps[] = []
             if (newGroupItem.groupChildren && groupChildrenLen > 0) {
@@ -1660,7 +1660,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
                 setPagesData(YakitRoute.HTTPFuzzer, pageNodeInfo)
             }
 
-            // fuzzer数据
+            // Fuzzer data
             const fuzzerSequenceData: FuzzerSequenceCacheDataProps = {
                 groupId: newGroupItem.id,
                 cacheData: []
@@ -1687,9 +1687,9 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
         }
     })
 
-    /** ---------- web-fuzzer 缓存逻辑 end ---------- */
+    /** ---------- Cannot exceed 50 characters ---------- */
     /**
-     * @description 设置空间引擎页面的缓存数据
+     * @And another
      * @param {MultipleNodeInfo} node
      * @param {number} order
      */
@@ -1707,7 +1707,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
         }
         addPagesDataCache(YakitRoute.Space_Engine, newPageNode)
     })
-    /**简易版 安全检测 */
+    /**Simplified Security Check */
     const onSetSimpleDetectData = useMemoizedFn((node: MultipleNodeInfo, order: number) => {
         const newPageNode: PageNodeItemProps = {
             id: `${randomString(8)}-${order}`,
@@ -1723,7 +1723,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
         addPagesDataCache(YakitRoute.SimpleDetect, newPageNode)
     })
     /**
-     * @description 设置专项漏洞
+     * @Description: Set specialized vulnerability
      */
     const onSetPocData = useMemoizedFn((node: MultipleNodeInfo, order: number) => {
         const newPageNode: PageNodeItemProps = {
@@ -1742,12 +1742,12 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
         }
         addPagesDataCache(YakitRoute.PoC, newPageNode)
     })
-    // 新增数据对比页面
+    // New data comparison page
     useEffect(() => {
         ipcRenderer.on("main-container-add-compare", (e, params) => {
             openMenuPage({route: YakitRoute.DataCompare})
 
-            // 区分新建对比页面还是别的页面请求对比的情况
+            // Differentiate between creating a comparison page and requesting a comparison from another page
             ipcRenderer.invoke("created-data-compare")
         })
         return () => {
@@ -1779,7 +1779,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
                 onCancel={() => setBugTestShow(false)}
                 onOk={() => {
                     if (!bugTestValue) {
-                        yakitNotify("error", "请选择类型后再次提交")
+                        yakitNotify("error", "Please select type before resubmitting")
                         return
                     }
                     addBugTest(2)
@@ -1792,13 +1792,13 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
             >
                 <div style={{padding: "0 24px"}}>
                     <Form.Item
-                        label='专项漏洞类型'
+                        label='Through sending a new feature page'
                         help={
                             bugList.length === 0 && (
                                 <span className={styles["bug-test-help"]}>
-                                    点击管理分组新建分组
+                                    Exceeds tab limit
                                     <span className={styles["bug-test-help-active"]} onClick={onToManageGroup}>
-                                        管理分组
+                                        Manage Groups
                                     </span>
                                 </span>
                             )
@@ -1826,7 +1826,7 @@ export const MainOperatorContent: React.FC<MainOperatorContentProps> = React.mem
 
 const TabContent: React.FC<TabContentProps> = React.memo((props) => {
     const {currentTabKey, setCurrentTabKey, onRemove, pageCache, setPageCache, openMultipleMenuPage} = props
-    /** ---------- 拖拽排序 start ---------- */
+    /** ---------- Drag sorting start ---------- */
     const onDragEnd = useMemoizedFn((result: DropResult, provided: ResponderProvided) => {
         if (!result.destination) {
             return
@@ -1854,7 +1854,7 @@ const TabContent: React.FC<TabContentProps> = React.memo((props) => {
             }
         } catch (error) {}
     })
-    /** ---------- 拖拽排序 end ---------- */
+    /** ---------- Drag sorting - end ---------- */
     return (
         <div className={styles["tab-menu"]}>
             <ReactResizeDetector
@@ -1947,15 +1947,15 @@ const TabList: React.FC<TabListProps> = React.memo((props) => {
                 type: "grey",
                 data: [
                     {
-                        label: "关闭当前标签页",
+                        label: "Name: Extra processing logic for multi-opening page (specific to web-fuzzer page)",
                         key: "removeCurrent"
                     },
                     {
-                        label: "关闭所有标签页",
+                        label: "If the source item of the drag is a group and the destination item is a floating page, do not merge",
                         key: "removeAll"
                     },
                     {
-                        label: "关闭其他标签页",
+                        label: "Close other tabs",
                         key: "removeOther"
                     }
                 ],
@@ -1980,17 +1980,17 @@ const TabList: React.FC<TabListProps> = React.memo((props) => {
             true
         )
     })
-    /**关闭当前标签页 */
+    /**Name: Extra processing logic for multi-opening page (specific to web-fuzzer page) */
     const onRemoveCurrentTabs = useMemoizedFn((item: PageCache) => {
         onRemove(item)
     })
-    /**关闭所有标签页 如果有首页需要保留首页 */
+    /**Close all tabs but keep the homepage if it exists */
     const onRemoveAllTabs = useMemoizedFn((item: PageCache, index: number) => {
         const m = YakitModalConfirm({
             width: 420,
             type: "white",
-            onCancelText: "取消",
-            onOkText: "关闭所有",
+            onCancelText: "Cancel",
+            onOkText: "Closing group prompt needed by default",
             icon: <ExclamationCircleOutlined />,
             onOk: () => {
                 // const newPage: PageCache | undefined = pageCache.find((p) => p.route === YakitRoute.NewHome)
@@ -2002,7 +2002,7 @@ const TabList: React.FC<TabListProps> = React.memo((props) => {
                 } else {
                     setPageCache([])
                 }
-                //关闭所有清除fuzzer和序列化缓存数据
+                //Close other tabs in group
                 clearAllData()
                 clearFuzzerSequence()
                 m.destroy()
@@ -2010,16 +2010,16 @@ const TabList: React.FC<TabListProps> = React.memo((props) => {
             // onCancel: () => {
             //     m.destroy()
             // },
-            content: "是否关闭所有标签页"
+            content: "Whether to close all tabs"
         })
     })
-    /**关闭其他标签页 如果有首页需要保留首页*/
+    /**Specialized Vulnerability*/
     const onRemoveOtherTabs = useMemoizedFn((item: PageCache) => {
         const m = YakitModalConfirm({
             width: 420,
             type: "white",
-            onCancelText: "取消",
-            onOkText: "关闭其他",
+            onCancelText: "Cancel",
+            onOkText: "Close others",
             icon: <ExclamationCircleOutlined />,
             onOk: () => {
                 if (pageCache.length <= 0) return
@@ -2028,7 +2028,7 @@ const TabList: React.FC<TabListProps> = React.memo((props) => {
                 setPageCache(newPage)
                 clearOtherDataByRoute(item.routeKey)
                 if (item.route !== YakitRoute.HTTPFuzzer) {
-                    //当前item不是YakitRoute.HTTPFuzzer,则清除序列化缓存数据
+                    //If current item isn't YakitRoute.HTTPFuzzer, clear serialized cache data
                     clearFuzzerSequence()
                 }
                 m.destroy()
@@ -2036,7 +2036,7 @@ const TabList: React.FC<TabListProps> = React.memo((props) => {
             // onCancel: () => {
             //     m.destroy()
             // },
-            content: "是否保留当前标签页，关闭其他标签页"
+            content: "Keep only the current tab, close other tabs"
         })
     })
     return (
@@ -2136,7 +2136,7 @@ const TabItem: React.FC<TabItemProps> = React.memo((props) => {
 
 const SubTabList: React.FC<SubTabListProps> = React.memo((props) => {
     const {pageItem, index, pageCache, currentTabKey, openMultipleMenuPage, onSetPageCache} = props
-    // webFuzzer 序列化
+    // If dragging is a group, it should only sort, not merge
     const [type, setType] = useState<WebFuzzerType>("config")
 
     const [subPage, setSubPage] = useState<MultipleNodeInfo[]>(pageItem.multipleNode || [])
@@ -2145,7 +2145,7 @@ const SubTabList: React.FC<SubTabListProps> = React.memo((props) => {
         verbose: "",
         sortFieId: 1,
         groupId: "0"
-    }) // 选中的二级菜单
+    }) // Selected sub-menu
 
     const tabsRef = useRef(null)
     const subTabsRef = useRef<any>()
@@ -2166,11 +2166,11 @@ const SubTabList: React.FC<SubTabListProps> = React.memo((props) => {
     }, [currentTabKey])
 
     useEffect(() => {
-        // 处理外部新增一个二级tab
+        // Handle adding an external secondary tab
         setSubPage(pageItem.multipleNode || [])
     }, [pageItem.multipleNode])
 
-    // 切换一级页面时聚焦
+    // Focus when switching primary page
     useEffect(() => {
         const key = routeConvertKey(pageItem.route, pageItem.pluginName)
         if (currentTabKey === key) {
@@ -2179,7 +2179,7 @@ const SubTabList: React.FC<SubTabListProps> = React.memo((props) => {
     }, [currentTabKey])
 
     useEffect(() => {
-        // 新增的时候选中的item
+        // Operating system - start
         const multipleNodeLength = pageItem.multipleNode.length
         if (multipleNodeLength > 0) {
             let currentNode: MultipleNodeInfo = pageItem.multipleNode[multipleNodeLength - 1] || {
@@ -2199,7 +2199,7 @@ const SubTabList: React.FC<SubTabListProps> = React.memo((props) => {
     useUpdateEffect(() => {
         if (type !== "sequence") {
             emiter.emit("onRefWebFuzzer")
-            /**VariableList组件从数据中心刷新最新的展开项,从序列切换到其他tab时，inViewport不会发生变化，所以采取信号发送 */
+            /**VariableList component refreshes latest expanded items from data center, inViewport unchanged when switching tabs */
             emiter.emit("onRefVariableActiveKey")
         }
     }, [type])
@@ -2210,7 +2210,7 @@ const SubTabList: React.FC<SubTabListProps> = React.memo((props) => {
             setType(value.type)
         } catch (error) {}
     })
-    /**页面聚焦 */
+    /**Page focus */
     const onFocusPage = useMemoizedFn(() => {
         setTimeout(() => {
             if (!tabsRef || !tabsRef.current) return
@@ -2227,9 +2227,9 @@ const SubTabList: React.FC<SubTabListProps> = React.memo((props) => {
             setType("sequence")
         }, 200)
     })
-    /**快捷关闭或者新增 */
+    /**Quick close or add */
     const onKeyDown = useMemoizedFn((e: React.KeyboardEvent, subItem: MultipleNodeInfo) => {
-        // 快捷键关闭
+        // Shortcut close
         if (e.code === "KeyW" && (e.ctrlKey || e.metaKey)) {
             e.preventDefault()
             e.stopPropagation()
@@ -2237,7 +2237,7 @@ const SubTabList: React.FC<SubTabListProps> = React.memo((props) => {
             subTabsRef.current?.onRemove(subItem)
             return
         }
-        // 快捷键新增
+        // Shortcut add
         if (e.code === "KeyT" && (e.ctrlKey || e.metaKey)) {
             e.preventDefault()
             e.stopPropagation()
@@ -2321,8 +2321,8 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             openMultipleMenuPage
         } = props
 
-        //拖拽组件相关
-        const [combineIds, setCombineIds] = useState<string[]>([]) //组合中的ids
+        //Drag related components
+        const [combineIds, setCombineIds] = useState<string[]>([]) //If the source item of the drag is a group, do not merge
         const [isCombineEnabled, setIsCombineEnabled] = useState<boolean>(true)
         const [dropType, setDropType] = useState<string>(droppable)
         const [subDropType, setSubDropType] = useState<string>(droppableGroup)
@@ -2333,7 +2333,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             scrollRight: 0
         })
 
-        const [closeGroupTip, setCloseGroupTip] = useState<boolean>(true) // 关闭组的时候是否还需要弹窗提示,默认是要弹窗的;如果用户选择了不再提示,后续则就不需要再弹出提示框
+        const [closeGroupTip, setCloseGroupTip] = useState<boolean>(true) // Delete group including its pages, a popup with a "Don't remind again" feature;If user chooses "Don't remind again," no further prompts
 
         const combineColorRef = useRef<string>("")
         const scrollLeftIconRef = useRef<any>()
@@ -2407,12 +2407,12 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
         const tabMenuSubRef = useRef<any>()
 
         useEffect(() => {
-            // 切换选中页面时聚焦
+            // Focus when switching selected page
             onFocusPage()
             if (subPage.length === 0) return
             const groupChildrenList = subPage[subPage.length - 1].groupChildren || []
             if (groupChildrenList.length > 0) {
-                // 二级tab最后一个是组
+                // Last secondary tab is a group
                 const index = groupChildrenList.findIndex((ele) => ele.id === selectSubMenu.id)
                 if (index !== -1) {
                     setTimeout(() => {
@@ -2421,7 +2421,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                 }
             }
             if (selectSubMenu.id === subPage[subPage.length - 1].id) {
-                //滚动到最后边
+                //Scroll to the end
                 scrollToRightMost()
             }
             if (selectSubMenu.id !== "0") {
@@ -2476,7 +2476,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             }
         )
 
-        /**滚动到最后边 */
+        /**Scroll to the end */
         const scrollToRightMost = useMemoizedFn(() => {
             if (!tabMenuSubRef.current) {
                 const tabMenuSub = document.getElementById(`tab-menu-sub-${pageItem.route}`)
@@ -2493,7 +2493,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             }
         })
 
-        /**@description  关闭组是否需要提示*/
+        /**@Description: Close group prompt needed?*/
         const getIsCloseGroupTip = useMemoizedFn(() => {
             getRemoteValue(Close_Group_Tip).then((e) => {
                 setCloseGroupTip(e === "false" ? false : true)
@@ -2504,7 +2504,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             const sourceIndex = result.source.index
             const {subIndex} = getPageItemById(subPage, result.draggableId)
             if (subIndex === -1) {
-                // 拖动的来源item是组时，不用合并
+                // Description: Move within the same group
                 if ((subPage[sourceIndex]?.groupChildren?.length || 0) > 0) return
             }
             const {droppableId: sourceDroppableId} = result.source
@@ -2536,13 +2536,13 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             try {
                 // console.log("onSubMenuDragEnd", result)
                 const {droppableId: sourceDroppableId} = result.source
-                /** 合并组   ---------start--------- */
+                /** Ungrouped page - Close other tabs--------- */
                 if (result.combine) {
-                    // 组外两个游离的标签页合成组
+                    // Two ungrouped tabs merge into a group
                     if (result.source.droppableId === "droppable2" && result.combine.droppableId === "droppable2") {
                         mergingGroup(result)
                     }
-                    // 组内的标签页拖拽到组外并和组外的一个标签页合成组(组内向组外合并)
+                    // When group is closed, change to expanded state)
                     if (sourceDroppableId.includes("group") && result.combine.droppableId === "droppable2") {
                         mergeWithinAndOutsideGroup(result)
                     }
@@ -2552,40 +2552,40 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                 setSubDropType(droppableGroup)
                 setCombineIds([])
                 combineColorRef.current = ""
-                /** 合并组   ---------end--------- */
-                /** 移动排序 ---------start--------- */
+                /** Merge group ---------end--------- */
+                /** Move sort ---------start--------- */
                 if (!result.destination && !result.source) {
                     return
                 }
 
                 const {droppableId: destinationDroppableId} = result.destination || {droppableId: "0"}
-                // 组外之间移动
+                // Movement between different external groups
                 if (sourceDroppableId === "droppable2" && destinationDroppableId === "droppable2") {
                     movingBetweenOutsideGroups(result)
                 }
-                //组之间的移动
+                //Move between groups
                 if (sourceDroppableId.includes("group") && destinationDroppableId.includes("group")) {
                     if (sourceDroppableId === destinationDroppableId) {
-                        //同一个组之间的移动
+                        //Movement within the same group
                         movingWithinSameGroup(result)
                     } else {
-                        // 从组A到组B
+                        // From Group A to Group B
                         movingBetweenDifferentGroups(result)
                     }
                 }
 
-                // 组内向外移动 变游离的tab
+                // Move from group to floating tab
                 if (sourceDroppableId.includes("group") && destinationDroppableId === "droppable2") {
                     movingWithinAndOutsideGroup(result)
                 }
-                // 组外向组内移动
+                // If currently selected is a group, select the first one inside
                 if (result.source.droppableId === "droppable2" && destinationDroppableId.includes("group")) {
                     moveOutOfGroupAndInGroup(result)
                 }
-                /** 移动排序 ---------end--------- */
+                /** Move sort ---------end--------- */
             } catch (error) {}
         })
-        /** @description 组外向组内移动合并 */
+        /** @Description: Move from outside to inside group */
         const mergingGroup = useMemoizedFn((result: DropResult) => {
             if (!result.combine) {
                 return
@@ -2598,11 +2598,11 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             const sourceGroupChildrenLength = subPage[sourceIndex]?.groupChildren?.length || 0
             const combineGroupChildrenLength = subPage[combineIndex]?.groupChildren?.length || 0
 
-            // 拖动的来源item是组时目的地item是游离页面，不合并
+            // Name: Plugin Store
             if (sourceGroupChildrenLength > 0 && combineGroupChildrenLength === 0) return
 
             if (sourceGroupChildrenLength > 0 && combineGroupChildrenLength > 0) {
-                // 拖动的来源item是组时目的地item也是组，合并  已经废弃
+                // Web-fuzzer caching logic - end
                 // const groupList = subPage[sourceIndex].groupChildren?.map((ele) => ({ ...ele, groupId })) || []
                 // subPage[combineIndex].groupChildren = (subPage[combineIndex].groupChildren || []).concat(groupList)
                 // subPage[combineIndex].expand = true
@@ -2621,7 +2621,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                 } else {
                     const groupLength = getGroupLength(subPage)
                     subPage[combineIndex].groupChildren = [{...subPage[combineIndex], groupId}, dropItem]
-                    subPage[combineIndex].verbose = `未命名[${groupLength}]`
+                    subPage[combineIndex].verbose = `Unnamed[${groupLength}]`
                     subPage[combineIndex].color = combineColorRef.current
                     subPage[combineIndex].expand = true
                     subPage[combineIndex].id = groupId
@@ -2643,7 +2643,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             onAddGroupsAndThenSort(combineItem, subPage, currentTabKey)
         })
 
-        /**@description 组内向组外合并 */
+        /**@Description: Merge from within group to outside */
         const mergeWithinAndOutsideGroup = useMemoizedFn((result: DropResult) => {
             if (!result.combine) {
                 return
@@ -2651,10 +2651,10 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             const {index: sourceIndex, droppableId} = result.source
             const {draggableId: combineDraggableId} = result.combine
 
-            if (droppableId === combineDraggableId) return // 同一个组不能合并
+            if (droppableId === combineDraggableId) return // Same group cannot merge
             if (droppableId.includes("group") === combineDraggableId.includes("group")) {
-                // 不能正常拖拽的时候，两个组之间的拖拽交互失效
-                // 所以执行movingBetweenDifferentGroups,不走合并的逻辑
+                // Interaction between two groups fails when drag and drop doesn't work properly
+                // Therefore, execute movingBetweenDifferentGroups without merging logic
                 const newResult: DropResult = {
                     combine: null,
                     destination: {
@@ -2673,7 +2673,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                 movingBetweenDifferentGroups(newResult)
                 return
             }
-            // 删除拖拽的组内标签页
+            // Delete dragged group tab
             const gIndex = subPage.findIndex((ele) => ele.id === droppableId)
             if (gIndex === -1) return
 
@@ -2684,7 +2684,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
 
             if (combineIndex === -1) return
             const newGroupId = generateGroupId()
-            //将拖拽的item和组外的目的地item合并
+            //Merge dragged item with an outside group item
 
             const dropItem: MultipleNodeInfo = {
                 ...sourceItem[0],
@@ -2695,13 +2695,13 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             }
             const groupLength = getGroupLength(subPage)
             subPage[combineIndex].groupChildren = [{...subPage[combineIndex], groupId: newGroupId}, dropItem]
-            subPage[combineIndex].verbose = `未命名[${groupLength}]`
+            subPage[combineIndex].verbose = `Unnamed[${groupLength}]`
             subPage[combineIndex].color = combineColorRef.current || subPage[sourceIndex].color
             subPage[combineIndex].expand = true
             subPage[combineIndex].id = newGroupId
 
             const combineItem = subPage[combineIndex]
-            // 拖拽后组内item===0,则删除该组
+            // If group's internal item===0 after drag, delete the group
             if (subPage[gIndex].groupChildren?.length === 0) {
                 subPage.splice(gIndex, 1)
                 removeFuzzerSequenceList({
@@ -2720,7 +2720,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                 setSelectGroupId(currentTabKey, combineItem.id)
             }
         })
-        /** @description 组外之间移动 */
+        /** @Description: Move between external groups */
         const movingBetweenOutsideGroups = useMemoizedFn((result: DropResult) => {
             if (!result.destination) {
                 return
@@ -2742,7 +2742,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             }
             onExchangeOrderPages(currentTabKey, source, destination)
         })
-        /** @description 同一个组内之间移动 */
+        /** @Move from outside to inside group */
         const movingWithinSameGroup = useMemoizedFn((result: DropResult) => {
             if (!result.destination) {
                 return
@@ -2758,7 +2758,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             const newGroupChildrenList: MultipleNodeInfo[] = reorder(groupChildrenList, sourceIndex, destinationIndex)
             subPage[gIndex].groupChildren = newGroupChildrenList
             onUpdatePageCache(subPage)
-            // 排序
+            // Sort
             const source = {
                 id: groupChildrenSourceItem.id,
                 sortFieId: destinationIndex + 1
@@ -2770,7 +2770,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             onExchangeOrderPages(currentTabKey, source, destination)
         })
 
-        /** @description 不同一个组间移动 从组A到组B */
+        /** @Description: Move between different groups From Group A to Group B */
         const movingBetweenDifferentGroups = useMemoizedFn((result: DropResult) => {
             if (!result.destination) {
                 return
@@ -2779,15 +2779,15 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             const {droppableId: dropDestinationId, index: destinationIndex} = result.destination
             const sourceGroupId = dropSourceId
             const destinationGroupId = dropDestinationId
-            // 将拖拽的item从来源地中删除
+            // Remove dragged item from source
             const sourceNumber = subPage.findIndex((ele) => ele.id === sourceGroupId)
             if (sourceNumber === -1) return
             const sourceGroupChildrenList = subPage[sourceNumber].groupChildren || []
-            const sourceItem = sourceGroupChildrenList[sourceIndex] // 拖拽的item
+            const sourceItem = sourceGroupChildrenList[sourceIndex] // Generated group id
             sourceGroupChildrenList.splice(sourceIndex, 1)
             subPage[sourceNumber].groupChildren = sourceGroupChildrenList
 
-            // 将拖拽的item添加到目的地的组内
+            // Add dragged item to destination group
             const destinationNumber = subPage.findIndex((ele) => ele.id === destinationGroupId)
             const destinationGroupChildrenList = subPage[destinationNumber].groupChildren || []
             if (destinationGroupChildrenList.length === 0) return
@@ -2799,11 +2799,11 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                 setSelectSubMenu((s) => ({...s, groupId: destinationGroupId}))
             }
 
-            destinationGroupChildrenList.splice(destinationIndex, 0, newSourceItem) // 按顺序将拖拽的item放进目的地中并修改组的id
+            destinationGroupChildrenList.splice(destinationIndex, 0, newSourceItem) // Place dragged item in order into destination and change group id
             subPage[destinationNumber].groupChildren = destinationGroupChildrenList
 
             if (sourceGroupChildrenList.length === 0) {
-                // 组内的标签页为0时,删除该组
+                // Delete group if it has 0 tabs
                 subPage.splice(sourceNumber, 1)
                 removeFuzzerSequenceList({
                     groupId: sourceItem.id
@@ -2813,7 +2813,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             onUpdateSorting(subPage, currentTabKey)
         })
 
-        /** @description 组内向组外移动 */
+        /** @Description: Move from group to outside */
         const movingWithinAndOutsideGroup = useMemoizedFn((result: DropResult) => {
             if (!result.destination) {
                 return
@@ -2822,11 +2822,11 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             const {index: destinationIndex} = result.destination
 
             const sourceGroupId = dropSourceId
-            // 将拖拽的item从来源地中删除
+            // Remove dragged item from source
             const sourceNumber = subPage.findIndex((ele) => ele.id === sourceGroupId)
             if (sourceNumber === -1) return
             const sourceGroupChildrenList: MultipleNodeInfo[] = subPage[sourceNumber].groupChildren || []
-            const sourceItem = sourceGroupChildrenList[sourceIndex] // 拖拽的item
+            const sourceItem = sourceGroupChildrenList[sourceIndex] // Generated group id
             sourceGroupChildrenList.splice(sourceIndex, 1)
             subPage[sourceNumber].groupChildren = sourceGroupChildrenList
 
@@ -2837,10 +2837,10 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             if (selectSubMenu.id === sourceItem.id) {
                 setSelectSubMenu((s) => ({...s, groupId: "0"}))
             }
-            // 将拖拽的item添加到目的地的组内
+            // Add dragged item to destination group
             subPage.splice(destinationIndex, 0, newSourceItem)
 
-            // 如果组内的item为0 ,需要删除组
+            // Delete group if it contains 0 items
             if (sourceGroupChildrenList.length === 0) {
                 const number = subPage.findIndex((ele) => ele.id === sourceGroupId)
                 subPage.splice(number, 1)
@@ -2854,30 +2854,30 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             }
             onUpdateSorting(subPage, currentTabKey)
         })
-        /** @description 组外向组内移动 */
+        /** @Compatibility only with "Configuration" for visibility in advanced settings, lower version shared with higher version */
         const moveOutOfGroupAndInGroup = useMemoizedFn((result: DropResult) => {
             if (!result.destination) {
                 return
             }
             const {index} = getPageItemById(subPage, result.draggableId)
-            //拖动的是组
+            //Selected item when adding
             if ((subPage[index].groupChildren?.length || 0) > 0) return
             const {index: sourceIndex} = result.source
             const {droppableId: dropDestinationId, index: destinationIndex} = result.destination
-            const sourceItem = subPage[sourceIndex] // 拖拽的item
+            const sourceItem = subPage[sourceIndex] // Generated group id
 
             const destinationGroupId = dropDestinationId
 
             const destinationNumber = subPage.findIndex((ele) => ele.id === destinationGroupId)
             if (sourceItem.groupChildren && sourceItem.groupChildren.length > 0) {
-                // 拖拽的item是一个组,两个组合并 已废弃
+                // Drag is a group, merge two groups - Deprecated
                 // const pageList = sourceItem.groupChildren.map((ele) => ({
                 //     ...ele,
                 //     groupId: destinationGroupId
                 // }))
                 // subPage[destinationNumber].groupChildren?.splice(destinationIndex, 0, ...pageList)
             } else {
-                // 将拖拽的item添加到目的地的组内
+                // Add dragged item to destination group
 
                 const destinationGroupChildrenList = subPage[destinationNumber].groupChildren || []
                 if (destinationGroupChildrenList.length === 0) return
@@ -2888,15 +2888,15 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                 if (selectSubMenu.id === newSourceItem.id) {
                     setSelectSubMenu((s) => ({...s, groupId: destinationGroupId}))
                 }
-                destinationGroupChildrenList.splice(destinationIndex, 0, newSourceItem) // 按顺序将拖拽的item放进目的地中并修改组的id
+                destinationGroupChildrenList.splice(destinationIndex, 0, newSourceItem) // Place dragged item in order into destination and change group id
                 subPage[destinationNumber].groupChildren = destinationGroupChildrenList
             }
-            // 将拖拽的item从来源地中删除
+            // Remove dragged item from source
             subPage.splice(sourceIndex, 1)
             onUpdatePageCache(subPage)
             onUpdateSorting(subPage, currentTabKey)
         })
-        /** 更新pageCache和subPage，保证二级新开tab后顺序不变 */
+        /** Description: Quick open a page with parameters */
         const onUpdatePageCache = useMemoizedFn((subMenuList: MultipleNodeInfo[]) => {
             try {
                 onSetPageCache(subMenuList)
@@ -2907,7 +2907,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
         })
         const onAddSubPage = useMemoizedFn(() => {
             if (getSubPageTotal(subPage) >= 100) {
-                yakitNotify("error", "超过标签页数量限制")
+                yakitNotify("error", "Whether to close the current group, closing will also close pages within the group")
                 return
             }
             openMultipleMenuPage({
@@ -2916,21 +2916,21 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                 pluginName: pageItem.pluginName
             })
         })
-        /** @description 删除item 更新选中的item*/
+        /** @Description: Delete item, update selected item*/
         const onUpdateSelectSubPage = useMemoizedFn((handleItem: MultipleNodeInfo) => {
             if (selectSubMenu.id === "0") return
-            // 先判断被删除的item是否是独立的，如果是独立的则不需要走组内的逻辑
-            // 独立的item被删除 游离的/没有组的
+            // First, check if the deleted item is independent; if so, proceed without group logic
+            // Independent Item Deleted - Floating/Ungrouped
             const itemIndex = subPage.findIndex((ele) => ele.id === handleItem.id)
             if (itemIndex !== -1) {
                 let currentNode: MultipleNodeInfo = subPage[itemIndex + 1]
                 if (!currentNode) currentNode = subPage[itemIndex - 1]
                 if (!currentNode) currentNode = subPage[0]
                 if ((currentNode?.groupChildren?.length || 0) > 0) {
-                    // 若此时选中的是一个组，则选中组内的第一个
+                    // Name: Determine if a page is opened, pinpoint it if yes, or open it if no
                     if (!currentNode.groupChildren) currentNode.groupChildren = []
                     if (!currentNode.expand) {
-                        // 如果组是关闭状态,则需要变为展开状态
+                        // If group is closed, change to expanded state
                         const number = subPage.findIndex((ele) => ele.id === currentNode.id)
                         if (number === -1) return
                         subPage[number] = {
@@ -2944,7 +2944,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                 setSelectSubMenu({...currentNode})
                 return
             }
-            // 删除组内的
+            // Description: Set the passed item as the selected one
             const groupIndex = subPage.findIndex((ele) => ele.id === handleItem.groupId)
             if (groupIndex !== -1) {
                 const groupList: MultipleNodeInfo = subPage[groupIndex] || {
@@ -2955,20 +2955,20 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                 if (!groupList.groupChildren) groupList.groupChildren = []
                 const groupChildrenIndex = groupList.groupChildren.findIndex((ele) => ele.id === handleItem.id)
                 if (groupChildrenIndex === -1) return
-                // 选中组内的前一个或者后一个
+                // Select the previous or next item in group
                 let currentChildrenNode: MultipleNodeInfo = groupList.groupChildren[groupChildrenIndex + 1]
                 if (!currentChildrenNode) currentChildrenNode = groupList.groupChildren[groupChildrenIndex - 1]
                 if (!currentChildrenNode) currentChildrenNode = groupList.groupChildren[0]
-                // 删除的item等于最后一个item，则选中组的前一个或者后一个item
+                // If deleted item is the last, select the previous or next item in group
                 if (currentChildrenNode.id === handleItem.id) {
                     currentChildrenNode = subPage[groupIndex + 1]
                     if (!currentChildrenNode) currentChildrenNode = subPage[groupIndex - 1]
                     if (!currentChildrenNode) currentChildrenNode = subPage[0]
                     if ((currentChildrenNode?.groupChildren?.length || 0) > 0) {
-                        // 若此时选中的是一个组，则选中组内的第一个
+                        // Name: Determine if a page is opened, pinpoint it if yes, or open it if no
                         if (!currentChildrenNode.groupChildren) currentChildrenNode.groupChildren = []
                         if (!currentChildrenNode.expand) {
-                            // 如果组是关闭状态,则需要变为张开状态
+                            // Close other tabs but keep the homepage if needed
                             const number = subPage.findIndex((ele) => ele.id === currentChildrenNode.id)
                             if (number === -1) return
                             subPage[number] = {
@@ -2983,7 +2983,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                 setSelectSubMenu({...currentChildrenNode})
             }
         })
-        /**@description 设置传入的item为选中的item */
+        /**@Operating system - end */
         const onSetSelectSubMenu = useMemoizedFn((handleItem: MultipleNodeInfo) => {
             if (handleItem.groupChildren && handleItem.groupChildren.length > 0) {
                 const index = handleItem.groupChildren.findIndex((ele) => ele.id === selectSubMenu.id)
@@ -2992,22 +2992,22 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                 setSelectSubMenu({...handleItem})
             }
         })
-        /** 关闭当前标签页 */
+        /** Name: Extra processing logic for multi-opening page (specific to web-fuzzer page) */
         const onRemoveSubPage = useMemoizedFn((removeItem: MultipleNodeInfo) => {
-            //  先更改当前选择item,在删除
+            //  Modify selected item, then delete
             if (removeItem.id === selectSubMenu.id) onUpdateSelectSubPage(removeItem)
             const {index, subIndex} = getPageItemById(subPage, removeItem.id)
             if (subIndex === -1) {
-                // 删除游离页面
+                // Delete floating page
                 subPage.splice(index, 1)
             } else {
-                // 删除组内页面
+                // Specialized vulnerability type
                 const groupItem = subPage[index]
                 const groupChildren = groupItem.groupChildren || []
                 if (groupChildren.length > 0) {
                     groupChildren.splice(subIndex, 1)
                 }
-                //删除后再判断
+                //Re-evaluate after deletion
                 if (groupChildren.length === 0) {
                     subPage.splice(index, 1)
                     removePagesDataCacheById(currentTabKey, groupItem.id)
@@ -3024,7 +3024,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             onUpdateSorting(subPage, currentTabKey)
         })
         /**
-         * @description 页面节点的右键点击事件
+         * @Description: Right-click event on a page node
          */
         const onRightClickOperation = useMemoizedFn((event: React.MouseEvent, item: MultipleNodeInfo) => {
             let menuData: YakitMenuItemType[] = _.cloneDeepWith(pageTabItemRightOperation)
@@ -3035,7 +3035,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                     const groupChildren = groupItem.groupChildren || []
                     const gLength = groupChildren.length
                     if (gLength > 0) {
-                        labelText = `“${groupChildren[0].verbose}”和另外 ${gLength - 1} 个标签页`
+                        labelText = `“${groupChildren[0].verbose}”Secondary floating page ${gLength - 1} Close all`
                     }
                 }
                 const node = {
@@ -3053,7 +3053,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             const {subIndex} = getPageItemById(subPage, item.id)
             if (subIndex !== -1) {
                 menuData.splice(2, 0, {
-                    label: "从组中移出",
+                    label: "Remove from group",
                     key: "removeFromGroup"
                 })
             }
@@ -3091,7 +3091,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             )
         })
 
-        /**重命名 */
+        /**Rename */
         const onRename = useMemoizedFn((item: MultipleNodeInfo) => {
             const m = showYakitModal({
                 footer: null,
@@ -3100,25 +3100,25 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                 content: (
                     <React.Suspense fallback={<div>loading...</div>}>
                         <TabRenameModalContent
-                            title='重命名'
+                            title='Rename'
                             onClose={() => {
                                 m.destroy()
                             }}
                             name={item.verbose}
                             onOk={(val) => {
                                 if (val.length > 50) {
-                                    yakitNotify("error", "不能超过50个字符")
+                                    yakitNotify("error", "Dragging is a group")
                                     return
                                 }
 
                                 const {index, subIndex} = getPageItemById(subPage, item.id)
                                 if (index === -1) return
                                 if (subIndex === -1) {
-                                    // 当前情况说明item是游离的页面,没有在其他组内
+                                    // Current description explains item is a floating page, not in any group
                                     subPage[index] = {...subPage[index], verbose: val}
                                     onUpdatePageCache(subPage)
                                 } else {
-                                    // 当前情况说明item在subPage[index]的组内
+                                    // Current description explains item is within group in subPage[index]
                                     const groupChildrenList = subPage[index].groupChildren || []
                                     if (groupChildrenList.length > 0) {
                                         groupChildrenList[subIndex] = {
@@ -3144,7 +3144,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                 )
             })
         })
-        /**更新数据中心得页面名称数据 */
+        /**Update page names in data center */
         const onUpdatePageName = useMemoizedFn((currentTabKey: string, param: MultipleNodeInfo) => {
             const current: PageNodeItemProps | undefined = queryPagesDataById(currentTabKey, param.id)
             if (!current) return
@@ -3152,7 +3152,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             updatePagesDataCacheById(currentTabKey, current)
             emiter.emit("secondMenuTabDataChange", "")
         })
-        /**将页面添加到新建组 */
+        /**Add page to new group */
         const onNewGroup = useMemoizedFn((item: MultipleNodeInfo) => {
             const {index, subIndex} = getPageItemById(subPage, item.id)
             const groupLength = getGroupLength(subPage)
@@ -3160,7 +3160,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             const newGroup: MultipleNodeInfo = {
                 id: groupId,
                 groupId: "0",
-                verbose: `未命名[${groupLength}]`,
+                verbose: `Unnamed[${groupLength}]`,
                 sortFieId: subPage.length,
                 groupChildren: [{...item, groupId}],
                 expand: true,
@@ -3171,10 +3171,10 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             }
 
             if (subIndex === -1) {
-                // 游离页面移动到新建组
+                // Manage groups
                 subPage.splice(index, 1, newGroup)
             } else {
-                // 组A移动到新建组
+                // Moving from Group A to new group
                 const groupChildren = subPage[index].groupChildren || []
                 if (groupChildren.length > 0) {
                     groupChildren.splice(subIndex, 1)
@@ -3196,13 +3196,13 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             onAddGroupsAndThenSort(newGroup, subPage, currentTabKey)
             onUpdatePageCache([...subPage])
         })
-        /**将标签页移动到组 */
+        /**Move tab into group */
         const onAddToGroup = useMemoizedFn((item: MultipleNodeInfo, key: string) => {
             const {index, subIndex} = getPageItemById(subPage, item.id)
             const {index: gIndex, current: currentGroup} = getPageItemById(subPage, key)
 
             if (subIndex === -1) {
-                //游离页面移动到组内
+                //Move floating page into group
                 // subPage[gIndex].groupChildren?.push({ ...item, groupId: subPage[gIndex].id })
                 subPage[gIndex] = {
                     ...subPage[gIndex],
@@ -3210,7 +3210,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                 }
                 subPage.splice(index, 1)
             } else {
-                // 组A移动到组B
+                // Move from Group A to Group B
                 const groupChildren = subPage[index].groupChildren || []
                 if (groupChildren.length > 0) {
                     groupChildren.splice(subIndex, 1)
@@ -3236,7 +3236,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             }
             onUpdateSorting(subPage, currentTabKey)
         })
-        /**从组中移出 */
+        /**Remove from group */
         const onRemoveFromGroup = useMemoizedFn((item: MultipleNodeInfo) => {
             const {index, subIndex} = getPageItemById(subPage, item.id)
             if (subIndex === -1) return
@@ -3269,7 +3269,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             }
             onUpdateSorting(subPage, currentTabKey)
         })
-        /**更新全局变量中得序列缓存数据 */
+        /**Update global variable sequence cache data */
         const onUpdateFuzzerSequenceCacheData = useMemoizedFn((item: MultipleNodeInfo) => {
             const sequenceCache = queryFuzzerSequenceCacheDataByGroupId(item.groupId).filter(
                 (ele) => ele.pageId !== item.id
@@ -3281,20 +3281,20 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             }
         })
 
-        /**关闭当前标签页 */
+        /**Name: Extra processing logic for multi-opening page (specific to web-fuzzer page) */
         const onRemove = useMemoizedFn((item: MultipleNodeInfo) => {
             onRemoveSubPage(item)
         })
-        /**二级游离页面/未分组的页面 关闭其他标签页 */
+        /**Type 1 opens vulnerability detection type selection, Type 2 opens poc page directly with data/Description: Move from outside to inside group */
         const onRemoveOther = useMemoizedFn((item: MultipleNodeInfo) => {
             const {index, subIndex} = getPageItemById(subPage, item.id)
             if (subIndex === -1) {
-                // 游离页面的关闭其他tabs
+                // Close other tabs of floating pages
                 const m = YakitModalConfirm({
                     width: 420,
                     type: "white",
-                    onCancelText: "取消",
-                    onOkText: "关闭其他",
+                    onCancelText: "Cancel",
+                    onOkText: "Close others",
                     icon: <ExclamationCircleOutlined />,
                     onOk: () => {
                         const newSubPage: MultipleNodeInfo[] = [item]
@@ -3319,29 +3319,29 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                     // onCancel: () => {
                     //     m.destroy()
                     // },
-                    content: "是否保留当前标签页，关闭其他标签页"
+                    content: "Keep only the current tab, close other tabs"
                 })
             } else {
-                // 关闭组内的其他tabs
+                // Last selected group needs to be set when last one is a group
                 const m = YakitModalConfirm({
                     width: 420,
                     type: "white",
-                    onCancelText: "取消",
-                    onOkText: "关闭组内其他",
+                    onCancelText: "Cancel",
+                    onOkText: "Import plugin",
                     icon: <ExclamationCircleOutlined />,
                     onOk: () => {
                         const groupItem = subPage[index]
                         subPage[index].groupChildren = [item]
                         onSetSelectSubMenu(item)
                         onUpdatePageCache(subPage)
-                        //更新fuzzer缓存
+                        //Update fuzzer cache
                         const current: PageNodeItemProps | undefined = queryPagesDataById(currentTabKey, item.id)
                         if (current) {
                             const groupList = [{...current, sortFieId: 1}]
                             setPageNodeInfoByPageGroupId(currentTabKey, item.groupId, groupList)
                         }
                         if (currentTabKey === YakitRoute.HTTPFuzzer) {
-                            // 移出序列中该组的其他数据
+                            // Remove other data of the group from sequence
                             removeGroupOther(groupItem.id, item.id)
                         }
                         m.destroy()
@@ -3349,7 +3349,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                     // onCancel: () => {
                     //     m.destroy()
                     // },
-                    content: "是否仅保留当前标签页，关闭组内其他标签页"
+                    content: "Keep only the current tab, close other tabs in group"
                 })
             }
         })
@@ -3384,7 +3384,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                 true
             )
         })
-        /**@description 取消组/将组内的页面变成游离的状态 */
+        /**@Description: Cancel group/Turn group's pages into floating status */
         const onCancelGroup = useMemoizedFn((groupItem: MultipleNodeInfo) => {
             const index = subPage.findIndex((ele) => ele.id === groupItem.id)
             if (index === -1) return
@@ -3405,7 +3405,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             }
             onUpdateSorting(subPage, currentTabKey)
         })
-        /**更新两个item的排序字段 */
+        /**Update sorting fields of two items */
         const onExchangeOrderPages = useMemoizedFn(
             (
                 routeKey: YakitRoute | string,
@@ -3437,10 +3437,10 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                 }, 200)
             }
         )
-        /**先添加新组，再onUpdateSorting */
+        /**First add new group, then onUpdateSorting */
         const onAddGroupsAndThenSort = useMemoizedFn(
             (newGroup: MultipleNodeInfo, subPage: MultipleNodeInfo[], currentRouteKey: string) => {
-                // 先添加新组，再onUpdateSorting
+                // First add new group, then onUpdateSorting
                 const newPageGroupNode: PageNodeItemProps = {
                     id: `${randomString(8)}-${newGroup.sortFieId}`,
                     routeKey: currentRouteKey,
@@ -3456,7 +3456,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                 onUpdateSorting(subPage, currentRouteKey)
             }
         )
-        /**更新排序和组内的页面所属组id 所有二级菜单的排序 */
+        /**Update sorting and group id of pages within all sub-menus */
         const onUpdateSorting = useMemoizedFn((subPage: MultipleNodeInfo[], currentRouteKey: string) => {
             const pageList: PageNodeItemProps[] = []
             subPage.forEach((ele, index) => {
@@ -3482,14 +3482,14 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             }
             setPagesData(currentRouteKey, pages)
         })
-        /**@description 关闭组/删除组包括组里的页面,有一个弹窗不再提示的功能 */
+        /**@Clear fuzzer and serialized cache data when closing all/When closing, if the selected item is within the group, change the selected item to the next selectable one */
         const onCloseGroupConfirm = useMemoizedFn((groupItem: MultipleNodeInfo) => {
             if (closeGroupTip) {
                 const m = YakitModalConfirm({
                     width: 420,
                     type: "white",
-                    onCancelText: "取消",
-                    onOkText: "关闭组",
+                    onCancelText: "Cancel",
+                    onOkText: "Close group",
                     icon: <ExclamationCircleOutlined />,
                     onOk: () => {
                         getIsCloseGroupTip()
@@ -3505,7 +3505,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                 onCloseGroup(groupItem)
             }
         })
-        /**关闭组 组的右键事件 */
+        /**Close group - Right-click event */
         const onCloseGroup = useMemoizedFn((groupItem: MultipleNodeInfo) => {
             const index = subPage.findIndex((ele) => ele.id === groupItem.id)
             if (index === -1) return
@@ -3519,13 +3519,13 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                 })
             }
         })
-        /**@description 组的右键事件 关闭其他标签页 */
+        /**@Description: Right-click event of group - Close other tabs */
         const onCloseOtherTabs = useMemoizedFn((groupItem: MultipleNodeInfo) => {
             const m = YakitModalConfirm({
                 width: 420,
                 type: "white",
-                onCancelText: "取消",
-                onOkText: "关闭其他",
+                onCancelText: "Cancel",
+                onOkText: "Close others",
                 icon: <ExclamationCircleOutlined />,
                 onOk: () => {
                     const newPage = [{...groupItem}]
@@ -3557,11 +3557,11 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                 // onCancel: () => {
                 //     m.destroy()
                 // },
-                content: "是否保留当前组及其组内标签页，关闭其他组和标签页"
+                content: "Keep current group and its tabs, close all other groups and tabs"
             })
         })
         /**
-         * @description 组的右键事件 收起和展开事件
+         * @Description: Right-click event of group - Collapse and expand
          */
         const onUnfoldAndCollapse = useMemoizedFn((item: MultipleNodeInfo) => {
             const newItem = {...item}
@@ -3571,25 +3571,25 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
                 const number = (newItem.groupChildren || []).findIndex((ele) => ele.id === selectSubMenu.id)
                 if (number !== -1 && !newItem.expand) {
                     const total = getSubPageTotal(subPage)
-                    // 关闭时, 选中的item在该组内时,将选中的item变为后面可以选中的item
+                    // Close other tabs in group
                     const {index} = getPageItemById(subPage, newItem.id)
                     const sLength = subPage.length
                     const initIndex = total >= 100 ? index - 1 : index + 1
-                    // 因为限制100个，如果该组为最后一个，就选中上一个可选item
+                    // Select previous selectable item if it's the last group due to 100 item limit
                     for (let i = initIndex; total >= 100 ? i > 0 : i < sLength + 1; total >= 100 ? i-- : i++) {
                         const element: MultipleNodeInfo | undefined = subPage[i]
                         if (!element) {
-                            // element不存在时,新建一个tab选中
+                            // If element doesn't exist, create and select a new tab
                             onAddSubPage()
                             break
                         }
                         if (element.expand && element.groupChildren && element.groupChildren.length > 0) {
-                            //下一个为组时,选中组内的第一个
+                            //Default data of the open page on software initialization
                             onSetSelectSubMenu(element.groupChildren[0])
                             break
                         }
                         if (element && element.groupChildren?.length === 0) {
-                            // 下一个为游离的tab页面时,选中该tab
+                            // Select next floating tab page
                             onSetSelectSubMenu(element)
                             break
                         }
@@ -3599,7 +3599,7 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             }, 300)
         })
         /**
-         * @description 更新组
+         * @Description: Update group
          */
         const onUpdateGroup = useMemoizedFn((groupItem: MultipleNodeInfo) => {
             const index = subPage.findIndex((ele) => ele.id === groupItem.id)
@@ -3624,10 +3624,10 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
             if (index === -1) return
 
             if (subIndex === -1) {
-                // 拖动的不是组内的item
+                // Dragging not from within group
                 const groupChildrenList = subPage[index].groupChildren || []
                 if (groupChildrenList.length > 0) {
-                    //拖拽的是组
+                    //Dragging is a group
                     setIsCombineEnabled(false)
                     return
                 }
@@ -3636,16 +3636,16 @@ const SubTabs: React.FC<SubTabsProps> = React.memo(
         const onBeforeCapture = useMemoizedFn((result: BeforeCapture) => {
             const {index, subIndex} = getPageItemById(subPage, result.draggableId)
             if (index === -1) return
-            // subIndex === -1 没有在组内
+            // Description: Close group
             if (subIndex === -1) {
                 const groupChildrenList = subPage[index].groupChildren || []
                 if (groupChildrenList.length > 0) {
-                    //如果拖拽的是一个组,则应该只能排序,不能组合
+                    //Delete pages within group
                     // setDropType(droppable)
                     // setSubDropType(droppableGroup)
                     return
                 } else {
-                    //如果拖拽的是一个item,可以排序也可以组合
+                    //Move floating page to new group
                     setDropType(droppableGroup)
                     setSubDropType(droppableGroup)
                 }
@@ -3781,7 +3781,7 @@ const SubTabItem: React.FC<SubTabItemProps> = React.memo((props) => {
             emiter.off("simpleDetectTabEvent", onSimpleDetectTabEvent)
         }
     }, [])
-    // 修改颜色
+    // Change color
     const onSimpleDetectTabEvent = useMemoizedFn((v) => {
         const obj: SimpleTabInterface = JSON.parse(v)
         if (obj.tabId === subItem.id) {
@@ -3923,16 +3923,16 @@ const SubTabGroupItem: React.FC<SubTabGroupItemProps> = React.memo((props) => {
                             )}
                             onClick={(e) => {
                                 const clickedElement = e.target as any
-                                // // 获取点击元素的下一个兄弟元素
+                                // // Get next sibling element
                                 const nextSiblingElement = clickedElement.nextElementSibling
                                 if (nextSiblingElement) {
                                     const width = nextSiblingElement.clientWidth
                                     if (subItem.expand) {
                                         subItem.childrenWidth = width
-                                        // 收
+                                        // Collapsing and Expanding
                                         nextSiblingElement.style = "width:0px;"
                                     } else {
-                                        // 展开
+                                        // Expand
                                         nextSiblingElement.style = `width:${subItem.childrenWidth}px;`
                                     }
                                 }
@@ -4014,10 +4014,10 @@ const SubTabGroupItem: React.FC<SubTabGroupItemProps> = React.memo((props) => {
     )
 })
 
-/**验证组名是否超过50个字符 */
+/**Verify group name doesn't exceed 50 characters */
 const onVerifyGroupName = (val: string) => {
     if (val.length > 50) {
-        yakitNotify("error", "不能超过50个字符")
+        yakitNotify("error", "Dragging is a group")
         return false
     }
     return true
@@ -4082,15 +4082,15 @@ const GroupRightClickShowContent: React.FC<GroupRightClickShowContentProps> = Re
                 width={232}
                 data={[
                     {
-                        label: "取消组合",
+                        label: "Cancel group",
                         key: "cancelGroup"
                     },
                     {
-                        label: "关闭组",
+                        label: "Close group",
                         key: "closeGroup"
                     },
                     {
-                        label: "关闭其他标签页",
+                        label: "Close other tabs",
                         key: "closeOtherTabs"
                     }
                 ]}
@@ -4110,10 +4110,10 @@ const CloseGroupContent: React.FC = React.memo(() => {
     })
     return (
         <div className={styles["close-group-content"]}>
-            <div>是否关闭当前组,关闭后,组内的页面也会关闭</div>
+            <div>Description: Close event for multi-opening primary page</div>
             <label className={styles["close-group-check"]}>
                 <YakitCheckbox checked={tipChecked} onChange={(e) => onChecked(e.target.checked)} />
-                不再提示
+                Do Not Remind Again
             </label>
         </div>
     )
@@ -4176,13 +4176,13 @@ const DroppableClone: React.FC<DroppableCloneProps> = React.memo((props) => {
     )
 })
 
-// 多开页面的一级页面关闭的确认弹窗
+// Confirmation popup for closing multi-opening primary page
 const onModalSecondaryConfirm = (props?: YakitSecondaryConfirmProps) => {
     let m = YakitModalConfirm({
         width: 420,
         type: "white",
-        onCancelText: "不保存",
-        onOkText: "保存",
+        onCancelText: "Do Not Save",
+        onOkText: "Save",
         keyboard: false,
         zIndex: 1010,
         ...(props || {}),

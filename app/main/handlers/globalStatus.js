@@ -1,19 +1,19 @@
 const {ipcMain} = require("electron")
 
-/** @name 全局反连服务器配置 */
+/** @name Global Callback Server Config */
 let globalConfigServer = null
 
 module.exports = (win, getClient) => {
-    /** @name 判断是否开启全局反连 */
+    /** @name Check Global Callback Active */
     // ipcMain.handle("is-global-reverse-status", () => {
     //     /** @returns {Boolean} */
     //     return !!globalConfigServer
     // })
-    /** @name 取消全局反连 */
+    /** @name Cancel Global Callback */
     // ipcMain.handle("cancel-global-reverse-status", () => {
     //     if (globalConfigServer) {
     //         globalConfigServer.cancel()
-    //         console.info("取消全局反连配置")
+    //         console.info("Cancel Global Callback Config")
     //         globalConfigServer = null
     //     }
     //     return

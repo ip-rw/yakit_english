@@ -4,16 +4,16 @@ interface OptionProps {
     value: string | number
 }
 /**
- * @description 组合搜索
- * @param {"input" | "select"} afterModuleType 右侧的组件类型 目前支持两种
- * @param {number} beforeOptionWidth 左侧下拉选择的宽度
- * @param {string | number} valueBeforeOption 左侧下拉选择的值
- * @param {OptionProps[]} valueBeforeOption 左侧下拉选择项
- * @param {(o: string) => void} onSelectBeforeOption 左侧下拉选择事件
- * @param {string} wrapperClassName 外侧class
- * @param {YakitSelectProps} selectProps 左侧下拉选择的props
- * @param {YakitInputSearchProps} inputSearchModuleTypeProps afterModuleType=input,时传入的inputProps
- * @param {YakitSelectProps} selectModuleTypeProps afterModuleType=select,时传入的inputProps
+ * @description Combo search
+ * @param {"input" | "select"} afterModuleType Right component type, supports two
+ * @param {number} beforeOptionWidth Left dropdown width
+ * @param {string | number} valueBeforeOption Left dropdown value
+ * @param {OptionProps[]} valueBeforeOption Left dropdown option
+ * @param {(o: string) => void} onSelectBeforeOption Left dropdown select event
+ * @param {string} wrapperClassName Outer class
+ * @param {YakitSelectProps} selectProps Left dropdown props
+ * @param {YakitInputSearchProps} inputSearchModuleTypeProps afterModuleType=input, inputProps
+ * @param {YakitSelectProps} selectModuleTypeProps afterModuleType=select, inputProps
  */
 export interface YakitCombinationSearchProps extends Omit<InputProps, "size"> {
     afterModuleType?: "input" | "select"

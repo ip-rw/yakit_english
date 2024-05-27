@@ -1,24 +1,24 @@
 import { TablePipeline } from '../pipeline';
 export interface ColumnResizeFeatureOptions {
-    /** 非受控用法：默认的列宽数组 */
+    /** Uncontrolled: Default width array */
     defaultSizes?: number[];
-    /** 受控用法：列宽数组 */
+    /** Controlled: Width array */
     sizes?: number[];
-    /** 受控用法：修改宽度的回调函数 */
+    /** Controlled: Width change callback */
     onChangeSizes?(nextSizes: number[]): void;
-    /** 列的最小宽度，默认为 60 */
+    /** Min column width, default 60 */
     minSize?: number;
-    /** 如果列宽数组中没有提供有效的宽度，fallbackSize 将作为该列的宽度，默认为 150 */
+    /** If no valid width in array, fallbackSize is column width, default 150 */
     fallbackSize?: number;
-    /** 列的最大宽度，默认为 1000 */
+    /** Max column width, default 1000 */
     maxSize?: number;
-    /** 是否在调整列宽时禁用 user-select，默认为 true */
+    /** Disable user-select on resize, default true */
     disableUserSelectWhenResizing?: boolean;
-    /** 把手的背景色 */
+    /** Handle BG color */
     handleBackground?: string;
-    /** 鼠标悬停时，把手的背景色 */
+    /** Handle BG color on hover */
     handleHoverBackground?: string;
-    /** 把手激活时的背景色 */
+    /** Handle active BG color */
     handleActiveBackground?: string;
 }
 export declare function columnResize(opts?: ColumnResizeFeatureOptions): (pipeline: TablePipeline) => TablePipeline;

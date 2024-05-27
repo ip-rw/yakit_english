@@ -16,7 +16,7 @@ import {MITMConsts} from "./MITMConsts"
 import {YakitAutoCompleteRefProps} from "@/components/yakitUI/YakitAutoComplete/YakitAutoCompleteType"
 
 /**
- * @param {boolean} isStartMITM 是否开启mitm服务，已开启mitm服务，显示switch。 未开启显示按钮
+ * @param {boolean} isStartMITM to start MITM service, if on, show switch. If off, show button
  */
 interface ChromeLauncherButtonProp {
     host?: string
@@ -48,7 +48,7 @@ const MITMChromeLauncher: React.FC<MITMChromeLauncherProp> = (props) => {
     const [userDataDir, setUserDataDir] = useState<string>("")
 
     useEffect(() => {
-        // 获取连接引擎的地址参数
+        // Get Connection Engine Address Params
         ipcRenderer
             .invoke("fetch-yaklang-engine-addr")
             .then((data) => {
@@ -73,9 +73,9 @@ const MITMChromeLauncher: React.FC<MITMChromeLauncherProp> = (props) => {
             wrapperCol={{span: 18}}
             onSubmitCapture={async (e) => {
                 e.preventDefault()
-                // 代理认证用户名
+                // Proxy auth username
                 let username = (await getRemoteValue(MITMConsts.MITMDefaultProxyUsername)) || ""
-                // 代理认证用户密码
+                // Proxy auth password
                 let password = (await getRemoteValue(MITMConsts.MITMDefaultProxyPassword)) || ""
                 let newParams: {
                     host: string
@@ -97,13 +97,13 @@ const MITMChromeLauncher: React.FC<MITMChromeLauncherProp> = (props) => {
                             props.callback(params.host, params.port)
                         })
                         .catch((e) => {
-                            failed(`Chrome 启动失败：${e}`)
+                            failed(`Chrome launch failed：${e}`)
                         })
                 })
             }}
             style={{padding: 24}}
         >
-            <Form.Item label={"配置代理"}>
+            <Form.Item label={"Setup proxy"}>
                 <YakitInput.Group className={style["chrome-input-group"]}>
                     <YakitInput
                         prefix={"http://"}
@@ -128,11 +128,11 @@ const MITMChromeLauncher: React.FC<MITMChromeLauncherProp> = (props) => {
                         setSaveUserData(e.target.checked)
                     }}
                 >
-                    保存用户数据
+                    Save user data
                 </YakitCheckbox>
             </Form.Item>
             {isSaveUserData && (
-                <Form.Item label={" "} colon={false} help={"如要打开新窗口，请设置新路径存储用户数据"}>
+                <Form.Item label={" "} colon={false} help={"To open a new window, set new path for user data"}>
                     <YakitAutoComplete
                         ref={userDataDirRef}
                         style={{width: "calc(100% - 20px)"}}
@@ -140,17 +140,17 @@ const MITMChromeLauncher: React.FC<MITMChromeLauncherProp> = (props) => {
                         cacheHistoryListLength={5}
                         initValue={defUserDataDir}
                         value={userDataDir}
-                        placeholder='设置代理'
+                        placeholder='Set Proxy'
                         onChange={(v) => {
                             setUserDataDir(v)
                         }}
                     />
-                    <Tooltip title={"选择存储路径"}>
+                    <Tooltip title={"Select storage path"}>
                         <CloudUploadOutlined
                             onClick={() => {
                                 ipcRenderer
                                     .invoke("openDialog", {
-                                        title: "请选择文件夹",
+                                        title: "Choose Folder",
                                         properties: ["openDirectory"]
                                     })
                                     .then((data: any) => {
@@ -175,9 +175,9 @@ const MITMChromeLauncher: React.FC<MITMChromeLauncherProp> = (props) => {
                             type={"success"}
                             message={
                                 <>
-                                    本按钮将会启动一个代理已经被正确配置的 Chrome (使用系统 Chrome 浏览器配置)
-                                    <br /> <Text mark={true}>无需用户额外启用代理</Text>
-                                    ，同时把测试浏览器和日常浏览器分离
+                                    This button will start a correctly configured proxy Chrome (using system Chrome settings)
+                                    <br /> <Text mark={true}>No need for users to enable proxy explicitly</Text>
+                                    ，Separate test browser from daily use browser
                                 </>
                             }
                         />
@@ -186,11 +186,11 @@ const MITMChromeLauncher: React.FC<MITMChromeLauncherProp> = (props) => {
                             type={"error"}
                             message={
                                 <>
-                                    <Text mark={true}>注意：</Text>
+                                    <Text mark={true}>Note：</Text>
                                     <br />
-                                    免配置的浏览器启用了 <Text code={true}>{`--ignore-certificate-errors`}</Text> <br />
-                                    这个选项是 <Text mark={true}>生效的</Text>，会忽略所有证书错误，
-                                    <Text mark={true}>仅推荐安全测试时开启</Text>
+                                    Browser without configuration enabled <Text code={true}>{`--ignore-certificate-errors`}</Text> <br />
+                                    This option is <Text mark={true}>Effective</Text>，Will ignore all certificate errors，
+                                    <Text mark={true}>Only recommended for security testing</Text>
                                 </>
                             }
                         />
@@ -203,7 +203,7 @@ const MITMChromeLauncher: React.FC<MITMChromeLauncherProp> = (props) => {
                     size='large'
                     disabled={isSaveUserData === true && userDataDir.length === 0}
                 >
-                    启动免配置 Chrome
+                    Launch Chrome without configuration
                 </YakitButton>
             </Form.Item>
         </Form>
@@ -237,21 +237,21 @@ const ChromeLauncherButton: React.FC<ChromeLauncherButtonProp> = React.memo((pro
         ipcRenderer
             .invoke("StopAllChrome")
             .then(() => {
-                info("关闭所有免配置 Chrome 成功")
+                info("Close all Chrome without configuration successfully")
             })
             .catch((e) => {
-                failed(`关闭所有 Chrome 失败: ${e}`)
+                failed(`Close all Chrome failed: ${e}`)
             })
     })
 
     const clickChromeLauncher = useMemoizedFn(() => {
         if (repRuleFlag) {
             Modal.confirm({
-                title: "温馨提示",
+                title: "Prompt",
                 icon: <ExclamationCircleOutlined />,
-                content: "检测到开启了替换规则，可能会影响劫持，是否确认开启？",
-                okText: "确认",
-                cancelText: "取消",
+                content: "Detected rule replacement on, might affect hijacking, confirm to proceed？",
+                okText: "Confirm",
+                cancelText: "Cancel",
                 closable: true,
                 centered: true,
                 closeIcon: (
@@ -284,11 +284,11 @@ const ChromeLauncherButton: React.FC<ChromeLauncherButtonProp> = React.memo((pro
                         {(started && <ChromeSvgIcon />) || (
                             <ChromeFrameSvgIcon style={{height: 16, color: "var(--yakit-body-text-color)"}} />
                         )}
-                        免配置启动
+                        No-config launch
                         {started && <CheckOutlined style={{color: "var(--yakit-success-5)", marginLeft: 8}} />}
                     </YakitButton>
                     {started && (
-                        <Tooltip title={"关闭所有免配置 Chrome"}>
+                        <Tooltip title={"Close all Chrome without configuration"}>
                             <YakitButton
                                 type='outline2'
                                 onClick={() => {
@@ -303,12 +303,12 @@ const ChromeLauncherButton: React.FC<ChromeLauncherButtonProp> = React.memo((pro
             )) || (
                 <YakitButton type='outline2' size='large' onClick={clickChromeLauncher}>
                     <ChromeFrameSvgIcon style={{height: 16, color: "var(--yakit-body-text-color)"}} />
-                    <span style={{marginLeft: 4}}>免配置启动</span>
+                    <span style={{marginLeft: 4}}>No-config launch</span>
                 </YakitButton>
             )}
             {chromeVisible && (
                 <YakitModal
-                    title='确定启动免配置 Chrome 参数'
+                    title='Confirm launch Chrome without configuration'
                     visible={chromeVisible}
                     onCancel={() => setChromeVisible(false)}
                     closable={true}
@@ -322,7 +322,7 @@ const ChromeLauncherButton: React.FC<ChromeLauncherButtonProp> = React.memo((pro
                         callback={(host, port) => {
                             setChromeVisible(false)
                             if (!isStartMITM) {
-                                // 记录时间戳
+                                // Record timestamp
                                 const nowTime: string = Math.floor(new Date().getTime() / 1000).toString()
                                 setRemoteValue(MITMConsts.MITMStartTimeStamp, nowTime)
                                 if (onFished) onFished(host, port)

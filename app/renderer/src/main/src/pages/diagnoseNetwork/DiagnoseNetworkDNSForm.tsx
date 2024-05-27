@@ -15,11 +15,11 @@ export const DiagnoseNetworkDNSForm: React.FC<DiagnoseNetworkDNSFormProp> = (pro
         props.onSubmit(params)
     }}>
         <InputItem
-            label={"测试域名"} setValue={Domain => setParams({...params, Domain})} value={params.Domain}
+            label={"Test Domain"} setValue={Domain => setParams({...params, Domain})} value={params.Domain}
             required={true}
         />
         <Form.Item colon={false} label={" "}>
-            <YakitButton type="primary" htmlType="submit"> 测试 DNS 可用性 </YakitButton>
+            <YakitButton type="primary" htmlType="submit"> Test DNS Availability </YakitButton>
         </Form.Item>
     </Form>
 };

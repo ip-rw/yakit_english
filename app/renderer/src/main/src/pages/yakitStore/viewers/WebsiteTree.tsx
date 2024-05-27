@@ -21,7 +21,7 @@ export interface WebsiteTreeViewerProp {
     targets?: string
     interval_seconds?: number
 
-    // 树在垂直方向上节点过多时可外部设置最大高度值
+    // Set max height externally when tree nodes too numerous vertically
     maxHeight?: number
 }
 
@@ -116,7 +116,7 @@ export const WebsiteTreeViewer: React.FC<WebsiteTreeViewerProp> = (props) => {
 
     const delManyReord = () => {
         if (delUrlArr.length === 0) {
-            warn("请选择")
+            warn("Please Select")
             return
         }
         let obj: any = {URLPrefixBatch: delUrlArr}
@@ -134,7 +134,7 @@ export const WebsiteTreeViewer: React.FC<WebsiteTreeViewerProp> = (props) => {
         if (data?.parent?.title) fetchUrl(data?.parent, arr)
     }
 
-    // 构建 table
+    // Build Table
     const uidToNodeMap = new Map<string, AntDTreeData>()
     const viewNode = (node: AntDTreeData) => {
         node.children.map(viewNode)
@@ -167,7 +167,7 @@ export const WebsiteTreeViewer: React.FC<WebsiteTreeViewerProp> = (props) => {
     const getData = useMemoizedFn((query) => {
         return new Promise((resolve) => {
             if (downLoadUrlArr.length === 0) {
-                warn("请选择")
+                warn("Please Select")
                 resolve(null)
             } else {
                 ipcRenderer
@@ -181,7 +181,7 @@ export const WebsiteTreeViewer: React.FC<WebsiteTreeViewerProp> = (props) => {
                     })
                     .then((res: QueryGeneralResponse<HTTPFlow>) => {
                         const {Data} = res
-                        //    数据导出
+                        //    Data Export
                         let exportData: any = []
                         const header: string[] = []
                         const filterVal: string[] = []
@@ -196,7 +196,7 @@ export const WebsiteTreeViewer: React.FC<WebsiteTreeViewerProp> = (props) => {
                         })
                     })
                     .catch((e: any) => {
-                        failed("数据导出失败 " + `${e}`)
+                        failed("Data export failed " + `${e}`)
                     })
             }
         })
@@ -214,7 +214,7 @@ export const WebsiteTreeViewer: React.FC<WebsiteTreeViewerProp> = (props) => {
                                     <Space direction='vertical' style={{width: "100%"}}>
                                         <div style={{display: "flex", justifyContent: "space-between"}}>
                                             <Space>
-                                                业务结构
+                                                Business Structure
                                                 <Button
                                                     type={"link"}
                                                     size={"small"}
@@ -233,7 +233,7 @@ export const WebsiteTreeViewer: React.FC<WebsiteTreeViewerProp> = (props) => {
                                                         size={"small"}
                                                     >
                                                         <SwitchItem
-                                                            label={"自动刷新"}
+                                                            label={"Auto Refresh"}
                                                             formItemStyle={{marginBottom: 0}}
                                                             value={autoRefresh}
                                                             setValue={setAutoRefresh}
@@ -255,7 +255,7 @@ export const WebsiteTreeViewer: React.FC<WebsiteTreeViewerProp> = (props) => {
                                                 style={{justifyContent: "space-between"}}
                                             >
                                                 <InputItem
-                                                    label={"URL关键字"}
+                                                    label={"URL Keyword"}
                                                     value={searchTarget}
                                                     setValue={setSearchTarget}
                                                 />
@@ -282,7 +282,7 @@ export const WebsiteTreeViewer: React.FC<WebsiteTreeViewerProp> = (props) => {
                                                     setCheckedAll(e.target.checked)
                                                 }}
                                             >
-                                                全选
+                                                Fixes failure to iterate load_content on missing older version data
                                             </Checkbox>
                                             {delUrlArr.length === 0 ? (
                                                 <Button
@@ -292,7 +292,7 @@ export const WebsiteTreeViewer: React.FC<WebsiteTreeViewerProp> = (props) => {
                                                         e.stopPropagation()
                                                     }}
                                                 >
-                                                    批量操作
+                                                    Batch Operation
                                                     <ChevronDownIcon style={{color: "#85899E"}} />
                                                 </Button>
                                             ) : (
@@ -302,18 +302,18 @@ export const WebsiteTreeViewer: React.FC<WebsiteTreeViewerProp> = (props) => {
                                                         <Menu className={style["http-history-table-drop-down-batch"]}>
                                                             <Menu.Item>
                                                                 <Popconfirm
-                                                                    title={"确定删除选择的URL吗？不可恢复"}
+                                                                    title={"Confirm delete selected URL? Irreversible"}
                                                                     onConfirm={() => {
                                                                         delManyReord()
                                                                     }}
                                                                 >
-                                                                    批量删除
+                                                                    Batch delete
                                                                 </Popconfirm>
                                                             </Menu.Item>
                                                             <Menu.Item>
                                                                 <ExportExcel
-                                                                    fileName='网站树视角'
-                                                                    text='批量导出'
+                                                                    fileName='Site Tree View'
+                                                                    text='Batch Export'
                                                                     showButton={false}
                                                                     getData={getData}
                                                                     btnProps={{size: "small"}}
@@ -330,7 +330,7 @@ export const WebsiteTreeViewer: React.FC<WebsiteTreeViewerProp> = (props) => {
                                                             e.stopPropagation()
                                                         }}
                                                     >
-                                                        批量操作
+                                                        Batch Operation
                                                         <ChevronDownIcon style={{color: "#85899E"}} />
                                                     </Button>
                                                 </Popover>
@@ -417,12 +417,12 @@ export const WebsiteTreeViewer: React.FC<WebsiteTreeViewerProp> = (props) => {
                                     defaultExpandAll={true}
                                     onRightClick={({event, node}) => {
                                         let data = [
-                                            {key: "bug-test", title: "发送到漏洞检测"},
-                                            {key: "scan-port", title: "发送到端口扫描"},
-                                            {key: "brute", title: "发送到爆破"}
+                                            {key: "bug-test", title: "Send To Vulnerability Detection"},
+                                            {key: "scan-port", title: "Send to Port Scan"},
+                                            {key: "brute", title: "Send To Brute Force"}
                                         ]
                                         if (node.checkable === false) {
-                                            data.push({key: "del-item", title: "删除该记录"})
+                                            data.push({key: "del-item", title: "Delete Record"})
                                         }
                                         showByContextMenu({
                                             data,
@@ -445,7 +445,7 @@ export const WebsiteTreeViewer: React.FC<WebsiteTreeViewerProp> = (props) => {
                                                     .invoke("QueryHTTPFlows", param)
                                                     .then((data: QueryGeneralResponse<HTTPFlow>) => {
                                                         if (data.Total > 100) {
-                                                            failed("该节点下的URL数量超过100个，请缩小范围后再重新操作")
+                                                            failed("URL count under node exceeds 100, please narrow scope and retry")
                                                             return
                                                         }
                                                         const urls = data.Data.map((item) => item.Url)

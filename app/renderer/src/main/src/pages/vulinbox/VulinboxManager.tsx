@@ -73,33 +73,33 @@ export const VulinboxManager: React.FC<VulinboxManagerProp> = (props) => {
 
     return <div style={{height: "100%", width: "100%", overflow: "hidden"}}>
         <AutoCard size={"small"} bordered={true} title={<Space>
-            <div>Vulinbox 管理器</div>
+            <div>Vulinbox Manager</div>
             {available ? <>
-                <Tag color={"green"}>安装成功</Tag>
+                <Tag color={"green"}>Installation Success</Tag>
                 {currentParams && <YakitButton type='outline2' onClick={() => {
-                    info("使用 Chrome 打开靶场")
+                    info("Open Range in Chrome")
                     openExternalWebsite(`${currentParams?.NoHttps ? "http://" : "https//"}${currentParams?.Host}:${currentParams?.Port}`)
                 }}>
                     <ChromeSvgIcon/>
                 </YakitButton>}
-            </> : <Tag color={"red"}>未安装</Tag>}
+            </> : <Tag color={"red"}>Not Installed</Tag>}
             {available && (
-                started ? <Popconfirm title={"确定要关闭靶场进程吗？"} onConfirm={() => {
+                started ? <Popconfirm title={"Confirm Range Shutdown?？"} onConfirm={() => {
                         ipcRenderer.invoke("cancel-StartVulinbox", token).then(() => {
                             setStarted(false)
                         })
                     }}>
-                        <YakitButton colors="danger">关闭靶场</YakitButton>
+                        <YakitButton colors="danger">Close Range</YakitButton>
                     </Popconfirm> :
                     <YakitButton type={"primary"} onClick={() => {
                         const m = showYakitModal({
-                            title: "启动靶场参数", width: "50%",
+                            title: "Launch Range Params", width: "50%",
                             content: (
                                 <div style={{marginTop: 20, marginLeft: 20}}>
                                     <VulinboxStart onSubmit={param => {
                                         ipcRenderer.invoke("StartVulinbox", param, token).then(() => {
                                             setCurrentParams(param)
-                                            info("启动靶场成功")
+                                            info("Range Launched Successfully")
                                             setStarted(true)
                                             m.destroy()
                                         }).catch((e) => {
@@ -114,12 +114,12 @@ export const VulinboxManager: React.FC<VulinboxManagerProp> = (props) => {
                             )
                         })
 
-                    }}>启动靶场</YakitButton>
+                    }}>Launch Range</YakitButton>
             )}
         </Space>} bodyStyle={{padding: 0}} extra={(
-            <Popconfirm title={"将从互联网下载靶场程序并安装"} onConfirm={() => {
+            <Popconfirm title={"Downloading & Installing Range"} onConfirm={() => {
                 const m = showYakitModal({
-                    title: "安装靶场",
+                    title: "Install Range",
                     width: "50%",
                     height: 500,
                     onOk: () => {
@@ -136,7 +136,7 @@ export const VulinboxManager: React.FC<VulinboxManagerProp> = (props) => {
                 })
             }}>
                 <YakitButton type={"outline1"}>
-                    安装靶场
+                    Install Range
                 </YakitButton>
             </Popconfirm>
 
@@ -174,12 +174,12 @@ const VulinboxStart: React.FC<VulinboxStartProp> = (props) => {
     >
         <InputItem label={"Host"} setValue={Host => setParams({...params, Host})} value={params.Host}/>
         <InputInteger label={"Port"} setValue={Port => setParams({...params, Port})} value={params.Port}/>
-        <SwitchItem label={"不启用 HTTPS"} setValue={NoHttps => setParams({...params, NoHttps})}
+        <SwitchItem label={"Disable HTTPS"} setValue={NoHttps => setParams({...params, NoHttps})}
                     value={params.NoHttps}/>
-        <SwitchItem label={"安全模式"} help={"不启用命令注入类操作系统的靶场"}
+        <SwitchItem label={"Safe Mode"} help={"Disable OS Command Injection Range"}
                     setValue={SafeMode => setParams({...params, SafeMode})} value={params.SafeMode}/>
         <Form.Item colon={false} label={" "}>
-            <YakitButton type="primary" htmlType="submit"> 启动靶场 </YakitButton>
+            <YakitButton type="primary" htmlType="submit"> Launch Range </YakitButton>
         </Form.Item>
     </Form>
 };
@@ -221,7 +221,7 @@ export const InstallVulinboxPrompt: React.FC<InstallVulinboxPromptProp> = (props
 
     useEffect(() => {
         ipcRenderer.invoke("InstallVulinbox", {}, token).then(() => {
-            success("正在安装 Vulinbox")
+            success("Installing Vulinbox")
             setLoading(true)
         })
         return () => {
@@ -235,7 +235,7 @@ export const InstallVulinboxPrompt: React.FC<InstallVulinboxPromptProp> = (props
                 strokeColor='#F28B44'
                 trailColor='#F0F2F5'
                 percent={percent}
-                format={(percent) => `已下载 ${percent}%`}
+                format={(percent) => `Downloaded ${percent}%`}
             />
         </div>
         <div className={styles["download-progress-messages"]}>

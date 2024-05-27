@@ -20,7 +20,7 @@ export interface HTTPPacketFuzzable {
     defaultPacket?: string
 }
 
-// 使用 HTTPHistory 控件的来源页面
+// Use Source Page of HTTPHistory Control
 export type HTTPHistorySourcePageType = "MITM" | "History"
 
 export interface HTTPHistoryProp extends HTTPPacketFuzzable {
@@ -41,12 +41,12 @@ export const HTTPHistory: React.FC<HTTPHistoryProp> = (props) => {
     const ref = useRef(null)
     const [inViewport] = useInViewport(ref)
     const {isRefreshHistory, setIsRefreshHistory} = useStore()
-    // 控制刷新数据
+    // Control Data Refresh
     const [refresh, setRefresh] = useState<boolean>(false)
     const [selected, setSelectedHTTPFlow] = useState<HTTPFlow>()
     const [highlightSearch, setHighlightSearch] = useState("")
     const [onlyShowFirstNode, setOnlyShowFirstNode] = useState<boolean>(true)
-    // History Id 用于区分每个history控件
+    // History Id for Differentiating Histories
     const [historyId, setHistoryId] = useState<string>(uuidv4())
     useUpdateEffect(() => {
         if (isRefreshHistory) {
@@ -69,13 +69,13 @@ export const HTTPHistory: React.FC<HTTPHistoryProp> = (props) => {
     }, [])
 
     /**
-     * 左侧tab部分
+     * Left Tab Section
      */
     const [hTTPHistoryTabs, setHTTPHistoryTabs] = useState<Array<HTTPHistoryTabsItem>>([
         {
             key: "web-tree",
-            label: "网站树",
-            contShow: false // 初始为false
+            label: "Site Tree",
+            contShow: false // Initially False
         }
     ])
     const [curTabKey, setCurTabKey] = useState<tabKeys>("web-tree")
@@ -112,7 +112,7 @@ export const HTTPHistory: React.FC<HTTPHistoryProp> = (props) => {
     }, [hTTPHistoryTabs])
 
     /**
-     * 网站树
+     * Site Tree
      */
     const webTreeRef = useRef<any>()
     const treeWrapRef = useRef<any>()
@@ -134,13 +134,13 @@ export const HTTPHistory: React.FC<HTTPHistoryProp> = (props) => {
         }
     }, [treeWrapRef.current])
 
-    // 跳转网站树指定节点
+    // Jump to Site Tree Node
     const onJumpWebTree = useMemoizedFn((value) => {
         if (inViewport && webTreeRef.current) {
             const val = JSON.parse(value)
             const host = val.host
             webTreeRef.current.onJumpWebTree(host)
-            handleTabClick({ key: "web-tree", label: "网站树", contShow: false })
+            handleTabClick({ key: "web-tree", label: "Site Tree", contShow: false })
         }
     })
     useEffect(() => {
@@ -150,13 +150,13 @@ export const HTTPHistory: React.FC<HTTPHistoryProp> = (props) => {
         }
     }, [])
 
-    // 表格参数改变
+    // Table Params Change
     const onQueryParams = useMemoizedFn((queryParams, execFlag) => {
         setTreeQueryparams(queryParams)
         setRefreshTreeFlag(!!execFlag)
     })
 
-    // 编辑器部分是否显示
+    // Editor Visibility
     const [secondNodeVisible, setSecondNodeVisible] = useState<boolean>(false)
     useEffect(() => {
         setSecondNodeVisible(!onlyShowFirstNode && typeof defaultFold === "boolean")
@@ -208,7 +208,7 @@ export const HTTPHistory: React.FC<HTTPHistoryProp> = (props) => {
                                     <WebTree
                                         ref={webTreeRef}
                                         height={treeWrapHeight - 30}
-                                        searchPlaceholder='请输入域名进行搜索，例baidu.com'
+                                        searchPlaceholder='Enter Domain to Search, e.g., baidu.com'
                                         treeExtraQueryparams={treeQueryparams}
                                         refreshTreeFlag={refreshTreeFlag}
                                         onGetUrl={(searchURL, includeInUrl) => {

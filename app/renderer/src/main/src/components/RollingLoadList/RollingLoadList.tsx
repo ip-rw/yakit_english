@@ -13,7 +13,7 @@ export interface RollingLoadListProps<T> {
     hasMore: boolean
     loading: boolean
     scrollToNumber?: number
-    isRef?: boolean // 刷新全部
+    isRef?: boolean // Refresh all
     classNameRow?: string
     classNameList?: string
     defItemHeight: number
@@ -21,7 +21,7 @@ export interface RollingLoadListProps<T> {
     isGridLayout?: boolean
     defCol?: number
     defOverscan?: number
-    recalculation?: boolean //刷新局部 data中某个item值更新需要重新计算
+    recalculation?: boolean //Refresh partial, recalculate on item update in data
     targetRef?: React.RefObject<any>
 }
 
@@ -107,7 +107,7 @@ export const RollingLoadList = <T extends any>(props: RollingLoadListProps<T>) =
         () => {
             if (!hasMore) return
             if (!containerRef || !wrapperRef) return
-            // wrapperRef 中的数据没有铺满 containerRef,那么就要请求更多的数据
+            // If wrapperRef data does not fill containerRef, request more data
             const containerHeight = containerRef.current?.clientHeight
             const wrapperHeight = wrapperRef.current?.clientHeight
             if (wrapperHeight && wrapperHeight <= containerHeight) {
@@ -124,7 +124,7 @@ export const RollingLoadList = <T extends any>(props: RollingLoadListProps<T>) =
         resetPre()
         scrollTo(0)
     }, [isRef])
-    const isFirstNumberRoll = useRef(true) // 初次不执行
+    const isFirstNumberRoll = useRef(true) // Do not execute initially
     useEffect(() => {
         onRollNumber()
     }, [numberRoll, col])
@@ -133,7 +133,7 @@ export const RollingLoadList = <T extends any>(props: RollingLoadListProps<T>) =
             isFirstNumberRoll.current = false
         } else {
             if (!numberRoll) return
-            // 初次不执行; 必须加上延时,不然元素可能还没有加载
+            // Do not execute initially; Add delay, else element may not load
             setTimeout(() => {
                 scrollTo(numberRoll)
             }, 100)
@@ -177,12 +177,12 @@ export const RollingLoadList = <T extends any>(props: RollingLoadListProps<T>) =
                     clientHeight: 0,
                     scrollHeight: 0
                 }
-                const contentScrollTop = dom.scrollTop //滚动条距离顶部
-                const clientHeight = dom.clientHeight //可视区域
-                const scrollHeight = dom.scrollHeight //滚动条内容的总高度
+                const contentScrollTop = dom.scrollTop //Scrollbar distance to top
+                const clientHeight = dom.clientHeight //Viewport
+                const scrollHeight = dom.scrollHeight //Scrollbar total height
                 const scrollBottom = scrollHeight - contentScrollTop - clientHeight
                 if (scrollBottom <= 500) {
-                    loadMoreData() // 获取数据的方法
+                    loadMoreData() // Fetch data method
                 }
             }
         },
@@ -250,7 +250,7 @@ export const RollingLoadList = <T extends any>(props: RollingLoadListProps<T>) =
                         </div>
                     )}
                     {!loading && !hasMore && (page || 0) > 0 && (
-                        <div className='grid-block text-center no-more-text'>暂无更多数据</div>
+                        <div className='grid-block text-center no-more-text'>No more data</div>
                     )}
                 </div>
             </div>

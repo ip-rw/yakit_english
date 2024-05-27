@@ -101,7 +101,7 @@ export const JavaPayloadPage: React.FC<JavaPayloadPageProp> = React.memo((props)
 
     const [showAddr, setShowAddr] = useState<boolean>(false)
     /**
-     * @name 反连服务器参数初始值
+     * @name Initial reverse server parameters
      */
     const addrParamsRef = useRef<SettingReverseParamsInfo>({
         BridgeParam: {Addr: "", Secret: ""},
@@ -110,7 +110,7 @@ export const JavaPayloadPage: React.FC<JavaPayloadPageProp> = React.memo((props)
         ReverseHost: "127.0.0.1"
     })
     /**
-     * @name 用户自定义反连服务器参数
+     * @name Custom reverse server parameters
      */
     const [addrParams, setAddrParams] = useState<SettingReverseParamsInfo>({
         BridgeParam: {Addr: "", Secret: ""},
@@ -136,7 +136,7 @@ export const JavaPayloadPage: React.FC<JavaPayloadPageProp> = React.memo((props)
         return host
     }, [showAddr, addrParams, remoteIp])
 
-    // 获取系统全局配置的反连参数和本地反连IP
+    // Get global reverse parameters and local reverse IP
     useEffect(() => {
         const initParams = addrParamsRef.current
 
@@ -175,7 +175,7 @@ export const JavaPayloadPage: React.FC<JavaPayloadPageProp> = React.memo((props)
             }
         })
     }, [])
-    // 实时接收反连数据
+    // Receive reverse data in real time
     useEffect(() => {
         if (!token) return
 
@@ -243,24 +243,24 @@ export const JavaPayloadPage: React.FC<JavaPayloadPageProp> = React.memo((props)
             ipcRenderer.removeAllListeners(`${token}-data`)
         }
     }, [token])
-    // 关闭页面时关闭Facades反连服务
+    // Close Facades reverse service on page close
     useEffect(() => {
         return () => {
             ipcRenderer.invoke("cancel-StartFacadesWithYsoObject", getToken())
         }
     }, [])
 
-    // 关闭接收反连数据监听
+    // Stop listening for reverse data
     const stopReverse = (isCancel?: boolean) => {
         if (!isCancel) {
             ipcRenderer.invoke("cancel-StartFacadesWithYsoObject", token).then(() => {
-                success("已关闭FacadeServer")
+                success("FacadeServer closed")
             })
         }
         setToken(randomString(40))
         setIsStart(false)
     }
-    // 清空现存反连数据
+    // Clear existing reverse connect data
     const clearReverseData = () => {
         dataRef.current = []
         totalRef.current = 0
@@ -268,7 +268,7 @@ export const JavaPayloadPage: React.FC<JavaPayloadPageProp> = React.memo((props)
     }
 
     /**
-     * @name 启动反连服务器
+     * @name Start reverse server
      */
     const startUpFacadeServer = (value: ParamsRefProps, addr: SettingReverseParamsInfo, remote: string) => {
         const classData = {...convertRequest({...value})}
@@ -291,49 +291,49 @@ export const JavaPayloadPage: React.FC<JavaPayloadPageProp> = React.memo((props)
                         })
                         .then((res) => {
                             paramsRef.current = {...value}
-                            info("启动FacadeServer")
+                            info("Start FacadeServer")
                             setIsStart(true)
                             setCodeRefresh(!codeRefresh)
                         })
                         .catch((err) => {
-                            failed(`应用到FacadeServer失败${err}`)
+                            failed(`Failed to apply to FacadeServer${err}`)
                             stopReverse()
                         })
                         .finally(() => setTimeout(() => setLoading(false), 300))
                 }, 200)
             })
             .catch((e: any) => {
-                failed("启动FacadeServer失败: " + `${e}`)
+                failed("Start FacadeServer failed: " + `${e}`)
             })
             .finally(() => setTimeout(() => setLoading(false), 300))
     }
     /**
-     * @name 启动带有payload配置的反连
+     * @name Start reverse connection with payload configuration
      */
     const onStart = useMemoizedFn((value: ParamsRefProps) => {
         if (isStart) {
             stopReverse()
             setTimeout(() => setLoading(false), 200)
         } else {
-            // 判断反连服务器参数是否有误
+            // Check reverse server parameters for errors
             let reverseAddr = addrParamsRef.current
             if (showAddr) {
                 reverseAddr = {...addrParams}
-                let hint = "开启高级配置后,"
+                let hint = "After turning on advanced settings,"
                 if (reverseAddr.IsRemote) {
-                    if (!reverseAddr.BridgeParam.Addr) hint += "请填写公网IP,"
+                    if (!reverseAddr.BridgeParam.Addr) hint += "Enter public IP,"
                 } else {
-                    if (!reverseAddr.ReverseHost) hint += "请填写反连IP,"
+                    if (!reverseAddr.ReverseHost) hint += "Enter reverse IP,"
                 }
-                if (!reverseAddr.ReversePort && reverseAddr.ReversePort !== 0) hint += "请填写端口号"
-                if (hint !== "开启高级配置后,") {
+                if (!reverseAddr.ReversePort && reverseAddr.ReversePort !== 0) hint += "Enter port number"
+                if (hint !== "After turning on advanced settings,") {
                     failed(hint)
                     setTimeout(() => setLoading(false), 300)
                     return
                 }
             }
 
-            // 生成启动反连服务器的后端请求参数
+            // Generate backend parameters to start reverse server
             if (reverseAddr.IsRemote) {
                 ipcRenderer
                     .invoke("GetTunnelServerExternalIP", {
@@ -344,13 +344,13 @@ export const JavaPayloadPage: React.FC<JavaPayloadPageProp> = React.memo((props)
                         setRemoteIp(data.IP)
                         startUpFacadeServer(value, reverseAddr, data.IP)
                     })
-                    .catch((e: any) => failed("获取远程地址失败: " + `${e}`))
+                    .catch((e: any) => failed("Failed to get remote address: " + `${e}`))
                     .finally(() => setTimeout(() => setLoading(false), 300))
             } else startUpFacadeServer(value, reverseAddr, "")
         }
     })
     /**
-     * @name 给反连应用payload配置
+     * @name Configure payload for reverse connection app
      */
     const onApply = useMemoizedFn((value: ParamsRefProps) => {
         const data = convertRequest(value)
@@ -358,8 +358,8 @@ export const JavaPayloadPage: React.FC<JavaPayloadPageProp> = React.memo((props)
         if (isStart) {
             ipcRenderer
                 .invoke("ApplyClassToFacades", {Token: token, GenerateClassParams: {...data}})
-                .then((res) => info("应用到FacadeServer成功"))
-                .catch((err) => failed(`应用到FacadeServer失败${err}`))
+                .then((res) => info("Applied to FacadeServer successfully"))
+                .catch((err) => failed(`Failed to apply to FacadeServer${err}`))
                 .finally(() => setTimeout(() => setLoading(false), 300))
         } else {
             setTimeout(() => setLoading(false), 300)
@@ -398,8 +398,8 @@ export const JavaPayloadPage: React.FC<JavaPayloadPageProp> = React.memo((props)
                                         <Form.Item
                                             label={
                                                 <div className='form-item-label-title'>
-                                                    高级设置
-                                                    <Tooltip placement='bottom' title='配置反连服务器参数'>
+                                                    Advanced settings
+                                                    <Tooltip placement='bottom' title='Configure reverse server parameters'>
                                                         <ExclamationCircleOutlined className='setting-payload-icon' />
                                                     </Tooltip>
                                                 </div>
@@ -409,7 +409,7 @@ export const JavaPayloadPage: React.FC<JavaPayloadPageProp> = React.memo((props)
                                         </Form.Item>
                                         {showAddr && (
                                             <>
-                                                <Form.Item label='启用公网穿透'>
+                                                <Form.Item label='Enable public network penetration'>
                                                     <YakitSwitch
                                                         checked={addrParams.IsRemote}
                                                         onChange={(IsRemote) =>
@@ -424,19 +424,19 @@ export const JavaPayloadPage: React.FC<JavaPayloadPageProp> = React.memo((props)
                                                             label={
                                                                 <div className='form-item-label-title'>
                                                                     <div className='form-required'>*</div>
-                                                                    公网Bridge地址
+                                                                    Public Bridge address
                                                                     <Tooltip
                                                                         placement='bottom'
                                                                         title={
                                                                             <div style={{color: "#fff"}}>
-                                                                                在自己的服务器安装 yak 核心引擎，执行{" "}
+                                                                                Install yak core engine on your server, execute{" "}
                                                                                 <YakitCopyText
                                                                                     showText={
                                                                                         "yak bridge --secret [your-pass]"
                                                                                     }
                                                                                     wrapStyle={{color: "#fff"}}
                                                                                 />{" "}
-                                                                                启动 Yak Bridge 公网服务{" "}
+                                                                                Start public Yak Bridge service{" "}
                                                                                 <Divider type={"vertical"} />
                                                                                 <Typography.Text
                                                                                     style={{color: "#fff"}}
@@ -460,7 +460,7 @@ export const JavaPayloadPage: React.FC<JavaPayloadPageProp> = React.memo((props)
                                                                 }}
                                                             />
                                                         </Form.Item>
-                                                        <Form.Item label='密码'>
+                                                        <Form.Item label='Password'>
                                                             <YakitInput
                                                                 allowClear={true}
                                                                 value={addrParams.BridgeParam.Secret}
@@ -477,7 +477,7 @@ export const JavaPayloadPage: React.FC<JavaPayloadPageProp> = React.memo((props)
                                                         label={
                                                             <>
                                                                 <div className='form-required'>*</div>
-                                                                {"反连地址"}
+                                                                {"Reverse address"}
                                                             </>
                                                         }
                                                     >
@@ -497,7 +497,7 @@ export const JavaPayloadPage: React.FC<JavaPayloadPageProp> = React.memo((props)
                                                     label={
                                                         <>
                                                             <div className='form-required'>*</div>
-                                                            {"反连端口"}
+                                                            {"Reverse port"}
                                                         </>
                                                     }
                                                 >
@@ -539,10 +539,10 @@ export const JavaPayloadPage: React.FC<JavaPayloadPageProp> = React.memo((props)
             <div className={`reverse-${isStart && !codeExtra ? "info" : "hidden"}-wrapper`}>
                 <div className='wrapper-body'>
                     <div className='body-left'>
-                        <YakitCard title='反连地址' className='info-addr-card' bodyStyle={{padding: "6px 12px"}}>
+                        <YakitCard title='Reverse address' className='info-addr-card' bodyStyle={{padding: "6px 12px"}}>
                             <Space direction={"vertical"}>
                                 <div className='addr-body'>
-                                    HTTP反连地址&nbsp;&nbsp;
+                                    HTTP reverse address&nbsp;&nbsp;
                                     <YakitTag
                                         enableCopy={true}
                                         color='blue'
@@ -550,7 +550,7 @@ export const JavaPayloadPage: React.FC<JavaPayloadPageProp> = React.memo((props)
                                     ></YakitTag>
                                 </div>
                                 <div className='addr-body'>
-                                    RMI反连地址&nbsp;&nbsp;
+                                    RMI reverse address&nbsp;&nbsp;
                                     <YakitTag
                                         enableCopy={true}
                                         color='success'
@@ -558,7 +558,7 @@ export const JavaPayloadPage: React.FC<JavaPayloadPageProp> = React.memo((props)
                                     ></YakitTag>
                                 </div>
                                 <div className='addr-body'>
-                                    LDAP反连地址&nbsp;&nbsp;
+                                    LDAP reverse address&nbsp;&nbsp;
                                     <YakitTag
                                         enableCopy={true}
                                         color='purple'
@@ -727,7 +727,7 @@ export const PayloadForm: React.FC<PayloadFormProp> = React.memo((props) => {
                 })
                 useGadget ? setOptions(optionArr) : setSelectOptions(optionArr)
             })
-            .catch((e: any) => failed(`${isGadget ? "获取利用链失败: " : "获取恶意类失败: "} ${e}`))
+            .catch((e: any) => failed(`${isGadget ? "Failed to get exploit chain: " : "Get malicious class failed: "} ${e}`))
     }
     const loadClassOptions = useMemoizedFn((selectedOptions: any[]) => {
         const targetOption = selectedOptions[selectedOptions.length - 1]
@@ -815,7 +815,7 @@ export const PayloadForm: React.FC<PayloadFormProp> = React.memo((props) => {
             .finally(() => setTimeout(() => setBtnLoading(false), 300))
     })
 
-    // 暂时只支持布尔类型与string类型的单向绑定
+    // Supports only unidirectional binding for boolean and string types
     const judgeBindValue = useMemoizedFn((key: string) => {
         const bindRef = formBindRef.current
         const paramsValue = paramsRef.current
@@ -840,8 +840,8 @@ export const PayloadForm: React.FC<PayloadFormProp> = React.memo((props) => {
             bodyStyle={{padding: "20px 15px", overflow: "auto"}}
             title={
                 <div>
-                    JavaPayload 配置
-                    <Tooltip placement='bottom' title='配置序列化Payload或恶意类'>
+                    JavaPayload configuration
+                    <Tooltip placement='bottom' title='Configure serialized Payload or malicious class'>
                         <ExclamationCircleOutlined className='setting-payload-icon' />
                     </Tooltip>
                 </div>
@@ -857,7 +857,7 @@ export const PayloadForm: React.FC<PayloadFormProp> = React.memo((props) => {
                             size='small'
                             onClick={formStart}
                         >
-                            {isStart ? "关闭反连" : "启动反连"}
+                            {isStart ? "Stop reverse connection" : "Start reverse connection"}
                         </YakitButton>
                     )}
                     {isReverse && (
@@ -868,7 +868,7 @@ export const PayloadForm: React.FC<PayloadFormProp> = React.memo((props) => {
                             size='small'
                             onClick={showCode}
                         >
-                            {isShowCode ? "关闭代码" : "显示代码"}
+                            {isShowCode ? "Close code" : "Display code"}
                         </YakitButton>
                     )}
                     <YakitButton
@@ -878,7 +878,7 @@ export const PayloadForm: React.FC<PayloadFormProp> = React.memo((props) => {
                         type='primary'
                         onClick={formApply}
                     >
-                        生成
+                        Generate
                     </YakitButton>
                 </div>
             }
@@ -898,8 +898,8 @@ export const PayloadForm: React.FC<PayloadFormProp> = React.memo((props) => {
                     <Form.Item
                         label={
                             <div className='form-item-label-title'>
-                                使用利用链
-                                <Tooltip placement='bottom' title='关闭则不使用利用链,只生成恶意类'>
+                                Use exploit chain
+                                <Tooltip placement='bottom' title='Close to not use exploit chain, only generate malicious class'>
                                     <ExclamationCircleOutlined className='setting-payload-icon' />
                                 </Tooltip>
                             </div>
@@ -917,7 +917,7 @@ export const PayloadForm: React.FC<PayloadFormProp> = React.memo((props) => {
                     </Form.Item>
 
                     <Form.Item
-                        label={useGadget ? "利用链" : "恶意类"}
+                        label={useGadget ? "Exploit chain" : "Malicious class"}
                         rules={[
                             {required: true, message: ""},
                             () => ({
@@ -940,7 +940,7 @@ export const PayloadForm: React.FC<PayloadFormProp> = React.memo((props) => {
                                 loadData={loadClassOptions}
                                 options={options}
                                 value={!params.Gadget ? [] : [params.Gadget, params.Class]}
-                                placeholder='请选择利用链'
+                                placeholder='Select exploit chain'
                                 onChange={(value: any[]) => {
                                     if (!value || value.length === 0) cleatParams()
                                     else {
@@ -948,7 +948,7 @@ export const PayloadForm: React.FC<PayloadFormProp> = React.memo((props) => {
                                             {key: "Gadget", value: value[0]},
                                             {key: "Class", value: value[1]}
                                         ])
-                                        // 防止此操作干扰上面的赋值操作
+                                        // Prevent this operation from interfering with the assignments above
                                         setTimeout(() => loadGeneraterFormList(value), 200)
                                     }
                                 }}
@@ -965,7 +965,7 @@ export const PayloadForm: React.FC<PayloadFormProp> = React.memo((props) => {
                         ) : (
                             <YakitSelect
                                 allowClear={true}
-                                placeholder='请选择恶意类'
+                                placeholder='Select malicious class'
                                 optionLabelProp='NameVerbose'
                                 value={params.Class}
                                 onChange={(value) => {
@@ -974,7 +974,7 @@ export const PayloadForm: React.FC<PayloadFormProp> = React.memo((props) => {
                                             {key: "Gadget", value: "None"},
                                             {key: "Class", value: value}
                                         ])
-                                        // 防止此操作干扰上面的赋值操作
+                                        // Prevent this operation from interfering with the assignments above
                                         setTimeout(() => loadGeneraterFormList(["None", value]), 200)
                                     } else cleatParams()
                                 }}
@@ -1035,8 +1035,8 @@ export const PayloadForm: React.FC<PayloadFormProp> = React.memo((props) => {
                                         allowClear={true}
                                         placeholder={
                                             item.Type === FormParamsType.Base64Bytes
-                                                ? "填写内容需Base64编码"
-                                                : `请输入${item.KeyVerbose}`
+                                                ? "Content must be Base64 encoded"
+                                                : `Please Enter${item.KeyVerbose}`
                                         }
                                         value={params[item.Key] as string}
                                         onChange={(e) => setParamsValue([{key: item.Key, value: e.target.value}])}
@@ -1116,7 +1116,7 @@ export const PayloadCode: React.FC<PayloadCodeProp> = React.memo((props) => {
     })
 
     /**
-     * @name 生成各种类型代码
+     * @name Generate various types of code
      */
     const convertCode = useMemoizedFn((type: string) => {
         if (!data.Class || !data.Gadget) return
@@ -1165,7 +1165,7 @@ export const PayloadCode: React.FC<PayloadCodeProp> = React.memo((props) => {
                         Bytes: d.Bytes
                     })
                     .then((res: {Base64: string}) => {
-                        success("生成Base64成功")
+                        success("Generate Base64 successfully")
                         setCode(res.Base64)
                     })
                     .catch((err) => {
@@ -1173,7 +1173,7 @@ export const PayloadCode: React.FC<PayloadCodeProp> = React.memo((props) => {
                     })
             })
             .catch((e: any) => {
-                failed("生成Base64失败: " + `${e}`)
+                failed("Generate Base64 failed: " + `${e}`)
             })
             .finally(() => setTimeout(() => setLoading(false), 300))
     })
@@ -1183,12 +1183,12 @@ export const PayloadCode: React.FC<PayloadCodeProp> = React.memo((props) => {
         ipcRenderer
             .invoke("GenerateYsoBytes", request)
             .then((d: {Bytes: Uint8Array; FileName: string}) => {
-                success("生成字节码成功")
+                success("Bytecode generated successfully")
                 setHex(d.Bytes)
                 setCode(Buffer.from(d.Bytes).toString("hex"))
             })
             .catch((e: any) => {
-                failed("生成字节码失败: " + `${e}`)
+                failed("Bytecode generation failed: " + `${e}`)
             })
             .finally(() => setTimeout(() => setLoading(false), 300))
     })
@@ -1201,11 +1201,11 @@ export const PayloadCode: React.FC<PayloadCodeProp> = React.memo((props) => {
         ipcRenderer
             .invoke("GenerateYsoCode", request)
             .then((d: {Code: string}) => {
-                success("生成代码成功")
+                success("Code generated successfully")
                 setCode(d.Code)
             })
             .catch((e: any) => {
-                failed("生成代码失败: " + `${e}`)
+                failed("Code generation failed: " + `${e}`)
             })
             .finally(() => setTimeout(() => setLoading(false), 300))
     })
@@ -1220,7 +1220,7 @@ export const PayloadCode: React.FC<PayloadCodeProp> = React.memo((props) => {
                         Data: d.Bytes
                     })
                     .then((res: {Data: string}) => {
-                        success("Dump成功")
+                        success("Dump successful")
                         setCode(res.Data)
                     })
                     .catch((err) => {
@@ -1228,7 +1228,7 @@ export const PayloadCode: React.FC<PayloadCodeProp> = React.memo((props) => {
                     })
             })
             .catch((e: any) => {
-                failed("Dump失败: " + `${e}`)
+                failed("Dump failed: " + `${e}`)
             })
             .finally(() => setTimeout(() => setLoading(false), 300))
     })
@@ -1239,7 +1239,7 @@ export const PayloadCode: React.FC<PayloadCodeProp> = React.memo((props) => {
             bodyStyle={{padding: 0, overflow: "hidden"}}
             title={
                 <div>
-                    代码
+                    Code
                     <YakitRadioButtons
                         className='code-type-radio'
                         size='small'
@@ -1274,7 +1274,7 @@ export const PayloadCode: React.FC<PayloadCodeProp> = React.memo((props) => {
                                 type='text'
                                 size='small'
                                 icon={
-                                    <Tooltip title='下载文件'>
+                                    <Tooltip title='Download file'>
                                         <DownloadOutlined />
                                     </Tooltip>
                                 }
@@ -1289,7 +1289,7 @@ export const PayloadCode: React.FC<PayloadCodeProp> = React.memo((props) => {
                             type='text'
                             size='small'
                             icon={
-                                <Tooltip title='复制代码'>
+                                <Tooltip title='Copy code'>
                                     <CopyOutlined />
                                 </Tooltip>
                             }
@@ -1324,14 +1324,14 @@ export const PayloadCode: React.FC<PayloadCodeProp> = React.memo((props) => {
                                 size='small'
                                 onClick={() => codeOperate("download")}
                             >
-                                下载文件
+                                Download file
                             </YakitButton>
                         ) : (
                             <></>
                         )}
 
                         <YakitButton loading={loading} type='primary' size='small' onClick={() => codeOperate("copy")}>
-                            复制代码
+                            Copy code
                         </YakitButton>
                         <YakitButton
                             type='text'

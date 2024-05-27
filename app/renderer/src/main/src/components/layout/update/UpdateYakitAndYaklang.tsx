@@ -81,7 +81,7 @@ export const UpdateYakitAndYaklang: React.FC<UpdateYakitAndYaklangProps> = React
         return []
     }, [yaklangUpdateContent])
 
-    /** 获取 yakit 更新内容 */
+    /** Fetch yakit Updates */
     const fetchYakitLastVersion = useMemoizedFn(() => {
         if (yakitUpdateContent.version) return
 
@@ -101,7 +101,7 @@ export const UpdateYakitAndYaklang: React.FC<UpdateYakitAndYaklangProps> = React
             })
             .catch((err) => {})
     })
-    /** 获取 yaklang 更新内容 */
+    /** Fetch yaklang Updates */
     const fetchYaklangLastVersion = useMemoizedFn(() => {
         if (yaklangUpdateContent.version) return
 
@@ -159,7 +159,7 @@ export const UpdateYakitAndYaklang: React.FC<UpdateYakitAndYaklangProps> = React
         return false
     }, [currentYaklang, latestYaklang, isShow])
 
-    /** 不再提示 */
+    /** Do Not Remind Again */
     const noHint = () => {
         setLocalValue(LocalGVS.NoAutobootLatestVersionCheck, true)
         setLatestYakit("")
@@ -185,7 +185,7 @@ export const UpdateYakitAndYaklang: React.FC<UpdateYakitAndYaklangProps> = React
             .invoke("download-latest-yakit", version, isEnterpriseEdition())
             .then(() => {
                 if (isYakitBreak.current) return
-                success("下载完毕")
+                success("Download Complete")
                 if (!getYakitProgress()?.size) return
                 setYakitProgress({
                     time: {
@@ -202,7 +202,7 @@ export const UpdateYakitAndYaklang: React.FC<UpdateYakitAndYaklangProps> = React
             })
             .catch((e: any) => {
                 if (isYakitBreak.current) return
-                failed(`下载失败: ${e}`)
+                failed(`Download Failed: ${e}`)
                 setYakitProgress(undefined)
                 setInstallYakit(false)
             })
@@ -234,7 +234,7 @@ export const UpdateYakitAndYaklang: React.FC<UpdateYakitAndYaklangProps> = React
             .then(() => {
                 if (isYaklangBreak.current) return
 
-                success("下载完毕")
+                success("Download Complete")
                 if (!getYaklangProgress()?.size) return
                 setYaklangProgress({
                     time: {
@@ -246,13 +246,13 @@ export const UpdateYakitAndYaklang: React.FC<UpdateYakitAndYaklangProps> = React
                     // @ts-ignore
                     size: getYaklangProgress().size
                 })
-                // 清空主进程yaklang版本缓存
+                // Clear Main Process yaklang Version Cache
                 ipcRenderer.invoke("clear-local-yaklang-version-cache")
                 yaklangUpdate()
             })
             .catch((e: any) => {
                 if (isYaklangBreak.current) return
-                failed(`引擎下载失败: ${e}`)
+                failed(`Engine Download Failed: ${e}`)
                 setInstallYaklang(false)
                 setYaklangProgress(undefined)
             })
@@ -273,12 +273,12 @@ export const UpdateYakitAndYaklang: React.FC<UpdateYakitAndYaklangProps> = React
         ipcRenderer
             .invoke("install-yak-engine", version)
             .then(() => {
-                success(`安装成功，如未生效，重启 ${getReleaseEditionName()} 即可`)
+                success(`Installation Successful, Restart if Not Effective ${getReleaseEditionName()} Immediately`)
             })
             .catch((err: any) => {
                 failed(
-                    `安装失败: ${
-                        err.message.indexOf("operation not permitted") > -1 ? "请关闭引擎后重启软件尝试" : err
+                    `Installation Failed: ${
+                        err.message.indexOf("operation not permitted") > -1 ? "Close Engine and Restart Software to Try" : err
                     }`
                 )
             })
@@ -308,26 +308,26 @@ export const UpdateYakitAndYaklang: React.FC<UpdateYakitAndYaklangProps> = React
                         <div className={styles["hint-right-wrapper"]}>
                             {installedYakit ? (
                                 <>
-                                    <div className={styles["hint-right-title"]}>{getReleaseEditionName()} 下载成功</div>
+                                    <div className={styles["hint-right-title"]}>{getReleaseEditionName()} Download Succeeded</div>
                                     <div className={styles["hint-right-content"]}>
-                                        安装需关闭软件，双击安装包即可安装完成，是否立即安装？
+                                        Close Software for Installation, Double-Click Installer to Complete. Install Now?？
                                     </div>
 
                                     <div className={styles["hint-right-btn"]}>
                                         <div></div>
                                         <div className={styles["btn-group-wrapper"]}>
                                             <YakitButton size='max' type='outline2' onClick={yakitLater}>
-                                                取消
+                                                Cancel
                                             </YakitButton>
                                             <YakitButton size='max' onClick={yakitUpdate}>
-                                                确定
+                                                OK
                                             </YakitButton>
                                         </div>
                                     </div>
                                 </>
                             ) : installYakit ? (
                                 <div className={styles["hint-right-download"]}>
-                                    <div className={styles["hint-right-title"]}>Yakit下载中...</div>
+                                    <div className={styles["hint-right-title"]}>Yakit Downloading...</div>
                                     <div className={styles["download-progress"]}>
                                         <Progress
                                             strokeColor='#F28B44'
@@ -336,16 +336,16 @@ export const UpdateYakitAndYaklang: React.FC<UpdateYakitAndYaklangProps> = React
                                         />
                                     </div>
                                     <div className={styles["download-info-wrapper"]}>
-                                        <div>剩余时间 : {(yakitProgress?.time.remaining || 0).toFixed(2)}s</div>
+                                        <div>Remaining Time : {(yakitProgress?.time.remaining || 0).toFixed(2)}s</div>
                                         <div className={styles["divider-wrapper"]}>
                                             <div className={styles["divider-style"]}></div>
                                         </div>
-                                        <div>耗时 : {(yakitProgress?.time.elapsed || 0).toFixed(2)}s</div>
+                                        <div>Duration : {(yakitProgress?.time.elapsed || 0).toFixed(2)}s</div>
                                         <div className={styles["divider-wrapper"]}>
                                             <div className={styles["divider-style"]}></div>
                                         </div>
                                         <div>
-                                            下载速度 : {((yakitProgress?.speed || 0) / 1000000).toFixed(2)}
+                                            Download Speed : {((yakitProgress?.speed || 0) / 1000000).toFixed(2)}
                                             M/s
                                         </div>
                                     </div>
@@ -356,21 +356,21 @@ export const UpdateYakitAndYaklang: React.FC<UpdateYakitAndYaklangProps> = React
                                             type='outline2'
                                             onClick={yakitBreak}
                                         >
-                                            取消
+                                            Cancel
                                         </YakitButton>
                                     </div>
                                 </div>
                             ) : (
                                 <>
                                     <div className={styles["hint-right-title"]}>
-                                        检测到 {getReleaseEditionName()} 版本升级
+                                        Detected {getReleaseEditionName()} Version Upgrade
                                     </div>
                                     <div className={styles["hint-right-content"]}>
-                                        {`${getReleaseEditionName()} ${latestYakit} 更新说明 :`}
+                                        {`${getReleaseEditionName()} ${latestYakit} Update Notes :`}
                                     </div>
                                     <div className={styles["hint-right-update-content"]}>
                                         {yakitContent.length === 0
-                                            ? "管理员未编辑更新通知"
+                                            ? "Admin Update Notifications Unedited"
                                             : yakitContent.map((item, index) => {
                                                   return <div key={`${item}-${index}`}>{item}</div>
                                               })}
@@ -379,15 +379,15 @@ export const UpdateYakitAndYaklang: React.FC<UpdateYakitAndYaklangProps> = React
                                     <div className={styles["hint-right-btn"]}>
                                         <div>
                                             <YakitButton size='max' type='outline2' onClick={noHint}>
-                                                不再提示
+                                                Do Not Remind Again
                                             </YakitButton>
                                         </div>
                                         <div className={styles["btn-group-wrapper"]}>
                                             <YakitButton size='max' type='outline2' onClick={yakitLater}>
-                                                稍后再说
+                                                Later
                                             </YakitButton>
                                             <YakitButton size='max' onClick={yakitDownload}>
-                                                立即更新
+                                                Update Now
                                             </YakitButton>
                                         </div>
                                     </div>
@@ -415,7 +415,7 @@ export const UpdateYakitAndYaklang: React.FC<UpdateYakitAndYaklangProps> = React
                         <div className={styles["hint-right-wrapper"]}>
                             {installYaklang ? (
                                 <div className={styles["hint-right-download"]}>
-                                    <div className={styles["hint-right-title"]}>引擎下载中...</div>
+                                    <div className={styles["hint-right-title"]}>Engine Downloading...</div>
                                     <div className={styles["download-progress"]}>
                                         <Progress
                                             strokeColor='#F28B44'
@@ -424,16 +424,16 @@ export const UpdateYakitAndYaklang: React.FC<UpdateYakitAndYaklangProps> = React
                                         />
                                     </div>
                                     <div className={styles["download-info-wrapper"]}>
-                                        <div>剩余时间 : {(yaklangProgress?.time.remaining || 0).toFixed(2)}s</div>
+                                        <div>Remaining Time : {(yaklangProgress?.time.remaining || 0).toFixed(2)}s</div>
                                         <div className={styles["divider-wrapper"]}>
                                             <div className={styles["divider-style"]}></div>
                                         </div>
-                                        <div>耗时 : {(yaklangProgress?.time.elapsed || 0).toFixed(2)}s</div>
+                                        <div>Duration : {(yaklangProgress?.time.elapsed || 0).toFixed(2)}s</div>
                                         <div className={styles["divider-wrapper"]}>
                                             <div className={styles["divider-style"]}></div>
                                         </div>
                                         <div>
-                                            下载速度 : {((yaklangProgress?.speed || 0) / 1000000).toFixed(2)}
+                                            Download Speed : {((yaklangProgress?.speed || 0) / 1000000).toFixed(2)}
                                             M/s
                                         </div>
                                     </div>
@@ -444,22 +444,22 @@ export const UpdateYakitAndYaklang: React.FC<UpdateYakitAndYaklangProps> = React
                                             type='outline2'
                                             onClick={yaklangBreak}
                                         >
-                                            取消
+                                            Cancel
                                         </YakitButton>
                                     </div>
                                 </div>
                             ) : (
                                 <>
-                                    <div className={styles["hint-right-title"]}>检测到引擎版本升级</div>
+                                    <div className={styles["hint-right-title"]}>Engine Version Upgrade Detected</div>
                                     <div className={styles["hint-right-content"]}>
-                                        {/* {`当前版本：${currentYaklang}`}
+                                        {/* {`Current Version：${currentYaklang}`}
                                         <br />
-                                        {`最新版本：${latestYaklang}`} */}
-                                        {`Yaklang ${latestYaklang} 更新说明 :`}
+                                        {`Latest Version：${latestYaklang}`} */}
+                                        {`Yaklang ${latestYaklang} Update Notes :`}
                                     </div>
                                     <div className={styles["hint-right-update-content"]}>
                                         {yaklangContent.length === 0
-                                            ? "管理员未编辑更新通知"
+                                            ? "Admin Update Notifications Unedited"
                                             : yaklangContent.map((item, index) => {
                                                   return <div key={`${item}-${index}`}>{item}</div>
                                               })}
@@ -468,15 +468,15 @@ export const UpdateYakitAndYaklang: React.FC<UpdateYakitAndYaklangProps> = React
                                     <div className={styles["hint-right-btn"]}>
                                         <div>
                                             <YakitButton size='max' type='outline2' onClick={noHint}>
-                                                不再提示
+                                                Do Not Remind Again
                                             </YakitButton>
                                         </div>
                                         <div className={styles["btn-group-wrapper"]}>
                                             <YakitButton size='max' type='outline2' onClick={yaklangLater}>
-                                                稍后再说
+                                                Later
                                             </YakitButton>
                                             <YakitButton size='max' onClick={yaklangDownload}>
-                                                立即更新
+                                                Update Now
                                             </YakitButton>
                                         </div>
                                     </div>

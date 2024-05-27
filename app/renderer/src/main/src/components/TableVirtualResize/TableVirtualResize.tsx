@@ -51,8 +51,8 @@ import cloneDeep from "lodash/cloneDeep"
 const {RangePicker} = DatePicker
 
 /**
- * @description: 更新说明
- * 1.更新data值变化，单元格状态没变，dataKey需要和修改的值对应上
+ * @Description: Update notes
+ * 1.Update data changes, cell state unchanged, dataKey must correspond to modified value
  */
 interface tablePosition {
     bottom?: number
@@ -135,33 +135,33 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
     }, [size])
     const [currentRow, setCurrentRow] = useState<T>()
     const [selectedRows, setSelectedRows] = useState<T[]>([])
-    const [width, setWidth] = useState<number>(0) //表格所在div宽度
-    const [height, setHeight] = useState<number>(300) //表格所在div高度
-    const [defColumns, setDefColumns] = useState<ColumnsTypeProps[]>(props.columns) // 表头
-    const [columns, setColumns, getColumns] = useGetState<ColumnsTypeProps[]>(props.columns) // 表头
-    const [lineLeft, setLineLeft] = useState<number>(0) // 拖拽线 left
-    const [hoverLine, setHoverLine] = useState<boolean>(false) // 拖拽线 鼠标移上去的状态显示
-    // const [tableWidth, setTableWidth] = useState<number>(0) // 表格所在div宽度  真实宽度
-    const [lineIndex, setLineIndex] = useState<number>(-1) // 拖拽的columns index
+    const [width, setWidth] = useState<number>(0) //Table div width
+    const [height, setHeight] = useState<number>(300) //Table div height
+    const [defColumns, setDefColumns] = useState<ColumnsTypeProps[]>(props.columns) // Header
+    const [columns, setColumns, getColumns] = useGetState<ColumnsTypeProps[]>(props.columns) // Header
+    const [lineLeft, setLineLeft] = useState<number>(0) // Drag Line Left
+    const [hoverLine, setHoverLine] = useState<boolean>(false) // Drag Line Hover State
+    // const [tableWidth, setTableWidth] = useState<number>(0) // Table div width, Actual width
+    const [lineIndex, setLineIndex] = useState<number>(-1) // Dragged columns index
     const [scroll, setScroll] = useState<ScrollProps>({
         scrollLeft: 0,
         scrollBottom: 0,
-        scrollRight: 2 //初始值要大于1
-    }) // 滚动条距离边的距离
+        scrollRight: 2 //Initial value must be >1
+    }) // Scrollbar Margin
     const [sort, setSort] = useState<SortProps>({
         order: "none",
         orderBy: ""
-    }) // 拖拽的columns index
+    }) // Dragged columns index
     const containerRef = useRef<any>(null)
     const wrapperRef = useRef<any>(null)
     const columnsRef = useRef(null)
     const tableRef = useRef<any>(null)
-    const lineStartX = useRef<number>(0) // 拖拽线开始位置
-    const lineEndX = useRef<number>(0) // 拖拽线结束位置
+    const lineStartX = useRef<number>(0) // Drag Line Start Position
+    const lineEndX = useRef<number>(0) // Drag Line End Position
     const tablePosition = useRef<tablePosition>({
         left: 0,
         top: 0
-    }) // 表格距离左边的距离
+    }) // Table Distance from Left
     const containerRefPosition = useRef<tablePosition>({
         left: 0,
         top: 0
@@ -209,9 +209,9 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
 
     useDebounceEffect(
         () => {
-            //为了出现滚动条以便于滚动加载
+            //To display scrollbar for loading
             if (!containerRef || !wrapperRef) return
-            // containerRef 中的数据没有铺满 tableRef,那么就要请求更多的数据
+            // Data in containerRef doesn't fill tableRef, need more data
             const containerHeight = containerRef.current?.clientHeight
             const tableHeight = tableRef.current?.clientHeight
             if (pagination && pagination.onChange && containerHeight && containerHeight <= tableHeight) {
@@ -229,7 +229,7 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
         }
     }, [currentIndex])
 
-    // 滚动到指定index
+    // Scroll to Specific Index
     useEffect(() => {
         if (scrollToIndex !== undefined) {
             if (typeof scrollToIndex === "string") {
@@ -243,7 +243,7 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
 
     const [inViewport] = useInViewport(containerRef)
 
-    // 使用上箭头
+    // Use Up Arrow
     useHotkeys(
         "up",
         () => {
@@ -259,7 +259,7 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
                 return
             }
             let index
-            // 如果上点的话，应该是选择更新的内容
+            // If above, select updated content
             for (let i = 0; i < dataLength; i++) {
                 if (data[i][renderKey] === currentRow[renderKey]) {
                     if (i === 0) {
@@ -291,9 +291,9 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
             const currentDom = document.getElementById(currentRow[renderKey])
             if (!currentDom) {
                 const dom = containerRef.current
-                //  长按up
-                // scrollTo(index) // 缓慢滑到
-                if (dom) dom.scrollTop = index * defItemHeight //滑动方式：马上滑到
+                //  Press and Hold Up
+                // scrollTo(index) // Slow Scroll
+                if (dom) dom.scrollTop = index * defItemHeight //Immediate Scroll
                 return
             }
             const currentPosition: tablePosition = currentDom.getBoundingClientRect()
@@ -305,7 +305,7 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
         },
         {wait: 100, leading: true}
     ).run
-    // 使用下箭头
+    // Use Down Arrow
     useHotkeys(
         "down",
         () => {
@@ -322,7 +322,7 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
             }
 
             let index
-            // 如果上点的话，应该是选择更新的内容
+            // If above, select updated content
             for (let i = 0; i < dataLength; i++) {
                 if (data[i][renderKey] === currentRow[renderKey]) {
                     if (i === dataLength - 1) {
@@ -355,19 +355,19 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
             const dom = containerRef.current
             const currentDom = document.getElementById(currentRow[renderKey])
             if (!currentDom) {
-                //  长按up
+                //  Press and Hold Up
                 scrollTo(index)
                 // if (dom) dom.scrollTop = index * defItemHeight
                 return
             }
 
             const currentPosition: tablePosition = currentDom.getBoundingClientRect()
-            const rowNumber = (containerRef.current.clientHeight - 28) / defItemHeight // 28 表头高度
+            const rowNumber = (containerRef.current.clientHeight - 28) / defItemHeight // 28 Header Height
             const y = 1 - (rowNumber - Math.trunc(rowNumber))
             const top = containerRefPosition.current.top + (containerRefPosition.current.height || 0)
             const inViewport =
                 currentPosition.top + 28 <= top && currentPosition.top + 28 >= containerRefPosition.current.top
-            if (!inViewport) dom.scrollTop = (index - Math.floor(rowNumber) + y) * defItemHeight + 1 + 6 // 1px border被外圈的border挡住了，所以+1,滚动条边角高度6
+            if (!inViewport) dom.scrollTop = (index - Math.floor(rowNumber) + y) * defItemHeight + 1 + 6 // 1px border hidden by outer border, +1, scrollbar corner height 6
         },
         {wait: 200, leading: true}
     ).run
@@ -392,7 +392,7 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
             if (!defColumnItem) {
                 return ele
             }
-            // 如果 columns 更新，保持之前的columnsItem的宽度
+            // Keep width of previous columnsItem if columns updated
             return {...ele, width: defColumnItem.width || ele.width}
         })
         setColumns([...newColumns])
@@ -419,7 +419,7 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
         setSelectedRows([])
         preSelectRef.current = undefined
     }, [wrapperRef])
-    // 计算左右宽度以及固定列
+    // Calculate fixed column widths
     const getLeftOrRightFixedWidth = useMemoizedFn(() => {
         const newColumns: ColumnsTypeProps[] = []
         columns.forEach((l, index) => {
@@ -459,7 +459,7 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
         setColumns([...newColumns])
     })
     const [colWidth, setColWidth, getColWidth] = useGetState<number>(0)
-    // 初始化表格宽度和列宽度
+    // Initialize table and column widths
     const getTableWidthAndColWidth = useMemoizedFn((scrollBarWidth: number) => {
         const cLength = props.columns.length
         if (!width || cLength <= 0) return
@@ -485,7 +485,7 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
                 }
             }
             if (cLength - total === 0 && index === getColumns().length - 2) {
-                // 倒数第二个 外界div宽度变宽，多出的宽度加在倒数第二列
+                // Second to last, extra width added to penultimate column if outer div widens
                 return {
                     ...ele,
                     width: (ele.width || cw) + cw
@@ -503,7 +503,7 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
         // }
         recalculatedTableWidth(scrollBarWidth)
     })
-    // 推拽后重新计算表格宽度
+    // Recompute table width after drag
     const recalculatedTableWidth = useMemoizedFn((scrollBarWidth: number, lastColWidth?: boolean) => {
         const cLength = columns.length
         if (cLength <= 0) return
@@ -514,7 +514,7 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
                     columns[lineIndex + 1].width =
                         (columns[lineIndex + 1].width || columns[lineIndex - 1].minWidth || 0) + width - tWidth
                 } else {
-                    // 拖拽第一条导致宽度不能填满表格
+                    // First drag unable to fill table width
                     columns[cLength - 1].width =
                         (columns[cLength - 1].width || columns[cLength - 1].minWidth || 0) + width - tWidth
                 }
@@ -550,7 +550,7 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
         const moveLeftX = lineStartX.current - e.clientX
         const changeWidth = (columns[lineIndex].width || 0) - moveLeftX
         if (Math.abs(changeWidth) < (columns[lineIndex].minWidth || 0)) {
-            // 拖拽值最小宽度不在移动拖拽线
+            // Minimum drag width not moving
             return
         }
         setLineLeft(left)
@@ -569,7 +569,7 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
         const minWidth = columns[lineIndex].minWidth || defMinWidth
         const width = columns[lineIndex].width || colWidth
         if (lineStartX.current > lineEndX.current) {
-            // 向左移动
+            // Move Left
             const moveLeftX = lineStartX.current - lineEndX.current
             const changeWidth = (minWidth > width ? minWidth : width) - moveLeftX
             if (changeWidth < minWidth) {
@@ -579,10 +579,10 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
             }
             recalculatedTableWidth(0, true)
         } else {
-            // 向右移动
+            // Move Right
             const moveRightX = lineEndX.current - lineStartX.current
             if (lineIndex === columns.length - 2) {
-                // 最后一条拖拽线,最后一个单元格
+                // Last drag line, last cell
                 const lastColumnsWidth = columns[columns.length - 1].width || 0
                 const lastColumnsMinWidth = columns[columns.length - 1].minWidth || defMinWidth
                 columns[columns.length - 1].width =
@@ -612,12 +612,12 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
                 scrollLeft,
                 clientWidth
             } = containerRef.current
-            // const contentScrollTop = dom.scrollTop // 滚动条距离顶部
-            // const clientHeight = dom.clientHeight // 可视区域
-            // const scrollHeight = dom.scrollHeight // 滚动条内容的总高度
+            // const contentScrollTop = dom.scrollTop // Scrollbar Distance from Top
+            // const clientHeight = dom.clientHeight // Viewport
+            // const scrollHeight = dom.scrollHeight // Scrollbar total height
             const scrollBottom = scrollHeight - contentScrollTop - clientHeight
             const scrollRight = scrollWidth - scrollLeft - clientWidth
-            // 性能优化
+            // Performance Optimization
             if (preScrollLeft.current !== scrollLeft) {
                 preScrollLeft.current = scrollLeft
                 if (scrollLeft < 50 || scrollRight < 50) {
@@ -632,22 +632,22 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
             if (preScrollBottom.current !== scrollBottom) {
                 if (wrapperRef && containerRef && pagination) {
                     const hasMore = pagination.total == data.length
-                    //避免频繁set
+                    //Avoid frequent set
                     if (scroll.scrollBottom < 50 && scrollBottom > 50) {
-                        // 不显示暂无数据
+                        // Hide No Data
                         setScroll({
                             ...scroll,
                             scrollBottom: scrollBottom
                         })
                     }
                     if (scrollBottom < 50) {
-                        //显示暂无数据
+                        //Show No Data
                         setScroll({
                             ...scroll,
                             scrollBottom: scrollBottom
                         })
                     }
-                    //向下滑动
+                    //Scroll Down
                     if (
                         preScrollBottom.current > scrollBottom &&
                         scrollBottom <= (scrollToBottom || 300) &&
@@ -666,10 +666,10 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
             wait: 200
         }
     ).run
-    const preSelectRef = useRef<T>() //用来存Shift+Click的第一个目标item
+    const preSelectRef = useRef<T>() //Store first target item for Shift+Click
     const onRowClick = useMemoizedFn((record: T, rowIndex: number) => {
         if (preSelectRef.current) {
-            // 多选 批量选中
+            // Multi-select, Batch selection
             const startKey = preSelectRef.current[renderKey]
             const endKey = record[renderKey]
             const startKeyIndex = data.findIndex((s) => s[renderKey] === startKey)
@@ -690,7 +690,7 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
             if (props.onRowClick) {
                 props.onRowClick(record)
             }
-            // 反选
+            // Deselect
             if (currentRow && currentRow[renderKey] === record[renderKey]) {
                 setCurrentRow(undefined)
                 onSetCurrentRow && onSetCurrentRow(undefined)
@@ -701,18 +701,18 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
         }
     })
 
-    /**多选触发 Shift+Click Shift + 鼠标左键同时点击*/
+    /**Multi-select with Shift+Click*/
     const handleShiftMousedown = useMemoizedFn((event) => {
         if (event.shiftKey && event.button === 0) {
             preSelectRef.current = currentRow
-            //去除文字选中
+            //Remove Text Selection
             window?.getSelection()?.removeAllRanges()
         }
     })
     const onRowContextMenu = useMemoizedFn((record: T, e: React.MouseEvent, rowIndex: number) => {
         if ((selectedRows?.length || 0) > 0) {
             const index = selectedRows.findIndex((ele) => ele[renderKey] === record[renderKey])
-            // 右键点击范围是否在多选的区域内，不在则清空多选区域，选中右键点击的item
+            // Right-click in multi-select area, if not, clear multi-select and select right-clicked item
             if (index === -1) {
                 setSelectedRows([])
                 setCurrentIndex && setCurrentIndex(rowIndex)
@@ -772,8 +772,8 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
     const onDateTimeSearch = useMemoizedFn((dates: [Moment, Moment] | null, colKey: string) => {
         const newFilters = {
             ...filters,
-            [colKey]: dates ? [moment(dates[0]).unix(), moment(dates[1]).unix()] : undefined, //给出去的时间 时间戳秒  antd时间组件值要毫秒
-            [`${colKey}-time`]: dates ? [moment(dates[0]).valueOf(), moment(dates[1]).valueOf()] : undefined //antd时间组件显示的时间 时间戳秒  antd时间组件值要毫秒
+            [colKey]: dates ? [moment(dates[0]).unix(), moment(dates[1]).unix()] : undefined, //Output time as timestamp seconds, antd time component needs milliseconds
+            [`${colKey}-time`]: dates ? [moment(dates[0]).valueOf(), moment(dates[1]).valueOf()] : undefined //antd time displayed in timestamp seconds, antd time values in milliseconds
         }
         setFilters({...newFilters})
         // if (props.onChange) props.onChange(1, pagination.limit, sort, newFilters)
@@ -797,7 +797,7 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
     }
 
     /**
-     * @description 选择搜索
+     * @Search Description
      */
     const renderSelect = useMemoizedFn((columnsItem: ColumnsTypeProps, filterKey: string) => {
         return (
@@ -819,7 +819,7 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
         )
     })
     /**
-     * @description 输入框搜索
+     * @Search Box Description
      */
     const renderInput = useMemoizedFn((columnsItem: ColumnsTypeProps, filterKey: string) => {
         return (
@@ -859,9 +859,9 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
                     <RangePicker
                         size='small'
                         ranges={{
-                            "1分钟": [moment().subtract(1, "minute"), moment()],
-                            "1小时": [moment().subtract(1, "hours"), moment()],
-                            "1天": [moment().subtract(1, "day"), moment()]
+                            "1 Minute": [moment().subtract(1, "minute"), moment()],
+                            "1 Hour": [moment().subtract(1, "hours"), moment()],
+                            "1 Day": [moment().subtract(1, "day"), moment()]
                         }}
                         onChange={(time) => {
                             onDateTimeSearch(time as [Moment, Moment] | null, filterKey)
@@ -877,19 +877,19 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
                             color='info'
                             onClick={() => onDateTimeSearch([moment().subtract(1, "minute"), moment()], filterKey)}
                         >
-                            1分钟
+                            1 Minute
                         </YakitTag>
                         <YakitTag
                             color='info'
                             onClick={() => onDateTimeSearch([moment().subtract(1, "hours"), moment()], filterKey)}
                         >
-                            1小时
+                            1 Hour
                         </YakitTag>
                         <YakitTag
                             color='info'
                             onClick={() => onDateTimeSearch([moment().subtract(1, "day"), moment()], filterKey)}
                         >
-                            1天
+                            1 Day
                         </YakitTag>
                     </div>
                 </div>
@@ -995,7 +995,7 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
                     )}
                 </>
             )}
-            {(width === 0 && <Spin spinning={true} tip='加载中...'></Spin>) || (
+            {(width === 0 && <Spin spinning={true} tip='Loading...'></Spin>) || (
                 <Spin spinning={loading !== undefined ? loading && pagination?.page == 1 : false}>
                     <div
                         className={classNames(styles["virtual-table-body"])}
@@ -1107,7 +1107,7 @@ const Table = <T extends any>(props: TableVirtualResizeProps<T>) => {
                                         [styles["pagination-text-show"]]: scroll.scrollBottom < 10 || list.length === 0
                                     })}
                                 >
-                                    暂无更多数据
+                                    No More Data
                                 </div>
                             )}
                         </div>
@@ -1204,7 +1204,7 @@ const ColumnsItemRender = React.memo((props: ColumnsItemRenderProps) => {
         >
             <div className={classNames(styles["justify-content-between"])}>
                 <div className={styles["virtual-title"]}>
-                    {/* 这个不要用 module ，用来拖拽最小宽度*/}
+                    {/* Don't use module for minimum drag width*/}
                     <div className='virtual-col-title' style={{width: "100%", display: "flex", alignItems: "center"}}>
                         {cIndex === 0 && rowSelection && rowSelection?.isShowAll !== false && (
                             <>
@@ -1603,8 +1603,8 @@ const CellRender = React.memo(
         )
     },
     (preProps, nextProps) => {
-        // return true; 	不渲染
-        // return false;	渲染
+        // return true; 	Do Not Render
+        // return false;	Render
 
         // if (preProps.isSelect !== nextProps.isSelect) {
         //     return false
@@ -1857,8 +1857,8 @@ const CellRenderDrop = React.memo(
         )
     },
     (preProps, nextProps) => {
-        // return true; 	不渲染
-        // return false;	渲染
+        // return true; 	Do Not Render
+        // return false;	Render
         // if (preProps.isSelect !== nextProps.isSelect) {
         //     return false
         // }
@@ -1878,30 +1878,30 @@ const CellRenderDrop = React.memo(
     }
 )
 /**
- * @description:表格的props描述， 包裹虚拟表格的父元素需要设置高度
- * @ref: 返回的滚动条所在的div的元素
- * @title: 表格顶部的title,左边，类型：string | ReactNode
- * @extra: 表格顶部的title，右边，类型：ReactNode
- * @renderTitle: 自定义表格顶部的title,类型:ReactNode
- * @titleHeight: 自定义表格顶部的高度,使用renderTitle,需要传入对应的height,否则虚拟列表滚动会不正确，类型:ReactNode
- * @data:数组 ，类型：T[]
- * @renderKey:每行的key值，不可重复 ，类型：string
- * @columns:每列的参数 类型：ColumnsTypeProps[]
- * @rowSelection:多选/单选配置，目前只支持多选 类型：RowSelectionProps<T>
- * @enableDrag:true,表格列之间可以拖动，最后一列除外。columns中也可以单独设置某一列是否可以拖动  类型：boolean
- * @onRowClick:row鼠标左键点击事件，会返回当前选中row的数据  类型：(record: T) => void
- * @onRowContextMenu:row鼠标右键点击事件，会返回当前选中row的数据和e 类型：(record: T, e: React.MouseEvent) => void
- * @pagination:分页配置 类型：PaginationProps
- * @onChange:查询条件变化 类型：(page: number, limit: number, sorter: SortProps, filters: any, extra?: any) => void
- * @loading：是否加载中 类型：boolean
- * @scrollToBottom：距离底部多少px开始加载下一页,默认300 类型：number
- * @isReset：重置表格条件 滚动至0 类型：boolean
- * @isShowTotal：内置的total是否显示；true显示，false不显示 类型：boolean
- * @currentIndex：当前row的index 类型：number
- * @isRefresh：boolean 刷新表格 滚动至0
- * @disableSorting：boolean 禁用排序
- * @query：查询条件
- * @property {boolean}  isRightClickBatchOperate 右键菜单批量操作，支持Shift + 鼠标左键同时点击
+ * @Description: Props of table, parent of virtual table must set height
+ * @ref: Scrollbar's div element returned
+ * @title: Table top title, left. Type: string | ReactNode
+ * @extra: Table top title, right. Type: ReactNode
+ * @renderTitle: Custom table top title. Type: ReactNode
+ * @titleHeight: Custom top height if using renderTitle, pass in height or virtual scroll might break. Type: ReactNode
+ * @data: Array, Type: T[]
+ * @renderKey: Unique key per row, Type: string
+ * @columns: Column Params, Type: ColumnsTypeProps[]
+ * @rowSelection: Multi-select/Single select mode, currently supports multi-select. Type: RowSelectionProps<T>
+ * @enableDrag:true, draggable between columns except last. Can set individually in columns. Type: boolean
+ * @onRowClick: Left-click row event, returns selected row data. Type: (record: T) => void
+ * @onRowContextMenu: Right-click row event, returns selected row data and e, Type: (record: T, e: React.MouseEvent)) => void
+ * @pagination: Pagination settings. Type: PaginationProps
+ * @onChange: Query condition change. Type: (page: number, limit: number, sorter: SortProps, filters: any, extra?: any) => void
+ * @loading: Loading state. Type: boolean
+ * @scrollToBottom: Load next page px from bottom, default 300 Type: number
+ * @isReset: Reset table conditions, scroll to 0. Type: boolean
+ * @isShowTotal: Display built-in total; true shows, false hides. Type: boolean
+ * @currentIndex: Current row index. Type: number
+ * @isRefresh: boolean, Refresh table, scroll to 0
+ * @disableSorting: boolean, Sorting disabled
+ * @Query: Search conditions
+ * @property {boolean}  isRightClickBatchOperate, Batch operation with right-click, supports Shift + Left Click
  * @return {*}
  */
 export const TableVirtualResize = React.forwardRef(TableVirtualResizeFunction) as <T>(
@@ -1929,7 +1929,7 @@ export const SelectSearch: React.FC<SelectSearchProps> = React.memo((props) => {
         setData(originalList)
     }, [originalList])
     useEffect(() => {
-        // 新版UI组件之前的过度写法
+        // Transition method for new UI components
         const scrollDom = selectRef.current?.firstChild?.firstChild?.firstChild
         if (!scrollDom) return
         scrollDomRef.current = scrollDom
@@ -2001,7 +2001,7 @@ export const SelectSearch: React.FC<SelectSearchProps> = React.memo((props) => {
                                         ? filterOptionRender(item.data)
                                         : item.data.label || item.data.value}
                                 </div>
-                            ))) || <div className={classNames(styles["no-data"])}>暂无数据</div>}
+                            ))) || <div className={classNames(styles["no-data"])}>No Data</div>}
                     </div>
                 </div>
             </div>
@@ -2018,7 +2018,7 @@ export const SelectSearch: React.FC<SelectSearchProps> = React.memo((props) => {
     const onChangeSelect = useDebounceFn(
         useMemoizedFn((values: string[], option: FiltersItemProps[]) => {
             onSelect(values, option)
-            // 滑动至最右边
+            // Scroll to Far Right
             if (filterSearch) onHandleScroll()
         }),
         {wait: 200}
@@ -2098,7 +2098,7 @@ export const SelectSearch: React.FC<SelectSearchProps> = React.memo((props) => {
                                         {checked && <CheckIcon className={styles["check-icon"]} />}
                                     </div>
                                 )
-                            })) || <div className={classNames(styles["no-data"])}>暂无数据</div>}
+                            })) || <div className={classNames(styles["no-data"])}>No Data</div>}
                     </div>
                     <FooterBottom onReset={onReset} onSure={onSure} />
                 </div>
@@ -2119,10 +2119,10 @@ export const FooterBottom: React.FC<FooterBottomProps> = React.memo((props) => {
     return (
         <div className={classNames(styles["select-footer"], className)}>
             <div className={classNames(styles["footer-bottom"], styles["select-reset"])} onClick={() => onReset()}>
-                重置
+                Reset
             </div>
             <div className={classNames(styles["footer-bottom"], styles["select-sure"])} onClick={() => onSure()}>
-                确定
+                Confirm
             </div>
         </div>
     )

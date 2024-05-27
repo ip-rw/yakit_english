@@ -62,8 +62,8 @@ type CompoundedComponent = React.ForwardRefExoticComponent<YakitDatePickerProps>
 }
 
 /**
- * @description: 日期选择
- * @augments DatePickerProps 继承antd的DatePicker默认属性
+ * @description: Date Picker
+ * @augments DatePickerProps Inherit default props of antd's DatePicker
  */
 export const YakitDatePicker = InternalDatePicker as CompoundedComponent
 

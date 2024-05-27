@@ -1,8 +1,8 @@
-/** 数据立方.
- * RecordMatrix 是一个二维的 map，CrossTable 会以下列方式使用 matrix 中的数据：
+/** Data Cube.
+ * RecordMatrix is a 2D map, CrossTable uses matrix data as follows：
  * `matrix.get(leftPK).get(topPK)[indicatorCode]` */
 export declare type RecordMatrix<R = any> = Map<string, Map<string, R>>;
-/** 普通的下钻树节点 */
+/** Generic Drilldown Node */
 export interface DrillNode {
     key: string;
     value: string;

@@ -115,14 +115,14 @@ export interface SetUserInfoProp {
     avatarColor: string
 }
 
-// 可上传文件类型
+// Uploadable File Types
 const FileType = ["image/png", "image/jpeg", "image/png"]
 
-// 用户信息
+// User Info
 export const SetUserInfo: React.FC<SetUserInfoProp> = React.memo((props) => {
     const {userInfo, setStoreUserInfo, avatarColor} = props
 
-    // OSS远程头像删除
+    // OSS Avatar Deletion
     const deleteAvatar = useMemoizedFn((imgName) => {
         NetWorkApi<API.DeleteResource, API.ActionSucceeded>({
             method: "post",
@@ -134,16 +134,16 @@ export const SetUserInfo: React.FC<SetUserInfoProp> = React.memo((props) => {
         })
             .then((result) => {
                 // if(result.ok){
-                //     success("原有头像删除成功")
+                //     success("Original Avatar Deleted")
                 // }
             })
             .catch((err) => {
-                failed("头像更换失败：" + err)
+                failed("Avatar Change Failed：" + err)
             })
             .finally(() => {})
     })
 
-    // 修改头像
+    // Change Avatar
     const setAvatar = useMemoizedFn(async (file) => {
         await ipcRenderer
             .invoke("upload-img", {path: file.path, type: file.type})
@@ -158,7 +158,7 @@ export const SetUserInfo: React.FC<SetUserInfoProp> = React.memo((props) => {
                 })
                     .then((result) => {
                         if (result.ok) {
-                            success("头像更换成功")
+                            success("Avatar Changed Successfully")
                             setStoreUserInfo({
                                 ...userInfo,
                                 companyHeadImg: imgUrl
@@ -168,12 +168,12 @@ export const SetUserInfo: React.FC<SetUserInfoProp> = React.memo((props) => {
                         }
                     })
                     .catch((err) => {
-                        failed("头像更换失败：" + err)
+                        failed("Avatar Change Failed：" + err)
                     })
                     .finally(() => {})
             })
             .catch((err) => {
-                failed("头像上传失败")
+                failed("Avatar Upload Failed")
             })
             .finally(() => {})
     })
@@ -188,7 +188,7 @@ export const SetUserInfo: React.FC<SetUserInfoProp> = React.memo((props) => {
                 showUploadList={false}
                 beforeUpload={(f) => {
                     if (!FileType.includes(f.type)) {
-                        failed(`${f.name}非png、png、jpeg文件，请上传正确格式文件！`)
+                        failed(`${f.name}Invalid File Type, Upload png, jpg, jpeg Only！`)
                         return false
                     }
                     setAvatar(f)
@@ -212,7 +212,7 @@ export const SetUserInfo: React.FC<SetUserInfoProp> = React.memo((props) => {
                 <div className='user-name'>{userInfo.companyName}</div>
                 {userInfo.role === "admin" && (
                     <>
-                        <div className='permission-show'>管理员</div>
+                        <div className='permission-show'>Admin</div>
                         <span className='user-admin-icon'>
                             <EnterpriseLoginInfoIcon />
                         </span>
@@ -222,7 +222,7 @@ export const SetUserInfo: React.FC<SetUserInfoProp> = React.memo((props) => {
         </div>
     )
 })
-// web-fuzzer页面缓存数据属性
+// web-fuzzer Cached Data Attributes
 export interface fuzzerInfoProp {
     time: string
 
@@ -235,10 +235,10 @@ export interface fuzzerInfoProp {
     // timeout?: number
     request?: string
     /**
-     * @param 二级菜单修改了名称后保存的字段，目前仅仅webFuzzer二级支持
+     * @Param Submenu Name Save Field, currently webFuzzer only
      */
     verbose?: string
-    /**@param 组信息  */
+    /**@Param Group Info  */
     groupChildren?: MultipleNodeInfo[]
     id?: string
 }
@@ -246,21 +246,21 @@ export interface fuzzerInfoProp {
 const Main: React.FC<MainProp> = React.memo((props) => {
     const [loading, setLoading] = useState(false)
 
-    // 修改密码弹框
+    // Password Change Popup
     const [passwordShow, setPasswordShow] = useState<boolean>(false)
 
-    // 登录框状态
+    // Login Box Status
     const [loginshow, setLoginShow, getLoginShow] = useGetState<boolean>(false)
 
-    /** ---------- 远程控制 start ---------- */
-    // 远程控制浮层
+    /** ---------- Remote Control Start ---------- */
+    // Remote Control Overlay
     const [controlShow, setControlShow] = useState<boolean>(false)
     const [controlName, setControlName] = useState<string>("")
     const {dynamicStatus, setDynamicStatus} = yakitDynamicStatus()
-    // 定时器监听是否连接/断开
+    // Timer Checks Connection/Disconnect
     useEffect(() => {
         const id = setInterval(() => {
-            // 当服务启动时 请求接口
+            // API Request on Service Start
             ipcRenderer.invoke("alive-dynamic-control-status").then((is: boolean) => {
                 if (is) {
                     getRemoteValue("REMOTE_OPERATION_ID").then((tunnel) => {
@@ -288,7 +288,7 @@ const Main: React.FC<MainProp> = React.memo((props) => {
                 }
             })
         }, 15000)
-        // 退出远程控制中页面
+        // Exit Remote Control Page
         ipcRenderer.on("lougin-out-dynamic-control-page-callback", async () => {
             setControlShow(false)
         })
@@ -298,13 +298,13 @@ const Main: React.FC<MainProp> = React.memo((props) => {
             ipcRenderer.removeAllListeners("lougin-out-dynamic-control-page-callback")
         }
     }, [])
-    /** ---------- 远程控制 end ---------- */
-    /** ---------- 引擎控制台 start ---------- */
-    // 是否展示console
+    /** ---------- Remote Control End ---------- */
+    /** ---------- Engine Console Start ---------- */
+    // Display Console?
     const [isShowBaseConsole, setIsShowBaseConsole] = useState<boolean>(false)
-    // 展示console方向
+    // Console Direction
     const [directionBaseConsole, setDirectionBaseConsole] = useState<"left" | "bottom" | "right">("left")
-    // 监听console方向打开
+    // Monitor Console Opening
     useEffect(() => {
         ipcRenderer.on("callback-direction-console-log", (e, res: any) => {
             if (res?.direction) {
@@ -316,20 +316,20 @@ const Main: React.FC<MainProp> = React.memo((props) => {
             ipcRenderer.removeAllListeners("callback-direction-console-log")
         }
     }, [])
-    // 缓存console展示状态 用于状态互斥
+    // Cache Console Display for Mutex
     useEffect(() => {
         setLocalValue(RemoteGV.ShowBaseConsole, isShowBaseConsole)
     }, [isShowBaseConsole])
-    /** ---------- 引擎控制台 end ---------- */
-    /** ---------- 登录状态变化的逻辑 start ---------- */
+    /** ---------- Engine Console End ---------- */
+    /** ---------- Login Status Change Start ---------- */
     const {userInfo, setStoreUserInfo} = useStore()
     const IsEnpriTrace = shouldVerifyEnpriTraceLogin()
 
     useEffect(() => {
         ipcRenderer.on("fetch-signin-token", (e, res: UserInfoProps) => {
-            // 刷新用户信息
+            // Refresh User Info
             setStoreUserInfo(res)
-            // 刷新引擎
+            // Refresh Engine
             globalUserLogin(res.token)
         })
         return () => {
@@ -338,14 +338,14 @@ const Main: React.FC<MainProp> = React.memo((props) => {
     }, [])
 
     useEffect(() => {
-        // 企业版初始进入页面（已登录）已获取用户信息 因此刷新
+        // Enterprise Initial Page (Logged In) User Info Refreshed
         if (shouldVerifyEnpriTraceLogin()) {
             ipcRenderer.send("company-refresh-in")
         }
     }, [])
 
-    /** ---------- 登录状态变化的逻辑 end ---------- */
-    // 刷新登录状态的token
+    /** ---------- Login Status Change End ---------- */
+    // Refresh Login Token
     useEffect(() => {
         ipcRenderer.on("refresh-token", (e, res: any) => {
             refreshToken(userInfo)
@@ -354,7 +354,7 @@ const Main: React.FC<MainProp> = React.memo((props) => {
             ipcRenderer.removeAllListeners("refresh-token")
         }
     }, [])
-    // 加载补全
+    // Load Completion
     useEffect(() => {
         ipcRenderer.invoke("GetYakitCompletionRaw").then((data: {RawJson: Uint8Array}) => {
             try {
@@ -366,7 +366,7 @@ const Main: React.FC<MainProp> = React.memo((props) => {
                 console.info(e)
             }
 
-            // success("加载 Yak 语言自动补全成功 / Load Yak IDE Auto Completion Finished")
+            // success("Yak Language Autocomplete Loaded / Load Yak IDE Auto Completion Finished")
         })
         //
         ipcRenderer.invoke("GetYakVMBuildInMethodCompletion", {}).then((data: {Suggestions: MethodSuggestion[]}) => {
@@ -383,9 +383,9 @@ const Main: React.FC<MainProp> = React.memo((props) => {
             }
         })
     }, [])
-    /** ---------- 其余逻辑 end ---------- */
+    /** ---------- Other Logic End ---------- */
 
-    /** @name 路由对应的菜单展示名称 */
+    /** @Name for Menu Display */
     const routeKeyToLabel = useRef<Map<string, string>>(new Map<string, string>())
 
     const {screenRecorderInfo} = useScreenRecorder()
@@ -395,8 +395,8 @@ const Main: React.FC<MainProp> = React.memo((props) => {
         }
     }, [screenRecorderInfo.isRecording])
 
-    /** 编辑菜单功能相关逻辑 */
-    const [isShowCustomizeMenu, setIsShowCustomizeMenu] = useState<boolean>(false) //是否显示自定义菜单页面
+    /** Edit Menu Logic */
+    const [isShowCustomizeMenu, setIsShowCustomizeMenu] = useState<boolean>(false) //Show Custom Menu Page?
     useEffect(() => {
         ipcRenderer.on("fetch-open-customize-menu", (e, type: YakitRoute) => {
             setIsShowCustomizeMenu(true)
@@ -406,28 +406,28 @@ const Main: React.FC<MainProp> = React.memo((props) => {
         }
     }, [])
 
-    /** yak-chat 相关逻辑 */
+    /** yak-chat Logic */
     const [chatShow, setChatShow] = useState<boolean>(false)
 
     const onChatCS = useMemoizedFn(() => {
         setChatShow(true)
     })
 
-    /** 通知软件打开页面 */
+    /** Notify Page Open */
     const openMenu = (info: RouteToPageProps) => {
         emiter.emit("menuOpenPage", JSON.stringify(info))
     }
 
     const waterMarkStr = (): string => {
-        // 社区版无水印
+        // Community Edition No Watermark
         if (isCommunityEdition()) {
             return ""
         } else if (userInfo.isLogin) {
             return userInfo.companyName || ""
         } else if (isEnpriTrace()) {
-            return "EnpriTrace-试用版"
+            return "EnpriTrace-Trial"
         } else if (isEnpriTraceAgent()) {
-            return "EnpriTraceAgent-试用版"
+            return "EnpriTraceAgent-Trial"
         }
         return ""
     }
@@ -445,7 +445,7 @@ const Main: React.FC<MainProp> = React.memo((props) => {
         })
     }, [])
 
-    // 拖动chartCS
+    // Drag chartCS
     const chartCSDragAreaRef = useRef<any>(null)
     const chartCSDragItemRef = useRef<any>(null)
     const [chartCSDragAreaHeight, setChartCSDragAreaHeight] = useState<number>(0)
@@ -455,11 +455,11 @@ const Main: React.FC<MainProp> = React.memo((props) => {
             setChartCSDragAreaHeight(h)
         })
     })
-    // 从底部缩短软件高度时 拖拽元素始终保持在边界处可见
+    // Keeping Drag Element Visible on Bottom Resize
     useUpdateEffect(() => {
         if (chartCSDragItemRef.current) {
             const top = parseInt(getComputedStyle(chartCSDragItemRef.current).getPropertyValue("top"))
-            const flag = top >= chartCSDragAreaHeight - 43 - 10 // 判读拖拽元素是否离最底部还有10px的距离
+            const flag = top >= chartCSDragAreaHeight - 43 - 10 // Check Drag Element 10px from Bottom
             const currentTop = flag ? chartCSDragAreaHeight - 43 - 10 : top
             chartCSDragItemRef.current.style.top = currentTop + "px"
         }
@@ -497,7 +497,7 @@ const Main: React.FC<MainProp> = React.memo((props) => {
         }
     }, [chartCSDragItemRef, chartCSDragAreaRef])
 
-    /** -------------------- 更新前瞻 Start -------------------- */
+    /** -------------------- Preview Update Start -------------------- */
     // useEffect(() => {
     //     if (isCommunityEdition()) {
     //         ipcRenderer.invoke("fetch-system-name").then((type: YakitSystem) => {
@@ -517,7 +517,7 @@ const Main: React.FC<MainProp> = React.memo((props) => {
     //     setLocalValue(LocalGV.UpdateForwardAnnouncement, LocalGV.JudgeUpdateForwardAnnouncement)
     //     onUpdateCancenl()
     // })
-    /** -------------------- 更新前瞻 End -------------------- */
+    /** -------------------- Preview Update End -------------------- */
 
     return (
         <>
@@ -578,7 +578,7 @@ const Main: React.FC<MainProp> = React.memo((props) => {
                     {loginshow && <Login visible={loginshow} onCancel={() => setLoginShow(false)}></Login>}
                     <Modal
                         visible={passwordShow}
-                        title={"修改密码"}
+                        title={"Change Password"}
                         destroyOnClose={true}
                         maskClosable={false}
                         bodyStyle={{padding: "10px 24px 24px 24px"}}
@@ -599,15 +599,15 @@ const Main: React.FC<MainProp> = React.memo((props) => {
             {controlShow && <ControlOperation controlName={controlName} />}
             <YakitHintModal
                 visible={false}
-                title='收到远程连接请求'
+                title='Remote Connection Received'
                 content={
                     <div>
-                        用户 <span style={{color: "#F28B44"}}>Alex-null</span>{" "}
-                        正在向你发起远程连接请求，是否同意对方连接？
+                        User <span style={{color: "#F28B44"}}>Alex-null</span>{" "}
+                        Incoming remote connection request, accept?？
                     </div>
                 }
-                cancelButtonText='拒绝'
-                okButtonText='同意'
+                cancelButtonText='Reject'
+                okButtonText='Agree'
                 onOk={() => {}}
                 onCancel={() => {}}
             />
@@ -641,29 +641,29 @@ export default Main
 //             centered={true}
 //             closable={false}
 //             visible={visible}
-//             title='重要更新内容前瞻'
-//             okText='已知道!'
-//             cancelText='关闭'
+//             title='Important Update Preview'
+//             okText='Acknowledged!'
+//             cancelText='Close'
 //             cancelButtonProps={{style: {display: "none"}}}
 //             onCancel={onCancel}
 //             onOk={onOk}
 //             footerExtra={
 //                 <YakitButton type='text' onClick={onIgnore}>
-//                     不再提示
+//                     Do Not Remind Again
 //                 </YakitButton>
 //             }
 //         >
 //             <div className='update-forward-wrapper'>
-//                 <div className='title-style'>Windows自定义安装上线预告!!!</div>
+//                 <div className='title-style'>Windows Custom Install Announcement!!!</div>
 //                 <div className='content-style'>
-//                     下一个版本即将上线自定义安装，安装涉及到旧数据迁移，为避免出现意外情况，建议安装前将yakit-project文件夹进行备份。
+//                     Next version custom install alert, advise backup of yakit-project folder due to data migration。
 //                 </div>
 
 //                 <div className='content-style'>
-//                     <span className='highlight-style'>注意事项!!</span>
-//                     <div>1、安装前需先将引擎进行更新</div>
+//                     <span className='highlight-style'>Notice!!</span>
+//                     <div>1. Update engine before installation</div>
 //                     <div>
-//                         2、迁移会将用户文件夹下的yakit-project文件复制到安装路径，并删除。如安装后打开发现没有引擎或数据，可能是用户文件夹下的yakit-project由于被占用无法删除，导致读取的还是用户文件下的内容。如已经迁移完可直接将用户文件夹下的yakit-project删除即可正常读取
+//                         2. Migration copies yakit-project to install path, deletes original. If missing engine/data post-install, delete yakit-project from user folder for correct read
 //                     </div>
 //                 </div>
 //             </div>

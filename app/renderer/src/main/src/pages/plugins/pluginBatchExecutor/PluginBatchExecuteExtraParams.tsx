@@ -20,7 +20,7 @@ import {defPluginExecuteFormValue} from "../operator/localPluginExecuteDetailHea
 const {YakitPanel} = YakitCollapse
 
 interface PluginBatchExecuteExtraParamsDrawerProps {
-    /**是否显示请求配置 默认显示 */
+    /**Show Request Config? Default Shown */
     isRawHTTPRequest: boolean
     extraParamsValue: PluginBatchExecuteExtraFormValue
     visible: boolean
@@ -64,7 +64,7 @@ const PluginBatchExecuteExtraParamsDrawer: React.FC<PluginBatchExecuteExtraParam
             visible={visible}
             onClose={onClose}
             width='40%'
-            title='额外参数'
+            title='Extra params'
         >
             <Form size='small' labelCol={{span: 6}} wrapperCol={{span: 18}} form={form}>
                 <PluginBatchExecuteExtraParams
@@ -73,7 +73,7 @@ const PluginBatchExecuteExtraParamsDrawer: React.FC<PluginBatchExecuteExtraParam
                     isRawHTTPRequest={isRawHTTPRequest}
                     form={form}
                 />
-                <div className={styles["to-end"]}>已经到底啦～</div>
+                <div className={styles["to-end"]}>Reached Bottom～</div>
             </Form>
         </YakitDrawer>
     )
@@ -104,19 +104,19 @@ const PluginBatchExecuteExtraParams: React.FC<PluginBatchExecuteExtraParamsProps
             ...cloneDeep(defPluginExecuteTaskValue)
         })
     })
-    /**重置固定的额外参数中的表单值 */
+    /**Reset form values in fixed extra parameters */
     const onReset = useMemoizedFn((restValue) => {
         form.setFieldsValue({...restValue})
     })
     return (
-        <YakitCollapse destroyInactivePanel={false} defaultActiveKey={["请求配置", "任务配置"]}>
+        <YakitCollapse destroyInactivePanel={false} defaultActiveKey={["Request config", "Task Config"]}>
             {!isRawHTTPRequest && (
                 <YakitPanel
-                    header='请求配置'
-                    key='请求配置'
+                    header='Request config'
+                    key='Request config'
                     extra={
                         <YakitButton type='text' colors='danger' onClick={handleResetRequest} size='small'>
-                            重置
+                            Reset
                         </YakitButton>
                     }
                 >
@@ -124,28 +124,28 @@ const PluginBatchExecuteExtraParams: React.FC<PluginBatchExecuteExtraParamsProps
                 </YakitPanel>
             )}
             <YakitPanel
-                header='任务配置'
-                key='任务配置'
+                header='Task Config'
+                key='Task Config'
                 extra={
                     <YakitButton type='text' colors='danger' onClick={handleResetTask} size='small'>
-                        重置
+                        Reset
                     </YakitButton>
                 }
             >
-                <Form.Item label='代理' name='Proxy'>
+                <Form.Item label='Proxy' name='Proxy'>
                     <YakitAutoComplete
                         ref={proxyRef}
                         allowClear
-                        placeholder='请输入...'
+                        placeholder='Please Enter...'
                         cacheHistoryDataKey={PluginGV.LocalBatchExecuteExtraProxy}
                         size='small'
                         isCacheDefaultValue={false}
                     />
                 </Form.Item>
-                <Form.Item label='并发进程' name='Concurrent'>
+                <Form.Item label='Concurrent Processes' name='Concurrent'>
                     <YakitInputNumber type='horizontal' size='small' min={0} precision={0} />
                 </Form.Item>
-                <Form.Item label='总超时时间' name='TotalTimeoutSecond'>
+                <Form.Item label='Total Timeout' name='TotalTimeoutSecond'>
                     <YakitInputNumber type='horizontal' size='small' min={0} precision={0} />
                 </Form.Item>
             </YakitPanel>

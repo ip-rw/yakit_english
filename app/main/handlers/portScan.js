@@ -16,9 +16,9 @@ module.exports = (win, getClient) => {
         return new Promise((resolve, reject) => {
             const type = params.split(".").pop()
             const typeArr = ['csv', 'xls', 'xlsx']
-            // 读取Excel
+            // Read Excel
             if (typeArr.includes(type)) {
-                // 读取xlsx
+                // Read xlsx
                 try {
                     const obj = xlsx.parse(params)
                     resolve(obj)
@@ -26,7 +26,7 @@ module.exports = (win, getClient) => {
                     reject(err)
                 }
             }
-            // 读取txt
+            // Read txt
             else {
                 FS.readFile(params, 'utf-8', function (err, data) {
                     if (err) {
@@ -40,10 +40,10 @@ module.exports = (win, getClient) => {
         })
     }
 
-    // 获取证书(ps:asyncFetchFileContent此方法读取有误)
+    // Fetch certificate (ps:asyncFetchFileContent might be incorrect)
     const asyncFetchCertificate = (params) => {
         return new Promise((resolve, reject) => {
-            // 读取 .pfx 文件
+            // Read .pfx file
             FS.readFile(params, (err, data) => {
                 if (err) {
                     reject(err);
@@ -51,9 +51,9 @@ module.exports = (win, getClient) => {
                     resolve(data)
                 }
 
-                // 处理 .pfx 文件的内容，例如解析证书
-                // 这里可能需要使用 `crypto` 模块进行进一步的处理
-                // 例如：crypto.createCredentials
+                // Process .pfx file content, e.g., parse certificate
+                // May need to use `crypto` modules for further processing
+                // e.g.: crypto.createCredentials
             });
         })
     }
@@ -147,12 +147,12 @@ module.exports = (win, getClient) => {
         handlerHelper.registerHandler(win, stream, streamRecoverSimpleDetectUnfinishedTaskMap, token)
     })
 
-    // 获取URL的IP地址
+    // Get URL IP address
     ipcMain.handle("fetch-file-content", async (e, params) => {
         return await asyncFetchFileContent(params)
     })
 
-    // 获取证书内容
+    // Get certificate content
     ipcMain.handle("fetch-certificate-content", async (e, params) => {
         return await asyncFetchCertificate(params)
     })

@@ -20,7 +20,7 @@ const DragonSuccess = () => (
 
 
 /**
- * @description:  实心的选择圆形
+ * @description: Solid Selection Circle
  */
 export const DragonFailIcon = (props: Partial<IconProps>) => {
     return <Icon component={DragonFail} {...props} />

@@ -2,9 +2,9 @@ import {RadioGroupProps} from "antd"
 import type {YakitSizeType} from "../YakitInputNumber/YakitInputNumberType"
 
 /**
- * @description: 按钮单选框Props
- * @augments RadioGroupProps 继承antd的 RadioGroupProps 默认属性
- * @property {YakitSizeType} size  默认middle
+ * @description: Button Radio Props
+ * @augments RadioGroupProps Inherits antd's RadioGroupProps Default Properties
+ * @property {YakitSizeType} size Default: middle
  * @property {string} className
  * @property {string} wrapClassName
  */

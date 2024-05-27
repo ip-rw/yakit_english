@@ -29,7 +29,7 @@ const ShowUserInfo: React.FC<ShowUserInfoProps> = (props) => {
             </div>
             <div style={{textAlign: "center", paddingTop: 10}}>
                 <Button style={{width: 200}} type='primary' onClick={() => copyUserInfo()}>
-                    复制
+                    Copy
                 </Button>
             </div>
         </div>
@@ -60,7 +60,7 @@ const CreateLicense: React.FC<CreateLicenseProps> = (props) => {
     const [data, setData, getData] = useGetState<API.CompanyLicenseConfigList[]>([])
     const [selectData, setSelectData, getSelectData] = useGetState<SelectDataProps[]>([])
     const keywordsRef = useRef<string>("")
-    // 企业名称分页
+    // Company Name Pagination
     const [_, setPagination, getPagination] = useGetState<PaginationSchema>({
         Limit: 20,
         Order: "desc",
@@ -105,7 +105,7 @@ const CreateLicense: React.FC<CreateLicenseProps> = (props) => {
                 }
             })
             .catch((err) => {
-                failed("查看license失败：" + err)
+                failed("View License Failed：" + err)
             })
             .finally(() => {
                 setTimeout(() => {
@@ -134,13 +134,13 @@ const CreateLicense: React.FC<CreateLicenseProps> = (props) => {
                 onCancel()
                 refresh()
                 const m = showModal({
-                    title: "生成成功",
+                    title: "Generation Success",
                     content: <ShowUserInfo text={text} onClose={() => m.destroy()} />
                 })
                 return m
             })
             .catch((err) => {
-                failed("企业操作失败：" + err)
+                failed("Company Operation Failed：" + err)
             })
             .finally(() => {
                 setTimeout(() => {
@@ -160,11 +160,11 @@ const CreateLicense: React.FC<CreateLicenseProps> = (props) => {
     return (
         <div style={{marginTop: 24}}>
             <Form {...layout} form={form} onFinish={onFinish}>
-                <Form.Item name='id' label='企业名称' rules={[{required: true, message: "该项为必选"}]}>
+                <Form.Item name='id' label='Company Name' rules={[{required: true, message: "Required Field"}]}>
                     <YakitSelect
                         showSearch
                         optionFilterProp='children'
-                        placeholder='请选择企业名称'
+                        placeholder='Select Company Name'
                         filterOption={(input, option) => {
                             const val = (option?.label ?? "") + ""
                             return val.toLowerCase().includes(input.toLowerCase())
@@ -184,18 +184,18 @@ const CreateLicense: React.FC<CreateLicenseProps> = (props) => {
                         dropdownRender={(originNode: React.ReactNode) => selectDropdown(originNode)}
                     />
                 </Form.Item>
-                <Form.Item name='company_version' label='版本' rules={[{required: true, message: "该项为必选"}]}>
-                    <YakitSelect placeholder='请选择版本' allowClear>
-                        <YakitSelect.Option value='EnpriTrace'>企业版</YakitSelect.Option>
-                        <YakitSelect.Option value='EnpriTraceAgent'>便携版</YakitSelect.Option>
+                <Form.Item name='company_version' label='Version' rules={[{required: true, message: "Required Field"}]}>
+                    <YakitSelect placeholder='Select Version' allowClear>
+                        <YakitSelect.Option value='EnpriTrace'>Enterprise Version</YakitSelect.Option>
+                        <YakitSelect.Option value='EnpriTraceAgent'>Portable Version</YakitSelect.Option>
                     </YakitSelect>
                 </Form.Item>
-                <Form.Item name='license' label='申请码' rules={[{required: true, message: "该项为必选"}]}>
-                    <Input.TextArea placeholder='请输入申请码' allowClear rows={13} />
+                <Form.Item name='license' label='Application Code' rules={[{required: true, message: "Required Field"}]}>
+                    <Input.TextArea placeholder='Enter Application Code' allowClear rows={13} />
                 </Form.Item>
                 <div style={{textAlign: "center"}}>
                     <Button style={{width: 200}} type='primary' htmlType='submit' loading={loading}>
-                        确认
+                        Confirm
                     </Button>
                 </div>
             </Form>
@@ -246,7 +246,7 @@ const LicenseForm: React.FC<LicenseFormProps> = (props) => {
                 refresh()
             })
             .catch((err) => {
-                failed("企业操作失败：" + err)
+                failed("Company Operation Failed：" + err)
             })
             .finally(() => {
                 setTimeout(() => {
@@ -264,7 +264,7 @@ const LicenseForm: React.FC<LicenseFormProps> = (props) => {
         if (editInfo && values.maxUser > editInfo.maxUser) {
             params.maxActivationNum = values.maxActivationNum + 1
             Modal.info({
-                title: "由于修改用户总数需要修改私有部署服务器的License，会占用一次License生成次数，所以默认会把License总数加1",
+                title: "Modifying User Count Requires Server License Update, Increment Total Licenses by 1",
                 onOk() {
                     requestFun(params)
                 }
@@ -276,18 +276,18 @@ const LicenseForm: React.FC<LicenseFormProps> = (props) => {
     return (
         <div style={{marginTop: 24}}>
             <Form {...layout} form={form} onFinish={onFinish}>
-                <Form.Item name='company' label='企业名称' rules={[{required: true, message: "该项为必填"}]}>
-                    <Input placeholder='请输入企业名称' allowClear disabled={!!editInfo} />
+                <Form.Item name='company' label='Company Name' rules={[{required: true, message: "Required Field"}]}>
+                    <Input placeholder='Enter Company Name' allowClear disabled={!!editInfo} />
                 </Form.Item>
                 <Form.Item
                     name='maxActivationNum'
-                    label='License总数'
+                    label='Total Licenses'
                     rules={[
-                        {required: true, message: "该项为必填"},
+                        {required: true, message: "Required Field"},
                         {
                             validator: (rule, value) => {
                                 if (editInfo && value && value < editInfo.maxActivationNum) {
-                                    return Promise.reject("License总数仅能增加")
+                                    return Promise.reject("Total Licenses Can Only Increase")
                                 } else {
                                     setSubmitBtn(false)
                                     return Promise.resolve()
@@ -296,26 +296,26 @@ const LicenseForm: React.FC<LicenseFormProps> = (props) => {
                         }
                     ]}
                 >
-                    <InputNumber placeholder='请输入License总数' style={{width: "100%"}} />
+                    <InputNumber placeholder='Enter Total Licenses' style={{width: "100%"}} />
                 </Form.Item>
                 <Form.Item
                     name='maxUser'
                     label={
                         <>
-                            用户总数
+                            User Count
                             {editInfo && (
-                                <Tooltip title='如修改用户总数则需要修改私有部署服务器的License'>
+                                <Tooltip title='Modify User Count Requires Server License Update'>
                                     <QuestionCircleOutlined style={{paddingLeft: 2, position: "relative", top: 1}} />
                                 </Tooltip>
                             )}
                         </>
                     }
                     rules={[
-                        {required: true, message: "该项为必填"},
+                        {required: true, message: "Required Field"},
                         {
                             validator: (rule, value) => {
                                 if (editInfo && value && value < editInfo.maxUser) {
-                                    return Promise.reject("用户总数不可减少")
+                                    return Promise.reject("User Count Not Decrease")
                                 } else {
                                     setSubmitBtn(false)
                                     return Promise.resolve()
@@ -324,26 +324,26 @@ const LicenseForm: React.FC<LicenseFormProps> = (props) => {
                         }
                     ]}
                 >
-                    <InputNumber placeholder='请输入用户总数' style={{width: "100%"}} />
+                    <InputNumber placeholder='Enter User Count' style={{width: "100%"}} />
                 </Form.Item>
                 <Form.Item
                     name='durationDate'
                     label={
                         <>
-                            有效期
+                            Validity
                             {editInfo && (
-                                <Tooltip title='如修改有效期，则所有License都需替换，已使用License数清零'>
+                                <Tooltip title='Replacing Licenses Resets Used Count Upon Expiry Update'>
                                     <QuestionCircleOutlined style={{paddingLeft: 2, position: "relative", top: 1}} />
                                 </Tooltip>
                             )}
                         </>
                     }
                     rules={[
-                        {required: true, message: "该项为必填"},
+                        {required: true, message: "Required Field"},
                         {
                             validator: (rule, value) => {
                                 if (editInfo && value && value.unix() < editInfo.durationDate) {
-                                    return Promise.reject("有效期不可缩短")
+                                    return Promise.reject("Expiry Cannot Shorten")
                                 } else {
                                     setSubmitBtn(false)
                                     return Promise.resolve()
@@ -355,7 +355,7 @@ const LicenseForm: React.FC<LicenseFormProps> = (props) => {
                     <DatePicker
                         // showTime
                         format='YYYY-MM-DD'
-                        placeholder='点击这里设置有效期'
+                        placeholder='Set Expiry Here'
                         style={{width: "100%"}}
                     />
                 </Form.Item>
@@ -367,7 +367,7 @@ const LicenseForm: React.FC<LicenseFormProps> = (props) => {
                         htmlType='submit'
                         loading={loading}
                     >
-                        确认
+                        Confirm
                     </Button>
                 </div>
             </Form>
@@ -400,10 +400,10 @@ const LicenseAdminPage: React.FC<LicenseAdminPageProps> = (props) => {
     })
     const [data, setData] = useState<API.CompanyLicenseConfigList[]>([])
     const [total, setTotal] = useState<number>(0)
-    // 编辑项信息
+    // Edit Item
     const [licenseFormShow, setLicenseFormShow] = useState<boolean>(false)
     const [editInfo, setEditInfo] = useState<API.CompanyLicenseConfigList>()
-    // 生成License Modal
+    // License Generation Modal
     const [createLicenseModal, setCreateLicenseModal] = useState<boolean>(false)
 
     const update = (page?: number, limit?: number, order?: string, orderBy?: string) => {
@@ -428,7 +428,7 @@ const LicenseAdminPage: React.FC<LicenseAdminPageProps> = (props) => {
                 setTotal(res.pagemeta.total)
             })
             .catch((err) => {
-                failed("查看license失败：" + err)
+                failed("View License Failed：" + err)
             })
             .finally(() => {
                 setTimeout(() => {
@@ -450,44 +450,44 @@ const LicenseAdminPage: React.FC<LicenseAdminPageProps> = (props) => {
             }
         })
             .then((res) => {
-                success("删除企业成功")
+                success("Delete Company Success")
                 update()
             })
             .catch((err) => {
-                failed("删除企业失败：" + err)
+                failed("Delete Company Failed：" + err)
             })
             .finally(() => {})
     }
 
-    // 计算相差天数
+    // Days Difference
     const countDay = (now, later) => {
-        // 将时间戳相减获得差值（秒数）
+        // Timestamp Difference (Seconds）
         const differ = later - now
         const day = differ / 60 / 60 / 24
         if (day > 30) {
-            return <Tag color='green'>正常使用</Tag>
+            return <Tag color='green'>In Use</Tag>
         } else if (0 < day && day <= 30) {
-            return <Tag color='orange'>即将过期</Tag>
+            return <Tag color='orange'>Expiring Soon</Tag>
         } else {
-            return <Tag color='red'>已过期</Tag>
+            return <Tag color='red'>Expired</Tag>
         }
     }
 
     const columns: ColumnsType<API.CompanyLicenseConfigList> = [
         {
-            title: "企业名称",
+            title: "Company Name",
             dataIndex: "company"
         },
         {
-            title: "状态",
+            title: "Status",
             dataIndex: "status",
             filters: [
                 {
-                    text: "已过期",
+                    text: "Expired",
                     value: 1
                 },
                 {
-                    text: "即将过期",
+                    text: "Expiring Soon",
                     value: 2
                 }
             ],
@@ -495,23 +495,23 @@ const LicenseAdminPage: React.FC<LicenseAdminPageProps> = (props) => {
             render: (text, record) => countDay(record.currentTime, record.durationDate)
         },
         {
-            title: "有效期至",
+            title: "Expiry Date",
             dataIndex: "durationDate",
             render: (text) => <span>{moment.unix(text).format("YYYY-MM-DD")}</span>
         },
         {
-            title: "License(已使用/总数)",
+            title: "Licenses (Used/Total)",
             dataIndex: "useActivationNum",
             render: (text, record) => {
                 return `${text} / ${record.maxActivationNum}`
             }
         },
         {
-            title: "用户总数",
+            title: "User Count",
             dataIndex: "maxUser"
         },
         {
-            title: "操作",
+            title: "Action",
             render: (i) => (
                 <Space>
                     <Button
@@ -522,17 +522,17 @@ const LicenseAdminPage: React.FC<LicenseAdminPageProps> = (props) => {
                             setLicenseFormShow(true)
                         }}
                     >
-                        编辑
+                        Edit
                     </Button>
                     <Popconfirm
-                        title={"确定删除该企业吗？"}
+                        title={"Confirm Delete Company?？"}
                         onConfirm={() => {
                             onRemove(i.id)
                         }}
                         placement='right'
                     >
                         <Button size={"small"} danger={true} type='link'>
-                            删除
+                            Delete
                         </Button>
                     </Popconfirm>
                 </Space>
@@ -572,7 +572,7 @@ const LicenseAdminPage: React.FC<LicenseAdminPageProps> = (props) => {
                         <div className='table-title'>
                             <div className='filter'>
                                 <Input.Search
-                                    placeholder={"请输入企业名称进行搜索"}
+                                    placeholder={"Search by Company Name"}
                                     enterButton={true}
                                     size={"small"}
                                     style={{width: 200}}
@@ -596,7 +596,7 @@ const LicenseAdminPage: React.FC<LicenseAdminPageProps> = (props) => {
                                             setEditInfo(undefined)
                                         }}
                                     >
-                                        添加企业
+                                        Add Company
                                     </Button>
                                     <Button
                                         type='primary'
@@ -606,7 +606,7 @@ const LicenseAdminPage: React.FC<LicenseAdminPageProps> = (props) => {
                                             setCreateLicenseModal(true)
                                         }}
                                     >
-                                        生成License
+                                        Generate License
                                     </Button>
                                 </Space>
                             </div>
@@ -621,7 +621,7 @@ const LicenseAdminPage: React.FC<LicenseAdminPageProps> = (props) => {
             />
             <Modal
                 visible={licenseFormShow}
-                title={editInfo ? "编辑企业" : "创建企业"}
+                title={editInfo ? "Edit Company" : "Create Company"}
                 destroyOnClose={true}
                 maskClosable={false}
                 bodyStyle={{padding: "10px 24px 24px 24px"}}
@@ -633,7 +633,7 @@ const LicenseAdminPage: React.FC<LicenseAdminPageProps> = (props) => {
             </Modal>
             <Modal
                 visible={createLicenseModal}
-                title={"生成License"}
+                title={"Generate License"}
                 destroyOnClose={true}
                 maskClosable={false}
                 bodyStyle={{padding: "10px 24px 24px 24px"}}

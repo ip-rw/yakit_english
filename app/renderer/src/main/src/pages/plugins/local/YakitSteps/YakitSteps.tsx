@@ -6,7 +6,7 @@ import {Steps} from "antd"
 import classNames from "classnames"
 
 const {Step} = Steps
-/** YakitSteps/YakitStep 目前只有插件商店的批量上传时使用，暂时没打算作为公共组件，后续有需求再议 */
+/** YakitSteps/YakitStep is currently used only for batch uploads in the plugin store, not intended as a public component for now, future needs can be discussed later. */
 const YakitSteps: React.FC<YakitStepsProps> = React.memo((props) => {
     useEffect(() => {}, [])
     return (

@@ -76,7 +76,7 @@ interface PluginEditDetailsProps {
     id?: number
 }
 
-/** 新建|编辑插件成功后的信号传递信息 */
+/** New|Signal After Successful Plugin Edit */
 export interface SavePluginInfoSignalProps {
     route: YakitRoute
     isOnline: boolean
@@ -87,28 +87,28 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
     const {id: pluginId} = props
 
     const [loading, setLoading] = useState<boolean>(false)
-    // 编辑时的旧数据
+    // Old Data on Edition
     const [info, setInfo] = useState<YakScript>()
 
-    /** --------------- 旧插件参数迁移提示 Start --------------- */
+    /** --------------- Old Params Migration Warning Start --------------- */
     const [oldShow, setOldShow] = useState<boolean>(false)
     const oldParamsRef = useRef<string>("")
     const [copyLoading, setCopyLoading] = useState<boolean>(false)
-    // 查询插件是否有旧数据需要迁移提示
+    // Check Plugin for Old Data Migration Warning
     const fetchOldData = useMemoizedFn((name: string) => {
         oldParamsRef.current = ""
 
         ipcRenderer
             .invoke("YaklangGetCliCodeFromDatabase", {ScriptName: name})
             .then((res: {Code: string; NeedHandle: boolean}) => {
-                // console.log("是否有旧数据的提示框", res)
+                // console.log("Old Data Warning Dialog?", res)
                 if (res.NeedHandle && !oldShow) {
                     oldParamsRef.current = res.Code
                     if (!oldShow) setOldShow(true)
                 }
             })
             .catch((e: any) => {
-                yakitNotify("error", "查询旧数据迁移失败: " + e)
+                yakitNotify("error", "Old Data Migration Query Failed: " + e)
             })
             .finally(() => {
                 setTimeout(() => {
@@ -121,23 +121,23 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         ipcRenderer.invoke("set-copy-clipboard", oldParamsRef.current)
         setTimeout(() => {
             onOldDataCancel()
-            success("复制成功")
+            success("Copy Success")
             setCopyLoading(false)
         }, 500)
     })
     const onOldDataCancel = useMemoizedFn(() => {
         if (oldShow) setOldShow(false)
     })
-    /** --------------- 旧插件参数迁移提示 End --------------- */
-    // 数组去重
+    /** --------------- Old Params Migration Warning End --------------- */
+    // Dedupe Array
     const filter = (arr) => arr.filter((item, index) => arr.indexOf(item) === index)
 
-    /** 通过ID获取插件旧数据 */
+    /** Fetch Old Data by ID */
     const fetchPluginInfo = useMemoizedFn((id: number) => {
         ipcRenderer
             .invoke("GetYakScriptById", {Id: id})
             .then(async (res: YakScript) => {
-                // console.log("编辑插件-获取插件信息", res)
+                // console.log("Edit Plugin - Fetch Info", res)
                 if (res.Type === "yak") fetchOldData(res.ScriptName)
                 let newTags = !res.Tags || res.Tags === "null" ? [] : (res.Tags || "").split(",")
                 setInfo(res)
@@ -147,7 +147,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
                         ? await onCodeToInfo(res.Type || "yak", res.Content)
                         : null
                 if (codeInfo && codeInfo.Tags.length > 0) {
-                    // 去重
+                    // Deduplicate
                     newTags = filter([...newTags, ...codeInfo.Tags])
                 }
                 setInfoParams({
@@ -163,7 +163,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
                     Content: res.Content
                 })
                 setCode(res.Content)
-                // 编辑插件页面-初始时默认展示第二部分
+                // Edit Plugin Page - Show Section 2 by Default
                 setTimeout(() => {
                     if (res.Type !== "yak") {
                         setLoading(false)
@@ -173,7 +173,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
                 }, 500)
             })
             .catch((e: any) => {
-                yakitNotify("error", "查询插件信息失败:" + e)
+                yakitNotify("error", "Fetch Plugin Info Failed:" + e)
                 setTimeout(() => {
                     setLoading(false)
                 }, 300)
@@ -188,7 +188,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
     }, [pluginId])
 
     const privateDomain = useRef<string>("")
-    // 获取私有域地址
+    // Fetch Private Domain Address
     const fetchPrivateDomain = useMemoizedFn(() => {
         getRemoteValue(RemoteGV.HttpSetting).then((value: string) => {
             if (value) {
@@ -204,8 +204,8 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         fetchPrivateDomain()
     }, [userInfo])
 
-    /** ---------- 页面判断变量和按钮展示逻辑块 start ---------- */
-    /** 是否为纯本地插件(未同步过云端的) */
+    /** ---------- Variable & Button Display Logic Block Start ---------- */
+    /** Purely Local Plugin (Not Synced)) */
     const isPureLocal = useMemo(() => {
         if (!pluginId) return true
         if (!info) return true
@@ -213,7 +213,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         if (!info.OnlineBaseUrl) return true
         else return false
     }, [pluginId, info])
-    /** 是否为同私有域插件 */
+    /** Private Domain Plugin? */
     const isSameBaseUrl = useMemo(() => {
         if (!pluginId) return true
         if (!info) return true
@@ -222,56 +222,56 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         if (info.OnlineBaseUrl === privateDomain.current) return true
         else return false
     }, [pluginId, info, privateDomain.current])
-    /** 当前插件是否为本人插件 */
+    /** Is Plugin Owned? */
     const isUser = useMemo(() => {
         return +(info?.UserId || 0) === userInfo.user_id
     }, [info, userInfo])
-    /** 是否是编辑页面 */
+    /** Edit Page Flag */
     const isModify = useMemo(() => {
         if (!pluginId) return false
         if (!info) return false
         else return true
     }, [pluginId, info])
 
-    // 是否展示复制按钮
+    // Show Copy Button?
     const showCopyBtn = useMemo(() => {
-        // 新建不展示
+        // Create Hide
         if (!isModify) return false
-        // 本地插件不展示
+        // Local Plugin Hide
         if (isPureLocal) return false
-        // 非同私有域不展示
+        // Non-Private Domain Hide
         if (!isSameBaseUrl) return false
-        // 同作者不展示
+        // Hide from Same Author
         if (isUser) return false
         return true
     }, [isModify, isPureLocal, isSameBaseUrl, isUser])
-    // 是否展示提交按钮
+    // Show Submit Button?
     const showSubmitBtn = useMemo(() => {
-        // 新建不展示
+        // Create Hide
         if (!isModify) return false
-        // 本地插件不展示
+        // Local Plugin Hide
         if (isPureLocal) return false
-        // 非同私有域不展示
+        // Non-Private Domain Hide
         if (!isSameBaseUrl) return false
         return true
     }, [isModify, isPureLocal, isSameBaseUrl])
-    // 是否展示同步按钮
+    // Show Sync Button?
     const showSyncBtn = useMemo(() => {
-        // 新建展示
+        // Create Display
         if (!isModify) return true
-        // 本地插件展示
+        // Local Plugin Display
         if (isPureLocal) return true
-        // 非同私有域展示
+        // Non-Private Domain Display
         if (!isSameBaseUrl) return true
         return false
     }, [isModify, isPureLocal, isSameBaseUrl])
-    /** ---------- 页面判断变量和按钮展示逻辑块 start ---------- */
+    /** ---------- Variable & Button Display Logic Block Start ---------- */
 
-    /** ---------- 页面可见数据操作逻辑块 start ---------- */
-    // 页面分块步骤式展示-相关逻辑
+    /** ---------- Visibility Data Operation Block Start ---------- */
+    // Stepwise Page Display Logic
     const [path, setPath] = useState<"type" | "info" | "setting">("type")
     const bodyRef = useRef<HTMLDivElement>(null)
-    // 各信息块切换事件
+    // Switch Info Block Event
     const onViewChange = useMemoizedFn((value: string) => {
         switch (value) {
             case "#plugin-details-info":
@@ -287,8 +287,8 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         }
     })
 
-    // 插件类型信息-相关逻辑
-    // 插件类型
+    // Plugin Type Logic
+    // Plugin type
     const [pluginType, setPluginType] = useState<string>("yak")
     const fetchPluginType = useMemoizedFn(() => {
         return pluginType
@@ -296,10 +296,10 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
     const onType = useMemoizedFn((value: string) => {
         if (pluginType === value) return
 
-        // 不同类型对应的基础信息和配置信息的重置
+        // Type-based Base & Config Reset
         let infoData: PluginBaseParamProps = {...(fetchInfoData() || getInfoParams())}
 
-        // 切换脚本类型时, 删除DNSLog和HTTP数据包变形代表的tag字段
+        // On Script Type Change, Remove DNSLog & HTTP Packet Switch Tags
         infoData = {
             ...infoData,
             Tags: infoData.Tags?.filter((item) => {
@@ -308,17 +308,17 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         }
 
         setPluginType(value)
-        // 不同类型对应的不同默认源码
+        // Type-specific Default Source
         setCode(pluginTypeToName[value]?.content || "")
         setInfoParams({...infoData})
         setSettingParams({Content: ""})
     })
-    // 插件基础信息-相关逻
+    // Plugin Basic Info Logic
     const infoRef = useRef<PluginInfoRefProps>(null)
     const [infoParams, setInfoParams, getInfoParams] = useGetState<PluginBaseParamProps>({
         ScriptName: ""
     })
-    // 获取基础信息组件内的数据(不考虑验证)
+    // Fetch Data Inside Base Info Component (No Validation))
     const fetchInfoData = useMemoizedFn(() => {
         if (infoRef.current) {
             return infoRef.current.onGetValue()
@@ -326,11 +326,11 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         return undefined
     })
     const [cacheTags, setCacheTags] = useState<string[]>()
-    // 删除某些tag 触发  DNSLog和HTTP数据包变形开关的改变
+    // Remove Certain Tags Triggering DNSLog & HTTP Packet Switch Change
     const onTagsCallback = useMemoizedFn((v: string[]) => {
         setCacheTags(v || [])
     })
-    // DNSLog和HTTP数据包变形开关的改变 影响 tag的增删
+    // DNSLog & HTTP Packet Switch Change Affects Tag Add/Remove
     const onSwitchToTags = useMemoizedFn((value: string[]) => {
         setInfoParams({
             ...(fetchInfoData() || getInfoParams()),
@@ -339,14 +339,14 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         setCacheTags(value)
     })
 
-    // 插件配置信息-相关逻辑
+    // Plugin Config Logic
     const settingRef = useRef<PluginSettingRefProps>(null)
     const [settingParams, setSettingParams] = useState<PluginSettingParamProps>({
         Content: ""
     })
-    // 插件源码-相关逻辑
+    // Plugin Source - Related Logic Knight
     const [code, setCode] = useState<string>(pluginTypeToName["yak"]?.content || "")
-    // 源码全屏框
+    // Fullscreen Source Box
     const [codeModal, setCodeModal] = useState<boolean>(false)
     const onOpenCodeModal = useMemoizedFn(() => {
         if (codeModal) return
@@ -357,7 +357,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         if (code !== content) setCode(content)
         setCodeModal(false)
     })
-    // 源码全屏版-预览参数去调试
+    // Fullscreen Source - Preview to Debug
     const onCodeModalToDegbug = useMemoizedFn((params: YakParamProps[], code: string) => {
         const baseInfo: PluginBaseParamProps = fetchInfoData() || getInfoParams()
         const info: PluginDataProps = {
@@ -370,13 +370,13 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         onModifyCode(code)
         setDebugShow(true)
     })
-    /** ---------- 页面可见数据操作逻辑块 end ---------- */
+    /** ---------- Visibility Data Operation Block End ---------- */
 
-    /** --------------- 预览参数逻辑 Start --------------- */
+    /** --------------- Preview Params Logic Start --------------- */
     const [previewParams, setPreviewParams] = useState<YakParamProps[]>([])
     const [previewParamsShow, setPreviewParamsShow, getPreviewParamsShow] = useGetState<boolean>(false)
 
-    /** 预览参数框内容在更新代码后的联动更新预览参数 */
+    /** Preview Box Content Update After Code Change */
     useDebounceEffect(
         () => {
             if (!getPreviewParamsShow()) return
@@ -400,7 +400,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
 
     const paramsForm = useRef<PreviewParamsRefProps>()
     const [previewCloseLoading, setPreviewCloseLoading] = useState<boolean>(false)
-    // 去调试
+    // Go Debug
     const onPreviewToDebug = useMemoizedFn(() => {
         if (previewCloseLoading) return
         setPreviewCloseLoading(true)
@@ -430,19 +430,19 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
             setPreviewCloseLoading(false)
         }, 200)
     })
-    // 结束预览
+    // Preview End
     const onCancelPreviewParams = useMemoizedFn(() => {
         if (previewParamsShow) {
             if (paramsForm && paramsForm.current) paramsForm.current.onReset()
             setPreviewParamsShow(false)
         }
     })
-    /** --------------- 预览参数逻辑 End --------------- */
+    /** --------------- Preview Params Logic End --------------- */
 
-    // 获取插件所有配置参数
+    // Fetch All Plugin Configs
     const convertPluginInfo = useMemoizedFn(async () => {
         if (!pluginType) {
-            yakitNotify("error", "请选择脚本类型")
+            yakitNotify("error", "Select Script Sty]")
             return
         }
 
@@ -453,7 +453,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         }
 
         if (!infoRef.current) {
-            yakitNotify("error", "未获取到基础信息，请重试")
+            yakitNotify("error", "Failed to Fetch Base Info, Retry")
             return
         }
         const info = await infoRef.current.onSubmit()
@@ -467,7 +467,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         }
 
         if (!settingRef.current) {
-            yakitNotify("error", "未获取到配置信息，请重试")
+            yakitNotify("error", "Failed to Fetch Config Info, Retry")
             return
         }
         const setting = await settingRef.current.onSubmit()
@@ -483,11 +483,11 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         let newTags = data.Tags || ""
         if (codeInfo && codeInfo.Tags.length > 0) {
             newTags += `,${codeInfo.Tags.join(",")}`
-            // 去重
+            // Deduplicate
             newTags = filter(newTags.split(",")).join(",")
         }
         data.Tags = newTags
-        // yak类型才解析参数和风险
+        // yak Types Parse Params and Risks
         if (data.Type === "yak" && codeInfo) {
             data.RiskDetail = codeInfo.RiskInfo.filter((item) => item.Level && item.CVE && item.TypeVerbose)
             data.Params = codeInfo.CliParameter
@@ -496,25 +496,25 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         return toolDelInvalidKV(data)
     })
 
-    // 插件本地保存
+    // Plugin Local Save
     const saveLocal: (modify: PluginDataProps) => Promise<YakScript> = useMemoizedFn((modify) => {
         return new Promise((resolve, reject) => {
-            // 新建还是编辑逻辑
+            // New or Edit Logic
             let isModifyState: boolean = false
 
-            // 页面是新建还是编辑
+            // Page: New or Edit?
             if (!isModify) {
                 isModifyState = false
             } else {
-                // 编辑插件是否为纯本地插件
+                // Edit Plugin as Purely Local?
                 if (isPureLocal) {
                     isModifyState = true
                 } else {
-                    // 编辑插件是否改动名字
+                    // Edit Plugin Name Change
                     if (modify.ScriptName === info?.ScriptName) {
                         isModifyState = true
                     } else {
-                        // 编辑插件改名字算新建
+                        // Renaming Plugin Counts as New
                         isModifyState = false
                     }
                 }
@@ -526,7 +526,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
             ipcRenderer
                 .invoke("SaveNewYakScript", request)
                 .then((data: YakScript) => {
-                    yakitNotify("success", "创建 / 保存 插件成功")
+                    yakitNotify("success", "Create / Save Plugin Successfully")
                     setTimeout(() => ipcRenderer.invoke("change-main-menu"), 100)
                     onLocalAndOnlineSend(data)
                     resolve(data)
@@ -537,7 +537,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         })
     })
 
-    /** --------------- 插件调试 Start --------------- */
+    /** --------------- Plugin Debug Start --------------- */
     const [debugPlugin, setDebugPlugin] = useState<PluginDataProps>()
     const [debugShow, setDebugShow] = useState<boolean>(false)
 
@@ -550,7 +550,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         setDebugPlugin(undefined)
     })
 
-    // 将页面数据转化为插件调试信息
+    // Convert Page Data to Plugin Debug Info
     const convertDebug = useMemoizedFn(() => {
         return new Promise(async (resolve, reject) => {
             setDebugPlugin(undefined)
@@ -576,24 +576,24 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         })
     })
 
-    // 调试
+    // Debug
     const onDebug = useMemoizedFn(async () => {
         if (saveLoading || onlineLoading || modifyLoading) return
         if (debugShow) return
 
         const result = await convertDebug()
-        // 获取插件信息错误
+        // Fetch Plugin Info Error
         if (result === "false") return
         setDebugShow(true)
     })
-    /** --------------- 插件调试 End --------------- */
+    /** --------------- Plugin Debug End --------------- */
 
-    /** 页面右上角的按钮组操作 start */
+    /** Top-Right Button Group Operations Start */
     const [onlineLoading, setOnlineLoading] = useState<boolean>(false)
-    // 同步至云端
+    // Sync to Cloud
     const onSyncCloud = useMemoizedFn(async () => {
         if (!userInfo.isLogin) {
-            yakitNotify("error", "登录后才可同步至云端")
+            yakitNotify("error", "Sync to Cloud Post-Login")
             return
         }
         if (onlineLoading || modifyLoading || saveLoading) return
@@ -612,10 +612,10 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         modifyInfo.current = convertLocalToRemoteInfo(isModify, {info: info, modify: obj})
         setCloudHint({isCopy: false, visible: true})
     })
-    // 复制至云端
+    // Copy to Cloud
     const onCopyCloud = useMemoizedFn(async () => {
         if (!userInfo.isLogin) {
-            yakitNotify("error", "登录后才可复制至云端")
+            yakitNotify("error", "Copy to Cloud Post-Login")
             return
         }
         if (onlineLoading || modifyLoading || saveLoading) return
@@ -635,10 +635,10 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         setCloudHint({isCopy: true, visible: true})
     })
     const [modifyLoading, setModifyLoading] = useState<boolean>(false)
-    // 提交
+    // Submit
     const onSubmit = useMemoizedFn(async () => {
         if (!userInfo.isLogin) {
-            yakitNotify("error", "登录后才可提交修改")
+            yakitNotify("error", "Submit Modifications Post-Login")
             return
         }
         if (modifyLoading || onlineLoading || saveLoading) return
@@ -657,22 +657,22 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         modifyInfo.current = convertLocalToRemoteInfo(isModify, {info: info, modify: obj})
 
         if (info && modifyInfo.current.script_name !== info?.ScriptName) {
-            yakitNotify("error", "提交请勿修改插件名")
+            yakitNotify("error", "Submit Without Changing Plugin Name")
             setTimeout(() => {
                 setModifyLoading(false)
             }, 200)
             return
         }
 
-        // 私密插件只填写描述修改内容
+        // Private Plugin Describe Changes Only
         if (modifyInfo.current.is_private) {
             setModifyReason(true)
         } else {
-            // 公开插件先进行评分，在填写描述修改内容
+            // Public Plugin Score Then Describe Changes
             setPluginTest(true)
         }
     })
-    // 保存
+    // Save
     const [saveLoading, setSaveLoading] = useState<boolean>(false)
     const closeSaveLoading = useMemoizedFn(() => {
         setTimeout(() => {
@@ -680,7 +680,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         }, 200)
         onDestroyInstance(false)
     })
-    // 按钮的保存功能执行前必须将关闭逻辑设置到"close"
+    // Set Close Logic before Save Button Action"close"
     const onBtnSave = useMemoizedFn(() => {
         modalTypeRef.current = "close"
         onSave()
@@ -690,14 +690,14 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         setSaveLoading(true)
 
         const obj: PluginDataProps | undefined = await convertPluginInfo()
-        // 基础验证未通过
+        // Basic Validation Failed
         if (!obj) {
             closeSaveLoading()
             return
         }
-        // 出现未知错误，未获取到插件名
+        // Unknown Error, Plugin Name Unretrieved
         if (!obj.ScriptName) {
-            yakitNotify("error", "未获取到插件名，请关闭页面后重试")
+            yakitNotify("error", "Failed to Retrieve Plugin Name, Close & Retry")
             closeSaveLoading()
             return
         }
@@ -707,25 +707,25 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
                 onDestroyInstance(true)
             })
             .catch((e) => {
-                yakitNotify("error", `保存插件失败: ${e}`)
+                yakitNotify("error", `Save plugin failed: ${e}`)
             })
             .finally(() => {
                 closeSaveLoading()
             })
     })
 
-    // 同步&复制云端
+    // Sync & Copy to Cloud
     const modifyInfo = useRef<API.PluginsRequest>()
     const [cloudHint, setCloudHint] = useState<{isCopy: boolean; visible: boolean}>({isCopy: false, visible: false})
     const onCloudHintCallback = useMemoizedFn((isCallback: boolean, param?: {type?: string; name?: string}) => {
-        // 手动关闭弹窗|没有获取到进行修改的插件信息
+        // Close Popup Manually|No Plugin Info to Modify Retrieved
         if (!isCallback || !modifyInfo.current) {
             setCloudHint({isCopy: false, visible: false})
             setTimeout(() => {
-                // 中断同步|复制至云端按钮的加载状态
+                // Interrupt Sync|Copy to Cloud Button Loading State
                 setOnlineLoading(false)
             }, 100)
-            if (!modifyInfo.current) yakitNotify("error", "未获取到插件信息，请重试!")
+            if (!modifyInfo.current) yakitNotify("error", "Failed to Retrieve Plugin Info, Retry!")
             return
         }
 
@@ -733,7 +733,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
             setCloudHint({isCopy: false, visible: false})
         }, 100)
 
-        // 点击弹窗的提交按钮
+        // Submit Button Click
         if (cloudHint.isCopy) {
             const request: API.CopyPluginsRequest = {
                 ...modifyInfo.current,
@@ -752,12 +752,12 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
                 }, 200)
             })
         } else {
-            // 公开的新插件需要走基础检测流程
+            // New Public Plugin Basic Check Required
             if (param && param?.type === "public") {
                 modifyInfo.current = {...modifyInfo.current, is_private: false}
                 setPluginTest(true)
             }
-            // 私密的插件直接保存，不用走基础检测流程
+            // Private Plugin Save Directly, Skip Basic Check
             if (param && param?.type === "private") {
                 uploadOnlinePlugin({...modifyInfo.current, is_private: true}, false, (value) => {
                     if (value) {
@@ -772,12 +772,12 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
             }
         }
     })
-    // 插件基础检测
+    // Plugin Basic Check
     const [pluginTest, setPluginTest] = useState<boolean>(false)
-    // 插件检测后是否执行上传操作
+    // Post-Detection Upload?
     const isUpload = useRef<boolean>(true)
     const onTestCallback = useMemoizedFn((value: boolean, info?: YakScript) => {
-        // 公开插件修改提交时，评分后打开描述修改原因弹窗
+        // Open Plugin Edit - Score Then Open Change Reason Popup
         if (!isUpload.current) {
             if (value) {
                 setTimeout(() => {
@@ -787,14 +787,14 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
             } else {
                 setPluginTest(false)
                 setTimeout(() => {
-                    // 终端提交按钮的加载状态
+                    // Submit Button Loading State
                     setModifyLoading(false)
                 }, 200)
             }
             return
         }
 
-        // 评分并上传后的回调逻辑
+        // Post-Score Upload Callback
         if (value) {
             if (info) {
                 if (typeof value !== "boolean") onLocalAndOnlineSend(value, true)
@@ -808,7 +808,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
             setOnlineLoading(false)
         }, 500)
     })
-    // 描述修改插件内容
+    // Describe Plugin Change
     const [modifyReason, setModifyReason] = useState<boolean>(false)
     const onModifyReason = useMemoizedFn((isSubmit: boolean, content?: string) => {
         if (isSubmit && modifyInfo.current) {
@@ -832,7 +832,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         setModifyReason(false)
     })
 
-    // 数据重置
+    // Data Reset
     const onReset = useMemoizedFn(() => {
         oldParamsRef.current = ""
 
@@ -846,18 +846,18 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         setDebugPlugin(undefined)
     })
 
-    // 注册页面外部操作的二次提示配置信息
+    // Registration Page External Action Secondary Prompt Config Info
     const {setSubscribeClose, removeSubscribeClose} = useSubscribeClose()
-    // 二次提示框的实例
+    // Secondary Prompt Instance
     const modalRef = useRef<any>(null)
-    // 二次提示框的操作类型
+    // Secondary Prompt Type
     const modalTypeRef = useRef<string>("close")
-    // 在已打开编辑插件页面时，再次触发编辑插件功能时的插件id
+    // Plugin ID Triggered Again on Edit Page Open
     const otherId = useRef<number>(0)
     const setOtherId = useMemoizedFn((id: string) => {
         otherId.current = +id || 0
     })
-    // 接收编辑插件的插件Id
+    // Receive Edit Plugin ID
     useEffect(() => {
         emiter.on("sendEditPluginId", setOtherId)
         return () => {
@@ -869,8 +869,8 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         if (pluginId) {
             setSubscribeClose(YakitRoute.ModifyYakitScript, {
                 close: {
-                    title: "插件未保存",
-                    content: "是否要将修改内容保存到本地?",
+                    title: "Plugin Unsaved",
+                    content: "Save Changes Locally??",
                     confirmLoading: saveLoading,
                     maskClosable: false,
                     onOk: (m) => {
@@ -883,8 +883,8 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
                     }
                 },
                 reset: {
-                    title: "插件未保存",
-                    content: "是否要将修改内容保存到本地，并编辑另一个插件?",
+                    title: "Plugin Unsaved",
+                    content: "Save Changes Locally & Edit Another??",
                     confirmLoading: saveLoading,
                     maskClosable: false,
                     onOk: (m) => {
@@ -896,7 +896,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
                         if (otherId.current) {
                             fetchPluginInfo(otherId.current)
                         } else {
-                            yakitNotify("error", "未获取到编辑插件Id,请重新操作")
+                            yakitNotify("error", "Failed to Retrieve Edit Plugin ID, Please Retry")
                         }
                     }
                 }
@@ -904,8 +904,8 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
         } else {
             setSubscribeClose(YakitRoute.AddYakitScript, {
                 close: {
-                    title: "插件未保存",
-                    content: "是否要将插件保存到本地?",
+                    title: "Plugin Unsaved",
+                    content: "Save Plugin Locally??",
                     confirmLoading: saveLoading,
                     maskClosable: false,
                     onOk: (m) => {
@@ -918,8 +918,8 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
                     }
                 },
                 reset: {
-                    title: "插件未保存",
-                    content: "是否要将插件保存到本地，并新建插件?",
+                    title: "Plugin Unsaved",
+                    content: "Save Plugin Locally & Create New??",
                     confirmLoading: saveLoading,
                     maskClosable: false,
                     onOk: (m) => {
@@ -942,12 +942,12 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
             }
         }
     }, [pluginId])
-    // 销毁二次提示的实例(新建|编辑 状态放一起处理)
+    // Destroy Secondary Prompt Instance (New)|Process Edit and Status Together)
     const onDestroyInstance = useMemoizedFn((state?: boolean) => {
         try {
             if (modalRef.current) modalRef.current.destroy()
         } catch (error) {}
-        // 销毁后的额外操作
+        // Post-Destroy Actions
         if (state) {
             if (modalTypeRef.current === "close") {
                 closePage(isModify ? "modify" : "new")
@@ -959,7 +959,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
                     if (otherId.current) {
                         fetchPluginInfo(otherId.current)
                     } else {
-                        yakitNotify("error", "未获取到编辑插件Id,请重新操作")
+                        yakitNotify("error", "Failed to Retrieve Edit Plugin ID, Please Retry")
                     }
                 }
             } else {
@@ -967,7 +967,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
             }
         }
     })
-    // 渲染端通信-关闭页面
+    // Render-side Communication - Close Page
     const closePage = useMemoizedFn((type: string) => {
         let route: YakitRoute = YakitRoute.AddYakitScript
         switch (type) {
@@ -985,7 +985,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
     })
 
     const {pages} = usePageInfo((s) => ({pages: s.pages}), shallow)
-    // 本地保存成功后的信号发送
+    // Signal After Successful Local Save
     const onLocalAndOnlineSend = useMemoizedFn((info: YakScript, isOnline?: boolean) => {
         let route: YakitRoute = YakitRoute.AddYakitScript
         if (isModify) {
@@ -1007,7 +1007,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
             emiter.emit("savePluginInfoSignal", JSON.stringify(param))
         }
     })
-    // 保存插件信息后-刷新商店|我的|本地列表数据
+    // Refresh Store After Saving Plugin Info|Mine|Local List Data
     const onUpdatePageList = useMemoizedFn((key: string) => {
         switch (key) {
             case "online":
@@ -1032,7 +1032,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
             <YakitSpin spinning={loading}>
                 <div className={styles["plugin-edit-details-header"]}>
                     <div className={styles["header-title"]}>
-                        <div className={styles["title-style"]}>{pluginId ? "修改插件" : "新建插件"}</div>
+                        <div className={styles["title-style"]}>{pluginId ? "Edit Plugin" : "Create Plugin"}</div>
                         {!!info && (
                             <div className={styles["title-extra-wrapper"]}>
                                 <YakitTag color={pluginTypeToName[info.Type]?.color as any}>
@@ -1065,7 +1065,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
                                         type='text2'
                                     >
                                         <OutlineViewgridIcon />
-                                        类型选择
+                                        Type Select
                                     </YakitButton>
                                 }
                             />
@@ -1078,7 +1078,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
                                         type='text2'
                                     >
                                         <OutlineIdentificationIcon />
-                                        基础信息
+                                        Base Info
                                     </YakitButton>
                                 }
                             />
@@ -1091,7 +1091,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
                                         type='text2'
                                     >
                                         <OutlineAdjustmentsIcon />
-                                        插件配置
+                                        Plugin Config
                                     </YakitButton>
                                 }
                             />
@@ -1104,7 +1104,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
                                 icon={<OutlineCodeIcon />}
                                 type='outline2'
                                 size='large'
-                                name={"调试"}
+                                name={"Debug"}
                                 onClick={onDebug}
                             />
 
@@ -1114,7 +1114,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
                                     icon={<OutlineDocumentduplicateIcon />}
                                     type='outline2'
                                     size='large'
-                                    name={"复制至云端"}
+                                    name={"Copy to Cloud"}
                                     loading={onlineLoading}
                                     onClick={onCopyCloud}
                                 />
@@ -1126,7 +1126,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
                                     icon={<OutlinePaperairplaneIcon />}
                                     type='outline1'
                                     size='large'
-                                    name={"提交"}
+                                    name={"Submit"}
                                     loading={modifyLoading}
                                     onClick={onSubmit}
                                 />
@@ -1138,7 +1138,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
                                     icon={<OutlineClouduploadIcon />}
                                     type='outline1'
                                     size='large'
-                                    name={"同步至云端"}
+                                    name={"Sync to Cloud"}
                                     loading={onlineLoading}
                                     onClick={onSyncCloud}
                                 />
@@ -1148,7 +1148,7 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
                                 maxWidth={1100}
                                 icon={<SolidStoreIcon />}
                                 size='large'
-                                name={"保存"}
+                                name={"Save"}
                                 loading={saveLoading}
                                 onClick={onBtnSave}
                             />
@@ -1158,12 +1158,12 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
 
                 <div ref={bodyRef} className={styles["plugin-edit-details-body"]}>
                     <div className={styles["body-wrapper"]}>
-                        {/* 类型选择 */}
+                        {/* Type Select */}
                         <div id='plugin-details-type' className={styles["body-type-wrapper"]}>
-                            <div className={styles["header-wrapper"]}>类型选择</div>
+                            <div className={styles["header-wrapper"]}>Type Select</div>
                             <div className={styles["type-body"]}>
                                 <div className={styles["body-container"]}>
-                                    <div className={styles["type-title"]}>脚本类型</div>
+                                    <div className={styles["type-title"]}>Script Type</div>
                                     <div className={styles["type-list"]}>
                                         <div className={styles["list-row"]}>
                                             {DefaultTypeList.slice(0, 3).map((item) => {
@@ -1193,24 +1193,24 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
                                 </div>
                             </div>
                         </div>
-                        {/* 基础信息 */}
+                        {/* Base Info */}
                         <div id='plugin-details-info' className={styles["body-info-wrapper"]}>
-                            <div className={styles["header-wrapper"]}>基础信息</div>
+                            <div className={styles["header-wrapper"]}>Base Info</div>
                             <div className={styles["info-body"]}>
                                 <PluginModifyInfo ref={infoRef} data={infoParams} tagsCallback={onTagsCallback} />
                             </div>
                         </div>
-                        {/* 插件配置 */}
+                        {/* Plugin Config */}
                         <div id='plugin-details-setting' className={styles["body-setting-wrapper"]}>
                             <div className={styles["header-wrapper"]}>
-                                插件配置
+                                Plugin Config
                                 <div
                                     className={styles["subtitle-help-wrapper"]}
                                     onClick={() => {
                                         ipcRenderer.invoke("open-url", CodeGV.PluginParamsHelp)
                                     }}
                                 >
-                                    <span className={styles["text-style"]}>帮助文档</span>
+                                    <span className={styles["text-style"]}>Help Docs</span>
                                     <OutlineQuestionmarkcircleIcon />
                                 </div>
                             </div>
@@ -1225,15 +1225,15 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
                                 <div className={styles["setting-editor-wrapper"]}>
                                     <div className={styles["editor-header"]}>
                                         <div className={styles["header-title"]}>
-                                            <span className={styles["title-style"]}>源码</span>
+                                            <span className={styles["title-style"]}>Source Code</span>
                                             <span className={styles["subtitle-style"]}>
-                                                可在此定义插件输入原理，并编写输出 UI
+                                                Define Input Logic & Write Output UI Here
                                             </span>
                                         </div>
                                         <div className={styles["header-extra"]}>
                                             {pluginType === "yak" && !previewParamsShow && (
                                                 <YakitButton icon={<SolidEyeIcon />} onClick={onOpenPreviewParams}>
-                                                    参数预览
+                                                    Param Preview
                                                 </YakitButton>
                                             )}
                                             <YakitButton
@@ -1284,10 +1284,10 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
                 getContainer={divRef.current || undefined}
                 wrapClassName={styles["old-data-hint-wrapper"]}
                 visible={oldShow}
-                title='旧数据迁移提示'
-                content='由于参数设计升级，检测到数据库存储参数与插件源码里参数不同，使用会有问题，请点击“复制代码”将参数复制到插件源码中。'
-                okButtonText='复制代码'
-                cancelButtonText='忽略'
+                title='Data Migration Warning'
+                content='Parameter Design Upgrade Warning, Database and Source Params Mismatch, Click“Copy Code”Certainly, please provide me with the Chinese text that you would like to have translated into English.?。'
+                okButtonText='Copy Code'
+                cancelButtonText='Ignore'
                 okButtonProps={{loading: copyLoading}}
                 onOk={onOldDataOk}
                 onCancel={onOldDataCancel}
@@ -1310,17 +1310,17 @@ export const PluginEditDetails: React.FC<PluginEditDetailsProps> = (props) => {
 }
 
 interface PluginEditorModalProps {
-    /** 指定弹窗挂载的节点，默认为body节点 */
+    /** Specify Popup Mount Node, Default to body */
     getContainer?: HTMLElement
-    /** 源码语言 */
+    /** Source Language */
     language?: string
     visible: boolean
     setVisible: (content: string) => any
     code: string
-    /** 预览参数回调 */
+    /** Preview Params Callback */
     onPreview: (params: YakParamProps[], code: string) => any
 }
-/** @name 插件编辑页面-源码全屏版 */
+/** @name: Plugin Edit Page - Fullscreen Source Code */
 const PluginEditorModal: React.FC<PluginEditorModalProps> = memo((props) => {
     const {getContainer, language = "yak", visible, setVisible, code, onPreview} = props
 
@@ -1344,7 +1344,7 @@ const PluginEditorModal: React.FC<PluginEditorModalProps> = memo((props) => {
 
     const [previewParams, setPreviewParams] = useState<YakParamProps[]>([])
     const [previewShow, setPreviewShow] = useState<boolean>(false)
-    /** 预览参数框内容在更新代码后的联动更新预览参数 */
+    /** Preview Box Content Update After Code Change */
     useDebounceEffect(
         () => {
             if (!previewShow) return
@@ -1367,7 +1367,7 @@ const PluginEditorModal: React.FC<PluginEditorModalProps> = memo((props) => {
     })
     const paramsForm = useRef<PreviewParamsRefProps>()
     const [previewCloseLoading, setPreviewCloseLoading] = useState<boolean>(false)
-    // 去调试
+    // Go Debug
     const onPreviewToDebug = useMemoizedFn(() => {
         if (previewCloseLoading) return
         setPreviewCloseLoading(true)
@@ -1383,7 +1383,7 @@ const PluginEditorModal: React.FC<PluginEditorModalProps> = memo((props) => {
             onPreview(paramsList, content)
         }
     })
-    // 结束预览
+    // Preview End
     const onCancelPreviewParams = useMemoizedFn(() => {
         if (previewShow) {
             if (paramsForm && paramsForm.current) paramsForm.current.onReset()
@@ -1397,17 +1397,17 @@ const PluginEditorModal: React.FC<PluginEditorModalProps> = memo((props) => {
                 getContainer={getContainer}
                 wrapClassName={styles["plugin-edit-page-modal"]}
                 mask={false}
-                title='源码'
+                title='Source Code'
                 subTitle={
                     <div className={styles["plugin-editor-modal-subtitle"]}>
-                        <span>可在此定义插件输入原理，并编写输出 UI</span>
+                        <span>Define Input Logic & Write Output UI Here</span>
                         <div className={styles["extra-wrapper"]}>
                             {language === "yak" && !previewShow && (
                                 <YakitButton icon={<SolidEyeIcon />} onClick={onOpenPreviewParams}>
-                                    参数预览
+                                    Param Preview
                                 </YakitButton>
                             )}
-                            <span>按 Esc 即可退出全屏</span>
+                            <span>Esc to Exit Fullscreen</span>
                         </div>
                     </div>
                 }
@@ -1448,7 +1448,7 @@ interface PluginSyncAndCopyModalProps {
     visible: boolean
     setVisible: (isCallback: boolean, param?: {type?: string; name?: string}) => any
 }
-/** @name 插件同步&复制云端 */
+/** @name: Plugin Sync & Copy to Cloud */
 const PluginSyncAndCopyModal: React.FC<PluginSyncAndCopyModalProps> = memo((props) => {
     const {isCopy, visible, setVisible} = props
 
@@ -1457,7 +1457,7 @@ const PluginSyncAndCopyModal: React.FC<PluginSyncAndCopyModalProps> = memo((prop
 
     const onSubmit = useMemoizedFn(() => {
         if (isCopy && !name) {
-            yakitNotify("error", "请输入复制插件的名称")
+            yakitNotify("error", "Enter Copy Plugin Name")
             return
         }
         setVisible(true, {type: isCopy ? undefined : type, name: isCopy ? name : undefined})
@@ -1465,7 +1465,7 @@ const PluginSyncAndCopyModal: React.FC<PluginSyncAndCopyModalProps> = memo((prop
 
     return (
         <YakitModal
-            title={isCopy ? "复制至云端" : "同步至云端"}
+            title={isCopy ? "Copy to Cloud" : "Sync to Cloud"}
             type='white'
             width={isCopy ? 506 : 448}
             centered={true}
@@ -1479,11 +1479,11 @@ const PluginSyncAndCopyModal: React.FC<PluginSyncAndCopyModalProps> = memo((prop
             {isCopy ? (
                 <div className={styles["plugin-sync-and-copy-body"]}>
                     <div className={styles["copy-header"]}>
-                        复制插件并同步到自己的私密插件，无需作者同意，即可保存修改内容至云端
+                        Copy & Sync to Private without Author Consent, Save Changes to Cloud
                     </div>
                     <div className={styles["copy-wrapper"]}>
-                        <div className={styles["title-style"]}>插件名称 : </div>
-                        <YakitInput placeholder='请输入...' value={name} onChange={(e) => setName(e.target.value)} />
+                        <div className={styles["title-style"]}>Plugin name : </div>
+                        <YakitInput placeholder='Please Enter...' value={name} onChange={(e) => setName(e.target.value)} />
                     </div>
                 </div>
             ) : (
@@ -1497,7 +1497,7 @@ const PluginSyncAndCopyModal: React.FC<PluginSyncAndCopyModalProps> = memo((prop
                                 setType("private")
                             }}
                         >
-                            私密(仅自己可见)
+                            Private (Self Only))
                         </Radio>
                         <Radio
                             className='plugins-radio-wrapper'
@@ -1507,7 +1507,7 @@ const PluginSyncAndCopyModal: React.FC<PluginSyncAndCopyModalProps> = memo((prop
                                 setType("public")
                             }}
                         >
-                            公开(审核通过后，将上架到插件商店)
+                            Public (Listed in Plugin Store After Approval))
                         </Radio>
                     </div>
                 </div>
@@ -1520,10 +1520,10 @@ interface UploadPluginModalProps {
     isUpload: boolean
     plugin?: API.PluginsEditRequest
     visible: boolean
-    /** 关闭弹窗(true:合格|false:不合格) */
+    /** Close Popup (true: Qualified)|false: Not Qualified) */
     onCancel: (value: boolean, info?: YakScript) => any
 }
-/** @name 插件源码评分-合格后自动上传 */
+/** @name: Plugin Source Scored - Auto Upload After Passing */
 const UploadPluginModal: React.FC<UploadPluginModalProps> = memo((props) => {
     const {isUpload, plugin, visible, onCancel} = props
 
@@ -1559,7 +1559,7 @@ interface ModifyPluginReasonProps {
     visible: boolean
     onCancel: (isSubmit: boolean, content?: string) => any
 }
-/** @name 描述修改内容 */
+/** @name: Describe Change Content */
 const ModifyPluginReason: React.FC<ModifyPluginReasonProps> = memo((props) => {
     const {visible, onCancel} = props
 
@@ -1567,7 +1567,7 @@ const ModifyPluginReason: React.FC<ModifyPluginReasonProps> = memo((props) => {
 
     const onSubmit = useMemoizedFn(() => {
         if (!content) {
-            yakitNotify("error", "请描述一下修改内容")
+            yakitNotify("error", "Describe Change")
             return
         }
         onCancel(true, content)
@@ -1579,7 +1579,7 @@ const ModifyPluginReason: React.FC<ModifyPluginReasonProps> = memo((props) => {
 
     return (
         <YakitModal
-            title='描述修改内容'
+            title='Describe Changes'
             type='white'
             width={448}
             centered={true}
@@ -1592,7 +1592,7 @@ const ModifyPluginReason: React.FC<ModifyPluginReasonProps> = memo((props) => {
         >
             <div className={styles["modify-plugin-reason-wrapper"]}>
                 <YakitInput.TextArea
-                    placeholder='请简单描述一下修改内容，方便作者审核...'
+                    placeholder='Briefly Describe Changes, For Author Review...'
                     autoSize={{minRows: 3, maxRows: 3}}
                     showCount
                     value={content}
@@ -1609,30 +1609,30 @@ interface PreviewParamsRefProps {
     onReset: () => any
 }
 interface PreviewParamsProps {
-    // yakit-window属性
+    // yakit-window Attributes
     getContainer?: HTMLElement
     visible: boolean
     confirmLoading?: boolean
     onDebug: () => any
     onCancel: () => any
     onOk: () => any
-    // 预览参数表单属性
+    // Preview Params Form Attributes
     params: YakParamProps[]
     ref?: React.MutableRefObject<PreviewParamsRefProps | undefined>
 }
-/** @name 预览参数内容 */
+/** @name: Preview Params Content */
 const PreviewParams: React.FC<PreviewParamsProps> = memo(
     React.forwardRef((props, ref) => {
         const {getContainer, visible, confirmLoading, onDebug, onCancel, onOk, params = []} = props
 
         const [form] = Form.useForm()
 
-        // 更新表单内容
+        // Update Form Content
         useEffect(() => {
             initFormValue()
         }, [params])
 
-        // 获取当前表单数据
+        // Fetch Current Form Data
         const getValues = useMemoizedFn(() => {
             return form.getFieldsValue()
         })
@@ -1648,11 +1648,11 @@ const PreviewParams: React.FC<PreviewParamsProps> = memo(
             [form]
         )
 
-        /** 必填参数 */
+        /** Required Params */
         const requiredParams = useMemo(() => {
             return params.filter((item) => !!item.Required) || []
         }, [params])
-        /** 选填参数 */
+        /** Optional Params */
         const groupParams = useMemo(() => {
             const arr = params.filter((item) => !item.Required) || []
             return ParamsToGroupByGroupName(arr)
@@ -1670,7 +1670,7 @@ const PreviewParams: React.FC<PreviewParamsProps> = memo(
                     [ele.Field]: value
                 }
             })
-            // console.log("预览参数-更新源码后的配置更新", newFormValue)
+            // console.log("Preview Params - Update Config After Source Update", newFormValue)
 
             form.setFieldsValue({...newFormValue})
         })
@@ -1678,24 +1678,24 @@ const PreviewParams: React.FC<PreviewParamsProps> = memo(
         return (
             <YakitWindow
                 getContainer={getContainer}
-                title='参数预览'
+                title='Param Preview'
                 subtitle={
                     <div style={{width: "100%", overflow: "hidden"}} className={"yakit-content-single-ellipsis"}>
-                        不可操作，仅供实时预览
+                        View-Only, No Operations
                     </div>
                 }
                 layout='topRight'
                 visible={visible}
                 contentStyle={{padding: 0}}
                 footerStyle={{flexDirection: "row-reverse", justifyContent: "center"}}
-                cancelButtonText='插件调试'
+                cancelButtonText='Plugin Debug'
                 cancelButtonProps={{
                     loading: !!confirmLoading,
                     icon: <OutlineCodeIcon />,
                     onClick: onDebug
                 }}
                 onCancel={onCancel}
-                okButtonText='结束预览'
+                okButtonText='Preview End'
                 okButtonProps={{colors: "danger", icon: <SolidEyeoffIcon />}}
                 onOk={onOk}
                 // cacheSizeKey='plugin-preview-params'
@@ -1711,7 +1711,7 @@ const PreviewParams: React.FC<PreviewParamsProps> = memo(
                     {groupParams.length > 0 && (
                         <>
                             <div className={styles["additional-params-divider"]}>
-                                <div className={styles["text-style"]}>额外参数 (非必填)</div>
+                                <div className={styles["text-style"]}>Extra Params (Optional))</div>
                                 <div className={styles["divider-style"]}></div>
                             </div>
                             <YakitCollapse
@@ -1720,7 +1720,7 @@ const PreviewParams: React.FC<PreviewParamsProps> = memo(
                                 bordered={false}
                             >
                                 {groupParams.map((item, index) => (
-                                    <YakitPanel key={`${item.group}`} header={`参数组：${item.group}`}>
+                                    <YakitPanel key={`${item.group}`} header={`Param Group：${item.group}`}>
                                         {item.data?.map((formItem, index) => (
                                             <React.Fragment key={`${formItem.Field}${formItem.FieldVerbose}${index}`}>
                                                 <FormContentItemByType item={formItem} pluginType='yak' />
@@ -1729,7 +1729,7 @@ const PreviewParams: React.FC<PreviewParamsProps> = memo(
                                     </YakitPanel>
                                 ))}
                             </YakitCollapse>
-                            <div className={styles["to-end"]}>已经到底啦～</div>
+                            <div className={styles["to-end"]}>Reached Bottom～</div>
                         </>
                     )}
                 </Form>

@@ -92,25 +92,25 @@ export const ShareImportExportData: React.FC<ShareDataProps> = ({
 }) => {
     const yamlContRef = useRef<string>("")
 
-    // 分享
+    // Share
     const handleShare = useMemoizedFn(() => {
         getShareContent((content) => {
             const m = showYakitModal({
-                title: "分享数据包 ID",
+                title: "Share Package ID",
                 content: <ShareModal module={module} shareContent={JSON.stringify(content)} />,
                 footer: null
             })
         })
     })
 
-    // 导出
+    // Export
     const handlExport = useMemoizedFn((e: {clientX: number; clientY: number}) => {
         showByRightContext(
             {
                 width: 150,
                 data: [
-                    {key: "pathTemplate", label: "导出为 Path 模板"},
-                    {key: "rawTemplate", label: "导出为 Raw 模板"}
+                    {key: "pathTemplate", label: "Export as Path Template"},
+                    {key: "rawTemplate", label: "Export as Raw Template"}
                 ],
                 onClick: ({key}) => {
                     switch (key) {
@@ -147,7 +147,7 @@ export const ShareImportExportData: React.FC<ShareDataProps> = ({
                 await saveABSFileAnotherOpen({
                     name: tempType + "-temp.yaml",
                     data: YamlContent,
-                    successMsg: "导出Yaml成功",
+                    successMsg: "Export Yaml Succeeded",
                     errorMsg: ""
                 })
             } else {
@@ -158,14 +158,14 @@ export const ShareImportExportData: React.FC<ShareDataProps> = ({
         }
     }
 
-    // 导入
+    // Import
     const handlImport = useMemoizedFn((e: {clientX: number; clientY: number}) => {
         showByRightContext(
             {
                 width: 150,
                 data: [
-                    {key: "dataPacketId", label: "导入数据包 ID"},
-                    {key: "yamlDocument", label: "导入Yaml文件"}
+                    {key: "dataPacketId", label: "Import Package ID"},
+                    {key: "yamlDocument", label: "Import Yaml File"}
                 ],
                 onClick: ({key}) => {
                     switch (key) {
@@ -191,29 +191,29 @@ export const ShareImportExportData: React.FC<ShareDataProps> = ({
             type: "white",
             title: (
                 <div className={styles.importYamlPopTitle}>
-                    导入 Yaml 文件
+                    Import Yaml File
                     <span className={styles.importText}>
-                        可将文件拖入框内，或
+                        Drag Files Here, or
                         <YakitButton type='text' onClick={onOpenSystemDialog} style={{fontSize: 14}}>
-                            点击此处
+                            Click here
                         </YakitButton>
-                        上传，也支持直接粘贴代码
+                        Upload, Code Paste Supported
                     </span>
                 </div>
             ),
-            onOkText: "导入",
+            onOkText: "Import",
             width: 800,
             content: <MultimodeImportYaml readYamlContent={readYamlContent} />,
             onCancel: (e) => {
                 m.destroy()
             },
             onOk: (e) => {
-                // BUG 偶现编辑器有内容 yamlContRef.current没有值 暂不清楚原因
+                // BUG Sporadic Editor Content, yamlContRef.current Empty, Reason Unknown
                 if (yamlContRef.current) {
                     execImportYaml()
                     m.destroy()
                 } else {
-                    yakitNotify("info", "请选择或粘贴要导入的文件")
+                    yakitNotify("info", "Select or Paste File to Import")
                 }
             }
         })
@@ -222,7 +222,7 @@ export const ShareImportExportData: React.FC<ShareDataProps> = ({
     const onOpenSystemDialog = async () => {
         try {
             const {canceled, filePaths} = await ipcRenderer.invoke("openDialog", {
-                title: "请选择文件",
+                title: "Select File",
                 properties: ["openFile"]
             })
             if (canceled) return
@@ -230,7 +230,7 @@ export const ShareImportExportData: React.FC<ShareDataProps> = ({
                 let absolutePath = filePaths[0].replace(/\\/g, "\\")
                 readYamlContent(absolutePath)
             } else {
-                throw new Error("获取路径失败")
+                throw new Error("Get Path Failed")
             }
         } catch (error) {
             yakitFailed(error + "")
@@ -281,9 +281,9 @@ export const ShareImportExportData: React.FC<ShareDataProps> = ({
         }
     }
 
-    // 序列导出组装数据
+    // Sequence Export Assembly Data
     const assemblyFuzzerSequenceData = (Requests: FuzzerRequestProps[]) => {
-        // 组装菜单组信息
+        // Assemble Menu Group Info
         const groupId = generateGroupId()
         const groupChildren: MultipleNodeInfo[] = []
         Requests.forEach((item, index) => {
@@ -304,7 +304,7 @@ export const ShareImportExportData: React.FC<ShareDataProps> = ({
             groupChildren.push(childItem)
         })
 
-        // verbose sortFieId color 已发送事件到MainOperatorContent组装
+        // verbose sortField color Event Sent to MainOperatorContent Assemble
         const groupItem = {
             groupChildren,
             groupId: "0",
@@ -378,19 +378,19 @@ const MultimodeImportYaml: React.FC<MultimodeImportYamlProp> = React.memo(({read
 
     useEffect(() => {
         const multimodeImportYamlDom = multimodeImportYamlRef.current
-        // 阻止默认的拖放行为
+        // Prevent Default Drag & Drop
         const handleDragover = (event: DragEvent) => {
             event.preventDefault()
         }
         multimodeImportYamlDom.addEventListener("dragover", handleDragover)
-        // 处理文件拖放事件
+        // Handle File Drag & Drop Event
         const handleDrap = (event: DragEvent) => {
             event.preventDefault()
             const file = event.dataTransfer?.files[0] as any
             const name = file?.name || ""
             const suffix = name.slice(name.lastIndexOf("."), name.length)
             if (![".yaml"].includes(suffix)) {
-                yakitNotify("warning", "上传文件格式错误，请重新上传")
+                yakitNotify("warning", "File Upload Error, Retry")
                 return
             }
             readYamlContent(file?.path)
@@ -440,7 +440,7 @@ export const ShareModal: React.FC<ShareModalProps> = React.memo((props) => {
     const [shareLoading, setShareLoading] = useState<boolean>(false)
     const {userInfo} = useStore()
     /**
-     * @description 一般分享，无特殊处理情况，例如web Fuzzer
+     * @Description General share, no special handling, e.g., web Fuzzer
      */
     const onShareOrdinary = useMemoizedFn(() => {
         const params: API.ShareRequest = {
@@ -469,7 +469,7 @@ export const ShareModal: React.FC<ShareModalProps> = React.memo((props) => {
                 })
             })
             .catch((err) => {
-                yakitNotify("error", "分享失败：" + err)
+                yakitNotify("error", "Share Failed：" + err)
             })
             .finally(() => {
                 setTimeout(() => {
@@ -480,7 +480,7 @@ export const ShareModal: React.FC<ShareModalProps> = React.memo((props) => {
     const onShareHttpHistory = useMemoizedFn(() => {
         try {
             if (!isCommunityEdition() && !userInfo.token) {
-                yakitNotify("error", "请登录后分享")
+                yakitNotify("error", "Please Login to Share")
                 return
             }
             const ids = JSON.parse(shareContent)
@@ -508,7 +508,7 @@ export const ShareModal: React.FC<ShareModalProps> = React.memo((props) => {
                     })
                 })
                 .catch((err) => {
-                    yakitNotify("error", "分享失败:" + err)
+                    yakitNotify("error", "Share Failed:" + err)
                 })
                 .finally(() => {
                     setTimeout(() => {
@@ -516,7 +516,7 @@ export const ShareModal: React.FC<ShareModalProps> = React.memo((props) => {
                     }, 200)
                 })
         } catch (error) {
-            yakitNotify("error", "分享数据转换失败:" + error)
+            yakitNotify("error", "Share Data Conversion Failed:" + error)
         }
     })
     const onShare = useMemoizedFn(() => {
@@ -533,37 +533,37 @@ export const ShareModal: React.FC<ShareModalProps> = React.memo((props) => {
     return (
         <div style={{padding: 24}}>
             <div className={styles["content-value"]}>
-                <span className={styles["label-text"]}>设置有效期：</span>
+                <span className={styles["label-text"]}>Set Expiry：</span>
                 <YakitRadioButtons
                     disabled={disabled}
                     value={expiredTime}
                     onChange={(e) => setExpiredTime(e.target.value)}
                     options={[
                         {
-                            label: "5分钟",
+                            label: "5 Minutes",
                             value: 5
                         },
                         {
-                            label: "15分钟",
+                            label: "15 Minutes",
                             value: 15
                         },
                         {
-                            label: "1小时",
+                            label: "1 Hour",
                             value: 60
                         },
                         {
-                            label: "1天",
+                            label: "1 Day",
                             value: 1440
                         }
                     ]}
                 />
             </div>
             <div className={styles["content-value"]}>
-                <span className={styles["label-text"]}>密码：</span>
+                <span className={styles["label-text"]}>Password：</span>
                 <YakitSwitch disabled={disabled} checked={pwd} onChange={(checked) => setPwd(checked)} />
             </div>
             <div className={styles["content-value"]}>
-                <span className={styles["label-text"]}>限制分享次数：</span>
+                <span className={styles["label-text"]}>Limit Share Count：</span>
                 <YakitSwitch
                     disabled={disabled}
                     checked={shareNumber}
@@ -576,14 +576,14 @@ export const ShareModal: React.FC<ShareModalProps> = React.memo((props) => {
                         value={limit_num}
                         onChange={(v) => setLimit_num(v as number)}
                         size='small'
-                        formatter={(value) => `${value}次`}
+                        formatter={(value) => `${value}Times`}
                         disabled={disabled}
                     />
                 )}
             </div>
             {shareResData.share_id && (
                 <div className={styles["content-value"]}>
-                    <span className={styles["label-text"]}>分享id：</span>
+                    <span className={styles["label-text"]}>Share ID：</span>
                     <span className={styles["display-flex"]}>
                         {shareResData.share_id} <CopyComponents copyText={shareResData.share_id} />
                     </span>
@@ -591,26 +591,26 @@ export const ShareModal: React.FC<ShareModalProps> = React.memo((props) => {
             )}
             {shareResData.extract_code && (
                 <div className={styles["content-value"]}>
-                    <span className={styles["label-text"]}>密码：</span>
+                    <span className={styles["label-text"]}>Password：</span>
                     <span>{shareResData.extract_code}</span>
                 </div>
             )}
             <div className={styles["btn-footer"]}>
                 <YakitButton type='primary' onClick={onShare} loading={shareLoading} disabled={disabled}>
-                    生成分享密令
+                    Generate Share Secret
                 </YakitButton>
                 {shareResData.share_id && (
                     <CopyToClipboard
                         text={
                             shareResData.extract_code
-                                ? `${shareResData.share_id}\r\n密码：${shareResData.extract_code}`
+                                ? `${shareResData.share_id}\r\nPassword：${shareResData.extract_code}`
                                 : `${shareResData.share_id}`
                         }
                         onCopy={(text, ok) => {
-                            if (ok) success("已复制到粘贴板")
+                            if (ok) success("Copied to Clipboard")
                         }}
                     >
-                        <YakitButton type={disabled ? "primary" : "outline1"}>复制分享</YakitButton>
+                        <YakitButton type={disabled ? "primary" : "outline1"}>Copy Share Link</YakitButton>
                     </CopyToClipboard>
                 )}
             </div>

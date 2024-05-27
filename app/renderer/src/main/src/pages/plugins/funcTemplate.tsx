@@ -100,7 +100,7 @@ import styles from "./funcTemplate.module.scss"
 
 const {ipcRenderer} = window.require("electron")
 
-/** @name 标题栏的搜索选项组件 */
+/** @Name: Title Bar Search Component */
 export const TypeSelect: React.FC<TypeSelectProps> = memo((props) => {
     const {active, list, setActive} = props
 
@@ -190,7 +190,7 @@ export const TypeSelect: React.FC<TypeSelectProps> = memo((props) => {
                                 </div>
                                 <div className={styles["list-btn-wrapper"]}>
                                     <div className={styles["btn-style"]} onClick={() => setActive([])}>
-                                        重置
+                                        Reset
                                     </div>
                                 </div>
                             </div>
@@ -206,7 +206,7 @@ export const TypeSelect: React.FC<TypeSelectProps> = memo((props) => {
     )
 })
 
-/** @name 带屏幕宽度自适应的按钮组件 */
+/** @Name: Adaptive Button Component */
 export const FuncBtn: React.FC<FuncBtnProps> = memo((props) => {
     const {name, maxWidth, className, ...rest} = props
 
@@ -238,7 +238,7 @@ export const FuncBtn: React.FC<FuncBtnProps> = memo((props) => {
     )
 })
 
-/** @name 带屏幕宽度自适应的搜索内容组件 */
+/** @Name: Adaptive Search Content Component */
 export const FuncSearch: React.FC<FuncSearchProps> = memo((props) => {
     const {maxWidth, onSearch: onsearch} = props
 
@@ -345,7 +345,7 @@ export const FuncSearch: React.FC<FuncSearchProps> = memo((props) => {
     )
 })
 
-/** @name 带下拉菜单的按钮组件 */
+/** @Name: Dropdown Button Component */
 export const FuncFilterPopover: React.FC<FuncFilterPopoverProps> = memo((props) => {
     const {
         maxWidth,
@@ -374,7 +374,7 @@ export const FuncFilterPopover: React.FC<FuncFilterPopoverProps> = memo((props) 
         }
     }, [])
 
-    /** 判断组件是纯图标还是带内容 */
+    /** Determine if component is icon-only or contains content */
     const nameAndIcon = useMemo(() => {
         if (!name) return false
         if (isIcon) return false
@@ -426,16 +426,16 @@ export const FuncFilterPopover: React.FC<FuncFilterPopoverProps> = memo((props) 
     )
 })
 
-/** @name 代表作者的图标ICON */
+/** @Name: Author ICON */
 export const AuthorIcon: React.FC<{}> = memo((props) => {
-    return <div className={styles["author-icon-wrapper"]}>作者</div>
+    return <div className={styles["author-icon-wrapper"]}>Author</div>
 })
-/** @name 代表申请人的图标ICON */
+/** @Name: Applicant ICON */
 export const ApplicantIcon: React.FC<{}> = memo((props) => {
-    return <div className={styles["applicant-icon-wrapper"]}>申请人</div>
+    return <div className={styles["applicant-icon-wrapper"]}>Applicant</div>
 })
 
-/** @name 插件主要部分组件 */
+/** @Name: Plugin Main Component */
 export const PluginsList: React.FC<PluginsListProps> = memo((props) => {
     const {
         checked,
@@ -452,7 +452,7 @@ export const PluginsList: React.FC<PluginsListProps> = memo((props) => {
         setVisible
     } = props
 
-    /** 全选框是否为半选状态 */
+    /** Indeterminate State Checkbox */
     const checkIndeterminate = useMemo(() => {
         if (checked) return false
         if (!checked && selected > 0) return true
@@ -500,7 +500,7 @@ export const PluginsList: React.FC<PluginsListProps> = memo((props) => {
                 <div className={styles["header-body"]}>
                     {!visible && (
                         <div className={styles["header-body-filter"]}>
-                            <Tooltip title='展开筛选' placement='topLeft' overlayClassName='plugins-tooltip'>
+                            <Tooltip title='Expand Filters' placement='topLeft' overlayClassName='plugins-tooltip'>
                                 <YakitButton
                                     type='text2'
                                     onClick={onExpend}
@@ -517,7 +517,7 @@ export const PluginsList: React.FC<PluginsListProps> = memo((props) => {
                             checked={checked}
                             onChange={(e) => onCheck(e.target.checked)}
                         />
-                        全选
+                        Fixes failure to iterate load_content on missing older version data
                     </div>
                     <div className={styles["body-total-selected"]}>
                         <div>
@@ -569,7 +569,7 @@ export const PluginsList: React.FC<PluginsListProps> = memo((props) => {
                                         })}
                                     >
                                         <span>
-                                            筛选条件 <span className={styles["total-style"]}>{tagLength}</span>
+                                            Filter Criteria <span className={styles["total-style"]}>{tagLength}</span>
                                         </span>
                                         <OutlineXIcon onClick={() => onDelAllTag()} />
                                     </div>
@@ -584,7 +584,7 @@ export const PluginsList: React.FC<PluginsListProps> = memo((props) => {
                     <Tooltip
                         className='plugins-tooltip'
                         placement='topRight'
-                        title={isList ? "切换至宫格视图" : "切换至列表视图"}
+                        title={isList ? "Switch to Grid View" : "Switch to ListView"}
                     >
                         <div className={styles["is-list-btn"]} onClick={() => setIsList(!isList)}>
                             {isList ? <OutlineViewgridIcon /> : <OutlineViewlistIcon />}
@@ -598,7 +598,7 @@ export const PluginsList: React.FC<PluginsListProps> = memo((props) => {
     )
 })
 
-/** @name 插件列表组件 */
+/** @Name: Plugin List Component */
 export const ListShowContainer: <T>(props: ListShowContainerProps<T>) => any = memo((props) => {
     const {
         isList,
@@ -635,7 +635,7 @@ export const ListShowContainer: <T>(props: ListShowContainerProps<T>) => any = m
         <YakitEmpty
             image={SearchResultEmpty}
             imageStyle={{width: 274, height: 180, marginBottom: 24}}
-            title='搜索结果“空”'
+            title='Search Results“Empty”'
             style={{paddingTop: "10%"}}
             className={styles["empty-list"]}
         />
@@ -683,7 +683,7 @@ export const ListShowContainer: <T>(props: ListShowContainerProps<T>) => any = m
     )
 })
 
-/** @name 插件列表布局列表 */
+/** @Name: Plugin List Layout List */
 export const ListList: <T>(props: ListListProps<T>) => any = memo((props) => {
     const {
         isList,
@@ -702,9 +702,9 @@ export const ListList: <T>(props: ListListProps<T>) => any = memo((props) => {
 
     // useWhyDidYouUpdate("ListList", {...props})
 
-    // 列表布局相关变量
+    // List Layout Variables
     const listContainerRef = useRef<HTMLDivElement>(null)
-    // 获取组件高度相关数据
+    // Get Component Height Data
     const fetchListHeight = useMemoizedFn(() => {
         const {scrollTop, clientHeight, scrollHeight} = listContainerRef.current || {
             scrollTop: 0,
@@ -727,7 +727,7 @@ export const ListList: <T>(props: ListListProps<T>) => any = memo((props) => {
         if (!oldInView.current && inView) {
             scrollTo(showIndex || 0)
         }
-        // 数据重置刷新
+        // Data Reset Refresh
         if (oldInView.current && inView && showIndex === 0) {
             scrollTo(0)
         }
@@ -736,7 +736,7 @@ export const ListList: <T>(props: ListListProps<T>) => any = memo((props) => {
 
     const onScrollCapture = useThrottleFn(
         useMemoizedFn(() => {
-            // 不执行非列表布局逻辑
+            // Skip Non-List Logic
             if (!isList) return
 
             if (loading) return
@@ -756,7 +756,7 @@ export const ListList: <T>(props: ListListProps<T>) => any = memo((props) => {
     )
 
     useEffect(() => {
-        // 不执行非列表布局逻辑
+        // Skip Non-List Logic
         if (!isList) return
 
         if (loading) return
@@ -786,7 +786,7 @@ export const ListList: <T>(props: ListListProps<T>) => any = memo((props) => {
                         </div>
                     )
                 })}
-                {!loading && !hasMore && <div className={styles["no-more-wrapper"]}>暂无更多数据</div>}
+                {!loading && !hasMore && <div className={styles["no-more-wrapper"]}>No More Data</div>}
                 {data.length > 0 && loading && (
                     <div className={styles["loading-wrapper"]}>
                         <YakitSpin wrapperClassName={styles["loading-style"]} />
@@ -796,7 +796,7 @@ export const ListList: <T>(props: ListListProps<T>) => any = memo((props) => {
         </div>
     )
 })
-/** @name 插件列表形式单个项组件 */
+/** @Name: Plugin List Item Component */
 export const ListLayoutOpt: React.FC<ListLayoutOptProps> = memo((props) => {
     const {
         order,
@@ -815,17 +815,17 @@ export const ListLayoutOpt: React.FC<ListLayoutOptProps> = memo((props) => {
         onClick
     } = props
 
-    // 副标题组件
+    // Subtitle Component
     const subtitle = useMemoizedFn(() => {
         if (subTitle) return subTitle(data)
         return null
     })
-    // 拓展组件
+    // Extension Component
     const extra = useMemoizedFn(() => {
         if (extraNode) return extraNode(data)
         return null
     })
-    // 组件点击回调
+    // Component Click Callback
     const onclick = useMemoizedFn(() => {
         if (onClick) return onClick(data, order, !checked)
         return null
@@ -867,7 +867,7 @@ export const ListLayoutOpt: React.FC<ListLayoutOptProps> = memo((props) => {
     )
 })
 
-/** @name 插件网格布局列表 */
+/** @Name: Plugin Grid List */
 export const GridList: <T>(props: GridListProps<T>) => any = memo((props) => {
     const {
         isList,
@@ -884,7 +884,7 @@ export const GridList: <T>(props: GridListProps<T>) => any = memo((props) => {
         setShowIndex
     } = props
 
-    // 计算网格列数
+    // Calculate Grid Columns
     const bodyRef = useSize(document.querySelector("body"))
     const gridCol = useMemo(() => {
         const width = bodyRef?.width || 900
@@ -893,7 +893,7 @@ export const GridList: <T>(props: GridListProps<T>) => any = memo((props) => {
         if (width >= 1736) return 5
         return 2
     }, [bodyRef])
-    // 展示的数据
+    // Displayed Data
     const shwoData = useMemo(() => {
         const len = data.length
         const rowNum = Math.ceil(len / gridCol)
@@ -907,7 +907,7 @@ export const GridList: <T>(props: GridListProps<T>) => any = memo((props) => {
     }, [data, gridCol])
 
     const containerRef = useRef<HTMLDivElement>(null)
-    // 获取组件高度相关数据
+    // Get Component Height Data
     const fetchListHeight = useMemoizedFn(() => {
         const {scrollTop, clientHeight, scrollHeight} = containerRef.current || {
             scrollTop: 0,
@@ -930,17 +930,17 @@ export const GridList: <T>(props: GridListProps<T>) => any = memo((props) => {
         if (!oldInView.current && inView) {
             scrollTo(Math.floor((showIndex || 0) / gridCol))
         }
-        // 数据重置刷新
+        // Data Reset Refresh
         if (oldInView.current && inView && showIndex === 0) {
             scrollTo(0)
         }
         oldInView.current = !!inView
     }, [inView, gridCol, showIndex])
 
-    // 滚动加载
+    // Infinite Scroll
     const onScrollCapture = useThrottleFn(
         useMemoizedFn(() => {
-            // 不执行非网格布局逻辑
+            // Skip Non-Grid Logic
             if (isList) return
 
             if (loading) return
@@ -959,9 +959,9 @@ export const GridList: <T>(props: GridListProps<T>) => any = memo((props) => {
         {wait: 200, leading: false}
     )
 
-    // 首屏数据不够时自动加载下一页
+    // Automatically load next page if initial data insufficient
     useEffect(() => {
-        // 不执行非网格布局逻辑
+        // Skip Non-Grid Logic
         if (isList) return
 
         if (loading) return
@@ -1008,7 +1008,7 @@ export const GridList: <T>(props: GridListProps<T>) => any = memo((props) => {
                         </div>
                     )
                 })}
-                {!loading && !hasMore && <div className={styles["no-more-wrapper"]}>暂无更多数据</div>}
+                {!loading && !hasMore && <div className={styles["no-more-wrapper"]}>No More Data</div>}
                 {data.length > 0 && loading && (
                     <div className={styles["loading-wrapper"]}>
                         <YakitSpin wrapperClassName={styles["loading-style"]} />
@@ -1018,7 +1018,7 @@ export const GridList: <T>(props: GridListProps<T>) => any = memo((props) => {
         </div>
     )
 })
-/** @name 插件网格形式单个项组件 */
+/** @Name: Plugin Grid Item Component */
 export const GridLayoutOpt: React.FC<GridLayoutOptProps> = memo((props) => {
     const {
         order,
@@ -1042,23 +1042,23 @@ export const GridLayoutOpt: React.FC<GridLayoutOptProps> = memo((props) => {
 
     // useWhyDidYouUpdate("GridLayoutOpt", {...props})
 
-    // 副标题组件
+    // Subtitle Component
     const subtitle = useMemoizedFn(() => {
         if (subTitle) return subTitle(data)
         return null
     })
-    // 拓展组件
+    // Extension Component
     const extra = useMemoizedFn(() => {
         if (extraFooter) return extraFooter(data)
         return null
     })
-    // 组件点击回调
+    // Component Click Callback
     const onclick = useMemoizedFn(() => {
         if (onClick) return onClick(data, order, !checked)
         return null
     })
 
-    /** 展示的标签列表 */
+    /** Displayed Tags List */
     const tagList = useMemo(() => {
         if (!tags) return []
         if (tags === "null") return []
@@ -1068,7 +1068,7 @@ export const GridLayoutOpt: React.FC<GridLayoutOptProps> = memo((props) => {
         } catch (error) {}
         return arr
     }, [tags])
-    /** 贡献者数据 */
+    /** Contributor Data */
     const contributes = useMemo(() => {
         if (prImgs.length <= 5) return {arr: prImgs, length: 0}
         else {
@@ -1172,7 +1172,7 @@ export const GridLayoutOpt: React.FC<GridLayoutOptProps> = memo((props) => {
     )
 })
 
-/** @name 用户头像(头像右下角带小icon) */
+/** @Name: User Avatar (With Small Icon in Lower Right Corner)) */
 export const AuthorImg: React.FC<AuthorImgProps> = memo((props) => {
     const {size = "middle", src, builtInIcon, icon} = props
     const [isError, setIsError] = useState<boolean>(false)
@@ -1236,11 +1236,11 @@ export const AuthorImg: React.FC<AuthorImgProps> = memo((props) => {
     )
 })
 
-/** @name 插件标签横向一行展示 */
+/** @Name: Plugin Tags Horizontal Display */
 export const TagsListShow: React.FC<TagsListShowProps> = memo((props) => {
     const {tags} = props
 
-    // 获取wrapper和第一个标签的宽度
+    // Get Wrapper and First Tag Width
     const wrapperRef = useRef<HTMLDivElement>(null)
     const wrapperSize = useSize(wrapperRef)
     const firstRef = useRef<HTMLDivElement>(null)
@@ -1252,7 +1252,7 @@ export const TagsListShow: React.FC<TagsListShowProps> = memo((props) => {
         return initFirstWidthRef.current
     })
 
-    // 判断是否需要将第一个标签隐藏并换成...展示
+    // Decide whether to hide first tag and replace with ...
     const isShow = useMemo(() => {
         if (!wrapperSize?.width) return true
         const firstWidth = fetchFirstWidth()
@@ -1284,7 +1284,7 @@ export const TagsListShow: React.FC<TagsListShowProps> = memo((props) => {
     )
 })
 
-/** @name 线上插件额外操作 */
+/** @Name: Online Plugin Extra Actions */
 export const OnlineExtraOperate: React.FC<OnlineExtraOperateProps> = memo((props) => {
     const {data, isLogin, dispatch, likeProps, commentProps, downloadProps} = props
     const [downloadLoading, setDownloadLoading] = useState<boolean>(false)
@@ -1292,7 +1292,7 @@ export const OnlineExtraOperate: React.FC<OnlineExtraOperateProps> = memo((props
     const onLikeClick = useMemoizedFn((e) => {
         e.stopPropagation()
         if (!isLogin) {
-            yakitNotify("error", "登录才可以进行点赞")
+            yakitNotify("error", "Like after login")
             return
         }
         const pluginStarsRequest: PluginStarsRequest = {
@@ -1320,7 +1320,7 @@ export const OnlineExtraOperate: React.FC<OnlineExtraOperateProps> = memo((props
     })
     const onCommentClick = useMemoizedFn((e) => {
         e.stopPropagation()
-        yakitNotify("success", "评论~~~")
+        yakitNotify("success", "Comments~~~")
         // commentProps.onCommentClick()
     })
     const onDownloadClick = useMemoizedFn((e) => {
@@ -1362,7 +1362,7 @@ export const OnlineExtraOperate: React.FC<OnlineExtraOperateProps> = memo((props
                     <span>{likeProps.likeNumber}</span>
                 </div>
             )}
-            {/* 功能开发中,暂时注释 */}
+            {/* Feature in development, temporarily commented out */}
             {/* <div className='divider-style' />
             <div className={styles["comment-operate"]} onClick={onCommentClick}>
                 <OutlineChatIcon />
@@ -1388,7 +1388,7 @@ export const OnlineRecycleExtraOperate: React.FC<OnlineRecycleExtraOperateProps>
     const onRemove = useMemoizedFn(async (e) => {
         e.stopPropagation()
         if (!isLogin) {
-            yakitNotify("error", "登录才可以进行删除")
+            yakitNotify("error", "Delete after login")
             return
         }
         try {
@@ -1406,7 +1406,7 @@ export const OnlineRecycleExtraOperate: React.FC<OnlineRecycleExtraOperateProps>
     const onReduction = useMemoizedFn(async (e) => {
         e.stopPropagation()
         if (!isLogin) {
-            yakitNotify("error", "登录才可以进行还原")
+            yakitNotify("error", "Restore after login")
             return
         }
         try {
@@ -1425,13 +1425,13 @@ export const OnlineRecycleExtraOperate: React.FC<OnlineRecycleExtraOperateProps>
                 <YakitButton type='text2' icon={<OutlineTrashIcon />} onClick={onRemove} />
             )}
             <YakitButton icon={<OutlineDatabasebackupIcon />} onClick={onReduction} loading={reductionLoading}>
-                还原
+                Restore
             </YakitButton>
         </div>
     )
 })
 
-/** @name 标题栏的搜索选项组件 */
+/** @Name: Title Bar Search Component */
 export const FilterPopoverBtn: React.FC<FilterPopoverBtnProps> = memo((props) => {
     const {defaultFilter, onFilter, refresh, type = "online", fixFilterList = []} = props
 
@@ -1443,7 +1443,7 @@ export const FilterPopoverBtn: React.FC<FilterPopoverBtnProps> = memo((props) =>
     const [filterList, setFilterList] = useState<API.PluginsSearch[]>([])
     const [isActive, setIsActive] = useState<boolean>(false)
 
-    // 查询筛选条件统计数据列表
+    // Query Filter Condition Stats List
     useEffect(() => {
         if (fixFilterList.length > 0) {
             setFilterList(fixFilterList)
@@ -1483,7 +1483,7 @@ export const FilterPopoverBtn: React.FC<FilterPopoverBtnProps> = memo((props) =>
         form.setFieldsValue({...defaultFilter})
         onSetIsActive(defaultFilter)
     }, [defaultFilter])
-    /**需求：详情的搜索会清除tag，插件组因为已经移出到外面，所以插件组不会被清除 */
+    /**Requirement: Searching details clears tags, plugin group not cleared as moved outside */
     const onFinish = useMemoizedFn((value) => {
         for (let name of excludeFilterName) {
             if(has(value,name)) delete value[name]
@@ -1492,7 +1492,7 @@ export const FilterPopoverBtn: React.FC<FilterPopoverBtnProps> = memo((props) =>
         setVisible(false)
         onSetIsActive(value)
     })
-    /**需求：详情的重置会清除tag，插件组因为已经移出到外面，所以插件组不会被清除 */
+    /**Resetting details clears tags, plugin group not cleared as moved outside */
     const onReset = useMemoizedFn(() => {
         const value = {
             plugin_type: [],
@@ -1507,7 +1507,7 @@ export const FilterPopoverBtn: React.FC<FilterPopoverBtnProps> = memo((props) =>
         setVisible(false)
         setIsActive(false)
     })
-    /** 显示激活状态判断 */
+    /** Active State Display Check */
     const onSetIsActive = useMemoizedFn((value: PluginFilterParams) => {
         const valueArr = (Object.keys(value) || []).filter((item) => !excludeFilterName.includes(item))
         if (valueArr.length > 0) {
@@ -1564,10 +1564,10 @@ export const FilterPopoverBtn: React.FC<FilterPopoverBtnProps> = memo((props) =>
 
                         <div className={styles["form-btns"]}>
                             <YakitButton type='text' onClick={onReset}>
-                                重置搜索
+                                Reset Search
                             </YakitButton>
                             <YakitButton type='primary' htmlType='submit'>
-                                搜索
+                                Search
                             </YakitButton>
                         </div>
                     </Form>
@@ -1579,15 +1579,15 @@ export const FilterPopoverBtn: React.FC<FilterPopoverBtnProps> = memo((props) =>
     )
 })
 
-/** @name 插件源码评分模块(包含评分逻辑),可和别的模块组合成新UI一起使用 */
+/** @Name: Plugin Rating Module (Includes Rating Logic), combinable with other modules for new UI */
 export const CodeScoreModule: React.FC<CodeScoreModuleProps> = memo((props) => {
     const {
         type,
         code,
         isStart,
         successWait = 1000,
-        successHint = "（表现良好，开始上传插件中...）",
-        failedHint = "（上传失败，请修复后再上传）",
+        successHint = "（Performing well, begin plugin upload...）",
+        failedHint = "（Upload Failed, Please Fix and Retry）",
         callback
     } = props
 
@@ -1598,7 +1598,7 @@ export const CodeScoreModule: React.FC<CodeScoreModuleProps> = memo((props) => {
         return isStart
     })
 
-    // 开始评分
+    // Start Rating
     const onTest = useMemoizedFn(() => {
         setLoading(true)
         ipcRenderer
@@ -1619,7 +1619,7 @@ export const CodeScoreModule: React.FC<CodeScoreModuleProps> = memo((props) => {
                 }
             })
             .catch((e) => {
-                yakitNotify("error", `插件基础测试失败: ${e}`)
+                yakitNotify("error", `Plugin Basic Test Failed: ${e}`)
                 callback(false)
             })
             .finally(() => {
@@ -1641,19 +1641,19 @@ export const CodeScoreModule: React.FC<CodeScoreModuleProps> = memo((props) => {
     return (
         <div className={styles["code-score-modal"]}>
             <div className={styles["header-wrapper"]}>
-                <div className={styles["title-style"]}>检测项包含：</div>
+                <div className={styles["title-style"]}>Detection Items Include：</div>
                 <div className={styles["header-body"]}>
                     <div className={styles["opt-content"]}>
                         <div className={styles["content-order"]}>1</div>
-                        基础编译测试，判断语法是否符合规范，是否存在不正确语法；
+                        Basic Compilation Test, Check Syntax Compliance；
                     </div>
                     <div className={styles["opt-content"]}>
                         <div className={styles["content-order"]}>2</div>
-                        把基础防误报服务器作为测试基准，防止条件过于宽松导致的误报；
+                        Use basic anti-false positive server as test benchmark to avoid overly lenient conditions leading to false positives；
                     </div>
                     <div className={styles["opt-content"]}>
                         <div className={styles["content-order"]}>3</div>
-                        检查插件执行过程是否会发生崩溃。
+                        Your instruction doesn't Sure, please provide the non-English text you need translated, and I'll assist you with the translations.?。
                     </div>
                 </div>
             </div>
@@ -1664,9 +1664,9 @@ export const CodeScoreModule: React.FC<CodeScoreModuleProps> = memo((props) => {
                             <YakitSpin spinning={true} />
                         </div>
                         <div className={styles["loading-title"]}>
-                            <div className={styles["title-style"]}>检测中，请耐心等待...</div>
+                            <div className={styles["title-style"]}>Detecting, please wait...</div>
                             <div className={styles["subtitle-style"]}>
-                                一般来说，检测将会在 <span className={styles["active-style"]}>10-20s</span> 内结束
+                                Plugin Debugging & Execution - New Interface <span className={styles["active-style"]}>10-20s</span> Within End
                             </div>
                         </div>
                     </div>
@@ -1717,14 +1717,14 @@ export const CodeScoreModule: React.FC<CodeScoreModuleProps> = memo((props) => {
                             <div className={styles["opt-results"]}>
                                 <div className={styles["success-score"]}>
                                     {+response?.Score}
-                                    <span className={styles["suffix-style"]}>分</span>
+                                    <span className={styles["suffix-style"]}>Minute</span>
                                 </div>
                                 <div className={styles["content-style"]}>{successHint}</div>
                             </div>
                         )}
                         {!response && (
                             <div className={styles["opt-results"]}>
-                                <div className={styles["content-style"]}>检查错误，请关闭后再次尝试!</div>
+                                <div className={styles["content-style"]}>Check Error, Please Retry After Closing!</div>
                             </div>
                         )}
                     </div>
@@ -1734,15 +1734,15 @@ export const CodeScoreModule: React.FC<CodeScoreModuleProps> = memo((props) => {
     )
 })
 
-/** @name 插件源码评分弹窗 */
+/** @Name: Plugin Rating Popup */
 export const CodeScoreModal: React.FC<CodeScoreModalProps> = memo((props) => {
     const {type, code, visible, onCancel} = props
 
-    // 不合格|取消
+    // Disqualified|Cancel
     const onFailed = useMemoizedFn(() => {
         onCancel(false)
     })
-    // 合格
+    // Qualified
     const onSuccess = useMemoizedFn(() => {
         onCancel(true)
     })
@@ -1755,7 +1755,7 @@ export const CodeScoreModal: React.FC<CodeScoreModalProps> = memo((props) => {
 
     return (
         <YakitModal
-            title='插件基础检测'
+            title='Plugin Basic Detection'
             type='white'
             width={506}
             centered={true}
@@ -1772,7 +1772,7 @@ export const CodeScoreModal: React.FC<CodeScoreModalProps> = memo((props) => {
     )
 })
 
-/** @name 插件类型标签 */
+/** @Name: Plugin Type Tag */
 export const PluginTypeTag: React.FC<PluginTypeTagProps> = memo((props) => {
     const {checked, setCheck, disabled, icon, name, description} = props
 
@@ -1807,7 +1807,7 @@ export const PluginTypeTag: React.FC<PluginTypeTagProps> = memo((props) => {
     )
 })
 
-/** @name 源码放大版编辑器 */
+/** @Name: Source Code Editor Plus */
 export const PluginEditorModal: React.FC<PluginEditorModalProps> = memo((props) => {
     const {language = "yak", visible, setVisible, code} = props
 
@@ -1823,11 +1823,11 @@ export const PluginEditorModal: React.FC<PluginEditorModalProps> = memo((props) 
 
     return (
         <YakitModal
-            title='源码'
+            title='Source Code'
             subTitle={
                 <div className={styles["plugin-editor-modal-subtitle"]}>
-                    <span>可在此定义插件输入原理，并编写输出 UI</span>
-                    <span>按 Esc 即可退出全屏</span>
+                    <span>Define plugin principle here, build Output UI</span>
+                    <span>Press Esc to Exit Fullscreen</span>
                 </div>
             }
             type='white'
@@ -1848,7 +1848,7 @@ export const PluginEditorModal: React.FC<PluginEditorModalProps> = memo((props) 
     )
 })
 
-/** @name 对比器放大版编辑器 */
+/** @Name: Comparator Editor Plus */
 export const PluginDiffEditorModal: React.FC<PluginDiffEditorModalProps> = memo((props) => {
     const {language = "yak", oldCode, newCode, visible, setVisible} = props
 
@@ -1867,11 +1867,11 @@ export const PluginDiffEditorModal: React.FC<PluginDiffEditorModalProps> = memo(
 
     return (
         <YakitModal
-            title='源码'
+            title='Source Code'
             subTitle={
                 <div className={styles["plugin-editor-modal-subtitle"]}>
-                    <span>可在此定义插件输入原理，并编写输出 UI</span>
-                    <span>按 Esc 即可退出全屏</span>
+                    <span>Define plugin principle here, build Output UI</span>
+                    <span>Press Esc to Exit Fullscreen</span>
                 </div>
             }
             type='white'

@@ -88,13 +88,13 @@ export const SpaceEngineOperator: React.FC<SpaceEngineOperatorProp> = (props) =>
         <YakitResizeBox
             firstNode={<AutoCard
                 title={<DemoItemSelectOne
-                    label={"引擎"}
+                    label={"Engine"}
                     formItemStyle={{margin: 0, width: 180}}
                     data={[
                         {label: "ZoomEye", value: "zoomeye"},
                         {label: "Fofa", value: "fofa"},
                         {label: "Shodan", value: "shodan"},
-                        {label: "不设置", value: ""},
+                        {label: "Not Set", value: ""},
                     ]}
                     setValue={Type => setParams({...params, Type})} value={params.Type}
                 />} size={"small"}
@@ -104,39 +104,39 @@ export const SpaceEngineOperator: React.FC<SpaceEngineOperatorProp> = (props) =>
                         ipcRenderer.invoke("FetchPortAssetFromSpaceEngine", params, token).then(() => {
                             setLoading(true)
                         })
-                    }}>执行</YakitButton>
+                    }}>Execute</YakitButton>
                     <YakitButton danger={true} disabled={!loading} onClick={() => {
                         cancel()
-                    }}>停止</YakitButton>
+                    }}>Stop</YakitButton>
                 </Space>}
             >
                 {noEngine ? <Alert
-                    type={"warning"} description={"请先设置空间引擎"}
+                    type={"warning"} description={"Set Space Engine First"}
                     style={{marginBottom: 8}}
                 /> : <Alert
                     type={statusFailed === "" ? "success" : "error"} description={<div>
                     {statusFailed}
                     {status.Info}
-                    {status.Used > 0 && <YakitTag>已用额度: {status.Used}</YakitTag>}
-                    {status.Remain > 0 && <YakitTag>剩余额度: {status.Remain}</YakitTag>}
+                    {status.Used > 0 && <YakitTag>Used Limit: {status.Used}</YakitTag>}
+                    {status.Remain > 0 && <YakitTag>Remaining Limit: {status.Remain}</YakitTag>}
                     {statusLoading ? <AutoSpin spinning={true} size={"small"}/> : ""}
                 </div>}
                 />}
                 {!noEngine &&
                     <Form layout={"vertical"} onSubmitCapture={e => (e.preventDefault())} disabled={params.Type === ""}>
-                        <Form.Item label={"搜索条件"}>
+                        <Form.Item label={"Search Criteria"}>
                             <YakEditor
                                 type={isRegisteredLanguage(params.Type) ? params.Type : "text"}
                                 value={params.Filter}
                                 setValue={(value) => (setParams({...params, Filter: value}))}
                             />
                         </Form.Item>
-                        <DemoItemSwitch label={"扫描"} value={params.ScanBeforeSave} setValue={i => (
+                        <DemoItemSwitch label={"Scan"} value={params.ScanBeforeSave} setValue={i => (
                             setParams({...params, ScanBeforeSave: i})
                         )}/>
-                        <InputInteger label={"最大页数"} setValue={MaxPage => setParams({...params, MaxPage})}
+                        <InputInteger label={"Max Pages"} setValue={MaxPage => setParams({...params, MaxPage})}
                                       value={params.MaxPage}/>
-                        <InputInteger label={"最大记录数"} setValue={MaxRecord => setParams({...params, MaxRecord})}
+                        <InputInteger label={"Max Records"} setValue={MaxRecord => setParams({...params, MaxRecord})}
                                       value={params.MaxRecord}/>
                     </Form>}
             </AutoCard>}

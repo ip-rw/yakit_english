@@ -52,7 +52,7 @@ export const OnlineJudgment: React.FC<OnlineJudgmentProps> = React.memo(
                 setLoading(false)
                 setOnlineResponseStatus({
                     code: 401,
-                    message: "未登录"
+                    message: "Not logged in"
                 })
             } else {
                 if (networkState.online) {
@@ -74,7 +74,7 @@ export const OnlineJudgment: React.FC<OnlineJudgmentProps> = React.memo(
                 .invoke("fetch-netWork-status-by-request-interface")
                 .then((res) => {
                     if (res.code === -1) {
-                        yakitNotify("error", "连接失败:" + res.message)
+                        yakitNotify("error", "Connection Failed:" + res.message)
                     }
                     setOnlineResponseStatus({
                         code: res.code,
@@ -82,7 +82,7 @@ export const OnlineJudgment: React.FC<OnlineJudgmentProps> = React.memo(
                     })
                 })
                 .catch((error) => {
-                    yakitNotify("error", "连接失败:" + error)
+                    yakitNotify("error", "Connection Failed:" + error)
                 })
                 .finally(() =>
                     setTimeout(() => {
@@ -100,8 +100,8 @@ export const OnlineJudgment: React.FC<OnlineJudgmentProps> = React.memo(
                             <YakitEmpty
                                 image={<img src={Server} alt='' />}
                                 imageStyle={{width: 272, height: 265, marginBottom: 16}}
-                                title='服务器故障'
-                                description='服务器故障，请联系管理员修复'
+                                title='Server Error'
+                                description='Server Error, Contact Admin'
                             />
                             <YakitButton
                                 className={styles["refresh-button"]}
@@ -109,7 +109,7 @@ export const OnlineJudgment: React.FC<OnlineJudgmentProps> = React.memo(
                                 icon={<OutlineRefreshIcon />}
                                 onClick={getNetWork}
                             >
-                                刷新页面
+                                Refresh Page
                             </YakitButton>
                         </>
                     )
@@ -121,33 +121,33 @@ export const OnlineJudgment: React.FC<OnlineJudgmentProps> = React.memo(
                                     <YakitEmpty
                                         image={<img src={NoPermissions} alt='' />}
                                         imageStyle={{width: 320, height: 250, marginBottom: 16}}
-                                        title='暂无访问权限'
-                                        description='登录后即可访问该页面'
+                                        title='No Access'
+                                        description='Login to Access This Page'
                                     />
                                     <YakitButton
                                         className={styles["refresh-button"]}
                                         type='outline1'
                                         onClick={onLogin}
                                     >
-                                        立即登录
+                                        Login Now
                                     </YakitButton>
                                 </>
                             ) : (
                                 <YakitEmpty
                                     image={<img src={NoPermissions} alt='' />}
                                     imageStyle={{width: 320, height: 250, marginBottom: 16}}
-                                    title='暂无访问权限'
-                                    description='请联系管理员分配权限'
+                                    title='No Access'
+                                    description='Contact Admin for Permissions'
                                 />
                             )} */}
                             <YakitEmpty
                                 image={<img src={NoPermissions} alt='' />}
                                 imageStyle={{width: 320, height: 250, marginBottom: 16}}
-                                title='暂无访问权限'
-                                description='登录后即可访问该页面'
+                                title='No Access'
+                                description='Login to Access This Page'
                             />
                             <YakitButton className={styles["refresh-button"]} type='outline1' onClick={() => onLogin()}>
-                                立即登录
+                                Login Now
                             </YakitButton>
                         </>
                     )
@@ -159,8 +159,8 @@ export const OnlineJudgment: React.FC<OnlineJudgmentProps> = React.memo(
                             <YakitEmpty
                                 image={<img src={Online} alt='' />}
                                 imageStyle={{width: 300, height: 210, marginBottom: 16}}
-                                title='请检查私有域配置与网络连接'
-                                description='连网后才可访问 Yakit 插件商店'
+                                title='Check Private Domain & Network'
+                                description='Connect to Access Yakit Plugin Store'
                             />
                             <YakitButton
                                 className={styles["refresh-button"]}
@@ -168,7 +168,7 @@ export const OnlineJudgment: React.FC<OnlineJudgmentProps> = React.memo(
                                 icon={<OutlineRefreshIcon />}
                                 onClick={getNetWork}
                             >
-                                刷新页面
+                                Refresh Page
                             </YakitButton>
                         </>
                     )

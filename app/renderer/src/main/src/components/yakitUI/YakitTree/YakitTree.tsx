@@ -8,8 +8,8 @@ import classNames from "classnames"
 
 export type TreeKey = string | number
 interface YakitTreeProps extends TreeProps {
-    showIcon?: boolean // 是否展示treeNode节点前的icon 默认 -> 展示
-    treeData: TreeNode[] // 需要满足 DataNode类型的数组
+    showIcon?: boolean // Show tree node icon by default -> Display
+    treeData: TreeNode[] // Array of DataNode type required
     classNameWrapper?: string
 }
 

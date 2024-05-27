@@ -7,11 +7,11 @@ import {ReactNode} from "react"
 
 type YakitDragger = Omit<DraggerProps, "beforeUpload" | "onChange">
 
-/**拖拽属性 */
+/**Drag Props */
 export interface FileDraggerProps {
-    /**禁用 */
+    /**Disabled */
     disabled?: boolean
-    /**是否允许多选 */
+    /**Multi-select Allowed? */
     multiple?: boolean
     className?: string
     children?: ReactNode
@@ -21,52 +21,52 @@ export interface YakitFormDraggerProps extends YakitDraggerProps {
     formItemClassName?: string
     formItemProps?: FormItemProps
 }
-/**拖拽/点击文件,回显文件路径组件props */
+/**Draggable/File Click Props */
 export interface YakitDraggerProps extends FileDraggerProps {
     size?: YakitSizeType
     inputProps?: InputProps
-    /**@description selectType为file,该属性才有效*/
+    /**@Valid Only for selectType=file*/
     setContent?: (s: string) => void
     help?: ReactDOM
     showDefHelp?: boolean
-    /**回显的文本值 */
+    /**Echoed Text Value */
     value?: string
-    /**回显的文本回调事件 */
+    /**Echo Text Callback */
     onChange?: (s: string) => void
-    /**all:支出上传文件和文件夹,不支持accept; file:只支持文件; folder:只支持文件夹;a */
+    /**All: Files & Folders, No accept; File Only; Folder Only;a */
     selectType?: "file" | "folder" | "all"
-    /** 展示组件 input|textarea|autoComplete */
+    /** Display Component Input|textarea|autoComplete */
     renderType?: "input" | "textarea" | "autoComplete"
-    /** autoComplete的props */
+    /** AutoComplete Props */
     autoCompleteProps?: YakitAutoCompleteProps
-    /** textarea的props */
+    /** Textarea Props */
     textareaProps?: InternalTextAreaProps
-    /**是否显示路径数量 */
+    /**Display Path Count? */
     isShowPathNumber?: boolean
 
-    /**接受的文件类型 */
+    /**Accepted File Types */
     accept?: string
-    /**是否给请输入正确的路径错误提示 */
+    /**Prompt for Valid Path? */
     showFailedFlag?: boolean
 }
 
 export interface YakitDraggerContentProps
     extends Omit<YakitDragger, "showUploadList" | "directory" | "multiple" | "beforeUpload" | "onChange"> {
-    /** textarea的props */
+    /** Textarea Props */
     textareaProps?: InternalTextAreaProps
     size?: YakitSizeType
-    /**回显的文本值 */
+    /**Echoed Text Value */
     value?: string
-    /**@description 回显的文本回调事件*/
+    /**@Echo Text Callback*/
     onChange?: (s: string) => void
     help?: ReactDOM
     showDefHelp?: boolean
     // InputProps?: InputProps
-    // /** 展示组件 input|textarea */
+    // /** Display Component Input|textarea */
     // renderType?: "input" | "textarea"
     /**@default 500k */
     fileLimit?: number
-    /**value的分隔符 @default ',' */
+    /**Value Separator @default ',' */
     valueSeparator?: string
 }
 

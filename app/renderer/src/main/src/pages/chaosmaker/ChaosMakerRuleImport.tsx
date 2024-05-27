@@ -25,27 +25,27 @@ export const ChaosMakerRuleImport: React.FC<ChaosMakerRuleImportProp> = (props) 
 
     const onSubmit = useMemoizedFn(() => {
         if (params.Content === "") {
-            failed("规则内容为空")
+            failed("Rule content empty")
             return
         }
 
         ipcRenderer.invoke("ImportChaosMakerRules", {...params}).then(()=>{
-            info("导入成功")
+            info("Import Success")
             if (props.onFinished) {
                 props.onFinished()
             }
         })
     })
 
-    return <AutoCard size={"small"} bordered={true} title={"导入流量规则"} extra={(
+    return <AutoCard size={"small"} bordered={true} title={"Import Traffic Rules"} extra={(
         <Space>
             <Popconfirm
-                title={"你确认要导入这些规则吗？"}
+                title={"Confirm rule import?？"}
                 onConfirm={()=>{
                     onSubmit()
                 }}
             >
-                <YakitButton>导入流量规则</YakitButton>
+                <YakitButton>Import Traffic Rules</YakitButton>
             </Popconfirm>
         </Space>
     )}>
@@ -57,14 +57,14 @@ export const ChaosMakerRuleImport: React.FC<ChaosMakerRuleImportProp> = (props) 
             }}
             layout={"vertical"}
         >
-            <SelectOne label={"流量类型"} data={[
-                {value: "suricata", text: "Suricata 流量规则"},
+            <SelectOne label={"Traffic Type"} data={[
+                {value: "suricata", text: "Suricata Traffic Rules"},
                 {value: "http-request", text: "HTTP"},
                 {value: "tcp", text: "TCP"},
                 {value: "icmp", text: "ICMP"},
-                {value: "linklayer", text: "链路层"},
+                {value: "linklayer", text: "Link Layer"},
             ]} setValue={RuleType => setParams({...params, RuleType})} value={params.RuleType}/>
-            <Form.Item label={"规则"} style={{height: "100%"}} required={true}>
+            <Form.Item label={"Rules"} style={{height: "100%"}} required={true}>
                 <div style={{height: "300px"}}>
                     <YakEditor
                         type={"html"}

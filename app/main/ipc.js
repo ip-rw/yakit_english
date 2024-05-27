@@ -68,12 +68,12 @@ function getClient(createNew) {
 }
 
 /**
- * @name 测试远程连接引擎是否成功
+ * @name Test remote engine connection success
  * @param {Object} params
- * @param {String} params.host 域名
- * @param {String} params.port 端口
- * @param {String} params.caPem 证书
- * @param {String} params.password 密钥
+ * @param {String} params.host Domain
+ * @param {String} params.port Port
+ * @param {String} params.caPem Certificate
+ * @param {String} params.password Key
  */
 function testRemoteClient(params, callback) {
     const {host, port, caPem, password} = params
@@ -136,7 +136,7 @@ module.exports = {
             return await asyncEcho(params)
         })
 
-        /** 获取 yaklang引擎 配置参数 */
+        /** Get yaklang engine config parameters */
         ipcMain.handle("fetch-yaklang-engine-addr", () => {
             return {
                 addr: global.defaultYakGRPCAddr,
@@ -144,20 +144,20 @@ module.exports = {
             }
         })
 
-        /** 登录相关监听 */
+        /** Login related listener */
         require("./handlers/userInfo")(win, getClient)
 
-        /** 注册本地缓存数据查改通信 */
+        /** Register local cache data CRUD communication */
         require("./localCache").register(win, getClient)
-        /** 启动、连接引擎 */
+        /** Start/connect engine */
         require("./handlers/engineStatus")(
             win,
             (addr, pem, password) => {
-                // 清空老数据
+                // Clear old data
                 if (_client) _client.close()
                 _client = null
 
-                // 设置新引擎参数
+                // Set new engine parameters
                 global.defaultYakGRPCAddr = addr
                 global.caPem = pem
                 global.password = password
@@ -165,7 +165,7 @@ module.exports = {
             getClient,
             newClient
         )
-        /** 远程控制 */
+        /** Remote control */
         require("./handlers/dynamicControl")(win, getClient)
 
         require("./handlers/execYak")(win, getClient)
@@ -195,10 +195,10 @@ module.exports = {
         //assets
         require("./handlers/assets")(win, getClient)
 
-        // 加载更多的 menu
+        // Load more menu
         require("./handlers/menu")(win, getClient)
 
-        // 管理 yak 引擎版本 / 升级等
+        // Manage yak engine version / Upgrades etc.
         const upgradeUtil = require("./handlers/upgradeUtil")
         upgradeUtil
             .initial()
@@ -228,39 +228,39 @@ module.exports = {
         // project
         require("./handlers/project")(win, getClient)
 
-        // 数据对比
+        // Data comparison
         require("./handlers/dataCompare")(win, getClient)
 
-        // 增加一个通用的导出功能
+        // Add generic export function
         require("./handlers/generalExport")(win, getClient)
 
         //
         require("./handlers/facadeServer")(win, getClient)
-        // 小工具插件
+        // Utility plugin
         require("./handlers/pluginTool")(win, getClient)
 
         // terminal
         require("./handlers/terminal")(win, getClient)
 
-        // 通信
+        // Communication
         require("./handlers/communication")(win, getClient)
 
         // reverse logger
         require("./handlers/reverse-connlogger").register(win, getClient)
 
-        // 接口注册
+        // Interface registration
         const api = fs.readdirSync(path.join(__dirname, "./api"))
         api.forEach((item) => {
             require(path.join(__dirname, `./api/${item}`))(win, getClient)
         })
 
-        // 各类UI层面用户操作
+        // All UI layer user operations
         const uiOp = fs.readdirSync(path.join(__dirname, "./uiOperate"))
         uiOp.forEach((item) => {
             require(path.join(__dirname, `./uiOperate/${item}`))(win, getClient)
         })
 
-        // 工具类 例如node文件处理
+        // Utility class e.g., node file processing
         const utils = fs.readdirSync(path.join(__dirname, "./utils"))
         utils.forEach((item) => {
             require(path.join(__dirname, `./utils/${item}`))(win, getClient)

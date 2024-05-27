@@ -31,7 +31,7 @@ export const ReportItemRender: React.FC<ReportItemRenderProp> = (props) => {
                     />
                 )
             } catch (e) {
-                console.info("渲染图失败")
+                console.info("Render Chart Failed")
                 console.info(e)
                 return (
                     <div style={{height: 300}}>
@@ -50,7 +50,7 @@ export const ReportItemRender: React.FC<ReportItemRenderProp> = (props) => {
                     />
                 )
             } catch (e) {
-                console.info("渲染图失败")
+                console.info("Render Chart Failed")
                 console.info(e)
                 return (
                     <div style={{height: 300}}>
@@ -78,7 +78,7 @@ export const ReportItemRender: React.FC<ReportItemRenderProp> = (props) => {
                 } else if (newData.type === "info-risk-list") {
                     return <FoldTable data={newData} />
                 } else {
-                    // kv图 南丁格尔玫瑰图 多层饼环
+                    // KV Chart Nightingale Rose Chart Multi-Layered Pie
                     const content = typeof newData === "string" ? JSON.parse(newData) : newData
                     const {type, data} = content
                     if (type) {
@@ -87,9 +87,9 @@ export const ReportItemRender: React.FC<ReportItemRenderProp> = (props) => {
                                 return <MultiPie content={content} />
                             case "nightingle-rose":
                                 return <NightingleRose content={content} />
-                            // 通用kv
+                            // General KV
                             case "general":
-                                // kv图展示柱状图
+                                // KV Chart Display Bar Chart
                                 return <VerticalOptionBar content={content} />
                             case "year-cve":
                                 return <StackedVerticalBar content={content}/>

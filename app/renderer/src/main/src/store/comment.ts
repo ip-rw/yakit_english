@@ -4,7 +4,7 @@ export interface CommenDataStore {
     isRefChildCommentList: boolean
 }
 interface StoreProps {
-    /**@name 是否刷新modal中子评论列表 */
+    /**@Refresh sub-comment list in modal? */
     commenData: CommenDataStore
     setCommenData: (info: CommenDataStore) => void
 }

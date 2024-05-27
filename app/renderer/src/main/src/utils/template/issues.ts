@@ -9,36 +9,36 @@ export interface LocalInfoProps {
 
 export const ReportBug = (system_info?: LocalInfoProps): string => {
     let tpl = `
-## 问题描述
+## Issue Description
 
-请在此处提供您遇到的问题的详细描述。请描述问题的表现、发生的频率、影响范围以及任何其他相关信息。如果可能，请提供具体的步骤来重现该问题。
+Provide a detailed description of the issue you encountered here. Describe the symptoms, frequency, scope of impact, and any other relevant information. If possible, please provide specific steps to reproduce the issue。
 
-## 预期行为
+## Expected Behavior
 
-请在此处描述您预期的行为，也就是问题被解决后应该出现的结果。如果可能，请提供具体的结果示例。
+Describe the behavior you expect here, i.e., the result that should occur after the issue is resolved. If possible, please provide specific examples of the outcome。
 
-## 实际行为
+## Actual Behavior
 
-请在此处描述您实际看到的行为，也就是问题解决后出现的结果。如果可能，请提供具体的结果示例。
+Describe the behavior you actually observed here, i.e., the result after the issue is resolved. If possible, please provide specific examples of the outcome。
 
-## 复现步骤
+## Reproduction Steps
 
-请在此处提供能够复现该问题的具体步骤。如果问题是随机发生的，或者需要特定的环境条件才能复现，请提供更详细的说明。
+Provide specific steps to reproduce the issue here. If the problem occurs randomly, or requires specific environmental conditions to reproduce, please provide more detailed explanations。
 
-1. 步骤 1
-2. 步骤 2
-3. 步骤 3
+1. Step 1
+2. Step 2
+3. Step 3
 
-## 环境信息
+## Environment Info
 
-- 操作系统: ${system_info?.system}
-- 系统架构: ${system_info?.arch}
-- ${getReleaseEditionName()} 版本: ${system_info?.localYakit}
-- YakLang 版本: ${system_info?.localYaklang}
+- Operating System: ${system_info?.system}
+- System Architecture: ${system_info?.arch}
+- ${getReleaseEditionName()} Version: ${system_info?.localYakit}
+- YakLang Version: ${system_info?.localYaklang}
 
-## 补充说明
+## Additional Notes
 
-如果您有任何其他有关该问题的信息或评论，请在此处添加。
+Add any other info or comments about the issue here。
 
 `
     tpl = encodeURIComponent(tpl)
@@ -46,21 +46,21 @@ export const ReportBug = (system_info?: LocalInfoProps): string => {
 }
 export const FeatureRequest = (): string => {
     let tpl = `
-## 需求描述
+## Requirement Description
 
-请清晰明确地描述你遇到的问题，例如：我在使用该产品时总是遇到以下问题...
+Please describe clearly and precisely the problem you encountered, for example: I always encounter the following issues when using the product...
 
-## 解决方案
+## Solution
 
-请清晰明确地描述你希望达成的目标和解决方案，例如：我希望产品能够实现以下功能...
+Please describe clearly and precisely the goal and solution you want, for example: I wish the product could implement the following features...
 
-## 可选方案
+## Alternative Suggestions
 
-请清晰明确地描述你考虑过的其他方案或功能。
+Please describe clearly and precisely any other alternatives or features you have considered。
 
-## 附加信息
+## Additional Info
 
-请提供任何与该功能请求相关的上下文信息、截图或其他材料等。
+Provide any context information, screenshots, or other materials related to this feature request。
 `
     tpl = encodeURIComponent(tpl)
     return tpl

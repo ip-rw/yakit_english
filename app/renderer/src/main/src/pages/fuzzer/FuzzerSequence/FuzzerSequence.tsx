@@ -108,7 +108,7 @@ const FuzzerPageSetting = React.lazy(() => import("./FuzzerPageSetting"))
 
 const {ipcRenderer} = window.require("electron")
 
-// 拖拽功能所需
+// Drag and drop functionality needed
 const getItemStyle = (isDragging, draggableStyle) => {
     let transform: string = draggableStyle["transform"] || ""
     if (isDragging) {
@@ -172,15 +172,15 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
     const [showAllRes, setShowAllRes] = useState<boolean>(false)
     const [showAllResponse, setShowAllResponse] = useState<boolean>(false)
 
-    // 匹配器和提取器相关
+    // Related to matchers and extractors
     const [visibleDrawer, setVisibleDrawer] = useState<boolean>(false)
     const [activeType, setActiveType] = useState<MatchingAndExtraction>("matchers")
     const [activeKey, setActiveKey] = useState<string>("ID:0")
     const [matcherAndExtractionHttpResponse, setMatcherAndExtractionHttpResponse] = useState<string>("")
-    const [showMatcherAndExtraction, setShowMatcherAndExtraction] = useState<boolean>(false) // Response中显示匹配和提取器
+    const [showMatcherAndExtraction, setShowMatcherAndExtraction] = useState<boolean>(false) // Display matches and extractors in Response
 
-    const [triggerPageSetting, setTriggerPageSetting] = useState<boolean>(false) // 刷新FuzzerPageSetting中的值
-    const [triggerME, setTriggerME] = useState<boolean>(false) // 刷新匹配器和提取器的值
+    const [triggerPageSetting, setTriggerPageSetting] = useState<boolean>(false) // Refresh values in FuzzerPageSetting
+    const [triggerME, setTriggerME] = useState<boolean>(false) // Refresh values of matchers and extractors
 
     // Request
     const [currentSelectRequest, setCurrentSelectRequest] = useState<WebFuzzerPageInfoProps>()
@@ -374,7 +374,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
             }
             onSetFirstAsSelected(FuzzerIndex)
 
-            // 用于数据项请求字段
+            // For data item request fields
             let count = countRef.current.get(FuzzerIndex)
             if (count !== undefined) {
                 count++
@@ -383,7 +383,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
                 countRef.current.set(FuzzerIndex, 0)
             }
 
-            // 主要用于查看全部数据
+            // Mainly for viewing all data
             if (Response.RuntimeID) {
                 let runtimeId = runtimeIdBufferRef.current.get(FuzzerIndex)
                 if (runtimeId) {
@@ -408,7 +408,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
                 let fuzzerTableMaxData = fuzzerTableMaxDataRef.current.get(FuzzerIndex) || DefFuzzerTableMaxData
                 if (successList) {
                     successList.push(r)
-                    // 超过最大显示 展示最新数据
+                    // Exceed maximum display, show newest data
                     if (successList.length > fuzzerTableMaxData) {
                         successList.shift()
                     }
@@ -436,7 +436,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
             }, 300)
         })
         ipcRenderer.on(errToken, (e, details) => {
-            yakitNotify("error", `提交模糊测试请求失败 ${details}`)
+            yakitNotify("error", `Failed to submit fuzz test request ${details}`)
             setTimeout(() => {
                 setLoading(false)
             }, 300)
@@ -462,7 +462,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
     const setExtractedMap = useMemoizedFn((extractedMap: Map<string, string>) => {
         if (inViewport && currentSequenceItem) set(currentSequenceItem?.id, extractedMap)
     })
-    /**点击开始执行后，如果没有选中项，则设置返回的第一个为选中item */
+    /**After clicking to start, if no item selected, set the first returned as selected item */
     const onSetFirstAsSelected = useMemoizedFn((fuzzerIndex: string) => {
         if (!currentSequenceItem) {
             const current: SequenceProps | undefined = sequenceList.find((ele) => ele.id === fuzzerIndex)
@@ -479,7 +479,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
                 let currentFailedCount = failedCountRef.current.get(fuzzerIndex) || 0
                 let lastSuccessCount = getResponse(fuzzerIndex)?.successCount || 0
                 let lastFailedCount = getResponse(fuzzerIndex)?.failedCount || 0
-                // 判断是否有更新
+                // Check for updates
                 if (currentSuccessCount !== lastSuccessCount || currentFailedCount !== lastFailedCount) {
                     updateData(fuzzerIndex)
                 }
@@ -516,7 +516,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
 
             if (successBuffer.length + failedBuffer.length === 1) {
                 const onlyOneResponse = successBuffer.length === 1 ? successBuffer[0] : failedBuffer[0]
-                // 设置第一个 response
+                // Set first response
                 setResponse(fuzzerIndex, {
                     id: fuzzerIndex,
                     onlyOneResponse,
@@ -555,8 +555,8 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
         runtimeIdBufferRef.current.clear()
     })
     /**
-     * 组内的webFuzzer页面高级配置或者request发生变化，或者组发生变化，
-     * 则更新原始序列originSequenceListRef,选中的item内容
+     * Changes in the advanced configuration of the webFuzzer page within the group, or request, or group changes，
+     * Then update original sequence originSequenceListRef, content of selected item
      */
     const onUpdateSequence = useDebounceFn(
         useMemoizedFn(() => {
@@ -601,7 +601,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
         }),
         {wait: 200}
     ).run
-    /**@returns bool false没有丢弃的数据，true有丢弃的数据 */
+    /**@returns bool false for no data discarded, true for data discarded */
     const onIsDropped = useMemoizedFn((data, fuzzerIndex) => {
         const currentRequest = getRequest(fuzzerIndex)
         if (!currentRequest) return
@@ -611,16 +611,16 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
         }
 
         if (advancedConfigValue.matchers?.length > 0) {
-            // 设置了 matchers
+            // Matchers set
             const hit = data["MatchedByMatcher"] === true
-            // 丢包的条件：
-            //   1. 命中过滤器，同时过滤模式设置为丢弃
-            //   2. 未命中过滤器，过滤模式设置为保留
+            // Conditions for packet loss：
+            //   1. Filter hit and filter mode set to discard
+            //   2. Filter missed, filter mode set to retain
             if (
                 (hit && advancedConfigValue.filterMode === "drop") ||
                 (!hit && advancedConfigValue.filterMode === "match")
             ) {
-                // 丢弃不匹配的内容
+                // Discard unmatched content
                 let dropCount = getDroppedCount(fuzzerIndex)
                 if (dropCount) {
                     dropCount++
@@ -652,7 +652,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
         }
     })
 
-    /**设置原始序列 */
+    /**Set original sequence */
     const onSetOriginSequence = useMemoizedFn((pageChildrenList: PageNodeItemProps[]) => {
         const newSequence: SequenceProps[] = pageChildrenList.map((item, index) => ({
             id: item.id,
@@ -707,8 +707,8 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
         setSequenceList([...sequenceList])
     })
     /**
-     * @description HotPatchCode和HotPatchCodeWithParamGetter一直使用缓存在数据库中的值
-     * proxy,dnsServers,etcHosts使用各个页面上显示的值
+     * @Description HotPatchCode and HotPatchCodeWithParamGetter always use values cached in the database
+     * Use values shown on each page for proxy, dnsServers, etcHosts
      */
     const getHttpParams = useMemoizedFn(() => {
         const httpParams: FuzzerRequestProps[] = []
@@ -717,7 +717,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
             const requestItem = pageChildrenList.find((ele) => ele.pageId === item.pageId)
             const webFuzzerPageInfo = requestItem?.pageParamsInfo.webFuzzerPageInfo
             if (webFuzzerPageInfo) {
-                // 用于表格显示最大数量
+                // For maximum table display quantity
                 fuzzerTableMaxDataRef.current.set(item.id, webFuzzerPageInfo.advancedConfigValue.resNumlimit)
                 const httpParamsItem: FuzzerRequestProps = {
                     ...advancedConfigValueToFuzzerRequests(webFuzzerPageInfo.advancedConfigValue),
@@ -752,7 +752,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
         const i = sequenceList.findIndex((ele) => !ele.pageId)
         if (i !== -1) {
             setErrorIndex(i)
-            yakitNotify("error", "请配置序列后再执行")
+            yakitNotify("error", "Please configure the sequence before execution")
             return
         }
         setLoading(true)
@@ -771,7 +771,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
     })
     const onAddSequenceNode = useMemoizedFn(() => {
         if (isEmptySequence(sequenceList)) {
-            yakitNotify("error", "已有空节点，请配置后再添加")
+            yakitNotify("error", "Empty node present, configure before adding")
             return
         }
         const addItem: SequenceProps = {
@@ -792,7 +792,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
             ...extraSetting
         }))
         setSequenceList([...newSequenceList])
-        yakitNotify("success", "应用成功")
+        yakitNotify("success", "Application succeeded")
     })
     const onRemoveNode = useMemoizedFn((index: number) => {
         if (index === errorIndex) {
@@ -819,7 +819,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
             setSequenceList([...sequenceList])
         }
     })
-    /**单个返回Response 打开匹配器和提取器编辑，切换选中项或者点击开始执行时，需要先验证用户是否要应用最新得数据 */
+    /**Single response returned, open matcher and extractor editor, switch selection or click to start execution, user verification required to apply latest data */
     const validateME = useMemoizedFn(() => {
         return new Promise((resolve, reject) => {
             if (isShowSequenceResponse && sequenceResponseRef && sequenceResponseRef.current) {
@@ -836,7 +836,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
     })
     const onSelect = useMemoizedFn(async (val: SequenceProps) => {
         if (!val.pageId) {
-            yakitNotify("error", "请配置序列后再选中")
+            yakitNotify("error", "Please select sequence before choosing")
             return
         }
         validateME()
@@ -849,10 +849,10 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
             })
     })
 
-    /**显示页面的高级配置部分参数 */
+    /**Display advanced configuration parameters of the page */
     const onShowSetting = useMemoizedFn((val: SequenceProps) => {
         if (!val.pageId) {
-            yakitNotify("error", "请选择页面")
+            yakitNotify("error", "Please select page")
             return
         }
         onSelect(val)
@@ -899,7 +899,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
         }
         return flag
     }
-    /**调试匹配器和提取器 */
+    /**Debug matchers and extractors */
     const onDebug = useMemoizedFn((value: DebugProps) => {
         setMatcherAndExtractionHttpResponse(value.httpResponse)
         setActiveType(value.type)
@@ -915,11 +915,11 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
             setVisibleDrawer(true)
         }
     })
-    /**关闭匹配器或提取器 */
+    /**Close matcher or extractor */
     const onCloseMatcherAndExtractionDrawer = useMemoizedFn(() => {
         setVisibleDrawer(false)
     })
-    /**保存匹配器/提取器数据 */
+    /**Save matcher/Extractor Data */
     const onSaveMatcherAndExtractionDrawer = useMemoizedFn(
         (matcher: MatcherValueProps, extractor: ExtractorValueProps) => {
             if (!currentSelectRequest?.pageId) return
@@ -954,7 +954,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
             }
         }
     )
-    /**多条数据返回的第一条数据的ResponseRaw,一条数据就返回这一条的 ResponseRaw */
+    /**ResponseRaw of the first data returned in multiple data scenarios, or the sole data's ResponseRaw */
     const defaultHttpResponse: string = useMemo(() => {
         if (currentSelectResponse) {
             const {onlyOneResponse, successFuzzer} = currentSelectResponse
@@ -968,7 +968,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
             return Uint8ArrayToString(emptyFuzzer.ResponseRaw)
         }
     }, [currentSelectResponse, currentSelectRequest])
-    /**提取器和匹配器的值 */
+    /**Values of extractors and matchers */
     const matcherAndExtractionValue: MatcherAndExtractionValueProps = useCreation(() => {
         const matchData: MatcherValueProps = {
             filterMode: "drop",
@@ -1020,7 +1020,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
                                     type: "white",
                                     title: (
                                         <div className={styles["sequence-animation-pop-title"]}>
-                                            WebFuzzer 序列动画演示
+                                            WebFuzzer sequence animation demo
                                             <div
                                                 className={styles["subtitle-help-wrapper"]}
                                                 onClick={() =>
@@ -1030,7 +1030,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
                                                     )
                                                 }
                                             >
-                                                <span className={styles["text-style"]}>官方帮助文档</span>
+                                                <span className={styles["text-style"]}>Official documentation</span>
                                                 <OutlineQuestionmarkcircleIcon />
                                             </div>
                                         </div>
@@ -1043,12 +1043,12 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
                                 })
                             }}
                         >
-                            序列配置
+                            Sequence configuration
                             <QuestionMarkCircleIcon />
                         </span>
                         <div className={styles["fuzzer-sequence-left-heard-extra"]}>
                             <YakitButton type='text' disabled={loading} onClick={() => onAddSequenceNode()}>
-                                添加节点
+                                Add Node
                                 <SolidPlusIcon className={styles["plus-icon"]} />
                             </YakitButton>
                             {loading ? (
@@ -1058,7 +1058,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
                                     colors='danger'
                                     type={"primary"}
                                 >
-                                    强制停止
+                                    Force stop
                                 </YakitButton>
                             ) : (
                                 <YakitButton
@@ -1066,7 +1066,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
                                     icon={<SolidPlayIcon className={styles["play-icon"]} />}
                                     type={"primary"}
                                 >
-                                    开始执行
+                                    Start Execution
                                 </YakitButton>
                             )}
                         </div>
@@ -1149,7 +1149,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
                                 />
                             </div>
                         )}
-                        <div className={styles["to-end"]}>已经到底啦～</div>
+                        <div className={styles["to-end"]}>Reached Bottom～</div>
                     </div>
                 </div>
                 <div
@@ -1158,7 +1158,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
                     })}
                 >
                     <div className={styles["setting-heard"]}>
-                        <span>{currentSequenceItem?.name}&nbsp;配置</span>
+                        <span>{currentSequenceItem?.name}&nbsp;Config</span>
                         <YakitButton type='text2' icon={<OutlineXIcon />} onClick={() => setIsShowSetting(false)} />
                     </div>
                     {currentSequenceItem && !!currentSequenceItem.pageId && (
@@ -1220,7 +1220,7 @@ const FuzzerSequence: React.FC<FuzzerSequenceProps> = React.memo((props) => {
                             />
                         </>
                     ) : (
-                        <YakitEmpty title='请选择 Web Fuzzer(如需使用序列，请将其他标签页拖入该分组)' />
+                        <YakitEmpty title='Please select Web Fuzzer (drag other tabs into this group for sequence use))' />
                     )}
                 </div>
             </div>
@@ -1294,7 +1294,7 @@ const SequenceItem: React.FC<SequenceItemProps> = React.memo((props) => {
     }, [pageNodeList])
     const tipText = useMemo(() => {
         const t: string[] = []
-        if (item?.inheritVariables) t.push("变量")
+        if (item?.inheritVariables) t.push("Variables")
         if (item?.inheritCookies) t.push("Cookie")
         return t.join("  ,  ")
     }, [item?.inheritVariables, item?.inheritCookies])
@@ -1365,7 +1365,7 @@ const SequenceItem: React.FC<SequenceItemProps> = React.memo((props) => {
                                             e.stopPropagation()
                                         }}
                                     >
-                                        <div className={styles["edit-name-popover-content-title"]}>修改名称</div>
+                                        <div className={styles["edit-name-popover-content-title"]}>Edit name</div>
                                         <YakitInput
                                             defaultValue={item.name}
                                             value={name}
@@ -1378,11 +1378,11 @@ const SequenceItem: React.FC<SequenceItemProps> = React.memo((props) => {
                                             onBlur={(e) => {
                                                 const {value} = e.target
                                                 if (!value) {
-                                                    yakitNotify("error", "名称不能为空")
+                                                    yakitNotify("error", "Name cannot be empty")
                                                     return
                                                 }
                                                 if (value.length > 20) {
-                                                    yakitNotify("error", "不超过20个字符")
+                                                    yakitNotify("error", "No more than 20 characters")
                                                     return
                                                 }
                                                 onUpdateItem({...item, name: value})
@@ -1434,7 +1434,7 @@ const SequenceItem: React.FC<SequenceItemProps> = React.memo((props) => {
                                     <YakitPopover
                                         title={
                                             <div className={styles["cog-popover-heard"]}>
-                                                <span className={styles["cog-popover-heard-title"]}>节点配置</span>
+                                                <span className={styles["cog-popover-heard-title"]}>Node configuration</span>
                                                 <span
                                                     className={styles["cog-popover-heard-extra"]}
                                                     onClick={(e) => {
@@ -1445,14 +1445,14 @@ const SequenceItem: React.FC<SequenceItemProps> = React.memo((props) => {
                                                         })
                                                     }}
                                                 >
-                                                    应用到其他节点
+                                                    Apply to other nodes
                                                 </span>
                                             </div>
                                         }
                                         content={
                                             <div className={styles["cog-popover-content"]}>
                                                 <LabelNodeItem
-                                                    label='继承变量'
+                                                    label='Inherit variables'
                                                     labelClassName={styles["cog-popover-content-item"]}
                                                 >
                                                     <YakitSwitch
@@ -1463,7 +1463,7 @@ const SequenceItem: React.FC<SequenceItemProps> = React.memo((props) => {
                                                     />
                                                 </LabelNodeItem>
                                                 <LabelNodeItem
-                                                    label='继承 Cookie'
+                                                    label='Inherit Cookie'
                                                     labelClassName={styles["cog-popover-content-item"]}
                                                 >
                                                     <YakitSwitch
@@ -1495,7 +1495,7 @@ const SequenceItem: React.FC<SequenceItemProps> = React.memo((props) => {
                                 </>
                             )}
                             <Divider type='vertical' style={{margin: 0}} />
-                            <Tooltip title='前往Fuzzer配置'>
+                            <Tooltip title='Go to Fuzzer configuration'>
                                 <YakitButton
                                     icon={<OutlineArrowcirclerightIcon />}
                                     type='text2'
@@ -1504,7 +1504,7 @@ const SequenceItem: React.FC<SequenceItemProps> = React.memo((props) => {
                                         e.stopPropagation()
                                         if (disabled) return
                                         if (!item.pageId) {
-                                            yakitNotify("error", "请选择页面")
+                                            yakitNotify("error", "Please select page")
                                         } else {
                                             onSelectSubMenuById(item.pageId)
                                         }
@@ -1573,7 +1573,7 @@ const SequenceResponseHeard: React.FC<SequenceResponseHeardProps> = React.memo((
         return cachedTotal === 1
     }, [cachedTotal])
 
-    // 跳转插件调试页面
+    // Jump to plugin debug page
     const handleSkipPluginDebuggerPage = async (tempType: "path" | "raw") => {
         const requests = getHttpParams()
         const params = {
@@ -1625,8 +1625,8 @@ const SequenceResponseHeard: React.FC<SequenceResponseHeardProps> = React.memo((
                 <YakitDropdownMenu
                     menu={{
                         data: [
-                            {key: "pathTemplate", label: "生成为 Path 模板"},
-                            {key: "rawTemplate", label: "生成为 Raw 模板"}
+                            {key: "pathTemplate", label: "Generate as Path template"},
+                            {key: "rawTemplate", label: "Generate as Raw template"}
                         ],
                         onClick: ({key}) => {
                             switch (key) {
@@ -1647,11 +1647,11 @@ const SequenceResponseHeard: React.FC<SequenceResponseHeardProps> = React.memo((
                     }}
                 >
                     <YakitButton type='primary' icon={<OutlineCodeIcon />}>
-                        生成 Yaml 模板
+                        Generate Yaml template
                     </YakitButton>
                 </YakitDropdownMenu>
                 <YakitButton type='primary' disabled={disabled} onClick={() => onShowAll()} style={{marginLeft: 8}}>
-                    展示全部响应
+                    Show all responses
                 </YakitButton>
             </div>
         </div>
@@ -1706,10 +1706,10 @@ const SequenceResponse: React.FC<SequenceResponseProps> = React.memo(
 
         const [refreshTrigger, setRefreshTrigger] = useState<boolean>(false)
 
-        const [showExtra, setShowExtra] = useState<boolean>(false) // Response中显示payload和提取内容
+        const [showExtra, setShowExtra] = useState<boolean>(false) // Display payload and extracted content in Response
         const [showResponseInfoSecondEditor, setShowResponseInfoSecondEditor] = useState<boolean>(true)
 
-        // 匹配器和提取器相关
+        // Related to matchers and extractors
         const [showMatcherAndExtraction, setShowMatcherAndExtraction] = useControllableValue<boolean>(props, {
             defaultValuePropName: "showMatcherAndExtraction",
             valuePropName: "showMatcherAndExtraction",
@@ -1764,7 +1764,7 @@ const SequenceResponse: React.FC<SequenceResponseProps> = React.memo(
                     }
                 } catch (error) {
                     reject(false)
-                    yakitNotify("error", `匹配器和提取器验证失败:${error}`)
+                    yakitNotify("error", `Matcher and extractor verification failed:${error}`)
                 }
             })
         })
@@ -1848,7 +1848,7 @@ const SequenceResponse: React.FC<SequenceResponseProps> = React.memo(
                         setRefreshTrigger(!refreshTrigger)
                     }}
                 >
-                    美化
+                    Beautify
                 </YakitButton>
                 <YakitButton
                     size='small'
@@ -1857,7 +1857,7 @@ const SequenceResponse: React.FC<SequenceResponseProps> = React.memo(
                         hotPatchTrigger()
                     }}
                 >
-                    热加载
+                    Hot reload
                 </YakitButton>
                 <div className={styles["resize-card-icon"]} onClick={() => setFirstFull(!firstFull)}>
                     {firstFull ? <ArrowsRetractIcon /> : <ArrowsExpandIcon />}
@@ -2020,8 +2020,8 @@ const SequenceResponse: React.FC<SequenceResponseProps> = React.memo(
                                                         onDebug={onDebug}
                                                         moreLimtAlertMsg={
                                                             <div style={{fontSize: 12}}>
-                                                                响应数量超过{fuzzerTableMaxData}
-                                                                ，为避免前端渲染压力过大，这里将丢弃部分数据包进行展示，请点击
+                                                                Response count exceeds{fuzzerTableMaxData}
+                                                                ，To reduce front-end rendering load, some data packets will be discarded.
                                                                 <YakitButton
                                                                     type='text'
                                                                     onClick={() => {
@@ -2029,9 +2029,9 @@ const SequenceResponse: React.FC<SequenceResponseProps> = React.memo(
                                                                     }}
                                                                     style={{padding: 0}}
                                                                 >
-                                                                    查看全部
+                                                                    View All
                                                                 </YakitButton>
-                                                                查看所有数据
+                                                                View all data
                                                             </div>
                                                         }
                                                         fuzzerTableMaxData={fuzzerTableMaxData}
@@ -2050,7 +2050,7 @@ const SequenceResponse: React.FC<SequenceResponseProps> = React.memo(
                                                 )}
                                             </>
                                         ) : (
-                                            <Result status={"warning"} title={"请执行序列后进行查看"} />
+                                            <Result status={"warning"} title={"Please view after performing the sequence"} />
                                         )}
                                     </div>
                                 </>
@@ -2063,7 +2063,7 @@ const SequenceResponse: React.FC<SequenceResponseProps> = React.memo(
     })
 )
 
-// 序列动画演示
+// Sequence animation demo
 interface SequenceAnimationAemonstrationProps {}
 const SequenceAnimationAemonstration: React.FC<SequenceAnimationAemonstrationProps> = React.memo((props) => {
     return (

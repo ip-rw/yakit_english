@@ -1,32 +1,32 @@
 export type PluginsEventProps = {
-    /** 刷新本地插件列表 */
+    /** Refresh Local Plugin List */
     onRefLocalPluginList: string
-    /** 触发编辑插件功能的插件ID */
+    /** Trigger Edit Plugin Function Plugin ID */
     sendEditPluginId: string
-    /** 新建|编辑插件成功后的发送信号(包含本地和线上保存, 传递数据的定义[SavePluginInfoSignalProps]) */
+    /** Create|Signal Sent After Editing Plugin Successfully (Includes Local & Online Save, Data Definition [SavePluginInfoSignalProps]]) */
     savePluginInfoSignal: string
-    /** 刷新插件商店列表 */
+    /** Refresh Plugin Store List */
     onRefOnlinePluginList: string
-    /** 刷新我的插件列表 */
+    /** Refresh My Plugins List */
     onRefUserPluginList: string
-    /** 刷新本地插件详情页面的选中的插件数据 */
+    /** Refresh Selected Plugin Data on Local Plugin Detail Page */
     onRefLocalDetailSelectPlugin: string
-    /** 修改私有域成功后发送的信号 */
+    /** Signal Sent After Modifying Private Domain Successfully */
     onSwitchPrivateDomain: string
-    /** 导入刷新本地插件列表 */
+    /** Import Refresh Local Plugin List */
     onImportRefLocalPluginList: string
-    /** 刷新插件组管理本地插件组列表 */
+    /** Refresh Local Plugin Group List in Plugin Group Management */
     onRefPluginGroupMagLocalQueryYakScriptGroup: string
-    /** 刷新插件组管理本地插件列表 */
+    /** Refresh Local Plugin List in Plugin Group Management */
     onRefPluginGroupMagLocalPluginList: string
-    /** 刷新插件组管理线上插件组列表 */
+    /** Refresh Online Plugin Group List in Plugin Group Management */
     onRefPluginGroupMagOnlineQueryYakScriptGroup: string
-    /** 刷新插件组管理线上插件列表 */
+    /** Refresh Online Plugin List in Plugin Group Management */
     onRefPluginGroupMagOnlinePluginList: string
-    /** 刷新插件组中PluginGroup选中插件组 */
+    /** Refresh Selected Plugin Group in PluginGroup */
     onRefpluginGroupSelectGroup: string
-    /** 刷新线上插件组管理列表 */
+    /** Refresh Online Plugin Group Management List */
     onRefpluginGroupList?: string
-    /**刷新单个执行页面中的插件数据 */
+    /**Refresh Plugin Data on Single Execution Page */
     onRefSinglePluginExecution?: string
 }

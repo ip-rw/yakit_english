@@ -60,7 +60,7 @@ export const WebShellURLTreeAndTable: React.FC<WebShellURLTreeAndTableProp> = (p
     }, [TreeBoxRef.current])
     
     const onRowClick = useMemoizedFn((record: TreeNode) => {
-        setSelected(record) // 更新当前选中的行
+        setSelected(record) // Update Selected Row
         // setWebShell(record)
     })
     const [pagination
@@ -76,7 +76,7 @@ export const WebShellURLTreeAndTable: React.FC<WebShellURLTreeAndTableProp> = (p
     const columns: ColumnsTypeProps[] = useMemo<ColumnsTypeProps[]>(() => {
         return [
             {
-                title: "类型",
+                title: "Type",
                 dataKey: "Type",
                 width: 40,
                 render: (_, t: TreeNode) => (
@@ -84,7 +84,7 @@ export const WebShellURLTreeAndTable: React.FC<WebShellURLTreeAndTableProp> = (p
                 )
             },
             {
-                title: "名称",
+                title: "Name",
                 dataKey: "Name",
                 width: 300,
                 render: (_, t: TreeNode) => (
@@ -92,7 +92,7 @@ export const WebShellURLTreeAndTable: React.FC<WebShellURLTreeAndTableProp> = (p
                 )
             },
             {
-                title: "大小",
+                title: "Size",
                 dataKey: "Size",
                 width: 300,
                 render: (_, t: TreeNode) => (
@@ -100,13 +100,13 @@ export const WebShellURLTreeAndTable: React.FC<WebShellURLTreeAndTableProp> = (p
                 )
             },
             {
-                title: "修改时间",
+                title: "Modification time",
                 dataKey: "ModifiedTimestamp",
                 width: 300,
                 render: (_, t: TreeNode) => t.data?.ModifiedTimestamp ? formatTimestamp(t.data?.ModifiedTimestamp) : "-"
             },
             {
-                title: "权限",
+                title: "Permissions",
                 dataKey: "Permission",
                 width: 300,
                 render: (_, t: TreeNode) =>
@@ -169,12 +169,12 @@ export const WebShellURLTreeAndTable: React.FC<WebShellURLTreeAndTableProp> = (p
 
     const fileMenuData = [
         {
-            key: "file-curd", label: "文件操作",
+            key: "file-curd", label: "File actions",
             children: [
-                {key: "file-curd-open", label: "打开"},
-                {key: "file-curd-edit", label: "编辑"},
-                {key: "file-curd-copy", label: "复制文件名"},
-                {key: "file-curd-delete", label: "删除", itemIcon: <TrashIcon/>},
+                {key: "file-curd-open", label: "Open"},
+                {key: "file-curd-edit", label: "Edit"},
+                {key: "file-curd-copy", label: "Copy Filename"},
+                {key: "file-curd-delete", label: "Delete", itemIcon: <TrashIcon/>},
             ]
         }
     ]
@@ -189,10 +189,10 @@ export const WebShellURLTreeAndTable: React.FC<WebShellURLTreeAndTableProp> = (p
     useEffect(() => {
         if (shouldEdit && content) {
             const edit = showYakitModal({
-                title: "编辑文件",
+                title: "Edit file",
                 width: "60%",
-                onCancelText: "返回",
-                onOkText: "保存",
+                onCancelText: "Back",
+                onOkText: "Save",
                 content: (
                     <>
                         <div style={{height: 500, overflow: "hidden"}}>
@@ -209,12 +209,12 @@ export const WebShellURLTreeAndTable: React.FC<WebShellURLTreeAndTableProp> = (p
                     </>
                 ),
                 onOk: () => {
-                    const newYakUrl = {...yakUrl};  // 创建一个新的对象，复制 yakUrl 的所有属性
+                    const newYakUrl = {...yakUrl};  // Create new object, copy all properties of yakUrl
                     newYakUrl.Query = newYakUrl.Query.map(queryItem => {
                         if (queryItem.Key === 'mode') {
-                            return {...queryItem, Value: 'append'};  // 如果键是 'mode'，则将值改为 'show'
+                            return {...queryItem, Value: 'append'};  // If the key is 'mode'，Then change the value to 'show'
                         } else {
-                            return queryItem;  // 否则保持原样
+                            return queryItem;  // Otherwise, keep as is
                         }
                     });
 
@@ -225,31 +225,31 @@ export const WebShellURLTreeAndTable: React.FC<WebShellURLTreeAndTableProp> = (p
                     }).then((r) => {
                         edit.destroy();
                     }).catch((e) => {
-                            yakitFailed(`更新失败: ${e}`);
+                            yakitFailed(`Update Failed: ${e}`);
                         }
                     );
-                    setShouldEdit(false);  // 在保存后重置 shouldEdit
+                    setShouldEdit(false);  // Reset shouldEdit after saving
                     edit.destroy();
                 },
                 onCancel: () => {
                     edit.destroy();
-                    setShouldEdit(false);  // 在保存后重置 shouldEdit
+                    setShouldEdit(false);  // Reset shouldEdit after saving
                 },
 
                 modalAfterClose: () => edit && edit.destroy(),
             });
-            setShouldEdit(false); // 在弹出模态框后重置 shouldEdit
+            setShouldEdit(false); // Reset shouldEdit after modal pops up
         }
 
     }, [content, shouldEdit]);
 
     const showFile = (url: YakURL) => {
-        const newYakUrl = {...url};  // 创建一个新的对象，复制 yakUrl 的所有属性
+        const newYakUrl = {...url};  // Create new object, copy all properties of yakUrl
         newYakUrl.Query = newYakUrl.Query.map(queryItem => {
             if (queryItem.Key === 'mode') {
-                return {...queryItem, Value: 'show'};  // 如果键是 'mode'，则将值改为 'show'
+                return {...queryItem, Value: 'show'};  // If the key is 'mode'，Then change the value to 'show'
             } else {
-                return queryItem;  // 否则保持原样
+                return queryItem;  // Otherwise, keep as is
             }
         });
 
@@ -259,7 +259,7 @@ export const WebShellURLTreeAndTable: React.FC<WebShellURLTreeAndTableProp> = (p
                 // const contentStr = Buffer.from(newContent).toString()
                 const contentStr = rsp.Resources[0]?.Extra.find(extra => extra.Key === 'content')?.Value || '';
                 setContent(contentStr);
-                setShouldEdit(true);  // 设置 shouldEdit 为 true
+                setShouldEdit(true);  // Set shouldEdit to true
             }
         ).finally(() => {
                 setLoading(false);
@@ -285,7 +285,7 @@ export const WebShellURLTreeAndTable: React.FC<WebShellURLTreeAndTableProp> = (p
         if (rowData) {
             setSelected(rowData)
         }
-        // showByCustom已废弃，删除，更换为 showByRightContext
+        // showByCustom deprecated, remove, replace with showByRightContext
         // showByCustom(
         //     {
         //         reactNode: (
@@ -355,7 +355,7 @@ export const WebShellURLTreeAndTable: React.FC<WebShellURLTreeAndTableProp> = (p
             setLoading(false)
         }).catch((error) => {
             setLoading(false)
-            yakitFailed(`加载失败: ${error}`)
+            yakitFailed(`Loading Failed: ${error}`)
         })
     }, [currentYakURL])
 
@@ -370,7 +370,7 @@ export const WebShellURLTreeAndTable: React.FC<WebShellURLTreeAndTableProp> = (p
                     schema={props.shellType.toLowerCase()}
                     // searchVal={"C:/Users/Administrator/Desktop/apache-tomcat-8.5.84/bin/?op=file&mode=list&id=" + props.Id}
                     searchYakURL={getYakURL()}
-                    searchPlaceholder='请输入域名进行搜索，例baidu.com'
+                    searchPlaceholder='Enter domain to search, e.g., baidu.com'
                     onSelectNodes={(nodes) => {
                         setLoading(false)
                         if (Array.isArray(nodes)) {
@@ -408,9 +408,9 @@ export const WebShellURLTreeAndTable: React.FC<WebShellURLTreeAndTableProp> = (p
                         renderTitle={
                             <div className={cveStyles["cve-list-title-body"]}>
                                 <div className={cveStyles["cve-list-title-left"]}>
-                                    <div className={cveStyles["cve-list-title"]}>文件列表</div>
+                                    <div className={cveStyles["cve-list-title"]}>File list</div>
                                     <Space>
-                                        <Tooltip title='刷新会重置所有查询条件'>
+                                        <Tooltip title='Refresh will reset all search conditions'>
                                             <Button
                                                 size={"middle"}
                                                 type={"link"}

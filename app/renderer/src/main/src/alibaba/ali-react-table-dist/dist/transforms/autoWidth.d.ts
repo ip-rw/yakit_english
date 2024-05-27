@@ -1,21 +1,21 @@
 import React from 'react';
 import { BaseTable } from '../base-table';
 import { TableTransform } from '../interfaces';
-/** 自适应列宽
+/** Adaptive Col Width
  *
- * @deprecated transform 用法已经过时，请使用 pipeline 来对表格进行拓展
+ * @deprecated transform usage obsolete, use pipeline for table expansion
  *
- * @param tableRef BaseTable 的 ref
- * @param options 参数
- * @param deps 重新调整列宽的依赖数组，每当依赖数组发生变化时， useAutoWidthTransform 会根据单元格内容的实际渲染宽度 设置单元格的宽度
+ * @param tableRef Ref to BaseTable
+ * @param options Parameters
+ * @param deps Deps array for resizing cols, useAutoWidthTransform sets col width based on actual cell content width upon deps change
  *
- * options 说明：
- * - options.appendExpander 是否在列的末尾追加可伸缩列
- * - options.expanderVisibility 设置为 `'hidden'` 可以隐藏可伸缩列
- * - options.wrapperStyle 单元格中 div.auto-width-wrapper 的样式
- * - options.initColumnWidth 自适应的初始列宽
+ * options description：
+ * - options.appendExpander Add expander at end of cols?
+ * - options.expanderVisibility set to `'hidden'` Hideable expander cols
+ * - options.wrapperStyle Style for div.auto-width-wrapper in cells
+ * - options.initColumnWidth Adaptive initial col width
  *
- * 注意 useAutoWidthTransform 是一个 React hooks，要遵循 hooks 的用法规范
+ * Note useAutoWidth-transform follows React hooks conventions
  * */
 export declare function useAutoWidthTransform(tableRef: React.MutableRefObject<BaseTable>, options?: {
     wrapperStyle?: React.CSSProperties;

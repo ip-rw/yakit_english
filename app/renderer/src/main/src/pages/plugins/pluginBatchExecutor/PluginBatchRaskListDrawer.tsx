@@ -56,19 +56,19 @@ const PluginBatchRaskListDrawer: React.FC<PluginBatchRaskListDrawerProps> = Reac
             visible={visible}
             onClose={onClose}
             width='45%'
-            title='任务列表'
+            title='Task List'
             extra={
                 <>
                     {selectedRowKeys.length === 0 ? (
-                        <YakitPopconfirm title='该操作会清空下面所有数据' onConfirm={onRemove}>
+                        <YakitPopconfirm title='This operation will clear all below data' onConfirm={onRemove}>
                             <YakitButton loading={removeLoading} type='primary' danger>
-                                清空
+                                Clear
                             </YakitButton>
                         </YakitPopconfirm>
                     ) : (
-                        <YakitPopconfirm title='该操作会删除勾选数据' onConfirm={onRemove}>
+                        <YakitPopconfirm title='This operation will delete selected data' onConfirm={onRemove}>
                             <YakitButton loading={removeLoading} type='primary' danger>
-                                删除
+                                Delete
                             </YakitButton>
                         </YakitPopconfirm>
                     )}
@@ -146,29 +146,29 @@ const PluginBatchRaskList: React.FC<PluginBatchRaskListProps> = React.memo(
                     return (
                         <div className={styles["table-status-item"]}>
                             <SolidCheckCircleIcon className={styles["icon-success"]} />
-                            <span className={styles["status-text"]}>已完成</span>
+                            <span className={styles["status-text"]}>Completed</span>
                         </div>
                     )
                 case "executing":
                     return (
                         <div className={styles["table-status-item"]}>
                             <OutlineLoadingIcon className={styles["icon-primary"]} />
-                            <span className={styles["status-text"]}>执行中</span>
+                            <span className={styles["status-text"]}>Executing</span>
                         </div>
                     )
                 case "paused":
                     return (
                         <div className={styles["table-status-item"]}>
                             <SolidPlayIcon className={styles["icon-helper"]} />
-                            <span className={styles["status-text"]}>暂停</span>
+                            <span className={styles["status-text"]}>Pause</span>
                         </div>
                     )
                 default:
                     return (
                         <div className={styles["table-status-item"]}>
                             <SolidXcircleIcon className={styles["icon-danger"]} />
-                            <span className={styles["status-text"]}>失败</span>
-                            <Tooltip title={record.Reason || "未知原因"}>
+                            <span className={styles["status-text"]}>Failed</span>
+                            <Tooltip title={record.Reason || "Unknown Reason"}>
                                 <OutlineQuestionmarkcircleIcon className={styles["icon-question"]} />
                             </Tooltip>
                         </div>
@@ -186,7 +186,7 @@ const PluginBatchRaskList: React.FC<PluginBatchRaskListProps> = React.memo(
                                 onPaused(record)
                             }}
                         >
-                            暂停
+                            Pause
                         </YakitButton>
                     )
                 case "paused":
@@ -198,7 +198,7 @@ const PluginBatchRaskList: React.FC<PluginBatchRaskListProps> = React.memo(
                                 onContinue(record)
                             }}
                         >
-                            继续
+                            Continue
                         </YakitButton>
                     )
                 default:
@@ -211,7 +211,7 @@ const PluginBatchRaskList: React.FC<PluginBatchRaskListProps> = React.memo(
                                 onRemoveSingle(record.TaskId)
                             }}
                         >
-                            删除
+                            Delete
                         </YakitButton>
                     )
             }
@@ -219,7 +219,7 @@ const PluginBatchRaskList: React.FC<PluginBatchRaskListProps> = React.memo(
         const columns: ColumnsTypeProps[] = useCreation<ColumnsTypeProps[]>(() => {
             return [
                 {
-                    title: "扫描目标",
+                    title: "Scan Target",
                     dataKey: "FirstTarget",
                     width: 160,
                     fixed: "left",
@@ -229,7 +229,7 @@ const PluginBatchRaskList: React.FC<PluginBatchRaskListProps> = React.memo(
                     }
                 },
                 {
-                    title: "状态",
+                    title: "Status",
                     dataKey: "Status",
                     width: 90,
                     render: (_, record: HybridScanTask) => getStatusNode(record),
@@ -241,19 +241,19 @@ const PluginBatchRaskList: React.FC<PluginBatchRaskListProps> = React.memo(
                         filterKey: "StatusType",
                         filters: [
                             {
-                                label: "已完成",
+                                label: "Completed",
                                 value: "done"
                             },
                             {
-                                label: "执行中",
+                                label: "Executing",
                                 value: "executing"
                             },
                             {
-                                label: "暂停",
+                                label: "Pause",
                                 value: "paused"
                             },
                             {
-                                label: "失败",
+                                label: "Failed",
                                 value: "error"
                             }
                         ]
@@ -261,7 +261,7 @@ const PluginBatchRaskList: React.FC<PluginBatchRaskListProps> = React.memo(
                 },
 
                 {
-                    title: "创建时间",
+                    title: "Created time",
                     dataKey: "CreatedAt",
                     render: (v) => (v ? formatTimestamp(v) : "-"),
                     sorterProps: {
@@ -270,7 +270,7 @@ const PluginBatchRaskList: React.FC<PluginBatchRaskListProps> = React.memo(
                     }
                 },
                 {
-                    title: "更新时间",
+                    title: "Update Time",
                     dataKey: "UpdatedAt",
                     render: (v) => (v ? formatTimestamp(v) : "-"),
                     sorterProps: {
@@ -279,7 +279,7 @@ const PluginBatchRaskList: React.FC<PluginBatchRaskListProps> = React.memo(
                     }
                 },
                 {
-                    title: "操作",
+                    title: "Action",
                     dataKey: "action",
                     fixed: "right",
                     width: 120,
@@ -296,7 +296,7 @@ const PluginBatchRaskList: React.FC<PluginBatchRaskListProps> = React.memo(
                                         onDetails(record.TaskId, "new")
                                     }}
                                 >
-                                    重试
+                                    Retry
                                 </YakitButton>
                             ) : (
                                 <YakitButton
@@ -306,7 +306,7 @@ const PluginBatchRaskList: React.FC<PluginBatchRaskListProps> = React.memo(
                                         onDetails(record.TaskId, "status")
                                     }}
                                 >
-                                    查看
+                                    View
                                 </YakitButton>
                             )}
                         </>
@@ -369,11 +369,11 @@ const PluginBatchRaskList: React.FC<PluginBatchRaskListProps> = React.memo(
         })
         const onDetails = useMemoizedFn((runtimeId: string, hybridScanMode: HybridScanModeType) => {
             const current: PageNodeItemProps | undefined = getBatchExecutorByRuntimeId(runtimeId)
-            // 重试new 都是新建页面
+            // RetryNew creates a new page
             if (!!current && hybridScanMode !== "new") {
                 emiter.emit("switchSubMenuItem", JSON.stringify({pageId: current.pageId}))
                 setTimeout(() => {
-                    // 页面打开的情况下，查看只需要切换二级菜单选中项，不需要重新查询数据
+                    // Switch submenu only, no data requery needed if page open
                     if (hybridScanMode !== "status") {
                         emiter.emit(
                             "switchTaskStatus",
@@ -448,11 +448,11 @@ const PluginBatchRaskList: React.FC<PluginBatchRaskListProps> = React.memo(
                 setIsAllSelect(false)
             }
         })
-        /**暂停任务 */
+        /**Pause Task */
         const onPaused = useMemoizedFn((record: HybridScanTask) => {
             onDetails(record.TaskId, "pause")
         })
-        /**继续任务 */
+        /**Continue Task */
         const onContinue = useMemoizedFn((record: HybridScanTask) => {
             onDetails(record.TaskId, "resume")
         })

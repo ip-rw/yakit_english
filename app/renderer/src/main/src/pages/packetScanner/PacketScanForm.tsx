@@ -66,7 +66,7 @@ export const PacketScanForm: React.FC<PacketScanFormProp> = (props) => {
         e.preventDefault()
 
         if (plugins.length < 0) {
-            info("未选择插件无法进行扫描")
+            info("Scan Unavailable Without Plugin Selection")
             return
         }
 
@@ -78,22 +78,22 @@ export const PacketScanForm: React.FC<PacketScanFormProp> = (props) => {
             HTTPRequest: httpRequest,
             PluginList: plugins
         } as ExecPacketScanRequest, token).then(() => {
-            info("开始扫描数据包")
+            info("Begin Packet Scan")
         })
     }} layout={"horizontal"}>
         <Form.Item style={{marginBottom: 4}}>
             {loading && <Button type={"primary"} danger={true} onClick={() => {
                 ipcRenderer.invoke("cancel-ExecPacketScan", token)
-            }}>停止任务</Button>}
-            {!loading && <Button type="primary" htmlType="submit"> 开始扫描 </Button>}
+            }}>Stop Task</Button>}
+            {!loading && <Button type="primary" htmlType="submit"> Start Scan </Button>}
         </Form.Item>
         {/*<InputInteger*/}
-        {/*    label={"设置请求超时时间"}*/}
+        {/*    label={"Set Request Timeout"}*/}
         {/*    setValue={Timeout => setParams({...params, Timeout})} value={params.Timeout}*/}
         {/*/>*/}
         <InputInteger
             size={"small"}
-            label={"总超时时间"}
+            label={"Total Timeout"}
             setValue={TotalTimeoutSeconds => setParams({...params, TotalTimeoutSeconds})}
             value={params.TotalTimeoutSeconds}
         />

@@ -27,7 +27,7 @@ interface MenuPluginProps {
 export const MenuPlugin: React.FC<MenuPluginProps> = React.memo((props) => {
     const {loading, pluginList, onMenuSelect, onRestore: restoreCallback} = props
 
-    /** 转换成菜单组件统一处理的数据格式，插件是否下载的验证由菜单组件处理，这里不处理 */
+    /** Convert to the menu component unified data format, plugin download verification handled by menu component, not here */
     const onMenu = useMemoizedFn((pluginId: number, pluginName: string) => {
         if (!pluginName) return
 
@@ -68,7 +68,7 @@ export const MenuPlugin: React.FC<MenuPluginProps> = React.memo((props) => {
                     })
             })
             .catch((e: any) => {
-                yakitNotify("error", `更新菜单失败:${e}`)
+                yakitNotify("error", `Menu update failed:${e}`)
             })
     })
 
@@ -145,10 +145,10 @@ export const MenuPlugin: React.FC<MenuPluginProps> = React.memo((props) => {
                 <div className={styles["list-custom"]}>
                     <div className={classNames(styles["btn-style"], styles["add-list"])} onClick={onCustom}>
                         <SMViewGridAddIcon />
-                        自定义...
+                        Custom...
                     </div>
                     <div className={classNames(styles["btn-style"], styles["restore-style"])} onClick={onRestore}>
-                        复原菜单
+                        Restore Menu
                     </div>
                 </div>
             </div>
@@ -157,7 +157,7 @@ export const MenuPlugin: React.FC<MenuPluginProps> = React.memo((props) => {
 
     return (
         <div className={styles["menu-plugin-wrapper"]}>
-            <div className={styles["plugin-header"]}>常用插件</div>
+            <div className={styles["plugin-header"]}>Common Plugins</div>
             <div className={styles["plugin-wrapper"]}>
                 <div className={styles["plugin-content"]}>
                     <div className={styles["plugin-body"]}>

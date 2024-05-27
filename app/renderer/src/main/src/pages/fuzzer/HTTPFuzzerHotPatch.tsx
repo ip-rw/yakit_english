@@ -27,34 +27,34 @@ export interface HTTPFuzzerHotPatchProp {
     initialHotPatchCodeWithParamGetter?: string
 }
 
-const HotPatchDefaultContent = `// 使用标签 {{yak(handle|param)}} 可触发热加载调用
+const HotPatchDefaultContent = `// Use Tags {{yak(handle|param)}} Triggers hot reload calls
 handle = func(param) {
-    // 在这里可以直接返回一个字符串
+    // Can directly return a string here
     return codec.EncodeBase64("base64-prefix" + param) + sprintf("_origin(%v)", param)
 }
 
-// 使用标签 {{yak(handle1|...)}} 可触发热加载调用
+// Use Tags {{yak(handle1|...)}} Triggers hot reload calls
 handle1 = func(param) {
-    // 这个特殊的 Hook 也支持返回数组
+    // This special Hook also supports returning arrays
     return ["12312312", "abc", "def"]
 }
 
-// beforeRequest 允许发送数据包前再做一次处理，定义为 func(origin []byte) []byte
+// beforeRequest allows for preprocessing data before sending, defined as func(origin []byte) []byte
 beforeRequest = func(req) {
     /*
-        // 我们可以提供一些基础用法，比如说单纯就是替换一个时间戳～
+        // We can provide some basic usages, like simply replacing a timestamp～
         req = str.ReplaceAll(req, "TIMESTAMP_INT64", sprint(time.Now().Unix()))
     */ 
     return []byte(req)
 }
 
-// afterRequest 允许对每一个请求的响应做处理，定义为 func(origin []byte) []byte
+// afterRequest allows processing for each response, defined as func(origin []byte) []byte
 afterRequest = func(rsp) {
     return []byte(rsp)
 }
 
-// mirrorHTTPFlow 允许对每一个请求的响应做处理，定义为 func(req []byte, rsp []byte, params map[string]any) map[string]any
-// 返回值回作为下一个请求的参数，或者提取的数据，如果你需要解密响应内容，在这里操作是最合适的
+// mirrorHTTPFlow allows processing for each request response, defined as func(req []byte, rsp []byte, params map[string]any) map[string]any
+// Returned values serve as parameters for the next request or extracted data, ideal for decrypting response content here
 mirrorHTTPFlow = func(req, rsp, params) {
     return params
 }
@@ -62,15 +62,15 @@ mirrorHTTPFlow = func(req, rsp, params) {
 
 const HotPatchParamsGetterDefault = `__getParams__ = func() {
     /*
-        __getParams__ 是一个用户可控生成复杂数据初始数据的参数：
-        可以在这个函数中同时处理所有数据：
+        __getParams__ is a user-controllable parameter for generating initial complex data：
+        Can process all data in this function：
         
         1. CSRF Bypass
-        2. 获取额外信息，进行强关联的信息变形
+        2. Gather additional info for strong correlation transformations
     */
     return {
-        // "array-params": [1, 2, 3, 512312],  # 可用 {{params(array-params)}}
-        // "foo-params": "asdfasdfassss",      # 可用 {{params(foo-params)}}
+        // "array-params": [1, 2, 3, 512312],  # Available {{params(array-params)}}
+        // "foo-params": "asdfasdfassss",      # Available {{params(foo-params)}}
     }
 }`
 
@@ -110,8 +110,8 @@ export const HTTPFuzzerHotPatch: React.FC<HTTPFuzzerHotPatchProp> = (props) => {
             let m = YakitModalConfirm({
                 width: 420,
                 type: "white",
-                onCancelText: "不保存",
-                onOkText: "保存",
+                onCancelText: "Do Not Save",
+                onOkText: "Save",
                 icon: <ExclamationCircleOutlined />,
                 style: {top: "20%"},
                 onOk: () => {
@@ -123,7 +123,7 @@ export const HTTPFuzzerHotPatch: React.FC<HTTPFuzzerHotPatchProp> = (props) => {
                     props.onCancel()
                     m.destroy()
                 },
-                content: "是否保存修改的【热加载代码】"
+                content: "Save Changes to Hot Reload Code?】"
             })
         } else {
             props.onCancel()
@@ -133,7 +133,7 @@ export const HTTPFuzzerHotPatch: React.FC<HTTPFuzzerHotPatchProp> = (props) => {
     return (
         <div className={styles["http-fuzzer-hotPatch"]}>
             <div className={styles["http-fuzzer-hotPatch-heard"]}>
-                <span>调试 / 插入热加载代码</span>
+                <span>Debug / Insert Hot Reload Code</span>
                 <OutlineXIcon onClick={onClose} />
             </div>
             <Form
@@ -158,7 +158,7 @@ export const HTTPFuzzerHotPatch: React.FC<HTTPFuzzerHotPatchProp> = (props) => {
                                     <AutoCard
                                         size={"small"}
                                         bordered={false}
-                                        title={<span style={{color: "var(--yakit-header-color)"}}>结果展示</span>}
+                                        title={<span style={{color: "var(--yakit-header-color)"}}>Result Display</span>}
                                         extra={
                                             <Space>
                                                 <YakitButton
@@ -167,7 +167,7 @@ export const HTTPFuzzerHotPatch: React.FC<HTTPFuzzerHotPatchProp> = (props) => {
                                                         callCopyToClipboard(data.join("\n"))
                                                     }}
                                                 >
-                                                    复制 Fuzz 结果
+                                                    Copy Fuzz Result
                                                 </YakitButton>
                                                 <YakitButton
                                                     type='text'
@@ -176,7 +176,7 @@ export const HTTPFuzzerHotPatch: React.FC<HTTPFuzzerHotPatchProp> = (props) => {
                                                     }}
                                                 >
                                                     {" "}
-                                                    复制 Fuzz 标签
+                                                    Copy Fuzz Tag
                                                 </YakitButton>
                                             </Space>
                                         }
@@ -194,14 +194,14 @@ export const HTTPFuzzerHotPatch: React.FC<HTTPFuzzerHotPatchProp> = (props) => {
                 <Form.Item
                     label={
                         <Space>
-                            模版内容
+                            Template Content
                             <YakitButton
                                 type='text'
                                 onClick={() => {
                                     callCopyToClipboard(params.Template)
                                 }}
                             >
-                                点击复制
+                                Click to Copy
                             </YakitButton>
                             {props.onInsert && (
                                 <YakitButton
@@ -211,17 +211,17 @@ export const HTTPFuzzerHotPatch: React.FC<HTTPFuzzerHotPatchProp> = (props) => {
                                         if (props.onSaveCode) props.onSaveCode(params.HotPatchCode)
                                     }}
                                 >
-                                    插入编辑器位置
+                                    Insert at Editor Position
                                 </YakitButton>
                             )}
-                            {/*<Tooltip title={<>{`支持：{{params(...)}} 标签`}</>}>*/}
+                            {/*<Tooltip title={<>{`Support：{{params(...)}} Tags`}</>}>*/}
                             {/*    <YakitCheckbox*/}
                             {/*        checked={dynamicParam}*/}
                             {/*        onChange={(e) => {*/}
                             {/*            setDynamicParam(e.target.checked)*/}
                             {/*        }}*/}
                             {/*    >*/}
-                            {/*        预加载参数展开*/}
+                            {/*        Preload Params Expansion*/}
                             {/*    </YakitCheckbox>*/}
                             {/*</Tooltip>*/}
                         </Space>
@@ -238,7 +238,7 @@ export const HTTPFuzzerHotPatch: React.FC<HTTPFuzzerHotPatchProp> = (props) => {
                 <Form.Item
                     label={
                         <Space style={{lineHeight: "16px"}}>
-                            热加载代码
+                            Hot Reload Code
                             {props.onSaveCode && (
                                 <YakitButton
                                     type={"primary"}
@@ -246,19 +246,19 @@ export const HTTPFuzzerHotPatch: React.FC<HTTPFuzzerHotPatchProp> = (props) => {
                                         try {
                                             if (props.onSaveCode) props.onSaveCode(params.HotPatchCode)
                                             setTimeout(() => {
-                                                yakitNotify("success", "保存成功")
+                                                yakitNotify("success", "Save Successful")
                                             }, 100)
                                         } catch (error) {
-                                            yakitNotify("error", "保存失败:" + error)
+                                            yakitNotify("error", "Save Failed:" + error)
                                         }
                                     }}
                                 >
-                                    保存
+                                    Save
                                 </YakitButton>
                             )}
                             <div>
                                 <YakitPopconfirm
-                                    title={"点击该按钮将会重置热加载代码，代码可能会丢失，请谨慎操作"}
+                                    title={"Clicking this will reset hot reload code, code may be lost, proceed with caution"}
                                     onConfirm={() => {
                                         if (props.onSaveCode) props.onSaveCode(params.HotPatchCode)
 
@@ -268,7 +268,7 @@ export const HTTPFuzzerHotPatch: React.FC<HTTPFuzzerHotPatchProp> = (props) => {
                                     <YakitButton icon={<RefreshIcon />} type='text' />
                                 </YakitPopconfirm>
                                 <YakitPopover
-                                    title={"扩大编辑器"}
+                                    title={"Expand Editor"}
                                     content={
                                         <>
                                             <YakitRadioButtons
@@ -280,15 +280,15 @@ export const HTTPFuzzerHotPatch: React.FC<HTTPFuzzerHotPatchProp> = (props) => {
                                                 options={[
                                                     {
                                                         value: 250,
-                                                        label: "小"
+                                                        label: "Small"
                                                     },
                                                     {
                                                         value: 400,
-                                                        label: "中"
+                                                        label: "Medium"
                                                     },
                                                     {
                                                         value: 600,
-                                                        label: "大"
+                                                        label: "Large"
                                                     }
                                                 ]}
                                             />
@@ -309,9 +309,9 @@ export const HTTPFuzzerHotPatch: React.FC<HTTPFuzzerHotPatchProp> = (props) => {
                         />
                     </div>
                 </Form.Item>
-                <Form.Item help={"调试须知: 调试执行将会仅最多执行20秒 或 渲染 Payload 最多 300 条"}>
+                <Form.Item help={"Debug Notice: Debug execute will only run for up to 20 seconds or render up to 300 Payloads"}>
                     <YakitButton loading={loading} type='primary' htmlType='submit'>
-                        调试执行
+                        Debug Execute
                     </YakitButton>
                 </Form.Item>
             </Form>

@@ -17,30 +17,30 @@ import emiter from "@/utils/eventBus/eventBus"
 
 const { ipcRenderer } = window.require("electron")
 
-/** @name 基础菜单组配置信息 */
+/** @name Base Menu Config */
 export const baseMenuLists: OtherMenuListProps = {
     fontSize: {
         menu: [
             {
                 key: "font-size",
-                label: "字体大小",
+                label: "Font Size",
                 children: [
-                    { key: "font-size-small", label: "小" },
-                    { key: "font-size-middle", label: "中" },
-                    { key: "font-size-large", label: "大" }
+                    { key: "font-size-small", label: "Small" },
+                    { key: "font-size-middle", label: "Medium" },
+                    { key: "font-size-large", label: "Large" }
                 ]
             }
         ],
         onRun: (editor: YakitIMonacoEditor, key: string) => { }
     },
     cut: {
-        menu: [{ key: "cut", label: "剪切" }],
+        menu: [{ key: "cut", label: "Cut" }],
         onRun: (editor: YakitIMonacoEditor, key: string) => {
             if (editor?.executeEdits) {
-                /** 获取需要剪切的范围 */
+                /** Get Cut Range */
                 const position = fetchSelectionRange(editor, true)
                 if (!position) return
-                /** 获取需要剪切的内容 */
+                /** Get Cut Content */
                 const content = fetchCursorContent(editor, true)
 
                 const flag = editor.executeEdits("", [
@@ -59,18 +59,18 @@ export const baseMenuLists: OtherMenuListProps = {
         }
     },
     copy: {
-        menu: [{ key: "copy", label: "复制" }],
+        menu: [{ key: "copy", label: "Copy" }],
         onRun: (editor: YakitIMonacoEditor, key: string) => {
             if (editor) ipcRenderer.invoke("set-copy-clipboard", `${fetchCursorContent(editor, true)}`)
             return
         }
     },
     paste: {
-        menu: [{ key: "paste", label: "粘贴" }],
+        menu: [{ key: "paste", label: "Paste" }],
         onRun: (editor: YakitIMonacoEditor, key: string) => {
             if (!editor) return
 
-            /** 获取需要粘贴的范围 */
+            /** Get Paste Range */
             const position = fetchSelectionRange(editor, false)
             if (!position) return
 
@@ -102,28 +102,28 @@ interface MutateHTTPRequestParams {
     UploadEncode: boolean
 }
 
-/** @name 编码模块子菜单 */
+/** @name Encoding Submenu */
 const codeSubmenu: { key: string; label: string }[] = [
-    { key: "double-urlencode", label: "双重 URL 编码" },
-    { key: "base64-url-encode", label: "先 Base64 后 URL 编码" },
-    { key: "base64", label: "Base64 编码" },
-    { key: "hex-encode", label: "HEX 编码（十六进制编码）" },
-    { key: "htmlencode", label: "HTML 编码" },
-    { key: "unicode-encode", label: "Unicode 编码（\\uXXXX 编码）" },
-    { key: "urlencode", label: "URL 编码" },
-    { key: "urlescape", label: "URL 编码(只编码特殊字符)" }
+    { key: "double-urlencode", label: "Double URL Encode" },
+    { key: "base64-url-encode", label: "Base64 then URL Encode" },
+    { key: "base64", label: "Base64 Encode" },
+    { key: "hex-encode", label: "HEX Encode）" },
+    { key: "htmlencode", label: "HTML Encode" },
+    { key: "unicode-encode", label: "Unicode Encode (\\uXXXX)）" },
+    { key: "urlencode", label: "URL Encode" },
+    { key: "urlescape", label: "URL Encode (Special Chars Only))" }
 ]
-/** @name 解码模块子菜单 */
+/** @name Decode Submenu */
 const decodeSubmenu: { key: string; label: string }[] = [
-    { key: "url-base64-decode", label: "先 URL 后 Base64 解码" },
-    { key: "base64-decode", label: "Base64 解码" },
-    { key: "hex-decode", label: "HEX 解码（十六进制解码）" },
-    { key: "htmldecode", label: "HTML 解码" },
-    { key: "jwt-parse-weak", label: "JWT 解析（同时测试弱 Key）" },
-    { key: "unicode-decode", label: "Unicode 解码（\\uXXXX 解码）" },
-    { key: "urlunescape", label: "URL 解码" }
+    { key: "url-base64-decode", label: "URL then Base64 Decode" },
+    { key: "base64-decode", label: "Base64 Decode" },
+    { key: "hex-decode", label: "HEX Decode）" },
+    { key: "htmldecode", label: "HTML Decode" },
+    { key: "jwt-parse-weak", label: "JWT Decode (Weak Key Test)）" },
+    { key: "unicode-decode", label: "Unicode Decode (\\uXXXX)）" },
+    { key: "urlunescape", label: "URL Decode" }
 ]
-/** @name HTTP数据包变形模块子菜单 */
+/** @name HTTP Transform Submenu */
 const httpSubmenu: {
     key: string
     label: string
@@ -132,7 +132,7 @@ const httpSubmenu: {
 }[] = [
         {
             key: "mutate-http-method-get",
-            label: "改变 HTTP 方法成 GET",
+            label: "Change Method to GET",
             params: { FuzzMethods: ["GET"] } as MutateHTTPRequestParams,
             keybindings: [
                 process.platform === "darwin" ? YakitEditorKeyCode.Meta : YakitEditorKeyCode.Control,
@@ -142,25 +142,25 @@ const httpSubmenu: {
         },
         {
             key: "mutate-http-method-post",
-            label: "改变 HTTP 方法成 POST",
+            label: "Change Method to POST",
             params: { FuzzMethods: ["POST"] } as MutateHTTPRequestParams
         },
         {
             key: "mutate-http-method-head",
-            label: "改变 HTTP 方法成 HEAD",
+            label: "Change Method to HEAD",
             params: { FuzzMethods: ["HEAD"] } as MutateHTTPRequestParams
         },
-        { key: "mutate-chunked", label: "HTTP Chunk 编码", params: { ChunkEncode: true } as MutateHTTPRequestParams },
-        { key: "mutate-upload", label: "修改为上传数据包", params: { UploadEncode: true } as MutateHTTPRequestParams }
+        { key: "mutate-chunked", label: "HTTP Chunk Encode", params: { ChunkEncode: true } as MutateHTTPRequestParams },
+        { key: "mutate-upload", label: "Change to Upload Packet", params: { UploadEncode: true } as MutateHTTPRequestParams }
     ]
-/** @name 内置菜单组配置信息 */
+/** @name Built-in Menu Config */
 
 export const extraMenuLists: OtherMenuListProps = {
     code: {
         menu: [
             {
                 key: "code",
-                label: "编码",
+                label: "Encode",
                 children: [...codeSubmenu] as any as EditorMenuItemType[]
             }
         ],
@@ -178,7 +178,7 @@ export const extraMenuLists: OtherMenuListProps = {
         menu: [
             {
                 key: "decode",
-                label: "解码",
+                label: "Decode",
                 children: [...decodeSubmenu] as any as EditorMenuItemType[]
             }
         ],
@@ -196,7 +196,7 @@ export const extraMenuLists: OtherMenuListProps = {
         menu: [
             {
                 key: "http",
-                label: "HTTP数据包变形",
+                label: "HTTP Transform",
                 children: [...httpSubmenu] as any as EditorMenuItemType[]
             }
         ],
@@ -216,7 +216,7 @@ export const extraMenuLists: OtherMenuListProps = {
         menu: [
             {
                 key: "customhttp",
-                label: "自定义HTTP数据包变形",
+                label: "Custom HTTP Transform",
                 //  generate from YakitEditor.tsx
                 children: [],
             }
@@ -233,7 +233,7 @@ export const extraMenuLists: OtherMenuListProps = {
         menu: [
             {
                 key: "customcontextmenu",
-                label: "自定义右键菜单执行",
+                label: "Custom Context Menu Action",
                 //  generate from YakitEditor.tsx
                 children: [],
             }
@@ -260,7 +260,7 @@ export const extraMenuLists: OtherMenuListProps = {
 
 
 
-/** @name codec模块和JSON美化模块处理函数 */
+/** @name Codec & JSON Beautify Function */
 const execCodec = async (
     typeStr: string,
     text: string,
@@ -278,7 +278,7 @@ const execCodec = async (
                     width: "50%",
                     content: (
                         <AutoCard
-                            title={title || "编码结果"}
+                            title={title || "Encoding Result"}
                             bordered={false}
                             extra={
                                 <YakitButton
@@ -293,7 +293,7 @@ const execCodec = async (
                                         m.destroy()
                                     }}
                                 >
-                                    替换内容
+                                    Replace Content
                                 </YakitButton>
                             }
                             size={"small"}
@@ -308,7 +308,7 @@ const execCodec = async (
 
             if (noPrompt) {
                 showModal({
-                    title: title || "编码结果",
+                    title: title || "Encoding Result",
                     width: "50%",
                     content: (
                         <div style={{ width: "100%" }}>
@@ -329,7 +329,7 @@ interface MutateHTTPRequestResponse {
     Result: Uint8Array
     ExtraResults: Uint8Array[]
 }
-/** @name HTTP数据包变形模块处理函数 */
+/** @name HTTP Transform Function */
 const mutateRequest = (params: MutateHTTPRequestParams, editor?: YakitIMonacoEditor) => {
     ipcRenderer.invoke("HTTPRequestMutate", params).then((result: MutateHTTPRequestResponse) => {
         if (editor) {
@@ -341,7 +341,7 @@ const mutateRequest = (params: MutateHTTPRequestParams, editor?: YakitIMonacoEdi
         }
     })
 }
-/** @name 自定义HTTP数据包变形模块处理函数 */
+/** @name Custom HTTP Transform Function */
 const customMutateRequest = (key: string, text?: string, editor?: YakitIMonacoEditor) => {
     if (!editor) {
         return

@@ -5,8 +5,8 @@ const axios = require("axios")
 const https = require('https');
 
 /**
- * @name 判断当前网络通信状态
- * @returns {boolean} true可用
+ * @name Determine Current Network Communication Status
+ * @returns {boolean} true Available
  */
 const asyncNetworkJudgment = (win, params) => {
     return new Promise((resolve, reject) => {
@@ -42,8 +42,8 @@ const asyncFetchPrivateDomainUrl = (win, params) => {
             const service = axios.create({
                 baseURL: `${HttpSetting.httpBaseURL}/api/`,
                 timeout: 30 * 1000,
-                maxBodyLength: Infinity, //设置适当的大小
-                httpsAgent: new https.Agent({ rejectUnauthorized: false }), // 忽略 HTTPS 错误
+                maxBodyLength: Infinity, //Set Appropriate Size
+                httpsAgent: new https.Agent({ rejectUnauthorized: false }), // Ignore HTTPS Errors
             })
             service({
                 url: "navigation/bars",
@@ -63,8 +63,8 @@ const asyncFetchPrivateDomainUrl = (win, params) => {
                             message: err.response.statusText,
                         })
                     } else {
-                        // err.code === 'ECONNREFUSED':1.服务器未启动服务;
-                        // 其余情况都是按连接超时处理，提示用户网络问题
+                        // err.code === 'ECONNREFUSED':1. Server Not Running;
+                        // Treat other cases as connection timeouts, indicating network issues
                         resolve({
                             code: err.code === 'ECONNREFUSED' ? 500 : -1,
                             message: err.message,
@@ -77,12 +77,12 @@ const asyncFetchPrivateDomainUrl = (win, params) => {
     })
 }
 module.exports = (win, getClient) => {
-    /** 获取当前网络状态 */
+    /** Get Current Network Status */
     ipcMain.handle("fetch-netWork-status", async (e, params) => {
         return await asyncNetworkJudgment(win, params)
     })
 
-    /** 获取私有域地址 */
+    /** Retrieve Private Domain Address */
     ipcMain.handle("fetch-netWork-status-by-request-interface", async (e, params) => {
         return await asyncFetchPrivateDomainUrl(win, params)
     })

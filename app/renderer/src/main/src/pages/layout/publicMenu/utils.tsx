@@ -5,7 +5,7 @@ import {RouteToPageProps} from "./PublicMenu"
 import {EnhancedPrivateRouteMenuProps} from "../HeardMenu/HeardMenuType"
 import {SendDatabaseFirstMenuProps} from "@/routes/newRouteType"
 
-/** public版本前端增强型菜单项属性(用于前端数据对比和渲染逻辑使用) */
+/** Enhanced Public Version Menu Item Props) */
 export interface EnhancedPublicRouteMenuProps extends PublicRouteMenuProps {
     menuName: string
     headImg?: string
@@ -13,8 +13,8 @@ export interface EnhancedPublicRouteMenuProps extends PublicRouteMenuProps {
 }
 
 /**
- * 将 PublicRouteMenuProps 转换为 EnhancedPublicRouteMenuProps
- * 因为有多层菜单，所以使用深度遍历
+ * Convert PublicRouteMenuProps to EnhancedPublicRouteMenuProps
+ * Use Depth-Iteration for Multi-Level Menus
  */
 export const publicExchangeProps = (menus: PublicRouteMenuProps[]) => {
     const newMenus: EnhancedPublicRouteMenuProps[] = []
@@ -34,23 +34,23 @@ export const publicExchangeProps = (menus: PublicRouteMenuProps[]) => {
 }
 
 /**
- * @name 处理前端本地菜单数据和数据库菜单数据的交互，并整合为一个前端渲染的菜单数据
- * @description 整合逻辑：以数据库数据为主，前端本地新增数据放到已有数据的最后
- * @description 注意!!! 这套逻辑只适用二级菜单全是插件的情况
+ * @name Integrate Local & DB Menu Data for Frontend
+ * @description Integration Logic: DB Data Priority, Frontend Local New Data at End
+ * @description Warning! Logic Only for Plugin-Only Secondary Menus
  * @returns {object} info
- * @returns {Array} info.menus-前端渲染使用的菜单数据
- * @returns {boolean} info.isUpdate-是否需要更新数据库菜单数据
- * @returns {string[]} info.pluginName-菜单内插件名称的合集
+ * @returns {Array} info.menus-Frontend Menu Data
+ * @returns {boolean} info.isUpdate-DB Menu Data Update Needed
+ * @returns {string[]} info.pluginName-Collection of Menu Inside Plugin Names
  */
 export const publicUnionMenus = (local: PublicRouteMenuProps[], database: DatabaseMenuItemProps[]) => {
-    // 本地是否有新增菜单项
+    // Local Has New Menu Items
     let isUpdate = false
-    // 需要下载的插件菜单名
+    // Required Plugin Menu Names
     let pluginName: string[] = []
-    // 前端渲染使用的数据
+    // Data for Frontend Rendering
     const newMenus: EnhancedPublicRouteMenuProps[] = []
 
-    // 数据库无数据时的逻辑处理
+    // Logic for No DB Data
     if (database.length === 0) {
         isUpdate = true
         for (let item of local) {
@@ -81,7 +81,7 @@ export const publicUnionMenus = (local: PublicRouteMenuProps[], database: Databa
         }
     }
 
-    // 本地数据转换为一级菜单对应关系对象
+    // Convert Local Data to Top-Level Menu Relationship Object
     const localToMenus: Record<string, EnhancedPublicRouteMenuProps> = {}
     for (let item of local) {
         let child: EnhancedPublicRouteMenuProps[] = []
@@ -92,7 +92,7 @@ export const publicUnionMenus = (local: PublicRouteMenuProps[], database: Databa
         localToMenus[item.label] = {...item, menuName: item.label, children: child}
     }
     
-    // 数据库有数据时的逻辑处理
+    // Logic for DB Data Existence
     for (let item of database) {
         const newMenu: EnhancedPublicRouteMenuProps = {
             page: undefined,
@@ -101,32 +101,32 @@ export const publicUnionMenus = (local: PublicRouteMenuProps[], database: Databa
             children: []
         }
 
-        // 数据库-一级菜单下的二级菜单名合集
+        // DB Sub-menus Under Top-Level Menu
         const databaseChilds = (item.children || []).map((databaseI) => databaseI.menuName)
-        // 本地-一级菜单下的二级菜单名合集
+        // Local Sub-menus Under Top-Level Menu
         const localChilds = (localToMenus[item.menuName]?.children || []).map((localI) => localI.menuName)
-        // 计算本地和数据库二级菜单项数量的并集
+        // Union Count of Secondary Menu Items in DB and Local
         const unionChilds = Array.from(new Set([...databaseChilds, ...localChilds]))
-        // 进行比对的本地参考数据
+        // Local Reference Data for Comparison
         let referenceMenu: EnhancedPublicRouteMenuProps[] = []
 
-        // 用户自定义的一级菜单
+        // Custom Top-Level Menu
         if (localChilds.length === 0) referenceMenu = []
 
-        // 数据库和本地数据一致
+        // DB and Local Data Are Consistent
         if (databaseChilds.length === unionChilds.length && localChilds.length === unionChilds.length) {
             referenceMenu = []
         }
-        // 本地有新增数据
+        // Local Adds New Data
         if (databaseChilds.length < unionChilds.length && localChilds.length === unionChilds.length) {
             isUpdate = true
             referenceMenu = localToMenus[item.menuName]?.children || []
         }
-        // 数据库有用户新增数据
+        // DB Adds New User Data
         if (databaseChilds.length === unionChilds.length && localChilds.length < unionChilds.length) {
             referenceMenu = []
         }
-        // 数据库和本地都有新增数据
+        // Both DB and Local Add New Data
         if (databaseChilds.length < unionChilds.length && localChilds.length < unionChilds.length) {
             isUpdate = true
             referenceMenu = localToMenus[item.menuName]?.children || []
@@ -139,7 +139,7 @@ export const publicUnionMenus = (local: PublicRouteMenuProps[], database: Databa
         delete localToMenus[item.menuName]
     }
 
-    // 将本地菜单数据中新增数据进行末尾填充
+    // End-Fill Local Menu with New Data
     for (let item of Object.values(localToMenus)) newMenus.push(item)
 
     return {
@@ -150,11 +150,11 @@ export const publicUnionMenus = (local: PublicRouteMenuProps[], database: Databa
 }
 
 /**
- * @name 将传入的数据库二级菜单数据和本地二级菜单数据进行整合
- * @description 整合逻辑：以数据库数据为主，前端本地新增数据放到已有数据的最后
+ * @name Integrate Passed DB Secondary Menu Data with Local
+ * @description Integration Logic: DB Data Priority, Frontend Local New Data at End
  */
 const databaseConvertLocal = (local: EnhancedPublicRouteMenuProps[], database: DatabaseMenuItemProps[]) => {
-    // 本地数据转换为对应关系对象
+    // Convert Local Data to Relationship Object
     const localToMenus: Record<string, EnhancedPublicRouteMenuProps> = {}
     for (let item of local) localToMenus[item.label] = item
 
@@ -173,7 +173,7 @@ const databaseConvertLocal = (local: EnhancedPublicRouteMenuProps[], database: D
         delete localToMenus[item.menuName]
     }
 
-    // 将本地独有的菜单数据进行最后填充
+    // Final Fill of Unique Local Menu Data
     for (let localItem of Object.values(localToMenus)) {
         const info: EnhancedPublicRouteMenuProps = {
             ...localItem,
@@ -188,7 +188,7 @@ const databaseConvertLocal = (local: EnhancedPublicRouteMenuProps[], database: D
     return {plugins, menus}
 }
 
-/** 将public版本前端菜单数据转换为数据库数据结构 */
+/** Convert Public Frontend Menu Data to DB Structure */
 export const publicConvertDatabase = (data: EnhancedPublicRouteMenuProps[]) => {
     const menus: SendDatabaseFirstMenuProps[] = []
 
@@ -227,12 +227,12 @@ export const publicConvertDatabase = (data: EnhancedPublicRouteMenuProps[]) => {
     return menus
 }
 
-/** ---------- public和private版本共用工具方法 ---------- */
+/** ---------- Shared Utility Methods for Public/Private Versions ---------- */
 
 /**
- * @name 将页面信息转换为唯一标识符
- * @description 插件菜单：${YakitRoute}|${插件名}
- * @description 非插件菜单：${YakitRoute}
+ * @name Convert Page Info to Unique ID
+ * @description Plugin Menu：${YakitRoute}|${Plugin Name}
+ * @description Non-Plugin Menu：${YakitRoute}
  */
 export const routeConvertKey = (route: YakitRoute, pluginName?: string) => {
     if (route === YakitRoute.Plugin_OP) return `${route}${separator}${pluginName || ""}`
@@ -240,11 +240,11 @@ export const routeConvertKey = (route: YakitRoute, pluginName?: string) => {
 }
 
 /**
- * @name 唯一标识符转为页面信息 与routeConvertKey配套
+ * @name Convert Unique ID to Page Info, Pair with routeConvertKey
  */
 export const KeyConvertRoute = (str: string) => {
     try {
-        // 判断条件由当前组件方法(routeToMenu)里的分隔符变量(separator)决定
+        // Decided by separator Variable in routeToMenu Method
         if (str.indexOf(separator) > -1) {
             const keys = str.split(separator)
             const route = keys[0] as YakitRoute
@@ -264,7 +264,7 @@ export const KeyConvertRoute = (str: string) => {
 }
 
 /**
- * 深度遍历所有菜单项,并将菜单项转换为 ${routeInfoToKey()}-菜单展示名
+ * Depth-Iterate All Menu Items & Convert ${routeInfoToKey()}-Menu Display Name
  */
 export const menusConvertKey = (data: EnhancedPublicRouteMenuProps[] | EnhancedPrivateRouteMenuProps[]) => {
     const names: Map<string, string> = new Map<string, string>()
@@ -279,7 +279,7 @@ export const menusConvertKey = (data: EnhancedPublicRouteMenuProps[] | EnhancedP
 }
 
 export const separator = "|"
-/** 将菜单数据转换成 Menu组件数据 */
+/** Convert Menu Data to Menu Component Data */
 export const routeToMenu = (
     routes: EnhancedPublicRouteMenuProps[] | EnhancedPrivateRouteMenuProps[],
     parent?: string
@@ -297,8 +297,8 @@ export const routeToMenu = (
 }
 
 /**
- * 将页面路由信息 转换为key值
- * 转换格式：route|插件ID|插件名
+ * Convert Page Routes to Keys
+ * Conversion Format: route|Plugin ID|Plugin Name
  */
 export const routeInfoToKey = (
     info: RouteToPageProps | EnhancedPublicRouteMenuProps | EnhancedPrivateRouteMenuProps
@@ -319,10 +319,10 @@ export const routeInfoToKey = (
         }
     }
 }
-/** 将menu组件的key值 转换为页面路由信息 */
+/** Convert Menu Key Values to Page Route Info */
 export const keyToRouteInfo = (str: string) => {
     try {
-        // 判断条件由当前组件方法(routeToMenu)里的分隔符变量(separator)决定
+        // Decided by separator Variable in routeToMenu Method
         if (str.indexOf(separator) > -1) {
             const keys = str.split(separator)
             const route = keys[0] as YakitRoute
@@ -342,7 +342,7 @@ export const keyToRouteInfo = (str: string) => {
     }
 }
 
-/** @name 下载线上插件成功后回传的插件信息(批量下载) */
+/** @name Plugin Info Post-Download (Bulk) */
 export interface DownloadOnlinePluginByScriptNamesResponse {
     Data: {ScriptName: string; Id: string; HeadImg: string}[]
 }

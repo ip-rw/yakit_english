@@ -18,7 +18,7 @@ const CheckCircle = () => (
 )
 
 /**
- * @description:  实心的选择圆形
+ * @SolidSelectCircle
  */
 export const CheckCircleIcon = (props: Partial<IconProps>) => {
     return <Icon component={CheckCircle} {...props} />
@@ -37,7 +37,7 @@ const Refresh = () => (
 )
 
 /**
- * @description:  刷新 两个圆弧的箭头
+ * @refresh DoubleArcArrow
  */
 export const RefreshIcon = (props: Partial<IconProps>) => {
     return <Icon component={Refresh} {...props} />
@@ -55,7 +55,7 @@ const Filter = () => (
 )
 
 /**
- * @description: 筛选
+ * @Filter
  */
 export const FilterIcon = (props: Partial<IconProps>) => {
     return <Icon component={Filter} {...props} />
@@ -73,7 +73,7 @@ const Search = () => (
 )
 
 /**
- * @description: 圆圈搜索
+ * @CircleSearch
  */
 export const SearchIcon = (props: Partial<IconProps>) => {
     return <Icon component={Search} {...props} />
@@ -89,7 +89,7 @@ const StatusOffline = () => (
 )
 
 /**
- * @description: 屏蔽
+ * @Block
  */
 export const StatusOfflineIcon = (props: Partial<IconProps>) => {
     return <Icon component={StatusOffline} {...props} />
@@ -113,7 +113,7 @@ const SorterUp = () => (
 )
 
 /**
- * @description: 向上的箭头 排序
+ * @UpArrow Sort
  */
 export const SorterUpIcon = (props: Partial<IconProps>) => {
     return <Icon component={SorterUp} {...props} />
@@ -137,7 +137,7 @@ const SorterDown = () => (
 )
 
 /**
- * @description: 向下的箭头 排序
+ * @DownArrow Sort
  */
 export const SorterDownIcon = (props: Partial<IconProps>) => {
     return <Icon component={SorterDown} {...props} />
@@ -161,7 +161,7 @@ const DisableSorter = () => (
 )
 
 /**
- * @description: 两个箭头颜色一样 排序
+ * @TwoArrowsSameColor Sort
  */
 export const DisableSorterIcon = (props: Partial<IconProps>) => {
     return <Icon component={DisableSorter} {...props} />
@@ -174,7 +174,7 @@ const Remove = () => (
 )
 
 /**
- * @description: x 删除图标
+ * @x DeleteIcon
  */
 export const RemoveIcon = (props: Partial<IconProps>) => {
     return <Icon component={Remove} {...props} />
@@ -192,7 +192,7 @@ const ColorSwatch = () => (
 )
 
 /**
- * @description:切换颜色
+ * @ToggleColor
  */
 export const ColorSwatchIcon = (props: Partial<IconProps>) => {
     return <Icon component={ColorSwatch} {...props} />
@@ -210,7 +210,7 @@ const ChevronDown = () => (
 )
 
 /**
- * @description: 方向性：向下
+ * @DirectionalDown
  */
 export const ChevronDownIcon = (props: Partial<IconProps>) => {
     return <Icon component={ChevronDown} {...props} />
@@ -223,7 +223,7 @@ const ChevronUp = () => (
 )
 
 /**
- * @description: 方向性：向上
+ * @DirectionalUp
  */
 export const ChevronUpIcon = (props: Partial<IconProps>) => {
     return <Icon component={ChevronUp} {...props} />
@@ -241,7 +241,7 @@ const Save = () => (
 )
 
 /**
- * @description: save 导入
+ * @save Import
  */
 export const SaveIcon = (props: Partial<IconProps>) => {
     return <Icon component={Save} {...props} />
@@ -260,7 +260,7 @@ const SortDescending = () => (
 )
 
 /**
- * @description: 排序 降序
+ * @Sort Descend
  */
 export const SortDescendingIcon = (props: Partial<IconProps>) => {
     return <Icon component={SortDescending} {...props} />
@@ -279,7 +279,7 @@ const SortAscending = () => (
 )
 
 /**
- * @description: 排序 降序
+ * @Sort Descend
  */
 export const SortAscendingIcon = (props: Partial<IconProps>) => {
     return <Icon component={SortAscending} {...props} />
@@ -297,7 +297,7 @@ const DotsHorizontal = () => (
 )
 
 /**
- * @description: 省略号 横向
+ * @Ellipsis Horizontal
  */
 export const DotsHorizontalIcon = (props: Partial<IconProps>) => {
     return <Icon component={DotsHorizontal} {...props} />
@@ -315,7 +315,7 @@ const Export = () => (
 )
 
 /**
- * @description:  导出
+ * @Export
  */
 export const ExportIcon = (props: Partial<IconProps>) => {
     return <Icon component={Export} {...props} />
@@ -333,7 +333,7 @@ const QuestionMarkCircle = () => (
 )
 
 /**
- * @description:  问号 带圈
+ * @QuestionCircle
  */
 export const QuestionMarkCircleIcon = (props: Partial<IconProps>) => {
     return <Icon component={QuestionMarkCircle} {...props} />
@@ -369,7 +369,7 @@ const Trash = () => (
 )
 
 /**
- * @description:Trash  删除 垃圾桶
+ * @Trash Delete TrashCan
  */
 export const TrashIcon = (props: Partial<IconProps>) => {
     return <Icon component={Trash} {...props} />
@@ -387,7 +387,7 @@ const PencilAlt = () => (
 )
 
 /**
- * @description:PencilAlt 编辑
+ * @PencilAlt Edit
  */
 export const PencilAltIcon = (props: Partial<IconProps>) => {
     return <Icon component={PencilAlt} {...props} />
@@ -405,7 +405,7 @@ const Ban = () => (
 )
 
 /**
- * @description:Ban 禁止
+ * @Ban Prohibit
  */
 export const BanIcon = (props: Partial<IconProps>) => {
     return <Icon component={Ban} {...props} />
@@ -423,7 +423,7 @@ const Check = () => (
 )
 
 /**
- * @description:Check 对勾
+ * @Check Checkmark
  */
 export const CheckIcon = (props: Partial<IconProps>) => {
     return <Icon component={Check} {...props} />
@@ -436,7 +436,7 @@ const ChevronLeft = () => (
 )
 
 /**
- * @description:向左 left 方向性
+ * @LeftArrow Directional
  */
 export const ChevronLeftIcon = (props: Partial<IconProps>) => {
     return <Icon component={ChevronLeft} {...props} />
@@ -449,7 +449,7 @@ const ChevronRight = () => (
 )
 
 /**
- * @description:向右 right
+ * @RightArrow
  */
 export const ChevronRightIcon = (props: Partial<IconProps>) => {
     return <Icon component={ChevronRight} {...props} />
@@ -467,7 +467,7 @@ const Adjustments = () => (
 )
 
 /**
- * @description:调整
+ * @Adjust
  */
 export const AdjustmentsIcon = (props: Partial<IconProps>) => {
     return <Icon component={Adjustments} {...props} />
@@ -485,7 +485,7 @@ const PlusCircle = () => (
 )
 
 /**
- * @description:  + plus Circle 带圈
+ * @+ plus Circle Circle
  */
 export const PlusCircleIcon = (props: Partial<IconProps>) => {
     return <Icon component={PlusCircle} {...props} />
@@ -521,7 +521,7 @@ const DragSort = () => (
 )
 
 /**
- * @description: 拖拽排序
+ * @DragSort
  */
 export const DragSortIcon = (props: Partial<IconProps>) => {
     return <Icon component={DragSort} {...props} />
@@ -539,7 +539,7 @@ const Photograph = () => (
 )
 
 /**
- * @description:  Photograph 图片
+ * @Photograph Photo
  */
 export const PhotographIcon = (props: Partial<IconProps>) => {
     return <Icon component={Photograph} {...props} />
@@ -571,7 +571,7 @@ const CursorClick = () => (
 )
 
 /**
- * @description:  CursorClick 鼠标点击
+ * @CursorClick Click
  */
 export const CursorClickIcon = (props: Partial<IconProps>) => {
     return <Icon component={CursorClick} {...props} />
@@ -591,7 +591,7 @@ const User = () => (
 )
 
 /**
- * @description:  User 用户
+ * @User User
  */
 export const UserIcon = (props: Partial<IconProps>) => {
     return <Icon component={User} {...props} />
@@ -619,7 +619,7 @@ const AcademicCap = () => (
 )
 
 /**
- * @description:  AcademicCap 专家
+ * @AcademicCap Expert
  */
 export const AcademicCapIcon = (props: Partial<IconProps>) => {
     return <Icon component={AcademicCap} {...props} />
@@ -637,7 +637,7 @@ const ArrowLeft = () => (
 )
 
 /**
- * @description:  箭头 向左
+ * @ArrowLeft
  */
 export const ArrowLeftIcon = (props: Partial<IconProps>) => {
     return <Icon component={ArrowLeft} {...props} />
@@ -680,7 +680,7 @@ const PrivatePlugin = () => (
 )
 
 /**
- * @description:  私密插件 彩色
+ * @PrivatePlugin Color
  */
 export const PrivatePluginIcon = (props: Partial<IconProps>) => {
     return <Icon component={PrivatePlugin} {...props} />
@@ -710,7 +710,7 @@ const OfficialPlugin = () => (
 )
 
 /**
- * @description:  官方插件 彩色
+ * @OfficialPlugin Color
  */
 export const OfficialPluginIcon = (props: Partial<IconProps>) => {
     return <Icon component={OfficialPlugin} {...props} />
@@ -728,7 +728,7 @@ const Terminal = () => (
 )
 
 /**
- * @description: terminal  代码
+ * @Terminal Code
  */
 export const TerminalIcon = (props: Partial<IconProps>) => {
     return <Icon component={Terminal} {...props} />
@@ -752,7 +752,7 @@ const Cube = () => (
 )
 
 /**
- * @description: cube  默认
+ * @cube Default
  */
 export const CubeIcon = (props: Partial<IconProps>) => {
     return <Icon component={Cube} {...props} />
@@ -770,7 +770,7 @@ const ShieldExclamation = () => (
 )
 
 /**
- * @description: shield-exclamation 确认提示
+ * @shield-exclamation ConfirmAlert
  */
 export const ShieldExclamationIcon = (props: Partial<IconProps>) => {
     return <Icon component={ShieldExclamation} {...props} />
@@ -788,7 +788,7 @@ const DocumentDownload = () => (
 )
 
 /**
- * @description: DocumentDownload 下载图标
+ * @DocumentDownload DownloadIcon
  */
 export const DocumentDownloadIcon = (props: Partial<IconProps>) => {
     return <Icon component={DocumentDownload} {...props} />
@@ -807,7 +807,7 @@ const CloseCircle = () => (
 )
 
 /**
- * @description: CloseCircle 带圈得删除 x
+ * @CloseCircle CircleDelete x
  */
 export const CloseCircleIcon = (props: Partial<IconProps>) => {
     return <Icon component={CloseCircle} {...props} />
@@ -833,7 +833,7 @@ const ChromeSvg = () => (
         />
     </svg>
 )
-/** @name Chrome彩色图标 */
+/** @ChromeColorIcon */
 export const ChromeSvgIcon = (props: Partial<IconProps>) => {
     return <Icon component={ChromeSvg} {...props} />
 }
@@ -848,7 +848,7 @@ const ChromeFrameSvg = () => (
         />
     </svg>
 )
-/** @name Chrome边框图标 */
+/** @ChromeBorderIcon */
 export const ChromeFrameSvgIcon = (props: Partial<IconProps>) => {
     return <Icon component={ChromeFrameSvg} {...props} />
 }
@@ -863,7 +863,7 @@ const ArrowCircleRightSvg = () => (
         />
     </svg>
 )
-/** @name 带圆形边框的向右箭头图标 */
+/** @RightArrowCircleIcon */
 export const ArrowCircleRightSvgIcon = (props: Partial<IconProps>) => {
     return <Icon component={ArrowCircleRightSvg} {...props} />
 }
@@ -878,7 +878,7 @@ const ShieldExclamationSvg = () => (
         />
     </svg>
 )
-/** @name 盾牌感叹号 */
+/** @ShieldExclamation */
 export const ShieldExclamationSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={ShieldExclamationSvg} {...props} />
 }
@@ -894,7 +894,7 @@ const DesktopComputerSvg = () => (
         />
     </svg>
 )
-/** @name 电脑图标 */
+/** @ComputerIcon */
 export const DesktopComputerSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={DesktopComputerSvg} {...props} />
 }
@@ -910,7 +910,7 @@ const DotsVerticalSvg = () => (
         />
     </svg>
 )
-/** @name 省略纵向图标 */
+/** @EllipsisVerticalIcon */
 export const DotsVerticalSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={DotsVerticalSvg} {...props} />
 }
@@ -940,7 +940,7 @@ const ImportSvg = () => (
         />
     </svg>
 )
-/** @name 导入图标 */
+/** @ImportIcon */
 export const ImportSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={ImportSvg} {...props} />
 }
@@ -956,7 +956,7 @@ const PlusBoldSvg = () => (
         />
     </svg>
 )
-/** @name 加号图标(加粗) */
+/** @PlusIconBold) */
 export const PlusBoldSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={PlusBoldSvg} {...props} />
 }
@@ -971,7 +971,7 @@ const DocumentDuplicateSvg = () => (
         />
     </svg>
 )
-/** @name 复制图标(document-duplicate) */
+/** @CopyIcon) */
 export const DocumentDuplicateSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={DocumentDuplicateSvg} {...props} />
 }
@@ -1024,7 +1024,7 @@ const GithubSvg = () => (
         />
     </svg>
 )
-/** @name github图标 */
+/** @GithubIcon */
 export const GithubSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={GithubSvg} {...props} />
 }
@@ -1044,7 +1044,7 @@ const FolderOpen = () => (
 )
 
 /**
- * @description: folder-open 文件夹
+ * @folder-open Folder
  */
 export const FolderOpenIcon = (props: Partial<IconProps>) => {
     return <Icon component={FolderOpen} {...props} />
@@ -1061,7 +1061,7 @@ const CloudDownload = () => (
     </svg>
 )
 /**
- * @description: folder-open 下载 云
+ * @folder-open Download Cloud
  */
 export const CloudDownloadIcon = (props: Partial<IconProps>) => {
     return <Icon component={CloudDownload} {...props} />
@@ -1085,7 +1085,7 @@ const Import = () => (
     </svg>
 )
 /**
- * @description: import 导入
+ * @import Import
  */
 export const ImportIcon = (props: Partial<IconProps>) => {
     return <Icon component={Import} {...props} />
@@ -1114,7 +1114,7 @@ const CloudPlugin = () => (
     </svg>
 )
 /**
- * @description: 云端插件 菜单
+ * @CloudPlugin Menu
  */
 export const CloudPluginIcon = (props: Partial<IconProps>) => {
     return <Icon component={CloudPlugin} {...props} />
@@ -1137,7 +1137,7 @@ const Cog = () => (
     </svg>
 )
 /**
- * @description: cog 设置
+ * @cog Settings
  */
 export const CogIcon = (props: Partial<IconProps>) => {
     return <Icon component={Cog} {...props} />
@@ -1154,7 +1154,7 @@ const Quit = () => (
     </svg>
 )
 /**
- * @description: Quit 退出
+ * @Quit Exit
  */
 export const QuitIcon = (props: Partial<IconProps>) => {
     return <Icon component={Quit} {...props} />
@@ -1171,7 +1171,7 @@ const ArrowsExpand = () => (
     </svg>
 )
 /**
- * @description: arrows-expand 全屏 展开
+ * @arrows-expand Fullscreen Expand
  */
 export const ArrowsExpandIcon = (props: Partial<IconProps>) => {
     return <Icon component={ArrowsExpand} {...props} />
@@ -1188,7 +1188,7 @@ const ArrowsRetract = () => (
     </svg>
 )
 /**
- * @description: arrows-expand 全屏 收起
+ * @arrows-expand Fullscreen Collapse
  */
 export const ArrowsRetractIcon = (props: Partial<IconProps>) => {
     return <Icon component={ArrowsRetract} {...props} />
@@ -1205,7 +1205,7 @@ const LightningBolt = () => (
     </svg>
 )
 /**
- * @description:lightning-bolt 闪电 实心
+ * @lightning-bolt Lightning Solid
  */
 export const LightningBoltIcon = (props: Partial<IconProps>) => {
     return <Icon component={LightningBolt} {...props} />
@@ -1255,7 +1255,7 @@ const SolidCloudDownload = () => (
     </svg>
 )
 /**
- * @description:solid-cloud-download 下载 实心
+ * @solid-cloud-download Download Solid
  */
 export const SolidCloudDownloadIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidCloudDownload} {...props} />
@@ -1272,7 +1272,7 @@ const SolidTrash = () => (
     </svg>
 )
 /**
- * @description:solid-trash 垃圾桶 实心
+ * @solid-trash Trash Solid
  */
 export const SolidTrashIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidTrash} {...props} />
@@ -1290,7 +1290,7 @@ const Menu = () => (
     </svg>
 )
 /**
- * @description:menu 菜单
+ * @Menu Menu
  */
 export const MenuIcon = (props: Partial<IconProps>) => {
     return <Icon component={Menu} {...props} />
@@ -1308,7 +1308,7 @@ const SolidRefresh = () => (
 )
 
 /**
- * @description:  刷新 两个圆弧的箭头 Solid
+ * @refresh DoubleArcArrow Solid
  */
 export const SolidRefreshIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidRefresh} {...props} />
@@ -1325,7 +1325,7 @@ const Share = () => (
     </svg>
 )
 /**
- * @description:  分享 share
+ * @Share Share
  */
 export const ShareIcon = (props: Partial<IconProps>) => {
     return <Icon component={Share} {...props} />
@@ -1342,7 +1342,7 @@ const Clock = () => (
     </svg>
 )
 /**
- * @description:  历史 clock
+ * @history clock
  */
 export const ClockIcon = (props: Partial<IconProps>) => {
     return <Icon component={Clock} {...props} />
@@ -1364,7 +1364,7 @@ const PaperAirplane = () => (
     </svg>
 )
 /**
- * @description:  历史 paper-airplane
+ * @history paper-airplane
  */
 export const PaperAirplaneIcon = (props: Partial<IconProps>) => {
     return <Icon component={PaperAirplane} {...props} />
@@ -1403,7 +1403,7 @@ const Wrap = () => (
     </svg>
 )
 /**
- * @description:  wrap 换行
+ * @wrap Wrap
  */
 export const WrapIcon = (props: Partial<IconProps>) => {
     return <Icon component={Wrap} {...props} />
@@ -1420,7 +1420,7 @@ const Stop = () => (
     </svg>
 )
 /**
- * @description:  stop 停止
+ * @stop Stop
  */
 export const StopIcon = (props: Partial<IconProps>) => {
     return <Icon component={Stop} {...props} />
@@ -1437,7 +1437,7 @@ const Exclamation = () => (
     </svg>
 )
 /**
- * @description:  三角形边框-感叹号
+ * @TriangleBorderExclamation
  */
 export const ExclamationIcon = (props: Partial<IconProps>) => {
     return <Icon component={Exclamation} {...props} />
@@ -1455,7 +1455,7 @@ const ShieldCheck = () => (
     </svg>
 )
 /**
- * @description:  盾牌-勾
+ * @ShieldCheck
  */
 export const ShieldCheckIcon = (props: Partial<IconProps>) => {
     return <Icon component={ShieldCheck} {...props} />
@@ -1480,7 +1480,7 @@ const Camera = () => (
     </svg>
 )
 /**
- * @description:  camera 相机
+ * @camera Camera
  */
 export const CameraIcon = (props: Partial<IconProps>) => {
     return <Icon component={Camera} {...props} />
@@ -1497,7 +1497,7 @@ const CloudUpload = () => (
     </svg>
 )
 /**
- * @description:  cloud-upload 云 上传
+ * @cloud-upload Cloud Upload
  */
 export const CloudUploadIcon = (props: Partial<IconProps>) => {
     return <Icon component={CloudUpload} {...props} />
@@ -1512,7 +1512,7 @@ const FastForward = () => (
     </svg>
 )
 /**
- * @description:  fast-forward 前进
+ * @fast-forward FastForward
  */
 export const FastForwardIcon = (props: Partial<IconProps>) => {
     return <Icon component={FastForward} {...props} />
@@ -1527,7 +1527,7 @@ const Rewind = () => (
     </svg>
 )
 /**
- * @description:  rewind 后退
+ * @rewind Rewind
  */
 export const RewindIcon = (props: Partial<IconProps>) => {
     return <Icon component={Rewind} {...props} />
@@ -1545,7 +1545,7 @@ const CheckCircleOutline = () => (
     </svg>
 )
 /**
- * @description:  CheckCircle x 圈 边框
+ * @CheckCircle x Circle Border
  */
 export const CheckCircleOutlineIcon = (props: Partial<IconProps>) => {
     return <Icon component={CheckCircleOutline} {...props} />
@@ -1563,7 +1563,7 @@ const ExclamationOutline = () => (
     </svg>
 )
 /**
- * @description:  CheckCircle 警告 三角
+ * @CheckCircle Warning Triangle
  */
 export const ExclamationOutlineIcon = (props: Partial<IconProps>) => {
     return <Icon component={ExclamationOutline} {...props} />
@@ -1589,7 +1589,7 @@ const SideBarClose = () => (
     </svg>
 )
 /**
- * @description:  边栏关闭
+ * @SidebarClose
  */
 export const SideBarCloseIcon = (props: Partial<IconProps>) => {
     return <Icon component={SideBarClose} {...props} />
@@ -1615,7 +1615,7 @@ const SideBarOpen = () => (
     </svg>
 )
 /**
- * @description:  边栏打开
+ * @SidebarOpen
  */
 export const SideBarOpenIcon = (props: Partial<IconProps>) => {
     return <Icon component={SideBarOpen} {...props} />
@@ -1632,7 +1632,7 @@ const Resizer = () => (
     </svg>
 )
 /**
- * @description: Resizer 拖拽
+ * @Resizer Drag
  */
 export const ResizerIcon = (props: Partial<IconProps>) => {
     return <Icon component={Resizer} {...props} />
@@ -1649,7 +1649,7 @@ const HollowLightningBolt = () => (
     </svg>
 )
 /**
- * @description:lightning-bolt 闪电 空心
+ * @lightning-bolt Lightning Hollow
  */
 export const HollowLightningBoltIcon = (props: Partial<IconProps>) => {
     return <Icon component={HollowLightningBolt} {...props} />
@@ -1666,7 +1666,7 @@ const SolidChevronRight = () => (
     </svg>
 )
 /**
- * @description:向右 right Solid
+ * @RightArrow Solid
  */
 export const SolidChevronRightIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidChevronRight} {...props} />
@@ -1683,7 +1683,7 @@ const SolidChevronDown = () => (
     </svg>
 )
 /**
- * @description:向下 down Solid
+ * @down DownSolid
  */
 export const SolidChevronDownIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidChevronDown} {...props} />
@@ -1706,7 +1706,7 @@ const Eye = () => (
     </svg>
 )
 /**
- * @description:eye 眼睛
+ * @eye Eye
  */
 export const EyeIcon = (props: Partial<IconProps>) => {
     return <Icon component={Eye} {...props} />
@@ -1723,7 +1723,7 @@ const SwitchHorizontal = () => (
     </svg>
 )
 /**
- * @description:  盾牌-勾
+ * @ShieldCheck
  */
 export const SwitchHorizontalIcon = (props: Partial<IconProps>) => {
     return <Icon component={SwitchHorizontal} {...props} />
@@ -1740,7 +1740,7 @@ const ArrowNarrowRight = () => (
     </svg>
 )
 /**
- * @description:  右箭头
+ * @RightArrow
  */
 export const ArrowNarrowRightIcon = (props: Partial<IconProps>) => {
     return <Icon component={ArrowNarrowRight} {...props} />

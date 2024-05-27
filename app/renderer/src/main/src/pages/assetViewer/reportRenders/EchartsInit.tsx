@@ -28,10 +28,10 @@ export const VerticalOptionBar: React.FC<VerticalOptionBarProps> = (props) => {
             type: "category",
             data: [],
             // axisLabel: {
-            //   rotate: -45, // 负值为逆时针旋转
+            //   rotate: -45, // Negative for CCW rotation
             // }
             axisLabel: {
-                // interval: 0, // 显示所有标签
+                // interval: 0, // Show all labels
             }
         },
         yAxis: {
@@ -42,11 +42,11 @@ export const VerticalOptionBar: React.FC<VerticalOptionBarProps> = (props) => {
                 data: [],
                 type: "bar",
                 label: {
-                    show: true, // 设置label可显示
-                    position: "top", // 设置label位置
-                    formatter: "{c}" // 设置label内容
+                    show: true, // Enable label display
+                    position: "top", // Set label position
+                    formatter: "{c}" // Set label text
                     // emphasis: {
-                    //     // 设置label的鼠标悬停样式
+                    //     // Set label hover style
                     //     textStyle: {
                     //         color: '#000',
                     //         fontWeight: 'bold'
@@ -57,7 +57,7 @@ export const VerticalOptionBar: React.FC<VerticalOptionBarProps> = (props) => {
         ]
     })
     useEffect(() => {
-        if (content?.type_verbose === "通用KV") {
+        if (content?.type_verbose === "Generic KV") {
             const {name_verbose, name, data, complexity_group, access_vector} = content
 
             let title: string[] = []
@@ -70,9 +70,9 @@ export const VerticalOptionBar: React.FC<VerticalOptionBarProps> = (props) => {
                     })
                 })
             if (complexity_group && complexity_group.length > 0) {
-                // 不隐藏x轴
+                // Show x-axis
                 optionRef.current.xAxis.axisLabel.interval = 0
-                // 排序
+                // Sort
                 const allTitle = complexity_group.split(",")
                 let cacheTitle: string[] = []
                 let cacheValue: {value: number}[] = []
@@ -84,9 +84,9 @@ export const VerticalOptionBar: React.FC<VerticalOptionBarProps> = (props) => {
                     }
                 })
 
-                // 补充
+                // Supplement
                 allTitle.map((item, index) => {
-                    // 如若不存在 则插入
+                    // Insert if not exists
                     if (!cacheTitle.includes(item)) {
                         cacheTitle.splice(index, 0, item)
                         cacheValue.splice(index, 0, {
@@ -122,7 +122,7 @@ export const VerticalOptionBar: React.FC<VerticalOptionBarProps> = (props) => {
     )
 }
 
-// 堆叠柱状图
+// Stacked Bar Chart
 export const StackedVerticalBar: React.FC<VerticalOptionBarProps> = (props) => {
     const {content} = props
     const ref = useRef(null);
@@ -131,7 +131,7 @@ export const StackedVerticalBar: React.FC<VerticalOptionBarProps> = (props) => {
     const optionRef = useRef<any>({
         title: {
             left: "center",
-            text: "柱状图标题"
+            text: "Bar Chart Title"
         },
         tooltip: {
             trigger: "axis",
@@ -140,10 +140,10 @@ export const StackedVerticalBar: React.FC<VerticalOptionBarProps> = (props) => {
             }
         },
         legend: {
-            orient: "vertical", // 垂直方向
+            orient: "vertical", // Vertical
             y: "center",
             right: 0,
-            data: ["严重", "高危", "中危", "低危"]
+            data: ["Severe", "High Risk", "Reply Complete", "Low Risk"]
         },
         grid: {
             left: "6%",
@@ -156,12 +156,12 @@ export const StackedVerticalBar: React.FC<VerticalOptionBarProps> = (props) => {
             data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
         },
         yAxis: {
-            name: "风险数(个)",
+            name: "Risk count (pcs))",
             type: "value"
         },
         series: [
             {
-                name: "低危",
+                name: "Low Risk",
                 type: "bar",
                 stack: "total",
                 label: {
@@ -172,10 +172,10 @@ export const StackedVerticalBar: React.FC<VerticalOptionBarProps> = (props) => {
                 },
                 data: [320, 302, 301, 334, 390, 330, 320],
                 color: ["rgb(165,215,112)"],
-                barMaxWidth: 120 // 设置柱状图的最大宽度
+                barMaxWidth: 120 // Set bar chart max width
             },
             {
-                name: "中危",
+                name: "Reply Complete",
                 type: "bar",
                 stack: "total",
                 label: {
@@ -189,7 +189,7 @@ export const StackedVerticalBar: React.FC<VerticalOptionBarProps> = (props) => {
                 barMaxWidth: 120
             },
             {
-                name: "高危",
+                name: "High Risk",
                 type: "bar",
                 stack: "total",
                 label: {
@@ -203,7 +203,7 @@ export const StackedVerticalBar: React.FC<VerticalOptionBarProps> = (props) => {
                 barMaxWidth: 120
             },
             {
-                name: "严重",
+                name: "Severe",
                 type: "bar",
                 stack: "total",
                 label: {
@@ -280,19 +280,19 @@ interface HollowPieProps {
     data: {name: any; value: any; color: string; direction?: string}[]
     title?: string
 }
-// 空心圆环
+// Hollow Ring
 export const HollowPie: React.FC<HollowPieProps> = (props) => {
     const {data, title} = props
     const ref = useRef(null);
     const size = useSize(ref);
     const newData = data.filter((item) => item.direction != "center" && item.value !== 0)
-    const centerData = data.filter((item) => item.direction === "center") || [{name: "资产", value: 0}]
+    const centerData = data.filter((item) => item.direction === "center") || [{name: "Assets", value: 0}]
     const chartRef = useRef(null)
     const optionRef = useRef<any>({
         title: {
             show: true,
-            text: "资产",
-            subtext: ["{text|200}{small|台}"],
+            text: "Assets",
+            subtext: ["{text|200}{small|Platform}"],
             top: "44%",
             left: "37%",
             textAlign: "center",
@@ -319,18 +319,18 @@ export const HollowPie: React.FC<HollowPieProps> = (props) => {
                 }
             }
         },
-        // 多标题
+        // Multi Title
         graphic: [
-            // 第一个标题
+            // First Title
             {
-                type: "text", // 文本标签类型
-                left: "center", // 相对于画布的位置
-                top: "8%", // 相对于画布的位置
+                type: "text", // Text label type
+                left: "center", // Position relative to canvas
+                top: "8%", // Position relative to canvas
                 style: {
-                    text: "", // 文本内容
-                    // textColor: '#eee', // 文本颜色
-                    fontSize: 18, // 文本字体大小
-                    fontWeight: "bold" // 文本字体粗细
+                    text: "", // Text Content
+                    // textColor: '#eee', // Text color
+                    fontSize: 18, // Text font size
+                    fontWeight: "bold" // Text font weight
                 }
             }
         ],
@@ -345,7 +345,7 @@ export const HollowPie: React.FC<HollowPieProps> = (props) => {
             orient: "vertical",
             icon: "circle",
             padding: [0, 0, 0, 0],
-            // 点的大小位置
+            // Dot size & position
             itemWidth: 13,
             itemHeight: 7,
             itemStyle: {
@@ -371,9 +371,9 @@ export const HollowPie: React.FC<HollowPieProps> = (props) => {
 
         series: [
             {
-                // 空心饼图内外径
+                // Pie chart inner & outer radius
                 radius: ["35%", "62%"],
-                // 饼图上下左右位置
+                // Pie chart position
                 center: ["38%", "50%"],
                 itemStyle: {
                     borderColor: "#F0F1F3",
@@ -411,7 +411,7 @@ export const HollowPie: React.FC<HollowPieProps> = (props) => {
         optionRef.current.series[0].color = (newData || []).map((item)=>item.color);
         optionRef.current.title.text = centerData[0].name
         optionRef.current.graphic[0].style.text = title || ""
-        optionRef.current.title.subtext = [`{text|${centerData[0].value}}{small|台}`]
+        optionRef.current.title.subtext = [`{text|${centerData[0].value}}{small|Platform}`]
         // @ts-ignore
         const myChart = echarts.init(chartRef.current)
         myChart.setOption(optionRef.current)
@@ -439,7 +439,7 @@ interface MultiPieProps {
     content: ContentProp
 }
 
-// 多层饼环
+// Multi-layer Pie
 export const MultiPie: React.FC<MultiPieProps> = (props) => {
     const {name_verbose, name, data} = props.content
     const ref = useRef(null);
@@ -477,7 +477,7 @@ export const MultiPie: React.FC<MultiPieProps> = (props) => {
             }
         },
         xAxis: {
-            data: ["数据"],
+            data: ["Data"],
             axisLabel: {
                 color: "#A0A4AA"
             },
@@ -556,8 +556,8 @@ export const MultiPie: React.FC<MultiPieProps> = (props) => {
                     symbol: "circle",
                     emphasis: {
                         disable: false,
-                        scale: false, //不缩放
-                        scaleSize: 0 //为了防止失效直接设置未0
+                        scale: false, //No zoom
+                        scaleSize: 0 //Set to 0 to prevent expiration
                     },
                     itemStyle: {
                         normal: {
@@ -609,7 +609,7 @@ interface DetailsProps {
     name: string
     content: string
 }
-// 南丁格尔玫瑰图
+// Nightingale Rose Chart
 export const NightingleRose: React.FC<NightingleRoseProps> = (props) => {
     const {name_verbose, name, data} = props.content
     const ref = useRef(null);
@@ -650,9 +650,9 @@ export const NightingleRose: React.FC<NightingleRoseProps> = (props) => {
     })
     useEffect(() => {
         if (Array.isArray(data)) {
-            // 构造"南丁格尔玫瑰图"伪数据
+            // Build"Nightingale Rose Chart"Mock Data
             let cacheSource = JSON.parse(JSON.stringify(data))
-            // 当值为1大于总数三分之一时 一半隐藏一半显示
+            // Hide half if value>1/3 of total
             if (data.length >= 6) {
                 let index = data.filter((item) => item.value === 1).length
                 let limit = data.length / 3
@@ -668,7 +668,7 @@ export const NightingleRose: React.FC<NightingleRoseProps> = (props) => {
                     cacheSource = JSON.parse(JSON.stringify(newData))
                 }
             }
-            // 3-6为四分之一扇
+            // Quarter-segment for 3-6
             if (cacheSource.length < 6) {
                 optionRef.current.series[0].center = ["30%", "66%"]
                 let limitCount = cacheSource.length * 3
@@ -678,7 +678,7 @@ export const NightingleRose: React.FC<NightingleRoseProps> = (props) => {
                     })
                 }
             }
-            // 6-12为二分之一扇
+            // Half-segment for 6-12
             else if (cacheSource.length >= 6 && cacheSource.length <= 12) {
                 optionRef.current.series[0].startAngle = 180
                 optionRef.current.series[0].center = ["50%", "70%"]
@@ -692,7 +692,7 @@ export const NightingleRose: React.FC<NightingleRoseProps> = (props) => {
                     })
                 }
             }
-            // 12-20为全扇 超出数据不显示
+            // Full segment for 12-20, ignore extra data
             else if (cacheSource.length > 12) {
                 optionRef.current.series[0].radius = [40, 120]
                 optionRef.current.legend = {
@@ -741,11 +741,11 @@ export const NightingleRose: React.FC<NightingleRoseProps> = (props) => {
             optionRef.current.series[0].data = value || []
             // @ts-ignore
             const myChart = echarts.init(chartRef.current)
-            //先解绑事件，防止事件重复触发
+            //Unbind events to prevent duplicates
             myChart.off("click")
             myChart.off("legendselectchanged")
             myChart.on("click", function (params) {
-                // console.log("点击", params);
+                // console.log("Click", params);
                 setDetails({
                     // @ts-ignore
                     name: params?.data?.name || "",
@@ -786,7 +786,7 @@ interface EchartsCardProps {
     dataSource: any[]
 }
 
-// 卡片 (为了生成word样式-改成标签内样式)
+// Card (for Word style-as inline style))
 export const EchartsCard: React.FC<EchartsCardProps> = (props) => {
     const {dataTitle, dataSource} = props
     return (

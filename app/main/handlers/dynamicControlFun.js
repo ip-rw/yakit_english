@@ -3,12 +3,12 @@ const {getLocalYaklangEngine} = require("../filePath")
 const {psYakList} = require("../handlers/yakLocal")
 const {killYakGRPC} = require("../handlers/yakLocal")
 const isWindows = process.platform === "win32"
-/** @name 生成windows系统的管理员权限命令 */
+/** @Generate Admin CMD for Windows */
 function generateWindowsSudoCommand(file, args) {
     const cmds = args === "" ? `${file}` : `${file} ${args}`
     return `${cmds}`
 }
-// 当前服务ppid
+// Service PPID
 let ppid = null
 
 const asyncKillDynamicControl = () => {
@@ -41,7 +41,7 @@ const asyncKillDynamicControl = () => {
 }
 
 const asyncStartDynamicControl = (win, params) => {
-    // 如果已启用服务 则跳过启用服务 若10S内未获取到密钥则杀掉进程重启
+    // Skip if service enabled, kill & restart process if no key within 10s
     if (ppid) {
         return new Promise((resolve, reject) => resolve({alive:true}))
     }
@@ -64,7 +64,7 @@ const asyncStartDynamicControl = (win, params) => {
                     setTimeout(() => {
                         resolve({alive:false})
                     }, 1000)
-                    // 当前启用服务id
+                    // Enabled Service ID
                     ppid = subprocess.pid
                 }
             })

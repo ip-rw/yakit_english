@@ -22,7 +22,7 @@ import {defaultFilter, defaultSearch, pluginTypeToName} from "../builtInData"
 import emiter from "@/utils/eventBus/eventBus"
 
 export const getLinkPluginConfig = (selectList, pluginListSearchInfo, allCheck?: boolean) => {
-    // allCheck只有为false的时候才走该判断，undefined和true不走
+    // Enter condition only if allCheck is false, skip if undefined or true
     if (allCheck === false && selectList.length === 0) {
         return undefined
     }
@@ -77,7 +77,7 @@ export const SinglePluginExecution: React.FC<SinglePluginExecutionProps> = React
         getPluginById()
     })
 
-    /**获取插件详情，设置插件联动类型，查询私有域,刷新插件列表 */
+    /**Fetch plugin details, set linkage type, query private domain, refresh plugin list */
     const getPluginById = useMemoizedFn(() => {
         setPluginLoading(true)
         apiGetYakScriptById(yakScriptId)
@@ -98,7 +98,7 @@ export const SinglePluginExecution: React.FC<SinglePluginExecutionProps> = React
                 }, 200)
             })
             .catch((e) => {
-                yakitNotify("error", "获取插件详情失败:" + e)
+                yakitNotify("error", "Failed to fetch plugin details:" + e)
             })
             .finally(() => {
                 setTimeout(() => {
@@ -107,7 +107,7 @@ export const SinglePluginExecution: React.FC<SinglePluginExecutionProps> = React
             })
     })
 
-    /**插件UI联动相关参数 */
+    /**Plugin UI linkage params */
     const linkPluginConfig: HybridScanPluginConfig | undefined = useCreation(() => {
         if (!allCheck && selectList.length === 0) {
             return undefined
@@ -128,11 +128,11 @@ export const SinglePluginExecution: React.FC<SinglePluginExecutionProps> = React
     const headExtraNode = useCreation(() => {
         return (
             <>
-                <Tooltip title='刷新插件数据'>
+                <Tooltip title='Refresh plugin data'>
                     <YakitButton type='text2' icon={<OutlineRefreshIcon />} onClick={onRefresh} />
                 </Tooltip>
                 <div className='divider-style' />
-                <Tooltip title='编辑'>
+                <Tooltip title='Edit'>
                     <YakitButton type='text2' icon={<OutlinePencilaltIcon />} onClick={onEdit} />
                 </Tooltip>
             </>

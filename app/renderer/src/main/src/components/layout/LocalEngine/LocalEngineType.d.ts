@@ -10,8 +10,8 @@ export interface LocalEngineProps {
 }
 
 export interface LocalEngineLinkFuncProps {
-    /** 初始化并检查所有前置项后的本地连接 */
+    /** Init & Check Pre-reqs for Local Connection */
     init: () => any
-    /** 检查引擎版本后的本地连接 */
+    /** Post Engine Version Check Local Connection */
     link: () => any
 }

@@ -4,30 +4,30 @@ import {YakitInput} from "@/components/yakitUI/YakitInput/YakitInput"
 import styles from "./PluginGroupList.module.scss"
 
 export interface GroupListItem {
-    id: string // 唯一标识
-    name: string // 插件组名字
-    number: number // 插件组对应插件数量
-    icon: React.ReactElement // 插件组前的icon
-    iconColor: string // icon颜色
-    showOptBtns: boolean // 是否显示操作按钮
-    default: boolean // 是否默认
+    id: string // Unique ID
+    name: string // Group Name
+    number: number // Plugin Qty by Group
+    icon: React.ReactElement // Pre-group Icon
+    iconColor: string // Icon Color
+    showOptBtns: boolean // Show Action Btn?
+    default: boolean // Is Default?
 }
 
 interface PluginGroupListProps {
-    data: GroupListItem[] // 插件组数据
-    editGroup?: GroupListItem // 当前编辑组
+    data: GroupListItem[] // Group Data
+    editGroup?: GroupListItem // Current Edit Group
     onEditInputBlur: (groupItem: GroupListItem, newName: string, successCallback: () => void) => void
-    extraOptBtn: (groupItem: GroupListItem) => ReactNode // 插件组操作按钮
-    extraHideMenu: (groupItem: GroupListItem) => ReactNode // 插件组隐藏菜单
+    extraOptBtn: (groupItem: GroupListItem) => ReactNode // Group Action Btn
+    extraHideMenu: (groupItem: GroupListItem) => ReactNode // Hide Group Menu
     onActiveGroup: (groupItem: GroupListItem) => void
 }
 
 export const PluginGroupList: React.FC<PluginGroupListProps> = (props) => {
     const {data, editGroup, onEditInputBlur, extraOptBtn, extraHideMenu, onActiveGroup} = props
-    const [activeGroupId, setActiveGroupId] = useState<string>(data[0].id) // 当前选中插件组id
+    const [activeGroupId, setActiveGroupId] = useState<string>(data[0].id) // Group ID Selected
     const activeGroupIdRef = useRef<string>(activeGroupId)
     const editInputRef = useRef<any>()
-    const [newName, setNewName] = useState<string>("") // 插件组新名字
+    const [newName, setNewName] = useState<string>("") // New Group Name
 
     useEffect(() => {
         if (editGroup) {
@@ -123,7 +123,7 @@ export const PluginGroupList: React.FC<PluginGroupListProps> = (props) => {
                     )
                 })}
             </div>
-            <div className={styles["plugin-group-footer"]}>已经到底啦 ~ </div>
+            <div className={styles["plugin-group-footer"]}>Reached Bottom ~ </div>
         </div>
     )
 }

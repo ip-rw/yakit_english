@@ -65,7 +65,7 @@ export const PluginHistoryTable: React.FC<PluginHistoryTableProp> = (props) => {
             size={"small"}
             title={() => {
                 return <Space>
-                    <div>{props.script.ScriptName} 的执行历史记录</div>
+                    <div>{props.script.ScriptName} Execution History</div>
                     <Button type={"link"} ghost={true} onClick={() => {
                         update()
                     }}><ReloadOutlined/> </Button>
@@ -84,44 +84,44 @@ export const PluginHistoryTable: React.FC<PluginHistoryTableProp> = (props) => {
             scroll={{x: "auto"}}
             columns={[
                 {
-                    title: "执行时间",
+                    title: "Execution Time",
                     render: (i: ExecHistoryRecord) => <Tag>{formatTimestamp(i.Timestamp)}</Tag>,
                     width: 130,
                 },
                 {
-                    title: "耗时",
+                    title: "Duration",
                     render: (r: ExecHistoryRecord) => <Tag color={"geekblue"}>{r.DurationMs}ms</Tag>,
                     width: 100,
                 },
                 {
-                    title: "参数", width: 300,
+                    title: "Parameter", width: 300,
                     render: (r: ExecHistoryRecord) => <CopyableField noCopy={!r.Params} text={r.Params} width={300}/>,
                 },
                 {
-                    title: "状态", width: 120,
-                    render: (r: ExecHistoryRecord) => r.Ok ? <Tag color={"green"}>执行成功</Tag> :
-                        <Tag color={"red"}>执行失败</Tag>
+                    title: "Status", width: 120,
+                    render: (r: ExecHistoryRecord) => r.Ok ? <Tag color={"green"}>Exec Success</Tag> :
+                        <Tag color={"red"}>Exec Failure</Tag>
                 },
                 {
-                    title: "执行结果/失败原因", render: (r: ExecHistoryRecord) => r.Ok ? <Space>
-                        {r.Stdout && <Tag color={"geekblue"}>标准输出内容长度[{(r.StdoutLen)}]</Tag>}
-                        {r.Stderr && <Tag color={"orange"}>标准错误内容长度[{(r.StderrLen)}]</Tag>}
-                        {!r.Stdout && !r.Stderr ? <Tag>无输出</Tag> : undefined}
+                    title: "Execution Result/Failure Reason", render: (r: ExecHistoryRecord) => r.Ok ? <Space>
+                        {r.Stdout && <Tag color={"geekblue"}>StdOut Length[{(r.StdoutLen)}]</Tag>}
+                        {r.Stderr && <Tag color={"orange"}>StdErr Length[{(r.StderrLen)}]</Tag>}
+                        {!r.Stdout && !r.Stderr ? <Tag>No Output</Tag> : undefined}
                     </Space> : <Space>
                         <Tag color={"red"}>{r.Reason}</Tag>
                     </Space>
                 },
                 {
-                    title: "操作", render: (r: ExecHistoryRecord) => <Space>
+                    title: "Action", render: (r: ExecHistoryRecord) => <Space>
                         <Button size={"small"} onClick={() => {
                             showModal({
-                                title: "插件源码", content: <>
+                                title: "Plugin Source Code", content: <>
                                     <div style={{height: 500}}>
                                         <YakEditor type={ props.script.Type} readOnly={true} value={props.script.Content}/>
                                     </div>
                                 </>, width: "60%",
                             })
-                        }}>插件源码</Button>
+                        }}>Plugin Source Code</Button>
                     </Space>
                 },
             ]}

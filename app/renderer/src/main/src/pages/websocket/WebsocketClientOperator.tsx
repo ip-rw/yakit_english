@@ -31,20 +31,20 @@ export const WebsocketClientOperator: React.FC<WebsocketClientOperatorProp> = (p
     const [_toServer, setToServer, getToServer] = useGetState(Uint8ArrayToString(props.toServer || new Uint8Array));
     const [mode, setMode] = useState<"request" | "response">("request");
 
-    // 额外参数
+    // Extra params
     const [tls, setTls] = useState(!!props.tls);
     const [timeoutSeconds, setTimeoutSeconds] = useState(3600);
     const [proxy, setProxy] = useState("");
 
-    // 设置随机字符串
-    //    这个要通过 finished 的时候来搞
+    // Set random string
+    //    Handle on finish
     const [_token, setToken, getToken] = useGetState(randomString(30));
 
     useEffect(() => {
         props.onToken(getToken())
     }, [getToken()])
 
-    // 加载环境变量
+    // Load env variables
     useEffect(() => {
         getRemoteValue(YAKIT_WEBSOCKET_PROXY_DEFAULT).then(e => {
             if (!e) {
@@ -54,7 +54,7 @@ export const WebsocketClientOperator: React.FC<WebsocketClientOperatorProp> = (p
         })
     }, [])
 
-    // 数据通道
+    // Data channel
     useEffect(() => {
         const token = getToken()
 
@@ -72,7 +72,7 @@ export const WebsocketClientOperator: React.FC<WebsocketClientOperatorProp> = (p
         })
 
         /*
-        * 这儿只是顺带走一下，一般也不太需要 removeAll, 这 Viewer 里面退出会 removeALl 的，不慌
+        * Passing by, usually don't need removeAll, Viewer exits will removeAll, no rush
         * */
         ipcRenderer.on(`${token}-data`, async (e, data: WebsocketFlowFromFuzzer) => {
             if (data.IsUpgradeResponse) {
@@ -122,16 +122,16 @@ export const WebsocketClientOperator: React.FC<WebsocketClientOperatorProp> = (p
             return <AutoCard
                 size={"small"} bordered={true} title={<Space size={4}>
                 <SelectOne size={"small"} data={[
-                    {value: "request", text: "请求"},
-                    {value: "response", text: "响应"},
+                    {value: "request", text: "Request"},
+                    {value: "response", text: "Response"},
                 ]} value={mode} setValue={setMode} formItemStyle={{marginBottom: 0}}/>
-                {websocketBuildFinished ? <Tag color={"green"}>已建立连接</Tag> : <Tag color={"orange"}>连接未建立</Tag>}
+                {websocketBuildFinished ? <Tag color={"green"}>Connection established</Tag> : <Tag color={"orange"}>Connection not established</Tag>}
             </Space>}
                 bodyStyle={{padding: 0}}
                 extra={(
                     <Space>
                         <Popover
-                            title={"设置额外参数"}
+                            title={"Set Extra Params"}
                             trigger={["click"]}
                             content={() => {
                                 return <Form
@@ -142,7 +142,7 @@ export const WebsocketClientOperator: React.FC<WebsocketClientOperatorProp> = (p
                                 >
                                     <InputItem
                                         value={proxy} setValue={setProxy}
-                                        label={"设置代理"}
+                                        label={"Set Proxy"}
                                         autoComplete={[
                                             "http://127.0.0.1:7890",
                                             "socks5://127.0.0.1:7890",
@@ -155,7 +155,7 @@ export const WebsocketClientOperator: React.FC<WebsocketClientOperatorProp> = (p
                                         ]}
                                     />
                                     <InputInteger
-                                        label={"设置超时(s)"}
+                                        label={"Timeout setting(s)"}
                                         value={timeoutSeconds}
                                         setValue={setTimeoutSeconds}
                                         min={10}
@@ -174,13 +174,13 @@ export const WebsocketClientOperator: React.FC<WebsocketClientOperatorProp> = (p
                             }}>TLS</Checkbox>
                         </Form.Item>
                         {getExecuting() ? (
-                            <Popconfirm title={"确定要关闭 Websocket 连接吗？"} onConfirm={cancel}>
+                            <Popconfirm title={"Confirm closing Websocket?？"} onConfirm={cancel}>
                                 <Button
                                     size={"small"}
                                     type={"primary"}
                                     danger={true}
                                 >
-                                    断开
+                                    Disconnect
                                 </Button>
                             </Popconfirm>
                         ) : <Button
@@ -190,7 +190,7 @@ export const WebsocketClientOperator: React.FC<WebsocketClientOperatorProp> = (p
                                 submit()
                             }}
                         >
-                            连接
+                            Connect
                         </Button>}
                     </Space>
                 )}
@@ -207,7 +207,7 @@ export const WebsocketClientOperator: React.FC<WebsocketClientOperatorProp> = (p
                 />}
                 {mode === "response" && <AutoSpin
                     spinning={!getUpgradeResponse()}
-                    tip={"正在构建 Websocket 连接"}
+                    tip={"Building Websocket connection"}
                 >
                     <YakEditor
                         readOnly={true}
@@ -232,10 +232,10 @@ export const WebsocketClientOperator: React.FC<WebsocketClientOperatorProp> = (p
                         onClick={() => {
                             sendToServer()
                         }}
-                    >发送到服务器</Button>
+                    >Send to server</Button>
                 </Space>}
                 bodyStyle={{padding: 0}}
-                title={"发送数据"}
+                title={"Send data"}
             >
                 <YakEditor
                     // readOnly={!getExecuting()}

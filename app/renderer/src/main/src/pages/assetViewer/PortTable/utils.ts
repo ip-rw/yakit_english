@@ -24,7 +24,7 @@ export const defQueryPortsRequest: QueryPortsRequest = {
     }
 }
 /**
- * @description QueryPorts 获取端口资产表数据（基础版）
+ * @description QueryPorts Get port asset table data (Basic）
  */
 export const apiQueryPortsBase: (params: QueryPortsRequest) => Promise<QueryGeneralResponse<PortAsset>> = (params) => {
     return new Promise((resolve, reject) => {
@@ -32,19 +32,19 @@ export const apiQueryPortsBase: (params: QueryPortsRequest) => Promise<QueryGene
             .invoke(`QueryPorts`, params)
             .then(resolve)
             .catch((e: any) => {
-                yakitNotify("error", "取消插件批量执行出错:" + e)
+                yakitNotify("error", "Cancel batch execution error for plugin:" + e)
                 reject(e)
             })
     })
 }
 
 /**
- * @description QueryPorts 获取升序的增量数据
+ * @description QueryPorts Get incremental data in ascending order
  */
 export const apiQueryPortsIncrementOrderAsc: (params: QueryPortsRequest) => Promise<QueryGeneralResponse<PortAsset>> = (
     params
 ) => {
-    // 升序取增量数据
+    // Get incremental data in ascending order
     // {
     //     "Pagination": {
     //       "Page": 1,
@@ -59,12 +59,12 @@ export const apiQueryPortsIncrementOrderAsc: (params: QueryPortsRequest) => Prom
     return apiQueryPortsBase(newParams)
 }
 /**
- * @description QueryPorts 获取降序的增量数据
+ * @description QueryPorts Get incremental data in descending order
  */
 export const apiQueryPortsIncrementOrderDesc: (
     params: QueryPortsRequest
 ) => Promise<QueryGeneralResponse<PortAsset>> = (params) => {
-    // 降序取增量数据
+    // Get incremental data in descending order
     // {
     //     "Pagination": {
     //       "Page": 1,

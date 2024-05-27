@@ -26,7 +26,7 @@ export const ContentUploadInput: React.FC<ContentUploadInputProps> = (props) => 
                 item={{
                     help: (
                         <div className='content-upload-input-help'>
-                            {uploadHelpText||"可将TXT文件拖入框内或"}
+                            {uploadHelpText||"Drag TXT files here or"}
                             <Upload
                                 // accept={"text/plain"}
                                 multiple={false}
@@ -38,9 +38,9 @@ export const ContentUploadInput: React.FC<ContentUploadInputProps> = (props) => 
                                 }}
                                 {...dragger}
                             >
-                                <span className='help-hint-title'>点击此处</span>
+                                <span className='help-hint-title'>Click here</span>
                             </Upload>
-                            上传
+                            Upload
                             {otherHelpNode}
                         </div>
                     ),
@@ -58,7 +58,7 @@ export const ContentUploadInput: React.FC<ContentUploadInputProps> = (props) => 
                 item={{
                     help: (
                         <div className='content-upload-input-help'>
-                            {uploadHelpText||"可将TXT、Excel文件拖入框内或"}
+                            {uploadHelpText||"Drag TXT, Excel files here or"}
                             <Upload
                                 // accept={"text/plain"}
                                 multiple={false}
@@ -70,9 +70,9 @@ export const ContentUploadInput: React.FC<ContentUploadInputProps> = (props) => 
                                 }}
                                 {...dragger}
                             >
-                                <span className='help-hint-title'>点击此处</span>
+                                <span className='help-hint-title'>Click here</span>
                             </Upload>
-                            上传
+                            Upload
                             {otherHelpNode}
                         </div>
                     ),

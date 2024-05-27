@@ -81,7 +81,7 @@ const {ipcRenderer} = window.require("electron")
 
 export const judgeDynamic = (userInfo, avatarColor: string, active: boolean, dynamicConnect: boolean) => {
     const {companyHeadImg, companyName} = userInfo
-    // 点击且已被远程控制
+    // Clicked & Controlled Remotely
     const activeConnect: boolean = active && dynamicConnect
     return (
         <div
@@ -109,14 +109,14 @@ export const judgeDynamic = (userInfo, avatarColor: string, active: boolean, dyn
                 <div
                     className={classNames(styles["judge-avatar-text"], {[styles["judge-avatar-active-text"]]: active})}
                 >
-                    远程中
+                    Remoting
                 </div>
             )}
         </div>
     )
 }
 
-/** 随机头像颜色 */
+/** Random Avatar Color */
 export const randomAvatarColor = () => {
     const colorArr: string[] = ["#8863F7", "#DA5FDD", "#4A94F8", "#35D8EE", "#56C991", "#F4736B", "#FFB660", "#B4BBCA"]
     let color: string = colorArr[Math.round(Math.random() * 7)]
@@ -130,14 +130,14 @@ export interface FuncDomainProp {
     isRemoteMode: boolean
     onEngineModeChange: (type: YaklangEngineMode) => any
     typeCallback: (type: YakitSettingCallbackType) => any
-    /** 远程控制 - 自动切换远程连接 */
+    /** Remote Control - Auto Switch */
     runDynamicControlRemote: (v: string, url: string) => void
-    /** 当前是否验证License/登录 */
+    /** License Validated?/Login */
     isJudgeLicense: boolean
 
-    /** @name 当前是否展示项目管理页面 */
+    /** @Role Management */
     showProjectManage?: boolean
-    /** @name 操作系统类型 */
+    /** @OS Type */
     system: YakitSystem
 }
 
@@ -155,28 +155,28 @@ export const FuncDomain: React.FC<FuncDomainProp> = React.memo((props) => {
         isJudgeLicense
     } = props
 
-    /** 登录用户信息 */
+    /** Password Pop-Up Allowed? */
     const {userInfo, setStoreUserInfo} = useStore()
 
     const [loginShow, setLoginShow] = useState<boolean>(false)
-    /** 用户功能菜单 */
+    /** User Menu */
     const [userMenu, setUserMenu] = useState<MenuItemType[]>([
-        {title: "退出登录", key: "sign-out"}
-        // {title: "帐号绑定(监修)", key: "account-bind"}
+        {title: "Logout", key: "sign-out"}
+        // {title: "Account Binding (Supervised))", key: "account-bind"}
     ])
-    /** 修改密码弹框 */
+    /** Plugin Management */
     const [passwordShow, setPasswordShow] = useState<boolean>(false)
-    /** 是否允许密码框关闭 */
+    /** Install Later (Yaklang/Yakit Download) */
     const [passwordClose, setPasswordClose] = useState<boolean>(true)
-    /** 上传数据弹框 */
+    /** Upload Popup */
     const [uploadModalShow, setUploadModalShow] = useState<boolean>(false)
 
-    /** 发起远程弹框 受控端 - 控制端 */
+    /** Plain Export */
     const [dynamicControlModal, setDynamicControlModal] = useState<boolean>(false)
     const [controlMyselfModal, setControlMyselfModal] = useState<boolean>(false)
     const [controlOtherModal, setControlOtherModal] = useState<boolean>(false)
     const [dynamicMenuOpen, setDynamicMenuOpen] = useState<boolean>(false)
-    /** 当前远程连接状态 */
+    /** Current Remote Status */
     const {dynamicStatus} = yakitDynamicStatus()
     const [dynamicConnect] = useState<boolean>(dynamicStatus.isDynamicStatus)
     let avatarColor = useRef<string>(randomAvatarColor())
@@ -185,71 +185,71 @@ export const FuncDomain: React.FC<FuncDomainProp> = React.memo((props) => {
         const SetUserInfoModule = () => (
             <SetUserInfo userInfo={userInfo} avatarColor={avatarColor.current} setStoreUserInfo={setStoreUserInfo} />
         )
-        const LoginOutBox = () => <div className={styles["login-out-component"]}>退出登录</div>
-        // 非企业管理员登录
+        const LoginOutBox = () => <div className={styles["login-out-component"]}>Logout</div>
+        // Enterprise Non-Admin Login
         if (userInfo.role === "admin" && userInfo.platform !== "company") {
             setUserMenu([
-                // {key: "account-bind", title: "帐号绑定(监修)", disabled: true},
-                {key: "plugin-aduit", title: "插件管理"},
-                {key: "data-statistics", title: "数据统计"},
-                {key: "sign-out", title: "退出登录", render: () => LoginOutBox()}
+                // {key: "account-bind", title: "Account Binding (Supervised))", disabled: true},
+                {key: "plugin-aduit", title: "Non-Remote: Show Initiate, Hide Exit"},
+                {key: "data-statistics", title: "Data Statistics"},
+                {key: "sign-out", title: "Logout", render: () => LoginOutBox()}
             ])
         }
-        // 非企业超级管理员登录
+        // Current Version
         else if (userInfo.role === "superAdmin" && userInfo.platform !== "company") {
             setUserMenu([
-                {key: "trust-list", title: "用户管理"},
-                {key: "license-admin", title: "License管理"},
-                {key: "plugin-aduit", title: "插件管理"},
-                {key: "data-statistics", title: "数据统计"},
-                {key: "sign-out", title: "退出登录", render: () => LoginOutBox()}
+                {key: "trust-list", title: "User Management"},
+                {key: "license-admin", title: "License Management"},
+                {key: "plugin-aduit", title: "Non-Remote: Show Initiate, Hide Exit"},
+                {key: "data-statistics", title: "Data Statistics"},
+                {key: "sign-out", title: "Logout", render: () => LoginOutBox()}
             ])
         }
-        // 非企业操作员
+        // Non-Enterprise Operator
         else if (userInfo.role === "operate" && userInfo.platform !== "company") {
             setUserMenu([
-                {key: "data-statistics", title: "数据统计"},
-                {key: "sign-out", title: "退出登录"}
+                {key: "data-statistics", title: "Data Statistics"},
+                {key: "sign-out", title: "Logout"}
             ])
         }
-        // 非企业license管理员
+        // Non-Enterprise License Admin
         else if (userInfo.role === "licenseAdmin" && userInfo.platform !== "company") {
             setUserMenu([
-                {key: "license-admin", title: "License管理"},
-                {key: "sign-out", title: "退出登录", render: () => LoginOutBox()}
+                {key: "license-admin", title: "License Management"},
+                {key: "sign-out", title: "Logout", render: () => LoginOutBox()}
             ])
         }
-        // 企业用户管理员登录
+        // Enterprise Admin Login
         else if (userInfo.role === "admin" && userInfo.platform === "company") {
             let cacheMenu = (() => {
                 if (isEnpriTraceAgent()) {
                     return [
-                        {key: "user-info", title: "用户信息", render: () => SetUserInfoModule()},
-                        {key: "hole-collect", title: "漏洞汇总"},
-                        {key: "role-admin", title: "角色管理"},
-                        {key: "account-admin", title: "用户管理"},
-                        {key: "set-password", title: "修改密码"},
-                        {key: "plugin-aduit", title: "插件管理"},
-                        {key: "sign-out", title: "退出登录", render: () => LoginOutBox()}
+                        {key: "user-info", title: "User Info", render: () => SetUserInfoModule()},
+                        {key: "hole-collect", title: "Vulnerabilities Summary"},
+                        {key: "role-admin", title: "Historical Versions"},
+                        {key: "account-admin", title: "User Management"},
+                        {key: "set-password", title: "Change Password"},
+                        {key: "plugin-aduit", title: "Non-Remote: Show Initiate, Hide Exit"},
+                        {key: "sign-out", title: "Logout", render: () => LoginOutBox()}
                     ]
                 }
                 let cacheMenu = [
-                    {key: "user-info", title: "用户信息", render: () => SetUserInfoModule()},
-                    {key: "upload-data", title: "上传数据"},
-                    {key: "dynamic-control", title: "发起远程"},
-                    {key: "control-admin", title: "远程管理"},
-                    {key: "close-dynamic-control", title: "退出远程"},
-                    {key: "role-admin", title: "角色管理"},
-                    {key: "account-admin", title: "用户管理"},
-                    {key: "set-password", title: "修改密码"},
-                    {key: "plugin-aduit", title: "插件管理"},
-                    {key: "sign-out", title: "退出登录", render: () => LoginOutBox()}
+                    {key: "user-info", title: "User Info", render: () => SetUserInfoModule()},
+                    {key: "upload-data", title: "Upload Data"},
+                    {key: "dynamic-control", title: "Incremental Update"},
+                    {key: "control-admin", title: "Remote Management"},
+                    {key: "close-dynamic-control", title: "Exit Remote"},
+                    {key: "role-admin", title: "Historical Versions"},
+                    {key: "account-admin", title: "User Management"},
+                    {key: "set-password", title: "Change Password"},
+                    {key: "plugin-aduit", title: "Non-Remote: Show Initiate, Hide Exit"},
+                    {key: "sign-out", title: "Logout", render: () => LoginOutBox()}
                 ]
-                // 远程中时不显示发起远程 显示退出远程
+                // Remote Not Show Initiate, Show Exit
                 if (dynamicConnect) {
                     cacheMenu = cacheMenu.filter((item) => item.key !== "dynamic-control")
                 }
-                // 非远程控制时显示发起远程 不显示退出远程
+                // Recording Loading
                 if (!dynamicConnect) {
                     cacheMenu = cacheMenu.filter((item) => item.key !== "close-dynamic-control")
                 }
@@ -257,16 +257,16 @@ export const FuncDomain: React.FC<FuncDomainProp> = React.memo((props) => {
             })()
             setUserMenu(cacheMenu)
         }
-        // 企业用户非管理员登录
+        // Enterprise Non-Admin Login
         else if (userInfo.role !== "admin" && userInfo.platform === "company") {
             let cacheMenu = [
-                {key: "user-info", title: "用户信息", render: () => SetUserInfoModule()},
-                {key: "upload-data", title: "上传数据"},
-                {key: "dynamic-control", title: "发起远程"},
-                {key: "close-dynamic-control", title: "退出远程"},
-                {key: "set-password", title: "修改密码"},
-                {key: "plugin-aduit", title: "插件管理"},
-                {key: "sign-out", title: "退出登录"}
+                {key: "user-info", title: "User Info", render: () => SetUserInfoModule()},
+                {key: "upload-data", title: "Upload Data"},
+                {key: "dynamic-control", title: "Incremental Update"},
+                {key: "close-dynamic-control", title: "Exit Remote"},
+                {key: "set-password", title: "Change Password"},
+                {key: "plugin-aduit", title: "Non-Remote: Show Initiate, Hide Exit"},
+                {key: "sign-out", title: "Logout"}
             ]
             if (!userInfo.checkPlugin) {
                 cacheMenu = cacheMenu.filter((item) => item.key !== "plugin-aduit")
@@ -274,21 +274,21 @@ export const FuncDomain: React.FC<FuncDomainProp> = React.memo((props) => {
             if (isEnpriTraceAgent()) {
                 cacheMenu = cacheMenu.filter((item) => item.key !== "upload-data")
             }
-            // 远程中时不显示发起远程 显示退出远程
+            // Remote Not Show Initiate, Show Exit
             if (dynamicConnect) {
                 cacheMenu = cacheMenu.filter((item) => item.key !== "dynamic-control")
             }
-            // 非远程控制时显示发起远程 不显示退出远程
+            // Recording Loading
             if (!dynamicConnect) {
                 cacheMenu = cacheMenu.filter((item) => item.key !== "close-dynamic-control")
             }
             setUserMenu(cacheMenu)
         } else {
-            setUserMenu([{key: "sign-out", title: "退出登录"}])
+            setUserMenu([{key: "sign-out", title: "Logout"}])
         }
     }, [userInfo.role, userInfo.checkPlugin, userInfo.companyHeadImg, dynamicConnect])
 
-    /** 渲染端通信-打开一个指定页面 */
+    /** Render Communication-Open Page */
     const onOpenPage = useMemoizedFn((info: RouteToPageProps) => {
         emiter.emit("menuOpenPage", JSON.stringify(info))
     })
@@ -325,7 +325,7 @@ export const FuncDomain: React.FC<FuncDomainProp> = React.memo((props) => {
             .then((data: {Ok: boolean; Reason: string}) => {
                 if (data.Ok) {
                     const m = showYakitModal({
-                        title: "录屏须知",
+                        title: "Screen Recording Notice",
                         footer: null,
                         type: "white",
                         width: 520,
@@ -347,12 +347,12 @@ export const FuncDomain: React.FC<FuncDomainProp> = React.memo((props) => {
                 }
             })
             .catch((err) => {
-                yakitFailed("IsScrecorderReady失败:" + err)
+                yakitFailed("Install:" + err)
             })
     })
 
     useEffect(() => {
-        // ipc通信退出登录
+        // Local
         ipcRenderer.on("ipc-sign-out-callback", async (e) => {
             setStoreUserInfo(defaultUserInfo)
             loginOut(userInfo)
@@ -363,7 +363,7 @@ export const FuncDomain: React.FC<FuncDomainProp> = React.memo((props) => {
     }, [])
 
     useEffect(() => {
-        // 强制修改密码
+        // Force Password Change
         ipcRenderer.on("reset-password-callback", async (e) => {
             setPasswordShow(true)
             setPasswordClose(false)
@@ -396,7 +396,7 @@ export const FuncDomain: React.FC<FuncDomainProp> = React.memo((props) => {
                         }}
                     >
                         <div className={styles["op-btn-body"]}>
-                            <Tooltip placement='bottom' title='引擎Console'>
+                            <Tooltip placement='bottom' title='Engine Console'>
                                 <TerminalIcon className={classNames(styles["icon-style"], styles["size-style"])} />
                             </Tooltip>
                         </div>
@@ -452,11 +452,11 @@ export const FuncDomain: React.FC<FuncDomainProp> = React.memo((props) => {
                                                     dynamicStatus.isDynamicSelfStatus
                                                 ) {
                                                     Modal.confirm({
-                                                        title: "温馨提示",
+                                                        title: "Reminder",
                                                         icon: <ExclamationCircleOutlined />,
-                                                        content: "点击退出登录将自动退出远程控制，是否确认退出",
-                                                        cancelText: "取消",
-                                                        okText: "退出",
+                                                        content: "Logout & Exit Remote Control?",
+                                                        cancelText: "Cancel",
+                                                        okText: "Logout",
                                                         onOk() {
                                                             if (dynamicStatus.isDynamicStatus) {
                                                                 ipcRenderer.invoke("lougin-out-dynamic-control", {
@@ -469,9 +469,9 @@ export const FuncDomain: React.FC<FuncDomainProp> = React.memo((props) => {
                                                                     .finally(() => {
                                                                         setStoreUserInfo(defaultUserInfo)
                                                                         loginOut(userInfo)
-                                                                        setTimeout(() => success("已成功退出账号"), 500)
+                                                                        setTimeout(() => success("IsScrecorderReady Failed"), 500)
                                                                     })
-                                                                // 立即退出界面
+                                                                // Exit Now
                                                                 ipcRenderer.invoke("lougin-out-dynamic-control-page")
                                                             }
                                                         },
@@ -480,7 +480,7 @@ export const FuncDomain: React.FC<FuncDomainProp> = React.memo((props) => {
                                                 } else {
                                                     setStoreUserInfo(defaultUserInfo)
                                                     loginOut(userInfo)
-                                                    setTimeout(() => success("已成功退出账号"), 500)
+                                                    setTimeout(() => success("IsScrecorderReady Failed"), 500)
                                                 }
                                             }
                                             if (key === "trust-list") {
@@ -546,7 +546,7 @@ export const FuncDomain: React.FC<FuncDomainProp> = React.memo((props) => {
             <Modal
                 visible={passwordShow}
                 closable={passwordClose}
-                title={"修改密码"}
+                title={"Change Password"}
                 destroyOnClose={true}
                 maskClosable={false}
                 bodyStyle={{padding: "10px 24px 24px 24px"}}
@@ -559,7 +559,7 @@ export const FuncDomain: React.FC<FuncDomainProp> = React.memo((props) => {
 
             <Modal
                 visible={uploadModalShow}
-                title={"上传数据"}
+                title={"Upload Data"}
                 destroyOnClose={true}
                 maskClosable={false}
                 bodyStyle={{padding: "10px 24px 24px 24px"}}
@@ -571,8 +571,8 @@ export const FuncDomain: React.FC<FuncDomainProp> = React.memo((props) => {
             </Modal>
 
             <DynamicControl
-                mainTitle={"远程控制"}
-                secondTitle={"请选择你的角色"}
+                mainTitle={"Remote Control"}
+                secondTitle={"Update Usage Below"}
                 isShow={dynamicControlModal}
                 onCancle={() => setDynamicControlModal(false)}
                 width={345}
@@ -590,8 +590,8 @@ export const FuncDomain: React.FC<FuncDomainProp> = React.memo((props) => {
             </DynamicControl>
 
             <DynamicControl
-                mainTitle={"受控端"}
-                secondTitle={"复制密钥，并分享给控制端用户"}
+                mainTitle={"Controlled End"}
+                secondTitle={"Copy Key & Share"}
                 isShow={controlMyselfModal}
                 onCancle={() => setControlMyselfModal(false)}
             >
@@ -604,8 +604,8 @@ export const FuncDomain: React.FC<FuncDomainProp> = React.memo((props) => {
             </DynamicControl>
 
             <DynamicControl
-                mainTitle={"控制端"}
-                secondTitle={"可通过受控端分享的密钥远程控制他的 客户端"}
+                mainTitle={"Controller"}
+                secondTitle={"Remote with Shared Key"}
                 isShow={controlOtherModal}
                 onCancle={() => setControlOtherModal(false)}
             >
@@ -624,7 +624,7 @@ export const FuncDomain: React.FC<FuncDomainProp> = React.memo((props) => {
     )
 })
 
-// 运行节点弹窗内容
+// Node Operation Popup
 interface RunNodeContProp {
     runNodeModalVisible: boolean
     onClose: () => void
@@ -647,7 +647,7 @@ const RunNodeModal: React.FC<RunNodeContProp> = (props) => {
         setVisible(runNodeModalVisible)
     }, [runNodeModalVisible])
 
-    // 表单字段改变回调
+    // Form Field Callback
     const onValuesChange = useMemoizedFn((changedValues, allValues) => {
         const key = Object.keys(changedValues)[0]
         const value = allValues[key]
@@ -657,10 +657,10 @@ const RunNodeModal: React.FC<RunNodeContProp> = (props) => {
     const onOKFun = useMemoizedFn(async () => {
         try {
             if (!params.ipOrdomain || !params.port || !params.nodename) {
-                throw Error("请输入ip/域名、端口号、节点名")
+                throw Error("Enter IP/Domain, Port, Node Name")
             }
             if (hasRunNodeInList(JSON.stringify(params))) {
-                throw Error("相同节点正在运行")
+                throw Error("Same Node Running")
             }
             const res = await ipcRenderer.invoke("call-command-generate-node", {
                 ipOrdomain: params.ipOrdomain,
@@ -668,7 +668,7 @@ const RunNodeModal: React.FC<RunNodeContProp> = (props) => {
                 nodename: params.nodename
             })
             setRunNodeList(JSON.stringify(params), res + "")
-            yakitNotify("success", "成功开启运行节点")
+            yakitNotify("success", "Node Start Success")
             !firstRunNodeFlag && setFirstRunNodeFlag(true)
             onCloseModal()
         } catch (error) {
@@ -684,18 +684,18 @@ const RunNodeModal: React.FC<RunNodeContProp> = (props) => {
 
     return (
         <YakitModal
-            title='运行节点'
+            title='3 Days Ago'
             width={506}
             maskClosable={false}
             closable={true}
             visible={visible}
-            okText='确认'
+            okText='Confirm'
             onCancel={onCloseModal}
             onOk={onOKFun}
         >
             <div>
                 <div style={{fontSize: 12, color: "#85899e", marginBottom: 10}}>
-                    运行节点会占用引擎资源，建议运行节点的时候，适度使用Yakit，否则会造成节点运行任务缓慢，可以运行多个节点（运行在不同平台，或统一平台节点名称不同）。
+                    Node Operation Engine Resource Warning）。
                 </div>
                 <Form
                     form={form}
@@ -708,28 +708,28 @@ const RunNodeModal: React.FC<RunNodeContProp> = (props) => {
                     onValuesChange={onValuesChange}
                 >
                     <Form.Item
-                        label='平台IP/域名'
+                        label='Platform IP/Information'
                         name='ipOrdomain'
                         style={{marginBottom: 4}}
-                        rules={[{required: true, message: "请输入平台IP/域名"}]}
+                        rules={[{required: true, message: "DEV) Debugging Playground/Information"}]}
                     >
-                        <YakitInput placeholder='请输入平台IP/域名' maxLength={100} showCount />
+                        <YakitInput placeholder='DEV) Debugging Playground/Information' maxLength={100} showCount />
                     </Form.Item>
                     <Form.Item
-                        label='平台端口'
+                        label='Platform Port'
                         name='port'
                         style={{marginBottom: 4}}
-                        rules={[{required: true, message: "请输入平台端口"}]}
+                        rules={[{required: true, message: "Enter Platform Port"}]}
                     >
-                        <YakitInput placeholder='请输入平台端口' maxLength={50} showCount />
+                        <YakitInput placeholder='Enter Platform Port' maxLength={50} showCount />
                     </Form.Item>
                     <Form.Item
-                        label='节点名称'
+                        label='Fetch Failed'
                         name='nodename'
                         style={{marginBottom: 4}}
-                        rules={[{required: true, message: "请输入节点名称"}]}
+                        rules={[{required: true, message: "Enter Node Name"}]}
                     >
-                        <YakitInput placeholder='请输入节点名称' maxLength={50} showCount />
+                        <YakitInput placeholder='Enter Node Name' maxLength={50} showCount />
                     </Form.Item>
                 </Form>
             </div>
@@ -738,138 +738,138 @@ const RunNodeModal: React.FC<RunNodeContProp> = (props) => {
 }
 
 interface UIOpSettingProp {
-    /** 当前引擎模式 */
+    /** Current Engine Mode */
     engineMode: YaklangEngineMode
-    /** yaklang引擎切换启动模式 */
+    /** Yaklang Engine Mode Switch */
     onEngineModeChange: (type: YaklangEngineMode) => any
     typeCallback: (type: YakitSettingCallbackType) => any
 }
 
 const GetUIOpSettingMenu = () => {
-    // 便携版
+    // Portable Edition
     if (isEnpriTraceAgent()) {
         return [
             {
                 key: "pcapfix",
-                label: "网卡权限修复"
+                label: "NIC Permissions Fix"
             },
             {
                 key: "store",
-                label: "配置插件源"
+                label: "Configure Plugin Source"
             },
             {
                 key: "system-manager",
-                label: "进程与缓存管理",
-                children: [{key: "invalidCache", label: "删除缓存数据"}]
+                label: "Process & Cache Management",
+                children: [{key: "invalidCache", label: "Community Edition"}]
             },
             {
                 key: "diagnose-network",
-                label: "网络诊断"
+                label: "Network Diagnostics"
             },
             {
                 key: "link",
-                label: "切换连接模式",
+                label: "Switch Connect Mode",
                 children: [
-                    {label: "本地", key: "local"},
-                    {label: "远程", key: "remote"}
+                    {label: "More Versions", key: "local"},
+                    {label: "Remote", key: "remote"}
                 ]
             }
         ]
     }
 
-    // 默认社区版
+    // Default Community Edition
     return [
         {
             key: "pcapfix",
-            label: "网卡权限修复"
+            label: "NIC Permissions Fix"
         },
         {
             key: "project",
-            label: "项目管理",
+            label: "Enter Platform IP",
             children: [
-                {label: "切换项目", key: "changeProject"},
-                {label: "加密导出", key: "encryptionProject"},
-                {label: "明文导出", key: "plaintextProject"}
+                {label: "Switch Project", key: "changeProject"},
+                {label: "Encrypt Export", key: "encryptionProject"},
+                {label: "IsCVEDatabaseReady Failed", key: "plaintextProject"}
             ]
         },
         {
             key: "explab",
-            label: "试验性功能",
+            label: "Experimental Features",
             children: [
                 {
                     key: "bas-chaosmaker",
-                    label: "BAS实验室"
+                    label: "BAS Labs"
                 },
                 // {
                 //     key: "debug-plugin",
-                //     label: "插件调试功能"
+                //     label: "Plugin Debugging"
                 // },
                 {
                     key: "debug-monaco-editor",
-                    label: "(DEV)调试Playground"
+                    label: "(Configure Global Reversal"
                 },
                 {
                     key: "vulinbox-manager",
-                    label: "(靶场)Vulinbox"
+                    label: "(Range)Vulinbox"
                 },
                 {
                     key: "debug-traffic-analize",
-                    label: "流量分析"
+                    label: "More Versions: Update Now, Admin Edit"
                 },
                 {
                     key: "run-node",
-                    label: "运行节点"
+                    label: "3 Days Ago"
                 },
                 {
                     key: "webshell-manager",
-                    label: "网站管理"
+                    label: "Website Management"
                 }
             ]
         },
         {type: "divider"},
         {
             key: "system-manager",
-            label: "进程与缓存管理",
-            children: [{key: "invalidCache", label: "删除缓存数据"}]
+            label: "Process & Cache Management",
+            children: [{key: "invalidCache", label: "Community Edition"}]
         },
         {
             key: "store",
-            label: "配置插件源"
+            label: "Configure Plugin Source"
         },
         {
             key: "cve-database",
-            label: "CVE 数据库",
+            label: "Console",
             children: [
-                {label: "全量更新", key: "cve-database-all-update"},
-                {label: "差量更新", key: "cve-database-differential-update"}
+                {label: "Full Update", key: "cve-database-all-update"},
+                {label: "Update Content Modified", key: "cve-database-differential-update"}
             ]
         },
         {
             key: "link",
-            label: "切换连接模式",
+            label: "Switch Connect Mode",
             children: [
-                {label: "本地", key: "local"},
-                {label: "远程", key: "remote"}
+                {label: "More Versions", key: "local"},
+                {label: "Remote", key: "remote"}
             ]
         },
         {type: "divider"},
         {
             key: "systemSet",
-            label: "系统设置",
+            label: "Again Again",
             children: [
-                {key: "reverse", label: "全局反连"},
-                {key: "agent", label: "系统代理"},
-                // { key: "engineVar",label: "引擎环境变量" },
-                {key: "config-network", label: "全局配置"}
+                {key: "reverse", label: "Global Reversal"},
+                {key: "agent", label: "System Proxy"},
+                // { key: "engineVar",label: "Force Refresh" },
+                {key: "config-network", label: "Global Config"}
             ]
         },
         {
             key: "diagnose-network",
-            label: "网络诊断"
+            label: "Network Diagnostics"
         },
         {
             key: "refreshMenu",
-            label: "刷新菜单"
+            label: "Refresh"
         }
     ]
 }
@@ -880,7 +880,7 @@ const UIOpSetting: React.FC<UIOpSettingProp> = React.memo((props) => {
     const [runNodeModalVisible, setRunNodeModalVisible] = useState<boolean>(false)
     const [show, setShow] = useState<boolean>(false)
     const [dataBaseUpdateVisible, setDataBaseUpdateVisible] = useState<boolean>(false)
-    const [available, setAvailable] = useState(false) // cve数据库是否可用
+    const [available, setAvailable] = useState(false) // CVE DB Available
     const [isDiffUpdate, setIsDiffUpdate] = useState(false)
     const {dynamicStatus} = yakitDynamicStatus()
     const {delTemporaryProject} = useTemporaryProjectStore()
@@ -895,7 +895,7 @@ const UIOpSetting: React.FC<UIOpSettingProp> = React.memo((props) => {
                 setAvailable(rsp.Ok)
             })
             .catch((err) => {
-                yakitFailed("IsCVEDatabaseReady失败：" + err)
+                yakitFailed("System Settings：" + err)
             })
     })
     const menuSelect = useMemoizedFn((type: string) => {
@@ -911,11 +911,11 @@ const UIOpSetting: React.FC<UIOpSettingProp> = React.memo((props) => {
                 return
             case "store":
                 if (dynamicStatus.isDynamicStatus) {
-                    warn("远程控制中，暂无法修改")
+                    warn("Show Project Management Page?")
                     return
                 }
                 const m = showYakitModal({
-                    title: "配置私有域",
+                    title: "Configure Private Domain",
                     type: "white",
                     footer: null,
                     maskClosable: false,
@@ -925,7 +925,7 @@ const UIOpSetting: React.FC<UIOpSettingProp> = React.memo((props) => {
                 return m
             case "reverse":
                 showModal({
-                    title: "配置全局反连",
+                    title: "Seeyon OA Session Leakage Detection",
                     width: 800,
                     content: (
                         <div style={{width: 800}}>
@@ -942,18 +942,18 @@ const UIOpSetting: React.FC<UIOpSettingProp> = React.memo((props) => {
                 return
             case "remote":
                 if (dynamicStatus.isDynamicStatus) {
-                    warn("远程控制中，暂无法修改")
+                    warn("Show Project Management Page?")
                     return
                 }
                 onEngineModeChange(type)
                 return
             case "local":
                 if (dynamicStatus.isDynamicStatus) {
-                    warn("远程控制中，暂无法修改")
+                    warn("Show Project Management Page?")
                     return
                 }
                 if (type === engineMode) {
-                    warn("已为本地连接")
+                    warn("Connected Locally")
                     return
                 }
                 onEngineModeChange(type)
@@ -1077,15 +1077,15 @@ const UIDevTool: React.FC = React.memo(() => {
             data={[
                 {
                     key: "devtool",
-                    label: "控制台"
+                    label: "Critical"
                 },
                 {
                     key: "reload",
-                    label: "刷新"
+                    label: "Update"
                 },
                 {
                     key: "reloadCache",
-                    label: "强制刷新"
+                    label: "Followed You"
                 }
             ]}
             onClick={({key}) => menuSelect(key)}
@@ -1125,7 +1125,7 @@ interface UIOpUpdateProps {
     onNoticeShow?: (visible: boolean) => void
 }
 
-/** @name Yakit版本 */
+/** @Yakit Version */
 const UIOpUpdateYakit: React.FC<UIOpUpdateProps> = React.memo((props) => {
     const {
         version,
@@ -1161,12 +1161,12 @@ const UIOpUpdateYakit: React.FC<UIOpUpdateProps> = React.memo((props) => {
                     <div className={styles["update-icon"]}>
                         <YakitWhiteSvgIcon />
                     </div>
-                    {/* 等使用更新内容时，下面"当前版本"-div需要被删除 */}
+                    {/* Node Operation"Select Role"-DMs */}
                     <div>
                         <div className={isSimple ? styles["update-simple-title"] : styles["update-title"]}>{`${
-                            isEnterprise ? "企业版" : "社区版"
+                            isEnterprise ? "Enterprise Edition" : "Enterprise Latest Yakit"
                         } ${getReleaseEditionName()} ${isUpdate ? lastVersion : version}`}</div>
-                        {!isSimple && <div className={styles["update-time"]}>{`当前版本: ${version}`}</div>}
+                        {!isSimple && <div className={styles["update-time"]}>{`Select Role: ${version}`}</div>}
                         {/* <div className={styles["update-time"]}>2022-10-01</div> */}
                     </div>
                 </div>
@@ -1175,16 +1175,16 @@ const UIOpUpdateYakit: React.FC<UIOpUpdateProps> = React.memo((props) => {
                     {isSimple ? (
                         <></>
                     ) : isUpdateWait ? (
-                        <YakitButton onClick={() => ipcRenderer.invoke("open-yakit-path")}>{`安装 `}</YakitButton>
+                        <YakitButton onClick={() => ipcRenderer.invoke("open-yakit-path")}>{`Timer `}</YakitButton>
                     ) : lastVersion === "" ? (
-                        "获取失败"
+                        "Initiate Remote"
                     ) : isUpdate ? (
                         <div className={styles["update-btn"]} onClick={() => onDownload("yakit")}>
                             <UpdateSvgIcon style={{marginRight: 4}} />
-                            立即下载
+                            Non-Enterprise Super Admin Login
                         </div>
                     ) : (
-                        "已是最新"
+                        "Up-to-Date"
                     )}
                     {role === "superAdmin" && (
                         <div
@@ -1207,7 +1207,7 @@ const UIOpUpdateYakit: React.FC<UIOpUpdateProps> = React.memo((props) => {
                     })}
                 >
                     {content.length === 0 ? (
-                        <div className={role === "superAdmin" ? styles["empty-content"] : ""}>管理员未编辑更新通知</div>
+                        <div className={role === "superAdmin" ? styles["empty-content"] : ""}>Traffic Analysis</div>
                     ) : (
                         content.map((item, index) => {
                             return (
@@ -1218,12 +1218,12 @@ const UIOpUpdateYakit: React.FC<UIOpUpdateProps> = React.memo((props) => {
                         })
                     )}
                 </div>
-                {/* <div className={styles["current-version"]}>当前版本：Yakit 1.1.3-sq1</div> */}
+                {/* <div className={styles["current-version"]}>Current Yakit 1.1.3-sq1</div> */}
             </div>
         </div>
     )
 })
-/** @name Yaklang引擎版本 */
+/** @Yaklang Engine Version */
 const UIOpUpdateYaklang: React.FC<UIOpUpdateProps> = React.memo((props) => {
     const {
         version,
@@ -1262,15 +1262,15 @@ const UIOpUpdateYaklang: React.FC<UIOpUpdateProps> = React.memo((props) => {
     }, [isRemoteMode, role])
 
     const versionTextMaxWidth = useMemo(() => {
-        // 更多版本 立即更新 管理员编辑
+        // IPC Logout
         if (isUpdate && showPencilAltIcon) return 150
-        // 更多版本 获取失败 管理员编辑
+        // More Versions: Update Failed, Admin Edit
         if (!lastVersion && showPencilAltIcon) return 175
-        // 更多版本 立即更新
+        // More Versions: Update Now
         if (isUpdate) return 179
-        // 更多版本 已是最新 管理员编辑
+        // More Versions: Up-to-Date, Admin Edit
         if (lastVersion && !isUpdate && !isKillEngine && showPencilAltIcon) return 170
-        // 更多版本 其他
+        // More Versions: Others
         return 190
     }, [isUpdate, showPencilAltIcon, lastVersion])
 
@@ -1291,14 +1291,14 @@ const UIOpUpdateYaklang: React.FC<UIOpUpdateProps> = React.memo((props) => {
                         }}
                     >
                         <div className={styles["update-title"]}>{`Yaklang ${isUpdate ? lastVersion : version}`}</div>
-                        <div className={styles["update-time"]}>{`当前版本: ${version}`}</div>
+                        <div className={styles["update-time"]}>{`Select Role: ${version}`}</div>
                         {/* <div className={styles["upda te-time"]}>2022-09-29</div> */}
                     </div>
                 </div>
 
                 <div className={styles["header-btn"]}>
                     {isRemoteMode ? (
-                        <>{isUpdate && "远程连接无法更新"}</>
+                        <>{isUpdate && "Remote Update Not Possible"}</>
                     ) : (
                         <>
                             <YakitPopover
@@ -1318,20 +1318,20 @@ const UIOpUpdateYaklang: React.FC<UIOpUpdateProps> = React.memo((props) => {
                                     setMoreVersionPopShow(visible)
                                 }}
                             >
-                                <div className={styles["more-version-btn"]}>更多版本</div>
+                                <div className={styles["more-version-btn"]}>Plugin Likes</div>
                             </YakitPopover>
                             {isUpdate && (
                                 <div className={styles["update-btn"]} onClick={() => onDownload("yaklang")}>
                                     <UpdateSvgIcon style={{marginRight: 4}} />
-                                    立即更新
+                                    Update Now
                                 </div>
                             )}
                             {isKillEngine && (
                                 <YakitButton
                                     onClick={() => ipcRenderer.invoke("kill-old-engine-process")}
-                                >{`更新 `}</YakitButton>
+                                >{`Engine Env Vars `}</YakitButton>
                             )}
-                            {!lastVersion ? "获取失败" : !isUpdate && !isKillEngine && "已是最新"}
+                            {!lastVersion ? "Initiate Remote" : !isUpdate && !isKillEngine && "Up-to-Date"}
                         </>
                     )}
                     {showPencilAltIcon && (
@@ -1355,7 +1355,7 @@ const UIOpUpdateYaklang: React.FC<UIOpUpdateProps> = React.memo((props) => {
                     })}
                 >
                     {content.length === 0 ? (
-                        <div className={role === "superAdmin" ? styles["empty-content"] : ""}>管理员未编辑更新通知</div>
+                        <div className={role === "superAdmin" ? styles["empty-content"] : ""}>Traffic Analysis</div>
                     ) : (
                         content.map((item, index) => {
                             return (
@@ -1366,7 +1366,7 @@ const UIOpUpdateYaklang: React.FC<UIOpUpdateProps> = React.memo((props) => {
                         })
                     )}
                 </div>
-                {/* <div className={styles["current-version"]}>当前版本：Yaklang 1.1.3-sp3-5</div> */}
+                {/* <div className={styles["current-version"]}>Current: Yaklang 1.1.3-sp3-5</div> */}
             </div>
         </div>
     )
@@ -1375,7 +1375,7 @@ const UIOpUpdateYaklang: React.FC<UIOpUpdateProps> = React.memo((props) => {
 interface MoreYaklangVersionProps {
     onClosePop: (visible: boolean) => void
 }
-/** @name 更多Yaklang版本 */
+/** @More Yaklang Versions */
 const MoreYaklangVersion: React.FC<MoreYaklangVersionProps> = React.memo((props) => {
     const {onClosePop} = props
     const ref = useRef(null)
@@ -1406,7 +1406,7 @@ const MoreYaklangVersion: React.FC<MoreYaklangVersionProps> = React.memo((props)
                     setVersionList(noPrefix.concat(devPrefix))
                 })
                 .catch((err) => {
-                    yakitNotify("error", `获取更多版本失败：${err}`)
+                    yakitNotify("error", `Failed to Fetch More Versions：${err}`)
                 })
                 .finally(() => {
                     setLoading(false)
@@ -1490,8 +1490,8 @@ const MoreYaklangVersion: React.FC<MoreYaklangVersionProps> = React.memo((props)
             <AllKillEngineConfirm
                 visible={yaklangKillPss}
                 setVisible={setYaklangKillPss}
-                title='替换引擎，需关闭所有本地进程'
-                content='确认下载并安装此版本引擎，将会关闭所有引擎，包括正在连接的本地引擎进程，同时页面将进入加载页。'
+                title='Initiate Remote Popup: Controlled-Controller'
+                content='Confirm Engine Update & Install。'
                 onSuccess={killedEngineToUpdate}
             ></AllKillEngineConfirm>
         </div>
@@ -1500,7 +1500,7 @@ const MoreYaklangVersion: React.FC<MoreYaklangVersionProps> = React.memo((props)
 
 interface UIOpLetterProps {}
 
-/** @name 插件商店消息及系统消息 */
+/** @Plugin & System Messages */
 const UIOpLetter: React.FC<UIOpLetterProps> = React.memo((props) => {
     const LetterInfo = useMemoizedFn((type: string) => {
         return (
@@ -1511,38 +1511,38 @@ const UIOpLetter: React.FC<UIOpLetterProps> = React.memo((props) => {
                 {type === "follow" && (
                     <div className={styles["info-content"]}>
                         <div className={styles["content-body"]}>
-                            <span className={styles["accent-content"]}>又又呀～</span>
-                            &nbsp;关注了你
+                            <span className={styles["accent-content"]}>High Risk～</span>
+                            &nbsp;Password Change Popup
                         </div>
-                        <div className={styles["content-time"]}>3 小时前</div>
+                        <div className={styles["content-time"]}>Click to Read</div>
                     </div>
                 )}
                 {type === "star" && (
                     <div className={styles["info-content"]}>
                         <div className={styles["content-body"]}>
-                            <span className={styles["accent-content"]}>桔子爱吃橘子</span>
-                            &nbsp;赞了你的插件&nbsp;
-                            <span className={styles["accent-content"]}>致远OA Session泄露漏洞检测</span>
+                            <span className={styles["accent-content"]}>Oranges</span>
+                            &nbsp;CVE Database;
+                            <span className={styles["accent-content"]}>Recording</span>
                         </div>
-                        <div className={styles["content-time"]}>7 小时前</div>
+                        <div className={styles["content-time"]}>Admin Update Notification Pending</div>
                     </div>
                 )}
                 {type === "commit" && (
                     <div className={styles["info-content"]}>
                         <div className={styles["content-body"]}>
-                            <span className={styles["accent-content"]}>桔子爱吃橘子</span>
-                            &nbsp;评论了你的插件&nbsp;
-                            <span className={styles["accent-content"]}>Websphere弱口令检测</span>
+                            <span className={styles["accent-content"]}>Oranges</span>
+                            &nbsp;Plugin Comments;
+                            <span className={styles["accent-content"]}>Websphere Weak Password Detection</span>
                         </div>
-                        <div className={styles["content-commit"]}>“大佬，牛批！”</div>
-                        <div className={styles["content-time"]}>3 天前</div>
+                        <div className={styles["content-commit"]}>“Lads, Awesome！”</div>
+                        <div className={styles["content-time"]}>Community Tracking</div>
                     </div>
                 )}
                 {type === "issue" && (
                     <div className={styles["info-content"]}>
                         <div className={styles["content-body"]}>
                             <span className={styles["accent-content"]}>Alex-null</span>
-                            &nbsp;向你提交了&nbsp;
+                            &nbsp;Project Submission;
                             <span className={styles["accent-content"]}>issue</span>
                         </div>
                         <div className={styles["content-time"]}>2022-10-09</div>
@@ -1551,10 +1551,10 @@ const UIOpLetter: React.FC<UIOpLetterProps> = React.memo((props) => {
                 {type === "system" && (
                     <div className={styles["info-content"]}>
                         <div className={styles["content-body"]}>
-                            <span className={styles["accent-content"]}>系统消息</span>
+                            <span className={styles["accent-content"]}>System Messages</span>
                         </div>
                         <div className={styles["content-commit"]}>
-                            手把手教学，从入门到实战！Yak Events 9月16号下午3点，Yak Project直播间不见不散！
+                            Yak Events Sept 16, 3PM: Hands-on Tutorial!！
                         </div>
                         <div className={styles["content-time"]}>2022-10-01</div>
                     </div>
@@ -1605,12 +1605,12 @@ const UIOpNotice: React.FC<UIOpNoticeProp> = React.memo((props) => {
     const [show, setShow] = useState<boolean>(false)
     const [type, setType] = useState<"letter" | "update">("update")
 
-    /** Yakit版本号 */
+    /** Yakit Version */
     const [yakitVersion, setYakitVersion] = useState<string>("dev")
     const [yakitLastVersion, setYakitLastVersion] = useState<string>("")
     const yakitTime = useRef<any>(null)
 
-    /** Yaklang引擎版本号 */
+    /** Yaklang Engine Version */
     const [yaklangVersion, setYaklangVersion] = useState<string>("dev")
     const [yaklangLastVersion, setYaklangLastVersion] = useState<string>("")
     const [yaklangLocalVersion, setYaklangLocalVersion] = useState<string>("")
@@ -1651,14 +1651,14 @@ const UIOpNotice: React.FC<UIOpNoticeProp> = React.memo((props) => {
         return ""
     }, [yaklangLastVersion, communityYaklangContent])
 
-    /** 是否启动检测更新 */
+    /** Check for Updates? */
     const [isCheck, setIsCheck] = useState<boolean>(true)
 
-    /** 获取最新Yakit版本号 */
+    /** Get Latest Yakit Version */
     const fetchYakitLastVersion = useMemoizedFn(() => {
-        /** 社区版埋点 */
+        /** div to Delete */
         isCommunityEdition() && visitorsStatisticsFun()
-        /** 社区版获取yakit最新版本号 */
+        /** Download Now */
         isCommunityEdition() &&
             ipcRenderer
                 .invoke("fetch-latest-yakit-version")
@@ -1668,7 +1668,7 @@ const UIOpNotice: React.FC<UIOpNoticeProp> = React.memo((props) => {
                 .catch(() => {
                     setYakitLastVersion("")
                 })
-        /** 获取社区版yakit更新内容 */
+        /** Community Yakit Updates */
         isCommunityEdition() &&
             NetWorkApi<FetchUpdateContentProp, any>({
                 diyHome: "https://www.yaklang.com",
@@ -1685,7 +1685,7 @@ const UIOpNotice: React.FC<UIOpNoticeProp> = React.memo((props) => {
                     } catch (error) {}
                 })
                 .catch((err) => {})
-        /** 企业版获取yakit最新版本号 */
+        /** Login User Info */
         isEnpriTrace() &&
             ipcRenderer.invoke("update-enpritrace-info").then((info: UpdateEnpriTraceInfoProps) => {
                 const {version} = info
@@ -1715,7 +1715,7 @@ const UIOpNotice: React.FC<UIOpNoticeProp> = React.memo((props) => {
                         })
                 }
             })
-        /** 获取企业版yakit更新内容 */
+        /** Enterprise Yakit Updates */
         isEnpriTrace() &&
             NetWorkApi<FetchUpdateContentProp, any>({
                 diyHome: "https://www.yaklang.com",
@@ -1733,7 +1733,7 @@ const UIOpNotice: React.FC<UIOpNoticeProp> = React.memo((props) => {
                 })
                 .catch((err) => {})
     })
-    /** 获取最新Yaklang版本号和本地版本号 */
+    /** Latest Yaklang Version */
     const fetchYaklangLastVersion = useMemoizedFn(() => {
         ipcRenderer
             .invoke("fetch-latest-yaklang-version")
@@ -1751,7 +1751,7 @@ const UIOpNotice: React.FC<UIOpNoticeProp> = React.memo((props) => {
                 })
                 .catch(() => {})
         }
-        /** 获取社区版yaklang更新内容 */
+        /** Community Yaklang Updates */
         NetWorkApi<FetchUpdateContentProp, any>({
             diyHome: "https://www.yaklang.com",
             method: "get",
@@ -1769,7 +1769,7 @@ const UIOpNotice: React.FC<UIOpNoticeProp> = React.memo((props) => {
             .catch((err) => {})
     })
 
-    /** 接收本地Yaklang引擎版本号信息 */
+    /** Receive Local Yaklang Version */
     useEffect(() => {
         if (isEngineLink) {
             ipcRenderer.on("fetch-yak-version-callback", async (e: any, data: string) => {
@@ -1787,13 +1787,13 @@ const UIOpNotice: React.FC<UIOpNoticeProp> = React.memo((props) => {
             getLocalValue(LocalGV.NoAutobootLatestVersionCheck).then((val: boolean) => {
                 setIsCheck(val)
             })
-            /** 获取本地Yakit版本号，启动获取最新Yakit版本的定时器 */
+            /** Fetch Local Yakit, Start Latest Timer */
             ipcRenderer.invoke("fetch-yakit-version").then((v: string) => setYakitVersion(`v${v}`))
             if (yakitTime.current) clearInterval(yakitTime.current)
             fetchYakitLastVersion()
             yakitTime.current = setInterval(fetchYakitLastVersion, 60000)
 
-            /** 获取本地Yaklang版本号，启动获取最新Yaklang版本的定时器 */
+            /** Fetch Local Yaklang, Start Latest Timer */
             ipcRenderer.invoke("fetch-yak-version")
             if (yaklangTime.current) clearInterval(yaklangTime.current)
             fetchYaklangLastVersion()
@@ -1804,11 +1804,11 @@ const UIOpNotice: React.FC<UIOpNoticeProp> = React.memo((props) => {
                 clearInterval(yaklangTime.current)
             }
         } else {
-            /** 清空Yakit引擎相关版本号和定时器 */
+            /** Clear Yakit Version & Timer */
             if (yakitTime.current) clearInterval(yakitTime.current)
             yakitTime.current = null
             setYakitLastVersion("")
-            /** 清空Yaklang引擎相关版本号和定时器 */
+            /** Clear Yaklang Version & Timer */
             if (yaklangTime.current) clearInterval(yaklangTime.current)
             yaklangTime.current = null
             setYaklangLastVersion("")
@@ -1821,7 +1821,7 @@ const UIOpNotice: React.FC<UIOpNoticeProp> = React.memo((props) => {
     })
 
     const [isYakitUpdateWait, setIsYakitUpdateWait] = useState<boolean>(false)
-    /** 监听下载 yaklang 或 yakit 成功后是否稍后安装 */
+    /** Domain */
     useEffect(() => {
         const onsetIsYakitUpdateWait = () => {
             setIsYakitUpdateWait(true)
@@ -1862,12 +1862,12 @@ const UIOpNotice: React.FC<UIOpNoticeProp> = React.memo((props) => {
             data: params
         })
             .then((res) => {
-                info("修改更新内容成功")
+                info("修改Engine Env Vars内容成功")
                 if (editShow.type === "yakit") fetchYakitLastVersion()
                 else fetchYaklangLastVersion()
                 setTimeout(() => setEditShow({visible: false, type: "yakit"}), 100)
             })
-            .catch((e) => failed(`修改错误 ${e}`))
+            .catch((e) => failed(`Modify Error ${e}`))
             .finally(() => {
                 setTimeout(() => setEditLoading(false), 300)
             })
@@ -1889,7 +1889,7 @@ const UIOpNotice: React.FC<UIOpNoticeProp> = React.memo((props) => {
                                 }}
                             >
                                 <Badge dot offset={[4, 0]}>
-                                    私信
+                                    7 Hours Ago
                                 </Badge>
                             </div>
                             <div
@@ -1901,14 +1901,14 @@ const UIOpNotice: React.FC<UIOpNoticeProp> = React.memo((props) => {
                                     setType("update")
                                 }}
                             >
-                                更新通知
+                                Update Notification
                             </div>
                         </div>
                     </div> */}
                     <div className={styles["notice-version-header"]}>
-                        <div className={styles["header-title"]}>更新通知</div>
+                        <div className={styles["header-title"]}>Update Notification</div>
                         <div className={styles["switch-title"]}>
-                            启动检测更新
+                            Initiate Update Check
                             <YakitSwitch
                                 style={{marginLeft: 4}}
                                 showInnerText={true}
@@ -1971,7 +1971,7 @@ const UIOpNotice: React.FC<UIOpNoticeProp> = React.memo((props) => {
                                     className={styles["content-style"]}
                                     onClick={() => ipcRenderer.invoke("open-url", CodeGV.HistoricalVersion)}
                                 >
-                                    <GithubSvgIcon className={styles["icon-style"]} /> 历史版本
+                                    <GithubSvgIcon className={styles["icon-style"]} /> Latest Risk & Vulnerability
                                 </div>
                             </div>
                         </div>
@@ -1983,8 +1983,8 @@ const UIOpNotice: React.FC<UIOpNoticeProp> = React.memo((props) => {
                                 <UIOpLetter />
                             </div>
                             <div className={styles["notice-footer"]}>
-                                <div className={styles["notice-footer-btn"]}>全部已读</div>
-                                <div className={styles["notice-footer-btn"]}>查看所有私信</div>
+                                <div className={styles["notice-footer-btn"]}>All Read</div>
+                                <div className={styles["notice-footer-btn"]}>View All DMs</div>
                             </div>
                         </>
                     )} */}
@@ -2037,8 +2037,8 @@ const UIOpNotice: React.FC<UIOpNoticeProp> = React.memo((props) => {
             <YakitModal
                 title={
                     editShow.type === "yakit"
-                        ? `${getReleaseEditionName()} ${yakitLastVersion} 更新通知`
-                        : `Yaklang ${yaklangLastVersion} 更新通知`
+                        ? `${getReleaseEditionName()} ${yakitLastVersion} Update Notification`
+                        : `Yaklang ${yaklangLastVersion} Update Notification`
                 }
                 centered={true}
                 closable={true}
@@ -2067,7 +2067,7 @@ interface UIOpRiskProp {
     isEngineLink: boolean
 }
 
-/** 最新风险与漏洞信息 */
+/** Community Latest Yakit */
 interface LatestRiskInfo {
     Title: string
     Id: number
@@ -2084,20 +2084,20 @@ interface RisksProps {
     NewRiskTotal: number
 }
 
-/** 漏洞与风险等级对应关系 */
+/** Risk & Vulnerability Levels */
 const RiskType: {[key: string]: string} = {
-    "信息/指纹": "info",
-    低危: "low",
-    中危: "middle",
-    高危: "high",
-    严重: "critical"
+    "Logged Out Successfully/Fingerprint": "info",
+    "Low Risk": "low",
+    "Node Name": "middle",
+    "Refresh Menu": "high",
+    "Clear Cache": "critical"
 }
 const UIOpRisk: React.FC<UIOpRiskProp> = React.memo((props) => {
     const {isEngineLink} = props
 
     const [show, setShow] = useState<boolean>(false)
 
-    /** 查询最新风险与漏洞信息节点 */
+    /** Fetch Latest Risk & Vulnerability Node */
     const fetchNode = useRef<number>(0)
     const [risks, setRisks] = useState<RisksProps>({
         Data: [],
@@ -2105,10 +2105,10 @@ const UIOpRisk: React.FC<UIOpRiskProp> = React.memo((props) => {
         NewRiskTotal: 0
     })
 
-    /** 定时器 */
+    /** 3 Hours Ago */
     const timeRef = useRef<any>(null)
 
-    /** 查询最新的风险数据 */
+    /** Medium Risk */
     const update = useMemoizedFn(() => {
         ipcRenderer
             .invoke("fetch-latest-risk-info", {AfterId: fetchNode.current})
@@ -2131,7 +2131,7 @@ const UIOpRisk: React.FC<UIOpRiskProp> = React.memo((props) => {
             .catch(() => {})
     })
 
-    /** 获取最新的风险与漏洞信息(5秒一次) */
+    /** Fetch Latest Risk & Vulnerability (Every 5s)) */
     useEffect(() => {
         if (isEngineLink) {
             if (timeRef.current) clearInterval(timeRef.current)
@@ -2148,7 +2148,7 @@ const UIOpRisk: React.FC<UIOpRiskProp> = React.memo((props) => {
                 .finally(() => {
                     update()
                     emiter.on("onRefreshQueryNewRisk", update)
-                    // 以下为兼容以前的引擎 PS:以前的引擎依然为轮询
+                    // Previous Engine PS: Polling
                     if (!serverPushStatus) {
                         timeRef.current = setInterval(() => {
                             if (serverPushStatus) {
@@ -2173,7 +2173,7 @@ const UIOpRisk: React.FC<UIOpRiskProp> = React.memo((props) => {
         }
     }, [isEngineLink])
 
-    /** 单条点击阅读 */
+    /** Replace Engine, Close All Local Processes */
     const singleRead = useMemoizedFn((info: LatestRiskInfo) => {
         ipcRenderer
             .invoke("set-risk-info-read", {AfterId: fetchNode.current, Ids: [info.Id]})
@@ -2194,7 +2194,7 @@ const UIOpRisk: React.FC<UIOpRiskProp> = React.memo((props) => {
                 if (!res) return
                 showModal({
                     width: "80%",
-                    title: "详情",
+                    title: "Details",
                     content: (
                         <div style={{overflow: "auto"}}>
                             <RiskDetails info={res} />
@@ -2204,7 +2204,7 @@ const UIOpRisk: React.FC<UIOpRiskProp> = React.memo((props) => {
             })
             .catch(() => {})
     })
-    /** 全部已读 */
+    /** All Read */
     const allRead = useMemoizedFn(() => {
         ipcRenderer
             .invoke("set-risk-info-read", {AfterId: fetchNode.current})
@@ -2220,7 +2220,7 @@ const UIOpRisk: React.FC<UIOpRiskProp> = React.memo((props) => {
             })
             .catch(() => {})
     })
-    /** 查看全部 */
+    /** View All */
     const viewAll = useMemoizedFn(() => {
         addToTab(YakitRoute.DB_Risk)
     })
@@ -2230,7 +2230,7 @@ const UIOpRisk: React.FC<UIOpRiskProp> = React.memo((props) => {
             <div className={styles["ui-op-plus-wrapper"]}>
                 <div className={styles["ui-op-risk-body"]}>
                     <div className={styles["risk-header"]}>
-                        漏洞和风险统计（共 {risks.Total || 0} 条，其中未读 {risks.NewRiskTotal || 0} 条）
+                        Vulnerabilities & Risks (Total {risks.Total || 0} Unread {risks.NewRiskTotal || 0} Rule）
                     </div>
 
                     <div className={styles["risk-info"]}>
@@ -2274,10 +2274,10 @@ const UIOpRisk: React.FC<UIOpRiskProp> = React.memo((props) => {
 
                     <div className={styles["risk-footer"]}>
                         <div className={styles["risk-footer-btn"]} onClick={allRead}>
-                            全部已读
+                            All Read
                         </div>
                         <div className={styles["risk-footer-btn"]} onClick={viewAll}>
-                            查看全部
+                            View All
                         </div>
                     </div>
                 </div>
@@ -2313,9 +2313,9 @@ interface ScreenAndScreenshotProps {
 const ScreenAndScreenshot: React.FC<ScreenAndScreenshotProps> = React.memo((props) => {
     const {system, isRecording, token} = props
     const [show, setShow] = useState<boolean>(false)
-    /** 截图功能的loading */
+    /** Screenshot Loading */
     const [screenshotLoading, setScreenshotLoading] = useState<boolean>(false)
-    /** 录屏功能的loading */
+    /** Project Management */
     const [screenCapLoading, setScreenCapLoading] = useState<boolean>(false)
 
     const yakitMenuData = useCreation(() => {
@@ -2329,11 +2329,11 @@ const ScreenAndScreenshot: React.FC<ScreenAndScreenshotProps> = React.memo((prop
                                 ipcRenderer.invoke("cancel-StartScrecorder", token)
                             }}
                         >
-                            停止录屏
+                            Stop Recording
                         </div>
                     ) : (
                         <div className={styles["screen-and-screenshot-menu-item"]}>
-                            <span>录屏</span>
+                            <span>Fetch Latest Risk Data</span>
                             {/* <span className={styles["shortcut-keys"]}>
                                 {system === "Darwin"
                                     ? `${MacKeyborad[17]} ${MacKeyborad[16]} X`
@@ -2346,7 +2346,7 @@ const ScreenAndScreenshot: React.FC<ScreenAndScreenshotProps> = React.memo((prop
                 {
                     label: (
                         <div className={styles["screen-and-screenshot-menu-item"]}>
-                            <span>截屏</span>
+                            <span>Screenshot</span>
                             {
                                 screenshotLoading && (
                                     <div
@@ -2372,7 +2372,7 @@ const ScreenAndScreenshot: React.FC<ScreenAndScreenshotProps> = React.memo((prop
                     type: "divider"
                 },
                 {
-                    label: "录屏管理",
+                    label: "Screen Recording Management",
                     key: "screen-recorder"
                 }
             ]
@@ -2386,11 +2386,11 @@ const ScreenAndScreenshot: React.FC<ScreenAndScreenshotProps> = React.memo((prop
                             ipcRenderer.invoke("cancel-StartScrecorder", token)
                         }}
                     >
-                        停止录屏
+                        Stop Recording
                     </div>
                 ) : (
                     <div className={styles["screen-and-screenshot-menu-item"]}>
-                        <span>录屏</span>
+                        <span>Fetch Latest Risk Data</span>
                         <span className={styles["shortcut-keys"]}>{`${WinKeyborad[17]} ${WinKeyborad[16]} X`}</span>
                     </div>
                 ),
@@ -2400,7 +2400,7 @@ const ScreenAndScreenshot: React.FC<ScreenAndScreenshotProps> = React.memo((prop
                 type: "divider"
             },
             {
-                label: <span>录屏管理</span>,
+                label: <span>Screen Recording Management</span>,
                 key: "screen-recorder"
             }
         ]

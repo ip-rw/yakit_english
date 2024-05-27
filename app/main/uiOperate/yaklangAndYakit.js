@@ -6,13 +6,13 @@ const {getLocalYaklangEngine, loadExtraFilePath} = require("../filePath")
 const {fetchLatestYakEngineVersion} = require("../handlers/utils/network")
 
 module.exports = (win, getClient) => {
-    /** yaklang引擎是否安装 */
+    /** Is Yaklang Engine Installed */
     ipcMain.handle("is-yaklang-engine-installed", () => {
         /** @returns {Boolean} */
         return fs.existsSync(getLocalYaklangEngine())
     })
 
-    /** 获取Yaklang引擎最新版本号 */
+    /** Get Latest Yaklang Engine Version */
     const asyncFetchLatestYaklangVersion = () => {
         return new Promise((resolve, reject) => {
             fetchLatestYakEngineVersion()
@@ -24,12 +24,12 @@ module.exports = (win, getClient) => {
                 })
         })
     }
-    /** 获取Yaklang引擎最新版本号 */
+    /** Get Latest Yaklang Engine Version */
     ipcMain.handle("fetch-latest-yaklang-version", async (e) => {
         return await asyncFetchLatestYaklangVersion()
     })
 
-    /** 获取Yakit最新版本号 */
+    /** Get Latest Yakit Version */
     const asyncFetchLatestYakitVersion = () => {
         return new Promise((resolve, reject) => {
             let rsp = https.get("https://yaklang.oss-cn-beijing.aliyuncs.com/yak/latest/yakit-version.txt")
@@ -41,22 +41,22 @@ module.exports = (win, getClient) => {
             rsp.on("error", reject)
         })
     }
-    /** 获取Yakit最新版本号 */
+    /** Get Latest Yakit Version */
     ipcMain.handle("fetch-latest-yakit-version", async (e) => {
         return await asyncFetchLatestYakitVersion()
     })
 
-    /** 获取Yakit本地版本号 */
+    /** Get Local Yakit Version */
     ipcMain.handle("fetch-yakit-version", async (e) => {
         return app.getVersion()
     })
 
-    /** 以更新引擎但未关闭内存中的老版本引擎进程(mac) */
+    /** Update Engine Without Terminating Old Version in Memory (Mac)) */
     ipcMain.handle("kill-old-engine-process", (e, type) => {
         win.webContents.send("kill-old-engine-process-callback", type)
     })
 
-    /** 获取软件当前版本对应的引擎版本号 */
+    /** Get Engine Version for Current Software Version */
     ipcMain.handle("fetch-built-in-engine-version", (e) => {
         const versionPath = loadExtraFilePath(path.join("bins", "engine-version.txt"))
         if (fs.existsSync(versionPath)) {
@@ -70,7 +70,7 @@ module.exports = (win, getClient) => {
         }
     })
 
-    /** 获取Yaklang所有版本 */
+    /** Get All Yaklang Versions */
     const asyncFetchYaklangVersionList = () => {
         return new Promise((resolve, reject) => {
             let rsp = https.get("https://aliyun-oss.yaklang.com/yak/version-info/active_versions.txt")
@@ -82,7 +82,7 @@ module.exports = (win, getClient) => {
             rsp.on("error", reject)
         })
     }
-    /** 获取Yaklang所有版本 */
+    /** Get All Yaklang Versions */
     ipcMain.handle("fetch-yaklang-version-list", async (e) => {
         return await asyncFetchYaklangVersionList()
     })

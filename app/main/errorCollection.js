@@ -4,16 +4,16 @@ const path = require("path")
 const {renderLog, printLog} = require("./filePath")
 const {getNowTime} = require("./toolsFunc")
 
-/** 引擎错误日志 */
+/** Engine Error Log */
 const renderLogPath = path.join(renderLog, `render-log-${getNowTime()}.txt`)
 let renderWriteStream = fs.createWriteStream(renderLogPath, {flags: "a"})
 
-/** 引擎错误日志 */
+/** Engine Error Log */
 const printLogPath = path.join(printLog, `print-log-${getNowTime()}.txt`)
 let printWriteStream = fs.createWriteStream(printLogPath, {flags: "a"})
 
 module.exports = (win, getClient) => {
-    /** 渲染端错误信息收集 */
+    /** Render Error Info Collection */
     ipcMain.handle("render-error-log", (e, error) => {
         const content = error || ""
         if (content) {
@@ -25,7 +25,7 @@ module.exports = (win, getClient) => {
         }
     })
 
-    /** 可疑问题的打印信息收集 */
+    /** Suspicion Print Info Collection */
     ipcMain.handle("print-info-log", (e, info) => {
         if (info) {
             printWriteStream.write(`${info}\n`, (err) => {

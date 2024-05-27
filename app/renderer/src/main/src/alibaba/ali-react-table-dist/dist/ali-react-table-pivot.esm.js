@@ -13,8 +13,8 @@ function simpleEncode(path) {
     return `key:${path.join(' ')}`;
 }
 
-/** 根据指定的 code 序列计算下钻树 */
-function buildDrillTree(data, codes, { encode = simpleEncode, totalValue = '总计', includeTopWrapper = false, isExpand = always(true), enforceExpandTotalNode = true, } = {}) {
+/** Calculate drill tree from specified code sequence */
+function buildDrillTree(data, codes, { encode = simpleEncode, totalValue = 'Total', includeTopWrapper = false, isExpand = always(true), enforceExpandTotalNode = true, } = {}) {
     const emptyPath = [];
     const totalKey = encode(emptyPath);
     let array;
@@ -83,7 +83,7 @@ function buildDrillTree(data, codes, { encode = simpleEncode, totalValue = '总�
 function fallbackAggregate(slice) {
     return slice.length === 1 ? slice[0] : {};
 }
-/** 根据表格左侧与上方的下钻树，从全量明细数据中计算对应的数据立方 */
+/** Calculate data cube from drill trees on left and top of table */
 function buildRecordMatrix({ data, leftCodes, topCodes, aggregate = fallbackAggregate, encode = simpleEncode, isLeftExpand = always(true), isTopExpand = always(true), prebuiltLeftTree, prebuiltTopTree, }) {
     const ctx = {
         peculiarity: new Set(),
@@ -201,8 +201,8 @@ function buildRecordMatrix({ data, leftCodes, topCodes, aggregate = fallbackAggr
         }
     }
 }
-/** buildRecordMatrix 的简化版本，只能处理一个维度序列，返回一个 Map。
- * 相当于只处理 matrix 的第一行（汇总行） */
+/** Simplified buildRecordMatrix for one dimension, returns Map。
+ * Handles only the first row of matrix (Summary row)） */
 function buildRecordMap({ codes, encode = simpleEncode, data, aggregate, isExpand, }) {
     const matrix = buildRecordMatrix({
         data,
@@ -235,11 +235,11 @@ const ExpandSpan = styled__default.span `
 function convertDrillTreeToCrossTree(drillTree, { indicators, encode = simpleEncode, generateSubtotalNode, enforceExpandTotalNode = true, expandKeys, onChangeExpandKeys = noop, supportsExpand, } = {}) {
     const totalKey = encode([]);
     if (supportsExpand && expandKeys == null) {
-        throw new Error('[ali-react-table-dist] convertDrillTreeToCrossTree(...) 设置 supportsExpand=true 时，expandKeys 不能为 null/undefined.');
+        throw new Error('[[ali-react-table-dist] convertDrillTreeToCross&Tree(...), supportsExpand=true implies expandKeys cannot be null/undefined.');
     }
     const expandKeySet = new Set(expandKeys);
     return dfs(drillTree);
-    /** 在 indicators 非空的情况下获取指标对应的 CrossTreeNode */
+    /** Retrieve CrossTreeNode for indicators when not empty */
     function getIndicators(node, nodeData) {
         return indicators.map((indicator) => (Object.assign({ key: encode(node.path.concat([indicator.code])), value: indicator.name, data: Object.assign(Object.assign({}, nodeData), { indicator }) }, indicator)));
     }
@@ -275,11 +275,11 @@ function convertDrillTreeToCrossTree(drillTree, { indicators, encode = simpleEnc
                     data: nodeData,
                 };
                 if (!supportsExpand || (enforceExpandTotalNode && node.key === totalKey)) {
-                    // 不支持展开功能 或是强制展开
+                    // Expanding not supported or forced expansion
                     crossTreeNode.children = dfs(node.children);
                 }
                 else if (expandKeySet.has(node.key)) {
-                    // 展开的父节点
+                    // Expanded Parent Nodes
                     // @ts-ignore
                     crossTreeNode.title = (React.createElement(ExpandSpan, { onClick: () => {
                             onChangeExpandKeys(expandKeys.filter((k) => k !== node.key), node, 'collapse');
@@ -289,7 +289,7 @@ function convertDrillTreeToCrossTree(drillTree, { indicators, encode = simpleEnc
                     crossTreeNode.children = dfs(node.children);
                 }
                 else {
-                    // 收拢的父节点
+                    // Collapsed Parent Nodes
                     needProcessChildren = false;
                     crossTreeNode.title = (React.createElement(ExpandSpan, { onClick: () => {
                             onChangeExpandKeys(expandKeys.concat([node.key]), node, 'expand');
@@ -334,9 +334,9 @@ function buildCrossTable(options) {
     const columnOffset = (_a = options.columnOffset) !== null && _a !== void 0 ? _a : 0;
     const rowOffset = (_b = options.rowOffset) !== null && _b !== void 0 ? _b : 0;
     const hasOffset = columnOffset !== 0 || rowOffset !== 0;
-    // 有的时候 leftTree/topTree 是通过 node.children 传入的
-    // 此时 leftTree/topTree 等于 null 和等于空数组是等价的
-    // 故在这里兼容 leftTree/topTree 为空的情况
+    // Sometimes leftTree/topTree passed through node.children
+    // Current leftTree/topTree being null is equivalent to an empty array
+    // Hence, compatibility with leftTree/topTree is empty
     const leftTree = (_c = options.leftTree) !== null && _c !== void 0 ? _c : [];
     const topTree = (_d = options.topTree) !== null && _d !== void 0 ? _d : [];
     const getValue = (_e = options.getValue) !== null && _e !== void 0 ? _e : always(null);
@@ -346,7 +346,7 @@ function buildCrossTable(options) {
         columns: getColumns(),
         dataSource: getDataSource(),
     };
-    /** 获取表格的列配置 */
+    /** Retrieves table column config */
     function getColumns() {
         return [...getLeftPartColumns(), ...getDataPartColumns()];
         function getLeftPartColumns() {
@@ -396,7 +396,7 @@ function buildCrossTable(options) {
                 };
             }
         }
-        /** 获取表格数据部分的列配置 */
+        /** Retrieves table data column config */
         function getDataPartColumns() {
             if (topTree.length > 0) {
                 return dfs(topTree, { valuePath: [], depth: 0 });
@@ -412,14 +412,14 @@ function buildCrossTable(options) {
                 for (const node of nodes) {
                     ctx.valuePath.push(node.value);
                     if (isLeafNode(node)) {
-                        // 叶子节点
+                        // Leaf Node
                         result.push(getDataColumn(node, ctx.depth));
                     }
                     else {
                         const { key, value, children } = node, others = __rest(node
-                        // 强制展开的节点
+                        // Forced Expansion Nodes
                         , ["key", "value", "children"]);
-                        // 强制展开的节点
+                        // Forced Expansion Nodes
                         result.push(Object.assign(Object.assign({ columnType: 'data-parent' }, others), { name: value, children: dfs(children, { valuePath: ctx.valuePath, depth: ctx.depth + 1 }) }));
                     }
                     ctx.valuePath.pop();
@@ -459,20 +459,20 @@ function buildCrossTable(options) {
         }
         else if (leftTotalNode) {
             dfs([leftTotalNode], ctx);
-        } // else 表格没有行，展示空表格
+        } // Else no rows, display empty table
         return flatRows;
         function dfs(nodes, ctx) {
             let count = 0;
             for (const node of nodes) {
                 if (node.hidden) {
-                    // 跳过被隐藏的节点
+                    // Skip hidden nodes
                     continue;
                 }
                 const rect = {
                     top: ctx.rowIndex + count,
                     bottom: -1,
                     left: ctx.depth,
-                    right: -1, // 会在 dfs 之后算出结果
+                    right: -1, // Result calculated after dfs
                 };
                 const row = {
                     [ROW_KEY]: node.key,
@@ -524,9 +524,9 @@ function CrossTable(_a) {
 function buildCrossTreeTable(options) {
     var _a, _b;
     const { primaryColumn = { name: '' }, openKeys, onChangeOpenKeys, indentSize, isLeafNode: isLeafNodeOpt = isLeafNode, } = options;
-    // 有的时候 leftTree/topTree 是通过 node.children 传入的
-    // 此时 leftTree/topTree 等于 null 和等于空数组是等价的
-    // 故在这里兼容 leftTree/topTree 为空的情况
+    // Sometimes leftTree/topTree passed through node.children
+    // Current leftTree/topTree being null is equivalent to an empty array
+    // Hence, compatibility with leftTree/topTree is empty
     const leftTree = (_a = options.leftTree) !== null && _a !== void 0 ? _a : [];
     const topTree = (_b = options.topTree) !== null && _b !== void 0 ? _b : [];
     const pipeline = new TablePipeline({
@@ -540,7 +540,7 @@ function buildCrossTreeTable(options) {
         onChangeOpenKeys,
         indentSize,
         isLeafNode(row, nodeMeta) {
-            // 调用上层 isLeafNodeOpt 时，会从 row.node 中读取该表格行对应的 leftTreeNode
+            // Reads leftTreeNode from row.node when calling isLeafNodeOpt
             return isLeafNodeOpt(row.node, nodeMeta);
         },
     }));
@@ -548,7 +548,7 @@ function buildCrossTreeTable(options) {
         dataSource: pipeline.getDataSource(),
         columns: pipeline.getColumns(),
     };
-    /** 获取表格的列配置 */
+    /** Retrieves table column config */
     function getColumns() {
         return [
             Object.assign(Object.assign({}, primaryColumn), { getValue(row) {
@@ -567,7 +567,7 @@ function buildCrossTreeTable(options) {
                 } }),
             ...getDataPartColumns(),
         ];
-        /** 获取表格数据部分的列配置 */
+        /** Retrieves table data column config */
         function getDataPartColumns() {
             return dfs(topTree, { depth: 0 });
             function dfs(nodes, ctx) {
@@ -617,7 +617,7 @@ function buildCrossTreeTable(options) {
             const result = [];
             for (const node of nodes) {
                 if (node.hidden) {
-                    // 跳过被隐藏的节点
+                    // Skip hidden nodes
                     continue;
                 }
                 if (isLeafNode(node)) {
@@ -660,7 +660,7 @@ class CrossTreeTable extends React.Component {
         return null;
     }
     render() {
-        const _a = this.props, { BaseTableComponent = BaseTable, leftTree, topTree, getValue, getCellProps, primaryColumn, render, openKeys: openKeysProp, defaultOpenKeys, onChangeOpenKeys, indentSize, isLeafNode, baseTableRef } = _a, others = __rest(_a, ["BaseTableComponent", "leftTree", "topTree", "getValue", "getCellProps", "primaryColumn", "render", "openKeys", "defaultOpenKeys", "onChangeOpenKeys", "indentSize", "isLeafNode", "baseTableRef"]) // 透传其他 BaseTable 的 props
+        const _a = this.props, { BaseTableComponent = BaseTable, leftTree, topTree, getValue, getCellProps, primaryColumn, render, openKeys: openKeysProp, defaultOpenKeys, onChangeOpenKeys, indentSize, isLeafNode, baseTableRef } = _a, others = __rest(_a, ["BaseTableComponent", "leftTree", "topTree", "getValue", "getCellProps", "primaryColumn", "render", "openKeys", "defaultOpenKeys", "onChangeOpenKeys", "indentSize", "isLeafNode", "baseTableRef"]) // Pass-through other BaseTable props
         ;
         const openKeys = openKeysProp !== null && openKeysProp !== void 0 ? openKeysProp : this.state.openKeys;
         const { dataSource, columns } = buildCrossTreeTable({

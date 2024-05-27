@@ -98,9 +98,9 @@ export const DemoLayout: React.FC<any> = (p) => {
                     value={oneSelect}
                     setValue={setOneSelect}
                     formItemStyle={{width: "80%"}}
-                    label='单选下拉框'
-                    help='这里是帮助信息'
-                    placeholder='请选择'
+                    label='Dropdown'
+                    help='Help Info Here'
+                    placeholder='Please Select'
                     data={[
                         {label: "1", value: 1},
                         {label: "2", value: 2},
@@ -112,9 +112,9 @@ export const DemoLayout: React.FC<any> = (p) => {
                     value={multiSelect}
                     setValue={setMultiSelect}
                     formItemStyle={{width: "80%"}}
-                    label='多选下拉框'
-                    help='这里是帮助信息'
-                    placeholder='请选择'
+                    label='MultiSelect Dropdown'
+                    help='Help Info Here'
+                    placeholder='Please Select'
                     allowClear={true}
                     data={[
                         {label: "1", value: "1"},
@@ -127,15 +127,15 @@ export const DemoLayout: React.FC<any> = (p) => {
                     value={switchValue}
                     setValue={setSwitchValue}
                     formItemStyle={{width: "80%"}}
-                    label='开关'
-                    help='这里是帮助信息'
+                    label='Toggle'
+                    help='Help Info Here'
                 />
                 <DemoItemRadio
                     value={radios}
                     setValue={setRadios}
                     formItemStyle={{width: "80%"}}
-                    label='单选组'
-                    help='这里是帮助信息'
+                    label='RadioGroup'
+                    help='Help Info Here'
                     data={[
                         {label: "1", value: "1"},
                         {label: "2", value: "2"},
@@ -147,8 +147,8 @@ export const DemoLayout: React.FC<any> = (p) => {
                     value={radiosButton}
                     setValue={setRadiosButton}
                     formItemStyle={{width: "80%"}}
-                    label='单选按钮组'
-                    help='这里是帮助信息'
+                    label='Radio Button Group'
+                    help='Help Info Here'
                     data={[
                         {label: "1", value: "1"},
                         {label: "2", value: "2"},
@@ -160,8 +160,8 @@ export const DemoLayout: React.FC<any> = (p) => {
                     value={checkboxs}
                     setValue={setCheckboxs}
                     formItemStyle={{width: "80%"}}
-                    label='复选框'
-                    help='这里是帮助信息'
+                    label='Checkbox'
+                    help='Help Info Here'
                     data={[
                         {label: "1", value: "1"},
                         {label: "2", value: "2"},
@@ -173,18 +173,18 @@ export const DemoLayout: React.FC<any> = (p) => {
                     value={inputs}
                     setValue={setInputs}
                     formItemStyle={{width: "80%"}}
-                    label='输入框'
-                    help='这里是帮助信息'
+                    label='InputBox'
+                    help='Help Info Here'
                     required={true}
-                    placeholder='提示信息'
+                    placeholder='Tooltip'
                 />
                 <DemoItemTextArea
                     value={textareas}
                     setValue={setTextareas}
                     formItemStyle={{width: "80%"}}
-                    label='文本域'
-                    help='这里是帮助信息'
-                    placeholder='提示信息'
+                    label='Textarea'
+                    help='Help Info Here'
+                    placeholder='Tooltip'
                     allowClear={true}
                     autoSize={{minRows: 1, maxRows: 3}}
                 />
@@ -192,18 +192,18 @@ export const DemoLayout: React.FC<any> = (p) => {
                     value={autoCompletes}
                     setValue={setAutoCompletes}
                     formItemStyle={{width: "80%"}}
-                    label='提示输入框'
-                    help='这里是帮助信息'
-                    placeholder='提示信息'
+                    label='Input Hint'
+                    help='Help Info Here'
+                    placeholder='Tooltip'
                     allowClear={true}
-                    autoComplete={["真的加的1", "真的加的2", "真的加的3", "真的加的4"]}
+                    autoComplete={["Added1Real", "Added2Real", "Added3Real", "Added4Real"]}
                 />
                 <DemoItemInputInteger
                     value={integers}
                     setValue={setIntegers}
                     formItemStyle={{width: "80%"}}
-                    label='整数框'
-                    help='这里是帮助信息'
+                    label='IntBox'
+                    help='Help Info Here'
                     min={0}
                     max={10}
                 />
@@ -211,8 +211,8 @@ export const DemoLayout: React.FC<any> = (p) => {
                     value={floats}
                     setValue={setFloats}
                     formItemStyle={{width: "80%"}}
-                    label='浮点数框'
-                    help='这里是帮助信息'
+                    label='FloatBox'
+                    help='Help Info Here'
                     min={0}
                     max={10}
                     precision={2}
@@ -221,23 +221,23 @@ export const DemoLayout: React.FC<any> = (p) => {
                     value={path}
                     setValue={setPath}
                     formItemStyle={{width: "80%"}}
-                    label='input文件框'
-                    help='这里是帮助信息'
+                    label='Input FileBox'
+                    help='Help Info Here'
                 />
                 <DemoItemInputDraggerPath
                     value={path}
                     setValue={setPath}
                     formItemStyle={{width: "80%"}}
-                    label='textarea文件框'
-                    help='这里是帮助信息'
+                    label='Textarea FileBox'
+                    help='Help Info Here'
                     renderType='textarea'
                 />
                 <DemoItemInputDraggerPath
                     value={path}
                     setValue={setPath}
                     formItemStyle={{width: "80%"}}
-                    label='textarea文件夹框'
-                    help='这里是帮助信息'
+                    label='Textarea DirBox'
+                    help='Help Info Here'
                     selectType='folder'
                     renderType='textarea'
                 />
@@ -245,8 +245,8 @@ export const DemoLayout: React.FC<any> = (p) => {
             <div style={{width: "60%", height: "100%", display: "flex", flexDirection: "column"}}>
                 <div style={{width: "100%", height: 450, overflow: "hidden", display: "flex", flexDirection: "column"}}>
                     <div style={{display: "flex", gap: 10}}>
-                        <YakitButton onClick={() => setTriggetClear(!triggerClear)}>清空数据</YakitButton>
-                        <YakitButton onClick={() => setIsStop(!isStop)}>{isStop ? "开始更新" : "停止更新"}</YakitButton>
+                        <YakitButton onClick={() => setTriggetClear(!triggerClear)}>Clear Data</YakitButton>
+                        <YakitButton onClick={() => setIsStop(!isStop)}>{isStop ? "Start Update" : "Stop Update"}</YakitButton>
                     </div>
                     <DemoVirtualTable
                         isTopLoadMore={true}
@@ -263,22 +263,22 @@ export const DemoLayout: React.FC<any> = (p) => {
                             },
                             {
                                 key: "name",
-                                headerTitle: "名字"
+                                headerTitle: "Name"
                             },
                             {
                                 key: "time",
-                                headerTitle: "时间"
+                                headerTitle: "Time"
                             },
                             {
                                 key: "content",
-                                headerTitle: "内容"
+                                headerTitle: "Content"
                             },
                             {
                                 key: "op",
-                                headerTitle: "操作",
+                                headerTitle: "Action",
                                 width: 100,
                                 colRender: (info) => {
-                                    return <YakitButton type='text'>详情</YakitButton>
+                                    return <YakitButton type='text'>Details</YakitButton>
                                 }
                             }
                         ]}

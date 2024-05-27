@@ -57,7 +57,7 @@ const PluginExecuteExtraParams: React.FC<PluginExecuteExtraParamsProps> = React.
             onSaveSetting()
         })
         /**
-         * @description 保存高级配置
+         * @description Save Advanced Settings
          */
         const onSaveSetting = useMemoizedFn(() => {
             switch (pluginType) {
@@ -82,7 +82,7 @@ const PluginExecuteExtraParams: React.FC<PluginExecuteExtraParamsProps> = React.
             }
         })
 
-        /**yak/lua根据后端返的生成;mitm/port-scan/nuclei前端固定;codec没有额外参数*/
+        /**yak/Generate based on backend return;mitm/port-scan/nuclei frontend fixed;codec no extra parameters*/
         const pluginParamsNodeByPluginType = (type: string) => {
             switch (type) {
                 case "yak":
@@ -90,7 +90,7 @@ const PluginExecuteExtraParams: React.FC<PluginExecuteExtraParamsProps> = React.
                     return (
                         <Form size='small' labelCol={{span: 6}} wrapperCol={{span: 18}} form={form}>
                             <ExtraParamsNodeByType extraParamsGroup={extraParamsGroup} pluginType={pluginType} />
-                            <div className={styles["to-end"]}>已经到底啦～</div>
+                            <div className={styles["to-end"]}>Reached Bottom～</div>
                         </Form>
                     )
 
@@ -100,7 +100,7 @@ const PluginExecuteExtraParams: React.FC<PluginExecuteExtraParamsProps> = React.
                     return (
                         <Form size='small' labelCol={{span: 6}} wrapperCol={{span: 18}} form={form}>
                             <FixExtraParamsNode form={form} pathRef={pathRef} onReset={onReset} />
-                            <div className={styles["to-end"]}>已经到底啦～</div>
+                            <div className={styles["to-end"]}>Reached Bottom～</div>
                         </Form>
                     )
 
@@ -108,7 +108,7 @@ const PluginExecuteExtraParams: React.FC<PluginExecuteExtraParamsProps> = React.
                     return <></>
             }
         }
-        /**重置固定的额外参数中的表单值 */
+        /**Reset form values in fixed extra parameters */
         const onReset = useMemoizedFn((restValue) => {
             form.setFieldsValue({...restValue})
         })
@@ -118,7 +118,7 @@ const PluginExecuteExtraParams: React.FC<PluginExecuteExtraParamsProps> = React.
                 visible={visible}
                 onClose={onClose}
                 width='40%'
-                title='额外参数'
+                title='Extra params'
             >
                 {pluginParamsNodeByPluginType(pluginType)}
             </YakitDrawer>
@@ -139,7 +139,7 @@ export const ExtraParamsNodeByType: React.FC<ExtraParamsNodeByTypeProps> = React
     return (
         <YakitCollapse defaultActiveKey={defaultActiveKey} className={styles["extra-params-node-type"]}>
             {extraParamsGroup.map((item, index) => (
-                <YakitPanel key={`${item.group}`} header={`参数组：${item.group}`}>
+                <YakitPanel key={`${item.group}`} header={`Param Group：${item.group}`}>
                     {item.data?.map((formItem) => (
                         <React.Fragment key={formItem.Field + formItem.FieldVerbose}>
                             <FormContentItemByType item={formItem} pluginType={pluginType} />
@@ -156,15 +156,15 @@ interface FixExtraParamsNodeProps {
     form: FormInstance<HTTPRequestBuilderParams>
     onReset: (fields) => void
 
-    /** YakitCollapse的bordered 插件调试页面的样式需要该属性 */
+    /** YakitCollapse bordered, needed for plugin debug page style */
     bordered?: boolean
-    /** HTTP方法和请求路径的wrapper样式 插件调试页面的样式需要该属性 */
+    /** HTTP method and request path wrapper style, needed for plugin debug page style */
     httpPathWrapper?: string
 }
 type Fields = keyof HTTPRequestBuilderParams
 export const FixExtraParamsNode: React.FC<FixExtraParamsNodeProps> = React.memo((props) => {
     const {onReset, pathRef, form, bordered, httpPathWrapper} = props
-    const [activeKey, setActiveKey] = useState<string[]>(["GET 参数"])
+    const [activeKey, setActiveKey] = useState<string[]>(["GET Params"])
 
     const getParamsRef = useRef<any>()
     const postParamsRef = useRef<any>()
@@ -176,7 +176,7 @@ export const FixExtraParamsNode: React.FC<FixExtraParamsNodeProps> = React.memo(
     const headers = Form.useWatch("Headers", form)
     const cookie = Form.useWatch("Cookie", form)
 
-    // 重置
+    // Reset
     const handleReset = (
         e: React.MouseEvent<HTMLElement, MouseEvent>,
         field: Fields,
@@ -188,7 +188,7 @@ export const FixExtraParamsNode: React.FC<FixExtraParamsNodeProps> = React.memo(
         })
         ref.current.setVariableActiveKey(["0"])
     }
-    // 添加
+    // Add
     const handleAdd = (
         e: React.MouseEvent<HTMLElement, MouseEvent>,
         field: Fields,
@@ -205,13 +205,13 @@ export const FixExtraParamsNode: React.FC<FixExtraParamsNodeProps> = React.memo(
             })
             ref.current.setVariableActiveKey([...(ref.current.variableActiveKey || []), `${variables?.length || 0}`])
         } else {
-            yakitFailed(`请将已添加【变量${index}】设置完成后再进行添加`)
+            yakitFailed(`Var Added${index}】After Setting`)
         }
         if (activeKey?.findIndex((ele) => ele === actKey) === -1) {
             setActiveKey([...activeKey, actKey])
         }
     }
-    // 删除
+    // Delete
     const handleRemove = (i: number, field: Fields) => {
         const v = form.getFieldsValue()
         const variables = (v[field] || []) as KVPair[]
@@ -223,7 +223,7 @@ export const FixExtraParamsNode: React.FC<FixExtraParamsNodeProps> = React.memo(
     return (
         <div className={styles["plugin-extra-params"]}>
             <div className={httpPathWrapper}>
-                <Form.Item label='HTTP方法' name='Method' initialValue='GET'>
+                <Form.Item label='HTTP method' name='Method' initialValue='GET'>
                     <YakitSelect
                         options={["GET", "POST", "DELETE", "PATCH", "HEAD", "OPTIONS", "CONNECT"].map((item) => ({
                             value: item,
@@ -232,13 +232,13 @@ export const FixExtraParamsNode: React.FC<FixExtraParamsNodeProps> = React.memo(
                         size='small'
                     />
                 </Form.Item>
-                <Form.Item label='请求路径' name='Path'>
+                <Form.Item label='Request path' name='Path'>
                     <YakitSelect
                         ref={pathRef}
                         allowClear
                         defaultOptions={["/", "/admin"].map((item) => ({value: item, label: item}))}
                         mode='tags'
-                        placeholder='请输入...'
+                        placeholder='Please Enter...'
                         cacheHistoryDataKey={PluginGV.LocalExecuteExtraPath}
                         isCacheDefaultValue={false}
                         size='small'
@@ -255,7 +255,7 @@ export const FixExtraParamsNode: React.FC<FixExtraParamsNodeProps> = React.memo(
                 <YakitPanel
                     header={
                         <div className={styles["yakit-panel-heard"]}>
-                            GET 参数
+                            GET Params
                             {getParams?.length ? (
                                 <span className={styles["yakit-panel-heard-number"]}>{getParams?.length}</span>
                             ) : (
@@ -263,7 +263,7 @@ export const FixExtraParamsNode: React.FC<FixExtraParamsNodeProps> = React.memo(
                             )}
                         </div>
                     }
-                    key='GET 参数'
+                    key='GET Params'
                     extra={
                         <>
                             <YakitButton
@@ -272,16 +272,16 @@ export const FixExtraParamsNode: React.FC<FixExtraParamsNodeProps> = React.memo(
                                 onClick={(e) => handleReset(e, "GetParams", getParamsRef)}
                                 size='small'
                             >
-                                重置
+                                Reset
                             </YakitButton>
                             <Divider type='vertical' style={{margin: 0}} />
                             <YakitButton
                                 type='text'
-                                onClick={(e) => handleAdd(e, "GetParams", "GET 参数", getParamsRef)}
+                                onClick={(e) => handleAdd(e, "GetParams", "GET Params", getParamsRef)}
                                 style={{paddingRight: 0}}
                                 size='small'
                             >
-                                添加
+                                Add
                                 <SolidPlusIcon className={styles["plus-icon"]} />
                             </YakitButton>
                         </>
@@ -299,7 +299,7 @@ export const FixExtraParamsNode: React.FC<FixExtraParamsNodeProps> = React.memo(
                 <YakitPanel
                     header={
                         <div className={styles["yakit-panel-heard"]}>
-                            POST 参数
+                            POST Params
                             {postParams?.length ? (
                                 <span className={styles["yakit-panel-heard-number"]}>{postParams?.length}</span>
                             ) : (
@@ -307,7 +307,7 @@ export const FixExtraParamsNode: React.FC<FixExtraParamsNodeProps> = React.memo(
                             )}
                         </div>
                     }
-                    key='POST 参数'
+                    key='POST Params'
                     extra={
                         <>
                             <YakitButton
@@ -316,16 +316,16 @@ export const FixExtraParamsNode: React.FC<FixExtraParamsNodeProps> = React.memo(
                                 onClick={(e) => handleReset(e, "PostParams", postParamsRef)}
                                 size='small'
                             >
-                                重置
+                                Reset
                             </YakitButton>
                             <Divider type='vertical' style={{margin: 0}} />
                             <YakitButton
                                 type='text'
-                                onClick={(e) => handleAdd(e, "PostParams", "POST 参数", postParamsRef)}
+                                onClick={(e) => handleAdd(e, "PostParams", "POST Params", postParamsRef)}
                                 style={{paddingRight: 0}}
                                 size='small'
                             >
-                                添加
+                                Add
                                 <SolidPlusIcon className={styles["plus-icon"]} />
                             </YakitButton>
                         </>
@@ -361,7 +361,7 @@ export const FixExtraParamsNode: React.FC<FixExtraParamsNodeProps> = React.memo(
                                 onClick={(e) => handleReset(e, "Headers", headersRef)}
                                 size='small'
                             >
-                                重置
+                                Reset
                             </YakitButton>
                             <Divider type='vertical' style={{margin: 0}} />
                             <YakitButton
@@ -370,7 +370,7 @@ export const FixExtraParamsNode: React.FC<FixExtraParamsNodeProps> = React.memo(
                                 style={{paddingRight: 0}}
                                 size='small'
                             >
-                                添加
+                                Add
                                 <SolidPlusIcon className={styles["plus-icon"]} />
                             </YakitButton>
                         </>
@@ -406,7 +406,7 @@ export const FixExtraParamsNode: React.FC<FixExtraParamsNodeProps> = React.memo(
                                 onClick={(e) => handleReset(e, "Cookie", cookieRef)}
                                 size='small'
                             >
-                                重置
+                                Reset
                             </YakitButton>
                             <Divider type='vertical' style={{margin: 0}} />
                             <YakitButton
@@ -415,7 +415,7 @@ export const FixExtraParamsNode: React.FC<FixExtraParamsNodeProps> = React.memo(
                                 style={{paddingRight: 0}}
                                 size='small'
                             >
-                                添加
+                                Add
                                 <SolidPlusIcon className={styles["plus-icon"]} />
                             </YakitButton>
                         </>

@@ -1,128 +1,128 @@
 import {MITMConsts} from "@/pages/mitm/MITMConsts"
-/** 本地文件缓存数据-键值变量 */
+/** LocalFile Cache KV */
 export enum LocalGV {
-    /** @name 获取缓存数据里引擎的启动模式("local"|"remote") */
+    /** @EngineStartMode CacheGet("local"|"remote") */
     YaklangEngineMode = "yaklang-engine-mode",
-    /** @name 获取缓存数据里引擎启动配置 */
+    /** @EngineStartConfig CacheGet */
     YaklangEnginePort = "yaklang-engine-port",
-    /** @name 关闭窗口的二次确认 */
+    /** @ConfirmCloseWnd */
     WindowsCloseFlag = "windows-close-flag",
 
-    /** @name 是否自启最新版本检测 */
+    /** @AutoStart Version Check? */
     NoAutobootLatestVersionCheck = "no-autoboot-latest-version-check",
 
-    /** @name 未安装引擎提示框内的用户协议是否勾选 */
+    /** @EngineAgreement Checked? */
     IsCheckedUserAgreement = "is-checked-user-agreement",
 
-    /** @name 重要更新的前瞻提示框-本地缓存值 */
+    /** @PreviewUpdate DialogCache */
     UpdateForwardAnnouncement = "update-forward-announcement",
-    /** @name 判断前瞻提示框是否显示的界定值(代码里进行调整控制) */
+    /** @PredictiveDialog ShowThreshold) */
     JudgeUpdateForwardAnnouncement = "v1.2.9-sp1"
 }
 
-/** 引擎数据库缓存数据-键值变量 */
+/** EngineDB Cache KV */
 export enum RemoteGV {
-    /** @name 私有域地址 */
+    /** @PrivateDomain Address */
     HttpSetting = "httpSetting",
-    /** @name 全局反连地址 */
+    /** @Global Callback Address */
     GlobalBridgeAddr = "yak-bridge-addr",
-    /** @name 全局反连密钥 */
+    /** @Global Callback Key */
     GlobalBridgeSecret = "yak-bridge-secret",
-    /** @name 是否复用全局DNS-Log配置 */
+    /** @Global DNS-Log Reuse? */
     GlobalDNSLogBridgeInherit = "yakit-DNSLOG_INHERIT_BRIDGE",
-    /** @name 全局DNS-Log只看a记录 */
+    /** @Global DNS-Log AOnly */
     GlobalDNSLogOnlyARecord = "dnslog-onlyARecord",
-    /** @name 全局DNS-Log地址 */
+    /** @Global DNS-Log Address */
     GlobalDNSLogAddr = "yak-dnslog-addr",
-    /** @name 全局DNS-Log密钥 */
+    /** @Global DNS-Log Key */
     GlobalDNSLogSecret = "yak-dnslog-secret",
-    /** @name 登录账户Token(enterprise) */
+    /** @AuthToken (enterprise) */
     TokenOnlineEnterprise = "token-online-enterprise",
-    /** @name 登录账户Token */
+    /** @AuthToken */
     TokenOnline = "token-online",
-    /** @name 连接的项目数据库 */
+    /** @ProjectDB Connection */
     LinkDatabase = "link-database",
-    /** @name 全局状态的查询间隔时间 */
+    /** @GlobalStatus PollInterval */
     GlobalStateTimeInterval = "global-state-time-interval",
-    /** @name 全局Chrome启动路径 */
+    /** @GlobalChrome Path */
     GlobalChromePath = "global-chrome-path",
-    /** @name 软件内菜单展示模式 */
+    /** @MenuDisplay Mode */
     PatternMenu = "PatternMenu",
-    /** @name 是否展示引擎控制台  */
+    /** @Show Engine Console?  */
     ShowBaseConsole = "SHOW_BASE_CONSOLE",
 
-    /** @name 菜单是否为用户自行导入的json数据 */
+    /** @MenusAre JSON Imported? */
     IsImportJSONMenu = "is-import-json-menu",
-    /** @name 用户删除的系统内定菜单 */
+    /** @UserDeleted Menus */
     UserDeleteMenu = "user-delete-menu",
 
-    /** @name chat-cs聊天记录 */
+    /** @Chat-CS Logs */
     ChatCSStorage = "chat-cs-storage",
 
-    /** @name webFuzzer页面以及每个页面的数据缓存字段 */
+    /** @WebFuzzerPage CacheFields */
     FuzzerCache = "fuzzer-list-cache",
-    /** @name webFuzzer序列的缓存字段 */
+    /** @WebFuzzer Seq CacheFields */
     FuzzerSequenceCache = "fuzzer_sequence_cache",
-    /** @name history页面左侧tabs */
+    /** @HistoryTabs */
     HistoryLeftTabs = "history_left_tabs",
-    /** @name 临时项目记录是否记住不给提示 */
+    /** @TempProject RememberConfirm */
     TemporaryProjectNoPrompt = "temporary_project_no_prompt",
-    /** @name 插件组删除是否记住不给提示 */
+    /** @PluginGroup Deletion Confirm */
     PluginGroupDelNoPrompt = "plugin_group_del_no_prompt",
-    /** @name mitm劫持左侧tabs */
+    /** @MITM Capture LeftTabs */
     MitmHijackedLeftTabs = "mitm_hijacked_left_tabs",
-    /** @name history编辑器响应美化&渲染 */
+    /** @HistoryEdit ResponseBeautify&Render */
     HistoryResponseEditorBeautify = "history_response_editor_beautify",
-    /** @name history编辑器请求美化&渲染 */
+    /** @HistoryEdit Request Beautify&Render */
     HistoryRequestEditorBeautify = "history_request_editor_beautify",
-    /** @name WebFuzzer编辑器美化 */
+    /** @WebFuzzer Editor Beautify */
     WebFuzzerEditorBeautify = "webFuzzer_editor_beautify",
-    /** @name WebFuzzer编辑器美化&渲染 */
+    /** @WebFuzzer Editor Beautify&Render */
     WebFuzzerOneResEditorBeautifyRender = "webFuzzer_one_res_editor_beautify_render",
-    /**@name 专项漏洞关键词搜索缓存 */
+    /**@Vulnerability Search Cache */
     PocPluginKeywords = "poc-plugin-keywords",
-    /**@name MITM 用户数据是否保存 */
+    /**@MITM UserData Save? */
     MITMUserDataSave = "mitm_user_data_save",
-    /**@name WebFuzzer高级配置内容的显/隐 */
+    /**@WebFuzzer AdvConfig Display/Hide */
     WebFuzzerAdvancedConfigShow = "web_fuzzer_advanced_config_show",
-    /**@name MITM热加载代码保存 */
+    /**@MITM Code HotSave */
     MITMHotPatchCodeSave = "mitm_hot_patch_code_save",
-    /**@name fuzzer序列页面中,页面配置内容的显/隐 */
+    /**@FuzzerSeq PageDisplay/Hide */
     FuzzerSequenceSettingShow = "fuzzer_sequence_setting_show",
-    /**@name WebFuzzer最大响应数量限制 */
+    /**@WebFuzzer MaxResponse Limit */
     FuzzerResMaxNumLimit="fuzzer_res_max_limit"
 }
 
-/** 项目逻辑全局变量 */
+/** GlobalLogic Vars */
 export enum CodeGV {
-    /** @name 官网地址 */
+    /** @OfficialWebsite Address */
     HomeWebsite = "https://www.yaklang.com",
-    /** @name 远程连接配置信息文件路径 */
+    /** @RemoteConfig FilePath */
     RemoteLinkPath = "$HOME/yakit-projects/auth/yakit-remote.json",
-    /** @name 历史版本下载页面 */
+    /** @HistoryVersions Download Page */
     HistoricalVersion = "https://github.com/yaklang/yakit/releases",
-    /** @name public版本菜单模式 */
+    /** @Public Menu Mode */
     PublicMenuModeValue = "public",
-    /** @name 菜单状态缓存 */
+    /** @MenuState Cache */
     MenuExpand = "menu-expand",
-    /** @name 插件参数-帮助文档地址 */
+    /** @PluginParam-HelpURL */
     PluginParamsHelp = "https://yaklang.com/products/Plugin-repository/plugins/plugin_create"
 }
 
-/**YakitAutoComplate + YakitSelect缓存下拉和默认值变量 */
+/**YakitAutoComplete + YakitSelect Cache&DfltVals */
 export enum CacheDropDownGV {
-    /** @name mitm 劫持代理监听主机 */
+    /** @MITM Proxy Host */
     MITMDefaultHostHistoryList = "mitm_default_host_history",
-    /** @name CVETable 设置代理 */
+    /** @CVETable ProxySet */
     CVEProxyList = "cev_proxy_list",
-    /** @name 私有域地址 */
+    /** @PrivateDomain Address */
     ConfigBaseUrl = "config_base_url",
-    /** @name 配置插件源 -》设置代理 */
+    /** @ConfigPluginSource - ProxySet */
     ConfigProxy = "config_proxy",
-    /** @name MITM 保存用户数据地址 */
+    /** @MITM UserData SavePath */
     MITMSaveUserDataDir = "mitm_save_user_data_dir",
-    /** @name MITM webFuzzer 代理 */
+    /** @MITM webFuzzer Proxy */
     WebFuzzerProxyList = "web_fuzzer_proxy_list",
-    /** @name WebFuzzer 插入文件 */
+    /** @WebFuzzer File Insert */
     WebFuzzerInsertFileFuzzTag = "web_fuzzer_insert_file_fuzz_tag"
 }

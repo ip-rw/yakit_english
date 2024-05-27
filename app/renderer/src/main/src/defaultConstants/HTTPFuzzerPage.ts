@@ -1,5 +1,5 @@
 /**
- * @description 此文件是 HTTPFuzzerPage 页面的通用常用变量
+ * @Description This file is a common variable for HTTPFuzzerPage
  * @author luoluo
  */
 
@@ -22,7 +22,7 @@ export const WEB_FUZZ_HOTPATCH_WITH_PARAM_CODE = "WEB_FUZZ_HOTPATCH_WITH_PARAM_C
 export const WEB_FUZZ_DNS_Server_Config = "WEB_FUZZ_DNS_Server_Config"
 export const WEB_FUZZ_DNS_Hosts_Config = "WEB_FUZZ_DNS_Hosts_Config"
 
-// WebFuzzer表格默认显示数量
+// WebFuzzer Table Default Count
 export const DefFuzzerTableMaxData = 20000
 
 export const defaultAdvancedConfigShow: AdvancedConfigShowProps = {
@@ -31,7 +31,7 @@ export const defaultAdvancedConfigShow: AdvancedConfigShowProps = {
 }
 
 export const defaultAdvancedConfigValue: AdvancedConfigValueProps = {
-    // 请求包配置
+    // Request Pack Config
     fuzzTagMode: "standard",
     fuzzTagSyncIndex: false,
     isHttps: false,
@@ -41,15 +41,15 @@ export const defaultAdvancedConfigValue: AdvancedConfigValueProps = {
     resNumlimit: DefFuzzerTableMaxData,
     actualHost: "",
     timeout: 30.0,
-    // 批量目标
+    // Batch Targets
     batchTarget: new Uint8Array(),
-    // 发包配置
+    // Packet Config
     concurrent: 20,
     proxy: [],
     minDelaySeconds: 0,
     maxDelaySeconds: 0,
     repeatTimes: 0,
-    // 重试配置
+    // Retry Config
     maxRetryTimes: 0,
     retry: true,
     noRetry: false,
@@ -63,7 +63,7 @@ export const defaultAdvancedConfigValue: AdvancedConfigValueProps = {
     },
     retryWaitSeconds: 0,
     retryMaxWaitSeconds: 0,
-    // 重定向配置
+    // Redirect Config
     redirectCount: 3,
     noFollowRedirect: true,
     followJSRedirect: false,
@@ -78,7 +78,7 @@ export const defaultAdvancedConfigValue: AdvancedConfigValueProps = {
     // dns config
     dnsServers: [],
     etcHosts: [],
-    // 设置变量
+    // Set Variable
     params: [{Key: "", Value: "", Type: "raw"}],
     methodGet: [
         {
@@ -104,12 +104,12 @@ export const defaultAdvancedConfigValue: AdvancedConfigValueProps = {
             Value: ""
         }
     ],
-    // 匹配器
+    // Matcher
     filterMode: "onlyMatch",
     matchers: [],
     matchersCondition: "and",
     hitColor: "red",
-    // 提取器
+    // Extractor
     extractors: []
 }
 
@@ -154,53 +154,53 @@ export const defaultWebFuzzerPageInfo: WebFuzzerPageInfoProps = {
     request: defaultPostTemplate,
     variableActiveKeys: undefined
 }
-// 注：此处顺序为倒序（新增DefaultDescription记得带-fixed，此处为标识固定项）
+// Note: Order here is reverse (add DefaultDescription with -fixed, this marks fixed items）
 export const defaultLabel: LabelDataProps[] = [
     {
-        DefaultDescription: "反向正则（单个）-fixed",
-        Description: "反向正则（单个）",
+        DefaultDescription: "Inverse Regex (Single)-fixed",
+        Description: "Inverse Regex (Single）",
         Label: "{{regen:one([0-9a-f]{3})}}"
     },
     {
-        DefaultDescription: "反向正则（全部）-fixed",
-        Description: "反向正则（全部）",
+        DefaultDescription: "Inverse Regex (All)-fixed",
+        Description: "Inverse Regex (All）",
         Label: "{{regen([0-9a-f]{3})}}"
     },
     {
-        DefaultDescription: "时间戳（秒）-fixed",
-        Description: "时间戳（秒）",
+        DefaultDescription: "Timestamp (Sec)-fixed",
+        Description: "Timestamp (Sec）",
         Label: "{{timestamp(seconds)}}"
     },
     {
-        DefaultDescription: "验证码-fixed",
-        Description: "验证码",
+        DefaultDescription: "Captcha-fixed",
+        Description: "Captcha",
         Label: "{{int(0000-9999)}}"
     },
     {
-        DefaultDescription: "随机数-fixed",
-        Description: "随机数",
+        DefaultDescription: "RandomNum-fixed",
+        Description: "RandomNum",
         Label: "{{randint(0,10)}}"
     },
     {
-        DefaultDescription: "随机字符串-fixed",
-        Description: "随机字符串",
+        DefaultDescription: "RandomStr-fixed",
+        Description: "RandomStr",
         Label: "{{randstr}}"
     },
     {
-        DefaultDescription: "整数范围-fixed",
-        Description: "整数范围",
+        DefaultDescription: "Integer Range-fixed",
+        Description: "Integer Range",
         Label: "{{int(1-10)}}"
     },
     {
-        DefaultDescription: "插入Payload-fixed",
-        Description: "插入Payload"
+        DefaultDescription: "Insert Payload-fixed",
+        Description: "Insert Payload"
     },
     {
-        DefaultDescription: "插入临时字典-fixed",
-        Description: "插入临时字典"
+        DefaultDescription: "Insert Temp Dict-fixed",
+        Description: "Insert Temp Dict"
     },
     {
-        DefaultDescription: "插入文件-fixed",
-        Description: "插入文件"
+        DefaultDescription: "Insert File-fixed",
+        Description: "Insert File"
     }
 ]

@@ -19,9 +19,9 @@ import {Uint8ArrayToString} from "@/utils/str"
 
 const {ipcRenderer} = window.require("electron")
 
-/** -------------------- 数据结构转换 Start -------------------- */
+/** -------------------- Data Structure Transformation Start -------------------- */
 /**
- * @name 本地插件风险数据(YakRiskInfoProps)-转换成-线上插件风险数据(API.PluginsRiskDetail)
+ * @name Local Plugin Risk Data(YakRiskObj)-to-Online Plugin Risk Data(API.PluginsRiskDetail))
  */
 export const convertLocalToRemoteRisks = (risks?: YakRiskInfoProps[]) => {
     const arr: API.PluginsRiskDetail[] = []
@@ -40,7 +40,7 @@ export const convertLocalToRemoteRisks = (risks?: YakRiskInfoProps[]) => {
     return arr
 }
 /**
- * @name 线上插件风险数据(API.PluginsRiskDetail)-转换成-本地插件风险数据(YakRiskInfoProps)
+ * @name Online Plugin Risk Data(API.PluginsRiskDetail)-to-Local Plugin Risk Data(YakRiskInfoProps))
  */
 export const convertRemoteToLocalRisks = (risks?: API.PluginsRiskDetail[]) => {
     const arr: YakRiskInfoProps[] = []
@@ -60,7 +60,7 @@ export const convertRemoteToLocalRisks = (risks?: API.PluginsRiskDetail[]) => {
 }
 
 /**
- * @name 本地插件参数数据(YakParamProps)-转换成-线上插件参数数据(API.YakitPluginParam)
+ * @name Local Plugin Params(YakParamProps)-to-Online Plugin Params(API.YakitPluginParam))
  */
 export const convertLocalToRemoteParams = (local: YakParamProps[]) => {
     return local.map((item) => {
@@ -79,7 +79,7 @@ export const convertLocalToRemoteParams = (local: YakParamProps[]) => {
     })
 }
 /**
- * @name 线上插件参数数据(API.YakitPluginParam)-转换成-本地插件参数数据(YakParamProps)
+ * @name Online Plugin Params(API.YakitPluginParam)-to-Local Plugin Params(YakParamProps))
  */
 export const convertRemoteToLocalParams = (online: API.YakitPluginParam[]) => {
     return online.map((item) => {
@@ -99,8 +99,8 @@ export const convertRemoteToLocalParams = (online: API.YakitPluginParam[]) => {
 }
 
 /**
- * @name 本地插件数据结构(YakScript)-转换成-本地进行保存的插件数据结构(localYakInfo)
- * @param idModify 是否为编辑状态
+ * @name Local Plugin Data Structure(YakScript)-to-Local Saved Plugin Structure(localYakInfo))
+ * @param idModify Edit Mode
  */
 export const convertLocalToLocalInfo = (
     isModify: boolean,
@@ -135,7 +135,7 @@ export const convertLocalToLocalInfo = (
         }
     }
 
-    // 更新可编辑配置的内容
+    // Update Editable Config Content
     request.ScriptName = modify.ScriptName
     request.Type = modify.Type
     request.Help = modify.Help
@@ -146,11 +146,11 @@ export const convertLocalToLocalInfo = (
     request.PluginSelectorTypes = modify.PluginSelectorTypes
     request.Content = modify.Content
 
-    // 没有RiskDetail就赋值为undefined
+    // Set RiskDetail to undefined if None
     if (request.RiskInfo.length === 0) {
         request.RiskInfo = undefined
     }
-    // 没有Params就赋值为undefined
+    // Set Params to undefined if None
     if ((request.Params || []).length === 0) {
         request.Params = undefined
     }
@@ -159,8 +159,8 @@ export const convertLocalToLocalInfo = (
 }
 
 /**
- * @name 本地插件数据结构(YakScript)-转换成-提交修改插件数据结构(API.PluginsRequest)
- * @param idModify 是否为编辑状态
+ * @name Local Plugin Data Structure(YakScript)-to-Submit Plugin Edit Structure(API.PluginsRequest))
+ * @param idModify Edit Mode
  */
 export const convertLocalToRemoteInfo = (
     isModify: boolean,
@@ -191,7 +191,7 @@ export const convertLocalToRemoteInfo = (
         }
     }
 
-    // 更新可编辑配置的内容
+    // Update Editable Config Content
     request.script_name = modify.ScriptName
     request.type = modify.Type
     request.help = modify.Help
@@ -202,20 +202,20 @@ export const convertLocalToRemoteInfo = (
     request.plugin_selector_types = modify.PluginSelectorTypes
     request.content = modify.Content
 
-    // 没有tags就赋值为undefined
+    // Set tags to undefined if None
     if (request.tags?.length === 0) request.tags = undefined
-    // 分组为空字符时清空值(影响后端数据处理)
+    // Clear Value When Group Is Empty String (Affects Backend Data Processing))
     if (!request.group) request.group = undefined
-    // 没有riskInfo就赋值为undefined
+    // Set riskInfo to undefined if None
     if (request.riskInfo.length === 0) request.riskInfo = undefined
 
     return toolDelInvalidKV(request) as API.PluginsRequest
 }
 
 /**
- * @name 线上插件数据结构(API.PluginsDetail)-转换成-提交修改插件数据结构(API.PluginsRequest)
- * @param idModify 线上插件详细信息
- * @param modify 提交修改插件编辑信息
+ * @name Online Plugin Data Structure(API.PluginsDetail)-to-Submit Plugin Edit Structure(API.PluginsRequest))
+ * @param idModify Online Plugin Details
+ * @param modify Submit Plugin Edit Info
  */
 export const convertRemoteToRemoteInfo = (info: API.PluginsDetail, modify?: PluginDataProps) => {
     // @ts-ignore
@@ -229,7 +229,7 @@ export const convertRemoteToRemoteInfo = (info: API.PluginsDetail, modify?: Plug
     } catch (error) {}
 
     if (!!modify) {
-        // 更新可编辑配置的内容
+        // Update Editable Config Content
         request.script_name = modify.ScriptName
         request.type = modify.Type
         request.help = modify.Help
@@ -241,23 +241,23 @@ export const convertRemoteToRemoteInfo = (info: API.PluginsDetail, modify?: Plug
         request.content = modify.Content
     }
 
-    // 没有tags就赋值为undefined
+    // Set tags to undefined if None
     if (request.tags?.length === 0) request.tags = undefined
-    // 分组为空字符时清空值(影响后端数据处理)
+    // Clear Value When Group Is Empty String (Affects Backend Data Processing))
     if (!request.group) request.group = undefined
-    // 没有riskInfo就赋值为undefined
+    // Set riskInfo to undefined if None
     if ((request.riskInfo || []).length === 0) request.riskInfo = undefined
-    // 没有params就赋值为undefined
+    // Set params to undefined if None
     if ((request.params || []).length === 0) request.params = undefined
 
     return toolDelInvalidKV(request) as API.PluginsRequest
 }
-/** -------------------- 数据结构转换 End -------------------- */
+/** -------------------- Data Structure Transformation End -------------------- */
 
-/** -------------------- 插件参数数据处理工具 Start -------------------- */
+/** -------------------- Plugin Param Data Processing Tool Start -------------------- */
 /**
- * @description 根据组名将参数分组
- * @returns 返回处理好分组后的数据
+ * @description Group Params by Name
+ * @returns Returns Grouped Data
  */
 export const ParamsToGroupByGroupName = (arr: YakParamProps[]): YakExtraParamProps[] => {
     let map = {}
@@ -284,7 +284,7 @@ export const ParamsToGroupByGroupName = (arr: YakParamProps[]): YakExtraParamPro
 }
 
 /**
- * @description 表单显示的值,根据类型返回对应的类型的值
+ * @description Display Value in Form, Return Value by Type
  */
 export const getValueByType = (defaultValue, type: string): number | string | boolean | string[] => {
     let value
@@ -303,7 +303,7 @@ export const getValueByType = (defaultValue, type: string): number | string | bo
             value = Buffer.from((defaultValue || "") as string, "utf8")
             break
         case "select":
-            // 考虑(defaultValue)的数据可能本身就是一个数组
+            // Consider array for (defaultValue)
             if (Array.isArray(defaultValue)) {
                 value = defaultValue.length > 0 ? defaultValue : []
             } else {
@@ -319,7 +319,7 @@ export const getValueByType = (defaultValue, type: string): number | string | bo
 }
 
 /**
- * @description 处理最后的执行参数
+ * @description Process Final Execution Params
  * @param {{[string]:any}} object
  * @returns {YakExecutorParam[]}
  */
@@ -359,12 +359,12 @@ export const getYakExecutorParam = (object) => {
     })
     return newValue
 }
-/** -------------------- 插件参数数据处理工具 End -------------------- */
+/** -------------------- Plugin Param Data Processing Tool End -------------------- */
 
 /**
- * @name 插件上传到online-整体上传逻辑
- * @param info 上传到online的信息
- * @param isModify 是否为编辑操作
+ * @name Upload Plugin to Online-Overall Upload Logic
+ * @param info Info for Online Upload
+ * @param isModify Edit Operation
  */
 export const uploadOnlinePlugin = (
     info: API.PluginsEditRequest,
@@ -373,7 +373,7 @@ export const uploadOnlinePlugin = (
 ) => {
     // console.log("method:post|api:plugins", JSON.stringify(info))
 
-    // 往线上上传插件
+    // Upload Plugin Online
     NetWorkApi<API.PluginsEditRequest, API.PluginsResponse>({
         method: "post",
         url: "plugins",
@@ -385,12 +385,12 @@ export const uploadOnlinePlugin = (
                 if (callback) callback(true)
                 return
             }
-            // 下载插件
+            // Download Plugin
             apiDownloadPluginMine({UUID: [res.uuid]})
                 .then(() => {
-                    // 刷新插件菜单
+                    // Refresh Plugin Menu
                     setTimeout(() => ipcRenderer.invoke("change-main-menu"), 100)
-                    // 获取下载后本地最新的插件信息
+                    // Get Latest Local Plugin Info After Download
                     ipcRenderer
                         .invoke("GetYakScriptByOnlineID", {
                             OnlineID: res.id,
@@ -398,46 +398,46 @@ export const uploadOnlinePlugin = (
                         } as GetYakScriptByOnlineIDRequest)
                         .then((newSrcipt: YakScript) => {
                             if (callback) callback(newSrcipt)
-                            yakitNotify("success", "上传云端成功")
+                            yakitNotify("success", "Upload to Cloud Successful")
                         })
                         .catch((e) => {
                             // @ts-ignore
                             if (callback) callback(true)
-                            yakitNotify("error", `查询本地插件错误:${e}`)
+                            yakitNotify("error", `Query Local Plugin Error:${e}`)
                         })
                 })
                 .catch((err) => {
                     // @ts-ignore
                     if (callback) callback(true)
-                    yakitNotify("error", `插件下载本地失败:${err}`)
+                    yakitNotify("error", `Local Plugin Download Failed:${err}`)
                 })
         })
         .catch((err) => {
             if (callback) callback()
-            yakitNotify("error", "插件上传失败:" + err)
+            yakitNotify("error", "Plugin Upload Failed:" + err)
         })
 }
 
 /**
- * @name 复制插件-整体逻辑
- * @param info 复制online的信息
+ * @name Copy Plugin-Overall Logic
+ * @param info Copy Info Online
  */
 export const copyOnlinePlugin = (info: API.CopyPluginsRequest, callback?: (plugin?: YakScript) => any) => {
     // console.log("method:post|api:copy/plugins", JSON.stringify(info))
 
-    // 往线上上传插件
+    // Upload Plugin Online
     NetWorkApi<API.CopyPluginsRequest, API.PluginsResponse>({
         method: "post",
         url: "copy/plugins",
         data: info
     })
         .then((res) => {
-            // 下载插件
+            // Download Plugin
             apiDownloadPluginMine({UUID: [res.uuid]})
                 .then(() => {
-                    // 刷新插件菜单
+                    // Refresh Plugin Menu
                     setTimeout(() => ipcRenderer.invoke("change-main-menu"), 100)
-                    // 获取下载后本地最新的插件信息
+                    // Get Latest Local Plugin Info After Download
                     ipcRenderer
                         .invoke("GetYakScriptByOnlineID", {
                             OnlineID: res.id,
@@ -445,30 +445,30 @@ export const copyOnlinePlugin = (info: API.CopyPluginsRequest, callback?: (plugi
                         } as GetYakScriptByOnlineIDRequest)
                         .then((newSrcipt: YakScript) => {
                             if (callback) callback(newSrcipt)
-                            yakitNotify("success", "复制插件成功")
+                            yakitNotify("success", "Copy Plugin Successful")
                         })
                         .catch((e) => {
                             // @ts-ignore
                             if (callback) callback(true)
-                            yakitNotify("error", `查询本地插件错误:${e}`)
+                            yakitNotify("error", `Query Local Plugin Error:${e}`)
                         })
                 })
                 .catch((err) => {
                     // @ts-ignore
                     if (callback) callback(true)
-                    yakitNotify("error", `插件下载本地失败:${err}`)
+                    yakitNotify("error", `Local Plugin Download Failed:${err}`)
                 })
         })
         .catch((err) => {
             if (callback) callback()
-            yakitNotify("error", "复制插件失败:" + err)
+            yakitNotify("error", "Copy Plugin Failed:" + err)
         })
 }
 
 /**
- * @name 获取源码中的参数和风险信息
- * @param type 插件类型
- * @param code 插件源码
+ * @name Get Params and Risk Info from Source
+ * @param type Plugin Type
+ * @param code Plugin Source Code
  */
 export const onCodeToInfo: (type: string, code: string) => Promise<CodeToInfoResponseProps | null> = (type, code) => {
     return new Promise((resolve, reject) => {
@@ -480,7 +480,7 @@ export const onCodeToInfo: (type: string, code: string) => Promise<CodeToInfoRes
         ipcRenderer
             .invoke("YaklangInspectInformation", request)
             .then((res: CodeToInfoResponseProps) => {
-                // console.log("源码提取参数和风险信息", res)
+                // console.log("Extract Params and Risk Info from Source", res)
                 resolve({
                     Information: res.Information || [],
                     CliParameter: res.CliParameter || [],
@@ -489,7 +489,7 @@ export const onCodeToInfo: (type: string, code: string) => Promise<CodeToInfoRes
                 })
             })
             .catch((e: any) => {
-                yakitNotify("error", "源码提取参数及风险信息失败: " + e)
+                yakitNotify("error", "Extract Params and Risk Info from Source Failed: " + e)
                 resolve(null)
             })
     })

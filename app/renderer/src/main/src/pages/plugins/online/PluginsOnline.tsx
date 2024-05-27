@@ -76,7 +76,7 @@ import classNames from "classnames"
 import "../plugins.scss"
 import {CodeGV} from "@/yakitGV"
 
-/**插件商店页面的处理缓存中的搜索参数 */
+/**Handling Cached Search Params on Plugin Store Page */
 const getPluginOnlinePageData = (pluginOnlinePageData) => {
     const pageList = pluginOnlinePageData?.pageList || []
     if (pageList.length === 0) {
@@ -206,11 +206,11 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
         }),
         shallow
     )
-    /** 插件展示(列表|网格) */
+    /** Plugin Display (List)|Grid) */
     const [isList, setIsList] = useState<boolean>(false)
     const [selectList, setSelectList] = useState<string[]>([])
     const [allCheck, setAllCheck] = useState<boolean>(false)
-    /** 是否为加载更多 */
+    /** Load More Toggle */
     const [loading, setLoading] = useState<boolean>(false)
     const [downloadLoading, setDownloadLoading] = useState<boolean>(false)
     const [filters, setFilters] = useState<PluginFilterParams>({
@@ -231,11 +231,11 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
     const [otherSearch, setOtherSearch] = useState<OtherSearchProps>({
         timeType: {
             key: "allTimes",
-            label: "所有时间"
+            label: "All Time"
         },
         heatType: {
             key: "updated_at",
-            label: "默认排序"
+            label: "Default Sort"
         }
     })
 
@@ -250,13 +250,13 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
 
     const [menuExpand, setMenuExpand] = useState<boolean>(true)
 
-    /** 是否为初次加载 */
+    /** Is First Load */
     const isLoadingRef = useRef<boolean>(true)
     const latestLoadingRef = useLatest(loading)
 
     const userInfo = useStore((s) => s.userInfo)
 
-    // 获取筛选栏展示状态
+    // Retrieve Filter Bar Visibility State
     useEffect(() => {
         getRemoteValue(PluginGV.StoreFilterCloseStatus).then((value: string) => {
             if (value === "true") setShowFilter(true)
@@ -264,19 +264,19 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
         })
     }, [])
     useUpdateEffect(() => {
-        // 需要刷新插件商店商店列表+统计
+        // Refresh Required for Plugin Store List+Stats
         onSwitchPrivateDomainRefOnlinePluginInit()
     }, [userInfo.isLogin])
     useEffect(() => {
         getInitTotal()
         getPluginGroupList()
     }, [inViewport])
-    // 请求数据
+    // Request Data
     useEffect(() => {
         fetchList(true)
     }, [refresh, filters, otherSearch])
 
-    // 当filters过滤条件被其他页面或者意外删掉，插件列表却带了该过滤条件的情况，切换到该页面时需要把被删掉的过滤条件排除
+    // Exclude Deleted Filter Conditions on Plugin List Navigation
     useEffect(() => {
         const {realFilter, updateFilterFlag} = excludeNoExistfilter(filters, pluginGroupList)
         if (updateFilterFlag) {
@@ -295,7 +295,7 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
         }
     }, [])
     useEffect(() => {
-        /**首页点击热词和类型,更新缓存中的数据,需要刷新插件商店的列表 */
+        /**Home Page Clicks on Hotwords/Types, Update Cache Data, Need to Refresh Plugin Store List */
         if (pluginOnlinePageData.pageList.length > 0) {
             onRefOnlinePluginListByQuery()
         }
@@ -314,7 +314,7 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
             setMenuExpand(true)
         }
     })
-    /**切换私有域，刷新初始化的total和列表数据,回到列表页 */
+    /**Switch Private Domain, Refresh Initial Total & List Data, Return to List Page */
     const onSwitchPrivateDomainRefOnlinePluginInit = useMemoizedFn(() => {
         fetchList(true)
         getPluginGroupList()
@@ -322,9 +322,9 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
         setPlugin(undefined)
     })
     /**
-     * @description 刷新搜索条件,目前触发地方(首页-插件热点触发的插件商店搜索条件过滤)
+     * @Description Refresh Search Conditions, Trigger Location (Home-Plugin Hotspot Trigger Plugin Store Search Filter))
      */
-    /**首页点击热词和类型,更新缓存中的数据,需要刷新插件商店的列表 */
+    /**Home Page Clicks on Hotwords/Types, Update Cache Data, Need to Refresh Plugin Store List */
     const onRefOnlinePluginListByQuery = useMemoizedFn(() => {
         const {keyword = "", plugin_type = []} = getPluginOnlinePageData(pluginOnlinePageData)
         if (!!keyword) {
@@ -338,13 +338,13 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
             }, 200)
         }
         if (plugin_type.length > 0) {
-            // filters修改后会更着useEffect修改
+            // Updates with useEffect After filters Modification
             setFilters({
                 ...filters,
                 plugin_type
             })
         }
-        // 设置完搜索条件后清除
+        // Clear After Setting Search Conditions
         clearDataByRoute(YakitRoute.Plugin_Store)
     })
     const onRefOnlinePluginList = useMemoizedFn(() => {
@@ -353,7 +353,7 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
         }, 200)
     })
 
-    // 选中插件的数量
+    // Selected Plugin Count
     const selectNum = useMemo(() => {
         if (allCheck) return response.pagemeta.total
         else return selectList.length
@@ -367,11 +367,11 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
             setInitTotal(+res.pagemeta.total)
         })
     })
-    const filtersDetailRef = useRef<PluginFilterParams>() // 详情中的filter条件
-    const searchDetailRef = useRef<PluginSearchParams>() // 详情中的search条件
+    const filtersDetailRef = useRef<PluginFilterParams>() // Filter Condition in Details
+    const searchDetailRef = useRef<PluginSearchParams>() // Search Condition in Details
     const fetchList = useDebounceFn(
         useMemoizedFn(async (reset?: boolean) => {
-            // if (latestLoadingRef.current) return //先注释，会影响详情的更多加载
+            // if (latestLoadingRef.current) return //Comment Out, Affects More Loading in Details
             if (reset) {
                 isLoadingRef.current = true
                 setShowPluginIndex(0)
@@ -414,14 +414,14 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
         {wait: 200, leading: true}
     ).run
 
-    /**获取分组统计列表 */
+    /**Retrieve Group Statistic List */
     const getPluginGroupList = useMemoizedFn(() => {
         apiFetchGroupStatisticsOnline().then((res) => {
             setPluginGroupList(res.data)
         })
     })
 
-    // 滚动更多加载
+    // Scroll for More Loading
     const onUpdateList = useMemoizedFn(() => {
         fetchList()
     })
@@ -443,15 +443,15 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
         }
         onDownload(downloadParams)
     })
-    /**下载 */
+    /**Download */
     const onDownload = useMemoizedFn((downloadArgument: DownloadArgumentProps, callback?: () => void) => {
         const {filtersArgument, searchArgument, selectListArgument, selectNumArgument, allCheckArgument} =
             downloadArgument
         if (selectNumArgument === 0) {
-            // 全部下载
+            // Download All
             setVisibleOnline(true)
         } else {
-            // 批量下载
+            // Batch Download
             let downloadParams: DownloadOnlinePluginsRequest = {}
             if (allCheckArgument) {
                 downloadParams = {
@@ -473,35 +473,35 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
         }
     })
 
-    // 当前展示的插件序列
+    // Current plugin display sequence
     const showPluginIndex = useRef<number>(0)
     const setShowPluginIndex = useMemoizedFn((index: number) => {
         showPluginIndex.current = index
     })
 
-    /** 单项勾选|取消勾选 */
+    /** Single-Select|Deselect */
     const optCheck = useMemoizedFn((data: YakitPluginOnlineDetail, value: boolean) => {
         try {
-            // 全选情况时的取消勾选
+            // Fetch loading char with regex
             if (allCheck) {
                 setSelectList(response.data.map((item) => item.uuid).filter((item) => item !== data.uuid))
                 setAllCheck(false)
                 return
             }
-            // 单项勾选回调
+            // No history fetched if CS or vuln unselected by user
             if (value) setSelectList([...selectList, data.uuid])
             else setSelectList(selectList.filter((item) => item !== data.uuid))
         } catch (error) {
-            yakitNotify("error", "勾选失败:" + error)
+            yakitNotify("error", "Auto-rename to first QA if unchanged:" + error)
         }
     })
-    /**全选 */
+    /**Fixes failure to iterate load_content on missing older version data */
     const onCheck = useMemoizedFn((value: boolean) => {
         setSelectList([])
         setAllCheck(value)
     })
 
-    /** 单项额外操作组件 */
+    /** Single Extra Operation Component */
     const optExtraNode = useMemoizedFn((data: YakitPluginOnlineDetail) => {
         return (
             <OnlineExtraOperate
@@ -524,12 +524,12 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
             />
         )
     })
-    /** 单项点击回调 */
+    /** Single Item Callback */
     const optClick = useMemoizedFn((data: YakitPluginOnlineDetail, index: number) => {
         setPlugin({...data})
         setShowPluginIndex(index)
     })
-    /**新建插件 */
+    /**Create Plugin */
     const onNewAddPlugin = useMemoizedFn(() => {
         emiter.emit(
             "openPage",
@@ -570,7 +570,7 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
         }
         onDownload(batchDownloadParams, callback)
     })
-    /** 详情搜索事件 */
+    /** Detailed Search Event */
     const onDetailSearch = useMemoizedFn((detailSearch: PluginSearchParams, detailFilter: PluginFilterParams) => {
         searchDetailRef.current = detailSearch
         filtersDetailRef.current = detailFilter
@@ -578,11 +578,11 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
     })
     const onUploadAll = useMemoizedFn(() => {
         if (!userInfo.isLogin) {
-            yakitNotify("error", "请先登录")
+            yakitNotify("error", "Please login")
             return
         }
         if (userInfo.role !== "admin") {
-            yakitNotify("error", "暂无权限")
+            yakitNotify("error", "No Permission")
             return
         }
         setVisibleUploadAll(true)
@@ -591,7 +591,7 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
         setRemoteValue(PluginGV.StoreFilterCloseStatus, `${v}`)
         setShowFilter(v)
     })
-    /**初始数据为空的时候,刷新按钮,刷新列表和初始total,以及分组数据 */
+    /**Refresh Button When Initial Data is Empty, Refresh List & Initial Total, and Group Data */
     const onRefListAndTotalAndGroup = useMemoizedFn(() => {
         getInitTotal()
         fetchList(true)
@@ -634,7 +634,7 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
                             [styles["plugin-heard-title-hidden"]]: isShowRoll
                         })}
                     >
-                        插件商店
+                        Plugin Store
                     </div>
                 }
                 hidden={!!plugin}
@@ -656,7 +656,7 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
                                 icon={<OutlineClouddownloadIcon />}
                                 type='outline2'
                                 size='large'
-                                name={selectNum > 0 ? "下载" : "一键下载"}
+                                name={selectNum > 0 ? "Download" : "One-click download"}
                                 onClick={onDownloadBefore}
                                 loading={downloadLoading}
                                 disabled={initTotal === 0}
@@ -665,7 +665,7 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
                                 maxWidth={1050}
                                 icon={<SolidPluscircleIcon />}
                                 size='large'
-                                name='新建插件'
+                                name='Create Plugin'
                                 onClick={onNewAddPlugin}
                             />
                         </div>
@@ -703,10 +703,10 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
                                     menu={{
                                         type: "grey",
                                         data: [
-                                            {key: "day", label: "今日"},
-                                            {key: "week", label: "本周"},
-                                            {key: "month", label: "本月"},
-                                            {key: "allTimes", label: "所有时间"}
+                                            {key: "day", label: "Today"},
+                                            {key: "week", label: "This Week"},
+                                            {key: "month", label: "This Month"},
+                                            {key: "allTimes", label: "All Time"}
                                         ],
                                         onClick: ({key}) => {
                                             switch (key) {
@@ -715,7 +715,7 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
                                                         ...otherSearch,
                                                         timeType: {
                                                             key: "day",
-                                                            label: "今日"
+                                                            label: "Today"
                                                         }
                                                     })
                                                     break
@@ -724,7 +724,7 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
                                                         ...otherSearch,
                                                         timeType: {
                                                             key: "week",
-                                                            label: "本周"
+                                                            label: "This Week"
                                                         }
                                                     })
                                                     break
@@ -733,7 +733,7 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
                                                         ...otherSearch,
                                                         timeType: {
                                                             key: "month",
-                                                            label: "本月"
+                                                            label: "This Month"
                                                         }
                                                     })
                                                     break
@@ -742,7 +742,7 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
                                                         ...otherSearch,
                                                         timeType: {
                                                             key: "allTimes",
-                                                            label: "所有时间"
+                                                            label: "All Time"
                                                         }
                                                     })
                                                     break
@@ -760,9 +760,9 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
                                     name={otherSearch.heatType.label as string}
                                     menu={{
                                         data: [
-                                            {key: "updated_at", label: "默认排序"},
-                                            {key: "stars", label: "点赞最多"},
-                                            {key: "download_total", label: "下载最多"}
+                                            {key: "updated_at", label: "Default Sort"},
+                                            {key: "stars", label: "Most Liked"},
+                                            {key: "download_total", label: "Most Downloaded"}
                                         ],
                                         className: styles["func-filter-dropdown-menu"],
                                         onClick: ({key}) => {
@@ -772,7 +772,7 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
                                                         ...otherSearch,
                                                         heatType: {
                                                             key: "updated_at",
-                                                            label: "默认排序"
+                                                            label: "Default Sort"
                                                         }
                                                     })
                                                     break
@@ -781,7 +781,7 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
                                                         ...otherSearch,
                                                         heatType: {
                                                             key: "stars",
-                                                            label: "点赞最多"
+                                                            label: "Most Liked"
                                                         }
                                                     })
                                                     break
@@ -790,7 +790,7 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
                                                         ...otherSearch,
                                                         heatType: {
                                                             key: "download_total",
-                                                            label: "下载最多"
+                                                            label: "Most Downloaded"
                                                         }
                                                     })
                                                     break
@@ -874,8 +874,8 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
                         ) : (
                             <div className={styles["plugin-online-empty"]}>
                                 <YakitEmpty
-                                    title='暂无数据'
-                                    description={isCommunityEdition() ? "" : "可将本地所有插件一键上传"}
+                                    title='No Data Available'
+                                    description={isCommunityEdition() ? "" : "One-click Upload of All Local Plugins"}
                                 />
                                 <div className={styles["plugin-online-buttons"]}>
                                     {userInfo.role === "admin" && (
@@ -884,7 +884,7 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
                                             icon={<OutlineClouduploadIcon />}
                                             onClick={onUploadAll}
                                         >
-                                            一键上传
+                                            One-click Upload
                                         </YakitButton>
                                     )}
                                     <YakitButton
@@ -892,7 +892,7 @@ const PluginsOnlineList: React.FC<PluginsOnlineListProps> = React.memo((props, r
                                         icon={<OutlineRefreshIcon />}
                                         onClick={onRefListAndTotalAndGroup}
                                     >
-                                        刷新
+                                        Refresh
                                     </YakitButton>
                                 </div>
                             </div>
@@ -914,7 +914,7 @@ const PluginsUploadAll: React.FC<PluginsUploadAllProps> = React.memo((props) => 
     return (
         <YakitHint
             visible={visible}
-            title='一键上传'
+            title='One-click Upload'
             heardIcon={<SolidClouduploadIcon style={{color: "var(--yakit-warning-5)"}} />}
             footer={null}
             isDrag={true}
@@ -942,7 +942,7 @@ const PluginsOnlineHeard: React.FC<PluginsOnlineHeardProps> = React.memo((props)
     useEffect(() => {
         getBars()
     }, [])
-    /**获取导航卡片 */
+    /**Retrieve Navigation Card */
     const getBars = useMemoizedFn(() => {
         NetWorkApi<NavigationBars, API.NavigationBarsResponse>({
             method: "get",
@@ -952,7 +952,7 @@ const PluginsOnlineHeard: React.FC<PluginsOnlineHeardProps> = React.memo((props)
                 setCardImg(res.data || [])
             })
             .catch((err) => {
-                yakitNotify("error", "获取卡片导航失败:" + err)
+                yakitNotify("error", "Failed to Retrieve Card Navigation:" + err)
             })
             .finally(() => {})
     })
@@ -969,10 +969,10 @@ const PluginsOnlineHeard: React.FC<PluginsOnlineHeardProps> = React.memo((props)
             <div className={styles["plugin-online-heard-bg"]} />
             <div className={styles["plugin-online-heard-content"]}>
                 <div className={styles["plugin-online-heard-content-top"]}>
-                    <div className={styles["plugin-online-heard-content-top-tip"]}>Hello everyone! 👋</div>
-                    <div className={styles["plugin-online-heard-content-top-title"]}>Yakit 插件商店</div>
+                    <div className={styles["plugin-online-heard-content-top-tip"]}>您好，大家好! 👋</div>
+                    <div className={styles["plugin-online-heard-content-top-title"]}>Yakit Plugin Store</div>
                     <div className={styles["plugin-online-heard-content-top-subTitle"]}>
-                        未封闭的牛头&nbsp;&nbsp;YAK&nbsp;等待你来填满
+                        Unclosed Bull Head ;&nbsp;YAK&nbsp;Waiting for Your Contribution
                     </div>
                     <YakitCombinationSearchCircle value={search} onChange={setSearch} onSearch={onSearch} />
                 </div>
@@ -1013,7 +1013,7 @@ const PluginsOnlineHeard: React.FC<PluginsOnlineHeardProps> = React.memo((props)
                     </div>
                     <div className={styles["yakit-modal-code-content"]}>
                         <img alt='' src={codeUrl} className={styles["yakit-modal-code-content-url"]} />
-                        <span className={styles["yakit-modal-code-content-tip"]}>微信扫码关注公众号</span>
+                        <span className={styles["yakit-modal-code-content-tip"]}>WeChat QR Follow</span>
                     </div>
                 </div>
             </YakitModal>
@@ -1069,7 +1069,7 @@ const YakitCombinationSearchCircle: React.FC<YakitCombinationSearchCircleProps> 
                 className={styles["yakit-combination-search-circle-input"]}
                 wrapperClassName={styles["yakit-combination-search-circle-input-wrapper"]}
                 bordered={false}
-                placeholder='请输入关键词搜索插件'
+                placeholder='Enter Keywords to Search Plugins'
                 value={keyword}
                 onChange={onChangeInput}
                 onPressEnter={onSearch}

@@ -33,11 +33,11 @@ interface PaginationProps {
     Limit: number
 }
 
-const maxCellNumber = 100000 // 最大单元格10w
+const maxCellNumber = 100000 // Max Cell 10w
 
-/* 校验数组长度是否大于90MB，并在超过90MB时将数组分割成多个小段 */
+/* Split array into segments if >90MB */
 const splitArrayBySize = (arr, maxSizeInBytes) => {
-    // chunkSize用于减少解析次数-性能优化（每chunkSize条判断一次）
+    // chunkSize for fewer parse times - Perf Optimization）
     const chunkSize: number = 100
     const chunks: any[] = []
     let currentChunk: any[] = []
@@ -46,12 +46,12 @@ const splitArrayBySize = (arr, maxSizeInBytes) => {
     for (let i = 0; i < arr.length; i++) {
         const element: any = arr[i]
 
-        // 将元素添加到当前块
+        // Add element to current chunk
         currentChunk.push(element)
 
-        // 每隔 chunkSize 条数据一起计算一次是否超过指定大小，或者已经到达数组末尾
+        // Calculate every chunkSize rows whether exceeding size or at array end
         if ((i + 1) % chunkSize === 0 || i === arr.length - 1) {
-            // 一起计算前20个元素的大小
+            // Calculate size of first 20 elements together
             const elementsToCalculate = currentChunk.slice(-chunkSize)
             const elementsSize = elementsToCalculate.reduce((size, el) => {
                 return size + new TextEncoder().encode(JSON.stringify(el)).length
@@ -60,12 +60,12 @@ const splitArrayBySize = (arr, maxSizeInBytes) => {
             currentSize += elementsSize
 
             if (currentSize > maxSizeInBytes) {
-                // 如果当前块超过了指定大小，将其存储并创建新的块
-                chunks.push(currentChunk.slice(0, -chunkSize)) // push 未超过时的数组
+                // Store and create new chunk if current exceeds size
+                chunks.push(currentChunk.slice(0, -chunkSize)) // push array when not exceeded
                 currentChunk = elementsToCalculate
                 currentSize = elementsSize
             } else if (i === arr.length - 1) {
-                // 最后一次循环，且未超过指定大小，将剩余的 currentChunk 加到 chunks 中
+                // Add remaining currentChunk to chunks on the last loop without exceeding size
                 chunks.push(currentChunk)
             }
         }
@@ -78,7 +78,7 @@ export const ExportExcel: React.FC<ExportExcelProps> = (props) => {
     const {
         btnProps,
         getData,
-        fileName = "端口资产",
+        fileName = "Port Assets",
         pageSize = 100000,
         showButton = true,
         text,
@@ -88,10 +88,10 @@ export const ExportExcel: React.FC<ExportExcelProps> = (props) => {
     const [selectItem, setSelectItem] = useState<number>()
     const [visible, setVisible] = useState<boolean>(false)
     const [frequency, setFrequency] = useState<number>(0)
-    const exportDataBatch = useRef<Array<string[]>>([]) // 保存导出的数据
-    const exportNumber = useRef<number>() // 导出次数
-    const headerExcel = useRef<string[]>([]) // excel的头部
-    const optsCell = useRef<CellSetting>() // excel的头部
+    const exportDataBatch = useRef<Array<string[]>>([]) // Save exported data
+    const exportNumber = useRef<number>() // Export Counts
+    const headerExcel = useRef<string[]>([]) // Excel Header
+    const optsCell = useRef<CellSetting>() // Excel Header
     const [pagination, setPagination] = useState<QueryGeneralResponse<any>>({
         Data: [],
         Pagination: genDefaultPagination(pageSize, 1),
@@ -112,7 +112,7 @@ export const ExportExcel: React.FC<ExportExcelProps> = (props) => {
                     const chunks: any[] = splitArrayBySize(exportData, maxSizeInBytes)
 
                     if (totalCellNumber < maxCellNumber && response.Total <= pageSize && chunks.length === 1) {
-                        // 单元格数量小于最大单元格数量 或者导出内容小于90M，直接导出
+                        // Export directly if cell count < max or content < 90M
                         export_json_to_excel({
                             header: header,
                             data: exportData,
@@ -122,16 +122,16 @@ export const ExportExcel: React.FC<ExportExcelProps> = (props) => {
                             optsSingleCellSetting
                         })
                     } else if (!(totalCellNumber < maxCellNumber && response.Total <= pageSize)) {
-                        // 分批导出
-                        const frequency = Math.ceil(totalCellNumber / maxCellNumber) // 导出次数
-                        exportNumber.current = Math.floor(maxCellNumber / header.length) //每次导出的数量
+                        // Batch Export
+                        const frequency = Math.ceil(totalCellNumber / maxCellNumber) // Export Counts
+                        exportNumber.current = Math.floor(maxCellNumber / header.length) //Qty per Export
                         exportDataBatch.current = exportData
                         headerExcel.current = header
                         optsCell.current = optsSingleCellSetting
                         setFrequency(frequency)
                         setVisible(true)
                     } else {
-                        // 分割导出
+                        // Segmented Export
                         headerExcel.current = header
                         optsCell.current = optsSingleCellSetting
                         setSplitVisible(true)
@@ -155,19 +155,19 @@ export const ExportExcel: React.FC<ExportExcelProps> = (props) => {
                 }
             })
             .catch((e: any) => {
-                failed("数据导出失败: " + `${e}`)
+                failed("Data Export Failed: " + `${e}`)
             })
             .finally(() => setTimeout(() => setLoading(false), 300))
     })
 
-    // 分批导出
+    // Batch Export
     const inBatchExport = (index: number) => {
         if (!exportNumber.current) return
         const firstIndx = exportNumber.current * index
         const lastIndex =
             (index === frequency - 1 && exportDataBatch.current?.length) ||
             (exportNumber.current && exportNumber.current * (index + 1))
-        const name = `${fileName}(第${pagination.Pagination.Page}页${
+        const name = `${fileName}(No.${pagination.Pagination.Page}Page${
             exportNumber.current && firstIndx + 1
         }-${lastIndex})`
         const list: Array<string[]> = exportDataBatch.current?.slice(firstIndx, lastIndex + 1)
@@ -206,17 +206,17 @@ export const ExportExcel: React.FC<ExportExcelProps> = (props) => {
             {showButton ? (
                 <>
                     <YakitButton loading={loading} type={newUIType} onClick={() => toExcel()} {...btnProps}>
-                        {text || "导出Excel"}
+                        {text || "Export Excel"}
                     </YakitButton>
                 </>
             ) : (
                 <>
-                    <span onClick={() => toExcel()}>{text || "导出Excel"}</span>
+                    <span onClick={() => toExcel()}>{text || "Export Excel"}</span>
                     {loading && <LoadingOutlined spin={loading} style={{marginLeft: 5}} />}
                 </>
             )}
             <YakitModal
-                title='数据导出'
+                title='Data Export'
                 closable={true}
                 visible={visible}
                 onCancel={() => setVisible(false)}
@@ -237,7 +237,7 @@ export const ExportExcel: React.FC<ExportExcelProps> = (props) => {
                                     }, 500)
                                 }}
                             >
-                                第{pagination.Pagination.Page}页
+                                No.{pagination.Pagination.Page}Page
                                 {exportNumber.current && exportNumber.current * index + 1}-
                                 {(index === frequency - 1 && exportDataBatch.current?.length) ||
                                     (exportNumber.current && exportNumber.current * (index + 1))}
@@ -250,7 +250,7 @@ export const ExportExcel: React.FC<ExportExcelProps> = (props) => {
                             total={pagination.Total}
                             current={Number(pagination.Pagination.Page)}
                             pageSize={pageSize}
-                            showTotal={(total) => `共 ${total} 条`}
+                            showTotal={(total) => `Total ${total} Rows`}
                             hideOnSinglePage={true}
                             onChange={onChange}
                         />
@@ -258,7 +258,7 @@ export const ExportExcel: React.FC<ExportExcelProps> = (props) => {
                 </div>
             </YakitModal>
             <YakitModal
-                title='数据导出'
+                title='Data Export'
                 closable={true}
                 visible={splitVisible}
                 onCancel={() => setSplitVisible(false)}
@@ -298,28 +298,28 @@ export const ExportExcel: React.FC<ExportExcelProps> = (props) => {
 }
 
 interface ExportSelectProps {
-    /* 导出字段 */
+    /* Export Fields */
     exportValue: string[]
-    /* 传出导出字段 */
+    /* Pass Export Fields */
     setExportTitle: (v: string[]) => void
-    /* 导出Key 用于缓存 */
+    /* Export Key for caching */
     exportKey: string
-    /* 导出数据方法 */
+    /* Export Data Method */
     getData: (query: PaginationSchema) => Promise<any>
-    /* 导出文件名称 */
+    /* Export File Name */
     fileName?: string
     /* limit */
     pageSize?: number
     initCheckValue?: string[]
 }
-// 导出字段选择
+// Export Field Selection
 export const ExportSelect: React.FC<ExportSelectProps> = (props) => {
     const {exportValue, fileName, setExportTitle, exportKey, getData, pageSize, initCheckValue} = props
     const [checkValue, setCheckValue] = useState<CheckboxValueType[]>([])
     useEffect(() => {
         getRemoteValue(exportKey).then((setting) => {
             if (!setting) {
-                // 第一次进入 默认勾选所有导出字段
+                // All fields selected by default on first entry
                 setExportTitle(exportValue as string[])
                 setCheckValue(initCheckValue || exportValue)
             } else {
@@ -354,7 +354,7 @@ export const ExportSelect: React.FC<ExportSelectProps> = (props) => {
                     newUIType='primary'
                     getData={getData}
                     fileName={fileName}
-                    text='导出'
+                    text='Export'
                     pageSize={pageSize}
                 />
             </div>

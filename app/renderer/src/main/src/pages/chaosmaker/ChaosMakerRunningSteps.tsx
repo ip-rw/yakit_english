@@ -50,21 +50,21 @@ export const ChaosMakerRunningSteps: React.FC<ChaosMakerRunningStepsProp> = (pro
         >
             <Steps.Step
                 className={step === 0 ? "chaos-maker-rule-step-active" : "chaos-maker-rule-step"}
-                stepIndex={0} key={0} title={"参数"}
+                stepIndex={0} key={0} title={"Parameter"}
                 description={<div>
-                    设置额外参数 <br/>
-                    准备观察过程
+                    Set Extra Params <br/>
+                    Prepare to Observe
                 </div>}
             />
             <Steps.Step
                 className={step === 1 ? "chaos-maker-rule-step-active" : (
                     step > 1 ?  "chaos-maker-rule-step" :  "chaos-maker-rule-step-unactive"
                 )}
-                stepIndex={1} key={1} title={"进行模拟攻击"} description={(
+                stepIndex={1} key={1} title={"Run Sim Attack"} description={(
                 <>
                     {
                         step === 1 && <Popconfirm
-                            title={"确定要停止当前进程？"}
+                            title={"Confirm Stop Current Process？"}
                             onConfirm={() => {
                                 ipcRenderer.invoke("cancel-ExecuteChaosMakerRule", token)
                             }}
@@ -72,7 +72,7 @@ export const ChaosMakerRunningSteps: React.FC<ChaosMakerRunningStepsProp> = (pro
                             <YakitButton type="primary" colors="danger" onClick={() => {
 
                             }}>
-                                停止模拟
+                                Stop Simulation
                             </YakitButton>
                         </Popconfirm>
 
@@ -82,9 +82,9 @@ export const ChaosMakerRunningSteps: React.FC<ChaosMakerRunningStepsProp> = (pro
             <Steps.Step className={step === 2 ? "chaos-maker-rule-step-active" : (
                 step > 2 ?  "chaos-maker-rule-step" :  "chaos-maker-rule-step-unactive"
             )} stepIndex={2}
-                        key={2} title={"模拟攻击报告"}/>
+                        key={2} title={"Sim Attack Report"}/>
         </Steps>}
-        {!params && <Empty description={"请您选中你想要执行的剧本规则"}/>}
+        {!params && <Empty description={"Select Desired Scenario Rules"}/>}
         {step === 0 && <Form
             labelCol={{span: 5}} wrapperCol={{span: 14}}
             onSubmitCapture={e => {
@@ -94,18 +94,18 @@ export const ChaosMakerRunningSteps: React.FC<ChaosMakerRunningStepsProp> = (pro
                 ipcRenderer.invoke("ExecuteChaosMakerRule", params, token)
             }}
         >
-            <InputInteger label={"并发模拟数"} setValue={Concurrent => setParams({...params, Concurrent})}
-                          value={params.Concurrent} help={"并发数越高，模拟攻击速度越快"}/>
-            <SelectOne oldTheme={false} label={"重复模拟"} data={[
-                {text: "无限重复", value: -1},
-                {text: "不重复", value: 0},
-                {text: "重复10次", value: 10},
+            <InputInteger label={"Concurrent Sims"} setValue={Concurrent => setParams({...params, Concurrent})}
+                          value={params.Concurrent} help={"Higher Concurrency, Faster Sim Speed"}/>
+            <SelectOne oldTheme={false} label={"Repeat Sim"} data={[
+                {text: "Infinite Repeat", value: -1},
+                {text: "NoRepeat", value: 0},
+                {text: "Repeat 10 Times", value: 10},
             ]} setValue={ExtraRepeat => setParams({...params, ExtraRepeat})} value={params.ExtraRepeat}/>
-            <InputInteger label={"剧本间隔"} help={"指在大类别的模拟攻击间隔的秒数"}
+            <InputInteger label={"Scenario Interval"} help={"Seconds Between Major Sim Categories"}
                           setValue={GroupGapSeconds => setParams({...params, GroupGapSeconds})}
                           value={params.GroupGapSeconds}/>
             <Form.Item colon={false} label={" "}>
-                <YakitButton size={"max"} type="primary" htmlType="submit"> 执行模拟攻击剧本 </YakitButton>
+                <YakitButton size={"max"} type="primary" htmlType="submit"> Run Sim Scenario </YakitButton>
             </Form.Item>
         </Form>}
         {step === 1 && <AutoCard style={{padding: 0, marginTop: 10, height: "100%"}} bordered={false} bodyStyle={{

@@ -30,7 +30,7 @@ export const TimePoint: React.FC<TimePointProps> = ({value, placeholder, setValu
             showTime
             format="YYYY-MM-DD HH:mm:ss"
             value={m}
-            placeholder={placeholder || "设置时间点"}
+            placeholder={placeholder || "Set Time Point"}
             onChange={e => setValue && e && setValue(e.unix())}
         />
     </div>
@@ -57,7 +57,7 @@ const TimeRange: React.FC<TimeRangeProps> = (props: TimeRangeProps) => {
                         showTime
                         format="YYYY-MM-DD HH:mm:ss"
                         value={(start && start > 0) ? moment.unix(start) : undefined}
-                        placeholder="点击这里设置开始时间"
+                        placeholder="Set Start Time Here"
                         onChange={e => {
                             e != null ? setStart(e.unix()) : setStart(undefined)
                         }}
@@ -71,7 +71,7 @@ const TimeRange: React.FC<TimeRangeProps> = (props: TimeRangeProps) => {
                         showTime
                         format="YYYY-MM-DD HH:mm:ss"
                         value={(end && end > 0) ? moment.unix(end) : undefined}
-                        placeholder="点击这里设置结束时间"
+                        placeholder="Set End Time Here"
                         onChange={e => e != null ? setEnd(e.unix()) : setEnd(undefined)}
                     />
                 </div>

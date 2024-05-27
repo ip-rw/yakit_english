@@ -79,7 +79,7 @@ export const CustomCodecList: React.FC<CustomCodecListProps> = React.memo((props
             {/*            className={httpQueryStyles["plus-button-bolck"]}*/}
             {/*            block*/}
             {/*        >*/}
-            {/*            添加*/}
+            {/*            Add*/}
             {/*        </YakitButton>*/}
             {/*    </Form.Item>*/}
             {/*)}*/}
@@ -105,7 +105,7 @@ const CustomCodecListItemOperate: React.FC<CustomCodecListItemOperateProps> = Re
             >
                 <TrashIcon className={httpQueryStyles["trash-icon"]} onClick={() => onRemove()}/>
 
-                <Tooltip title='调试'>
+                <Tooltip title='Debug'>
                     <HollowLightningBoltIcon
                         className={httpQueryStyles["hollow-lightningBolt-icon"]}
                         onClick={() => {
@@ -165,24 +165,24 @@ export const CustomCodecEditor: React.FC<CustomCodecEditorProps> = React.memo((p
     })
     const onSaveToDataBase = useMemoizedFn(() => {
         if (!currCodec.ScriptName) {
-            warn("请输入插件模块名!")
+            warn("Enter plugin module name!")
             return
         }
         if (!currCodec.Content || (currCodec.Tags||"").split(",").length != 2) {
 
-            warn("请输入插件内容/选择类型!")
+            warn("Enter plugin content/Select type!")
             return
         }
         ipcRenderer
             .invoke("SaveYakScript", { ...currCodec, Type: "codec" })
             .then((data) => {
-                success(`创建 / 保存 ${title} 脚本成功`)
+                success(`Create / Save ${title} Script successful`)
                 setCurrCodec(data)
                 setOnchange(!onchange)
                 setTimeout(() => ipcRenderer.invoke("change-main-menu"), 100)
             })
             .catch((e: any) => {
-                failed(`保存 Yak ${title} 失败: ${e}`)
+                failed(`Save Yak ${title} Failed: ${e}`)
             })
             .finally(() => {
                 setTimeout(() => {
@@ -216,16 +216,16 @@ export const CustomCodecEditor: React.FC<CustomCodecEditorProps> = React.memo((p
                         className={mitmStyles["button-question"]}
                         size={"small"}
                     >
-                        调试执行
+                        Debug Execute
                     </YakitButton>
                     <YakitButton
                         type='primary'
                         className={mitmStyles["button-save"]}
                         onClick={() => onSaveToDataBase()}
                     >
-                        保存
+                        Save
                     </YakitButton>
-                    <Tooltip title='官方网站' placement='top' overlayClassName={mitmStyles["question-tooltip"]}>
+                    <Tooltip title='Official Website' placement='top' overlayClassName={mitmStyles["question-tooltip"]}>
                         <YakitButton
                             type='outline2'
                             className={mitmStyles["button-question"]}
@@ -269,19 +269,19 @@ wsmPacketEncoder = func(reqBody) {
 `
 
 const defPacketDecoder = `
-// 写在生成的 WebShell 代码中
-// 本质上这个函数是为了准确获取 payload 的值
-// 比如说，我的数据包编码器是给 payload 前面添加随机字符串
-// 那么这个函数就是为了减去随机的字符串获取 payload 的值
-// 比如 payload 是 "abcdef"，编码器给它加了 "Yakit"，
-// 数据包如下
+// Written in the generated WebShell code
+// Essentially, this function is to accurately obtain the value of the payload
+// For example, my packet encoder adds a random string before the payload
+// So, this function is to subtract the random string to get the value of the payload
+// For instance, the payload is "abcdef"，Encoder added it "Yakit"，
+// Packet as follows
 // POST /1.jsp HTTP/1.1
 // Content-Type: application/json
 // Host: www.example.com
 //
 // Yakitabcdef
 
-// 那这个解码器需要使用对应的 shell 语言来去掉 "Yakit"
+// Then the decoder needs to use the corresponding shell language to remove it "Yakit"
 `
 
 const defPayloadEncoder = `
@@ -308,12 +308,12 @@ wsmPayloadDecoder = func(reqBody) {
 const webFuzzerTabs = [
     {
         key: "enCoder",
-        label: "编码器",
+        label: "Encoder",
         icon: <OutlineCodeIcon/>
     },
     {
         key: "deCoder",
-        label: "解码器",
+        label: "Decoder",
         icon: <OutlineQrcodeIcon/>
     }
 ]
@@ -383,10 +383,10 @@ const CustomEditor: React.FC<CustomEditorProps> = React.memo((props) => {
         }
     }, [shellScript]);
 
-    // 定义一个状态变量和一个设置这个状态变量的函数
+    // Define a state variable and a function to set this state variable
     const [selectedTab, setSelectedTab] = useState("enCoder");
     const [disabled, setDisabled] = useState(false);
-// 定义一个处理点击事件的函数
+// Define a function to handle click events
     const handleTabClick = (key: string) => {
         setSelectedTab(key);
     };
@@ -446,13 +446,13 @@ const CustomEditor: React.FC<CustomEditorProps> = React.memo((props) => {
                         wrapperCol={{span: 14}}
                     >
                         <InputItem
-                            label={"名称"}
+                            label={"Name"}
                             required={true}
                             setValue={(ScriptName) => setParams({...params, ScriptName})}
                             value={params.ScriptName}
                             disable={disabled}
                         />
-                        <Form.Item label={"脚本类型"}>
+                        <Form.Item label={"Script Type"}>
                             <YakitSelect
                                 value={shellScript}
                                 onSelect={(val) => {
@@ -471,13 +471,13 @@ const CustomEditor: React.FC<CustomEditorProps> = React.memo((props) => {
                         </Form.Item>
 
                         <InputItem
-                            label={"简要描述"}
+                            label={"Brief Description"}
                             setValue={(Help) => setParams({...params, Help})}
                             value={params.Help}
                             disable={disabled}
                         />
                         <InputItem
-                            label={"作者"}
+                            label={"Author"}
                             setValue={(Author) => setParams({...params, Author})}
                             value={params.Author}
                             disable={disabled}

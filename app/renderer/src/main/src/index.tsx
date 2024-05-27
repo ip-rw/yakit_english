@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom"
 import reportWebVitals from "./reportWebVitals"
-/** 该样式必须放在APP组件的前面，因为里面有antd样式，放后面会把APP组件内的样式覆盖 */
+/** This style must be placed before the APP component, as it contains antd styles that will override the styles within the APP component if placed after. */
 import "./index.css"
 import NewApp from "./NewApp"
 import {HTML5Backend} from "react-dnd-html5-backend"
@@ -21,11 +21,11 @@ import "./assets/global.scss"
 //         // </React.StrictMode>,
 //     )
 // } else {
-//     // 正常情况/理论情况下，是不会出现这个情况
-//     createRoot(document.body).render(<div>此安装包有问题,请联系Yakit官方管理员</div>)
+//     // Normal situation./In theory, this situation should not occur.
+//     createRoot(document.body).render(<div>This installer has issues, please contact Yakit official administrator.</div>)
 // }
-// ahooks useVirtualList在createRoot(divRoot).render生成下的元素会出现渲染不及时，掉帧闪的问题，暂时先换成ReactDOM.render，期待官方修复
-// antd menu 存在多个二级菜单时, 在createRoot(divRoot).render生成下，会导致鼠标从一个二级菜单移动到下一个二级菜单后，前一个二级菜单不消失的情况，暂不确定原因，等升级antd5后再次尝试
+// ahooks useVirtualList has issues with flickering and frame drops when rendering with createRoot(divRoot).render, temporarily switch to ReactDOM.render, waiting for official fix.
+// When there are multiple submenus in antd menu, using createRoot(divRoot).render can cause the previous submenu not to disappear when moving the mouse from one submenu to the next, the reason is unclear, will retry after upgrading to antd5.
 ReactDOM.render(
     // <React.StrictMode>
     <DndProvider backend={HTML5Backend}>

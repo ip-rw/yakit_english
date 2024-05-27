@@ -6,14 +6,14 @@ import classNames from "classnames"
 import "./yakitCheckBoxAnimation.scss"
 
 /**
- * 更新说明
- * 1.增加环境变量加载主题色
- * 2.增加颜色变量
+ * Update Notes
+ * 1. Load theme color from env var
+ * 2. Add color variables
  */
 
 /**
- * @description: 两种方式的数字输入
- * @augments CheckboxProps 继承antd的CheckboxProps默认属性
+ * @description: Dual-mode Number Input
+ * @augments CheckboxProps Inherits default CheckboxProps from antd
  * @param {string} wrapperClassName
  */
 export const YakitCheckbox: React.FC<YakitCheckboxProps> = (props) => {

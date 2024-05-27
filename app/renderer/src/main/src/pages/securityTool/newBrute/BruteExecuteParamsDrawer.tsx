@@ -43,11 +43,11 @@ const BruteExecuteParamsDrawer: React.FC<BruteExecuteParamsDrawerProps> = React.
             visible={visible}
             onClose={onClose}
             width='60%'
-            title='额外参数'
+            title='Extra params'
         >
             <Form size='small' labelCol={{span: 6}} wrapperCol={{span: 18}} form={form}>
                 <BruteSettings visible={visible} form={form} />
-                <div className={styles["to-end"]}>已经到底啦～</div>
+                <div className={styles["to-end"]}>Reached Bottom～</div>
             </Form>
         </YakitDrawer>
     )
@@ -58,7 +58,7 @@ interface BruteSettingsProps {
     visible: boolean
     form: FormInstance<BruteExecuteExtraFormValue>
 }
-/**弱口令检测 */
+/**Weak password detection */
 export const BruteSettings: React.FC<BruteSettingsProps> = React.memo((props) => {
     const {visible, form} = props
     const delayMin = Form.useWatch("DelayMin", form)
@@ -83,7 +83,7 @@ export const BruteSettings: React.FC<BruteSettingsProps> = React.memo((props) =>
     return (
         <>
             <Form.Item
-                label='爆破用户字典'
+                label='User Dictionary'
                 name='UsernamesDict'
                 valuePropName='contentValue'
                 trigger='setContentValue'
@@ -94,14 +94,14 @@ export const BruteSettings: React.FC<BruteSettingsProps> = React.memo((props) =>
             >
                 <SelectPayload visible={visible} />
             </Form.Item>
-            <Form.Item label='爆破用户' name='usernames'>
-                <YakitInput.TextArea placeholder='请输入爆破用户，多个爆破用户用“英文逗号”或换行分隔' rows={3} />
+            <Form.Item label='Brute-Force Users' name='usernames'>
+                <YakitInput.TextArea placeholder='Enter brute-force usernames, separate multiple with“English Comma”Or New Line Separated' rows={3} />
             </Form.Item>
             <Form.Item label={" "} colon={false} name='replaceDefaultUsernameDict' valuePropName='checked'>
-                <YakitCheckbox disabled={usernamesDict.length === 0 && !usernames}>同时使用默认用户字典</YakitCheckbox>
+                <YakitCheckbox disabled={usernamesDict.length === 0 && !usernames}>Use Default User Dict</YakitCheckbox>
             </Form.Item>
             <Form.Item
-                label='爆破密码字典'
+                label='Password Dictionary'
                 name='PasswordsDict'
                 valuePropName='contentValue'
                 trigger='setContentValue'
@@ -112,26 +112,26 @@ export const BruteSettings: React.FC<BruteSettingsProps> = React.memo((props) =>
             >
                 <SelectPayload visible={visible} />
             </Form.Item>
-            <Form.Item label='爆破密码' name='passwords'>
-                <YakitInput.TextArea placeholder='请输入爆破密码，多个爆破密码用“英文逗号”或换行分隔' rows={3} />
+            <Form.Item label='Brute-Force Passwords' name='passwords'>
+                <YakitInput.TextArea placeholder='Enter brute-force passwords, separate multiple with“English Comma”Or New Line Separated' rows={3} />
             </Form.Item>
             <Form.Item label={" "} colon={false} name='replaceDefaultPasswordDict' valuePropName='checked'>
-                <YakitCheckbox disabled={passwordsDict.length === 0 && !passwords}>同时使用默认密码字典</YakitCheckbox>
+                <YakitCheckbox disabled={passwordsDict.length === 0 && !passwords}>Use Default Password Dict</YakitCheckbox>
             </Form.Item>
-            <Form.Item label='目标并发' name='Concurrent' help='同时爆破 n 个目标'>
+            <Form.Item label='Target Concurrency' name='Concurrent' help='Concurrent n Targets'>
                 <YakitInputNumber min={0} type='horizontal' />
             </Form.Item>
-            <Form.Item label='目标内并发' name='TargetTaskConcurrent' help='每个目标同时执行多少爆破任务'>
+            <Form.Item label='Concurrent in Target' name='TargetTaskConcurrent' help='Concurrent Tasks per Target'>
                 <YakitInputNumber min={0} type='horizontal' />
             </Form.Item>
-            <Form.Item label='自动停止' name='OkToStop' help='遇到第一个爆破结果时终止任务' valuePropName='checked'>
+            <Form.Item label='Auto-Stop' name='OkToStop' help='Stop at First Result' valuePropName='checked'>
                 <YakitSwitch />
             </Form.Item>
 
-            <Form.Item label='最小延迟' name='DelayMin'>
+            <Form.Item label='Min Delay' name='DelayMin'>
                 <YakitInputNumber min={0} max={delayMax} type='horizontal' />
             </Form.Item>
-            <Form.Item label='最大延迟' name='DelayMax'>
+            <Form.Item label='Max Delay' name='DelayMax'>
                 <YakitInputNumber min={delayMin} type='horizontal' />
             </Form.Item>
         </>
@@ -162,7 +162,7 @@ const SelectPayload: React.FC<SelectPayloadProps> = React.memo((props) => {
                 setData(data)
             })
             .catch((e: any) => {
-                yakitNotify("error", "获取字典列表失败" + e)
+                yakitNotify("error", "Failed to Get Dictionary List" + e)
             })
             .finally()
     }

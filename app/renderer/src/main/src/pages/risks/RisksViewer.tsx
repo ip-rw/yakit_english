@@ -25,7 +25,7 @@ export const RisksViewer: React.FC<RisksViewerProp> = React.memo((props) => {
                 data={props.risks}
                 wordWrap={true}
                 renderEmpty={() => {
-                    return <Empty className='table-empty' description='数据加载中' />
+                    return <Empty className='table-empty' description='Loading Data' />
                 }}
                 columns={[
                     {
@@ -33,7 +33,7 @@ export const RisksViewer: React.FC<RisksViewerProp> = React.memo((props) => {
                         width: 400,
                         resizable: true,
                         minWidth: 400,
-                        headRender: () => "标题",
+                        headRender: () => "Title",
                         cellRender: ({rowData, dataKey, ...props}: any) => {
                             return (
                                 <div
@@ -51,7 +51,7 @@ export const RisksViewer: React.FC<RisksViewerProp> = React.memo((props) => {
                         width: 150,
                         minWidth: 150,
                         resizable: true,
-                        headRender: () => "类型",
+                        headRender: () => "Type",
                         cellRender: ({rowData, dataKey, ...props}: any) => {
                             return rowData?.RiskTypeVerbose || rowData.RiskType
                         }
@@ -59,7 +59,7 @@ export const RisksViewer: React.FC<RisksViewerProp> = React.memo((props) => {
                     {
                         dataKey: "Severity",
                         width: 90,
-                        headRender: () => "等级",
+                        headRender: () => "Level",
                         cellRender: ({rowData, dataKey, ...props}: any) => {
                             const title = TitleColor.filter((item) => item.key.includes(rowData.Severity || ""))[0]
                             return (
@@ -90,14 +90,14 @@ export const RisksViewer: React.FC<RisksViewerProp> = React.memo((props) => {
                         dataKey: "operate",
                         width: 90,
                         fixed: "right",
-                        headRender: () => "操作",
+                        headRender: () => "Action",
                         cellRender: ({rowData}: any) => {
                             return (
                                 <a
                                     onClick={(e) => {
                                         showModal({
                                             width: "80%",
-                                            title: "详情",
+                                            title: "Details",
                                             content: (
                                                 <div style={{overflow: "auto"}}>
                                                     <RiskDetails info={rowData} isShowTime={false} />
@@ -106,7 +106,7 @@ export const RisksViewer: React.FC<RisksViewerProp> = React.memo((props) => {
                                         })
                                     }}
                                 >
-                                    详情
+                                    Details
                                 </a>
                             )
                         }

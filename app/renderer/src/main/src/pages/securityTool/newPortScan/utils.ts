@@ -5,7 +5,7 @@ import {StartBruteParams} from "@/pages/brute/BrutePage"
 const {ipcRenderer} = window.require("electron")
 
 /**
- * @description 端口扫描执行方法 社区版
+ * @description Port Scan Method Community
  */
 export const apiPortScan: (params: PortScanExecuteExtraFormValue, token: string) => Promise<null> = (params, token) => {
     return new Promise((resolve, reject) => {
@@ -15,18 +15,18 @@ export const apiPortScan: (params: PortScanExecuteExtraFormValue, token: string)
         ipcRenderer
             .invoke("PortScan", executeParams, token)
             .then(() => {
-                yakitNotify("info", "启动任务成功")
+                yakitNotify("info", "Task Started")
                 resolve(null)
             })
             .catch((e: any) => {
-                yakitNotify("error", "端口扫描执行出错:" + e)
+                yakitNotify("error", "Port Scan Execution Failed:" + e)
                 reject(e)
             })
     })
 }
 
 /**
- * @description 取消 PortScan
+ * @description Cancel PortScan
  */
 export const apiCancelPortScan: (token: string) => Promise<null> = (token) => {
     return new Promise((resolve, reject) => {
@@ -36,7 +36,7 @@ export const apiCancelPortScan: (token: string) => Promise<null> = (token) => {
                 resolve(null)
             })
             .catch((e: any) => {
-                yakitNotify("error", "取消端口扫描执行出错:" + e)
+                yakitNotify("error", "Cancel Port Scan Execution Failed:" + e)
                 reject(e)
             })
     })
@@ -54,7 +54,7 @@ export interface RecordPortScanRequest {
     PortScanRequest: PortScanExecuteExtraFormValue
 }
 /**
- * @description 端口扫描执行方法  企业版
+ * @description Port Scan Method Enterprise
  */
 export const apiSimpleDetect: (params: RecordPortScanRequest, token: string) => Promise<null> = (params, token) => {
     return new Promise((resolve, reject) => {
@@ -64,18 +64,18 @@ export const apiSimpleDetect: (params: RecordPortScanRequest, token: string) => 
         ipcRenderer
             .invoke("SimpleDetect", executeParams, token)
             .then(() => {
-                yakitNotify("info", "启动任务成功")
+                yakitNotify("info", "Task Started")
                 resolve(null)
             })
             .catch((e: any) => {
-                yakitNotify("error", "端口扫描执行出错:" + e)
+                yakitNotify("error", "Port Scan Execution Failed:" + e)
                 reject(e)
             })
     })
 }
 
 /**
- * @description 取消 SimpleDetect
+ * @description Cancel SimpleDetect
  */
 export const apiCancelSimpleDetect: (token: string) => Promise<null> = (token) => {
     return new Promise((resolve, reject) => {
@@ -85,7 +85,7 @@ export const apiCancelSimpleDetect: (token: string) => Promise<null> = (token) =
                 resolve(null)
             })
             .catch((e: any) => {
-                yakitNotify("error", "取消端口扫描执行出错:" + e)
+                yakitNotify("error", "Cancel Port Scan Execution Failed:" + e)
                 reject(e)
             })
     })
@@ -100,7 +100,7 @@ export interface CreatReportRequest {
     RuntimeId: string
 }
 /**
- * @description 生成报告  企业版
+ * @description Generate Report Enterprise
  */
 export const apiSimpleDetectCreatReport: (params: CreatReportRequest, token: string) => Promise<null> = (
     params,
@@ -116,14 +116,14 @@ export const apiSimpleDetectCreatReport: (params: CreatReportRequest, token: str
                 resolve(null)
             })
             .catch((e: any) => {
-                yakitNotify("error", "生成报告执行出错:" + e)
+                yakitNotify("error", "Report Generation Failed:" + e)
                 reject(e)
             })
     })
 }
 
 /**
- * @description 取消 SimpleDetectCreatReport
+ * @description Cancel SimpleDetectCreatReport
  */
 export const apiCancelSimpleDetectCreatReport: (token: string) => Promise<null> = (token) => {
     return new Promise((resolve, reject) => {
@@ -133,7 +133,7 @@ export const apiCancelSimpleDetectCreatReport: (token: string) => Promise<null> 
                 resolve(null)
             })
             .catch((e: any) => {
-                yakitNotify("error", "取消生成报告出错:" + e)
+                yakitNotify("error", "Cancel Report Generation Failed:" + e)
                 reject(e)
             })
     })

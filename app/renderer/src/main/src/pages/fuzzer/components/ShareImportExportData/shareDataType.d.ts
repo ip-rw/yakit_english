@@ -1,7 +1,7 @@
 import {FuzzerRequestProps} from "../../HTTPFuzzerPage"
 
 export interface ShareDataProps {
-    module: string // 新建tab类型
+    module: string // New Tab Type
     getShareContent?: (callback: any) => void
     getFuzzerRequestParams: () => FuzzerRequestProps[] | FuzzerRequestProps
     supportShare?: boolean

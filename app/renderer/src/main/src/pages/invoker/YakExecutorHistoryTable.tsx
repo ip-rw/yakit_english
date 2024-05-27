@@ -21,12 +21,12 @@ const ExecHistoryViewer = (r: ExecHistoryRecord) => {
             {/*    <YakEditor value={r.Script} readOnly={true}/>*/}
             {/*</div>*/}
             <Tabs>
-                {r.Stderr && <Tabs.TabPane tab={"标准错误流内容"} key={"stderr"}>
+                {r.Stderr && <Tabs.TabPane tab={"StdErr Content"} key={"stderr"}>
                     <div style={{height: 300}}>
                         <YakEditor value={Buffer.from(r.Stderr).toString("utf8")} readOnly={true}/>
                     </div>
                 </Tabs.TabPane>}
-                {r.Stdout && <Tabs.TabPane tab={"标准输出流内容"} key={"stdout"}>
+                {r.Stdout && <Tabs.TabPane tab={"StdOut Content"} key={"stdout"}>
                     <div style={{height: 300}}>
                         <YakEditor value={Buffer.from(r.Stdout).toString("utf8")} readOnly={true}/>
                     </div>
@@ -104,50 +104,50 @@ export const ExecHistoryTable: React.FC<ExecHistoryTableProp> = (props) => {
                 size: "small", simple: true,
                 pageSize: pagination?.Limit || 10,
                 showSizeChanger: !props.mini,
-                total, showTotal: (i) => <Tag>共{i}条历史记录</Tag>,
+                total, showTotal: (i) => <Tag>Total{i}History records</Tag>,
                 onChange(page: number, limit?: number): any {
                     update(page, limit)
                 },
             }}
             columns={props.mini ? [
                 {
-                    title: "开始执行", width: 180,
+                    title: "Start Execution", width: 180,
                     render: (r: ExecHistoryRecord) => <Tag>{formatTimestamp(r.Timestamp)}</Tag>
                 },
-                {title: "耗时", render: (r: ExecHistoryRecord) => <Tag color={"geekblue"}>{r.DurationMs}ms</Tag>},
+                {title: "Duration", render: (r: ExecHistoryRecord) => <Tag color={"geekblue"}>{r.DurationMs}ms</Tag>},
                 {
-                    title: "操作", fixed: "right", width: 60,
+                    title: "Action", fixed: "right", width: 60,
                     render: (r: ExecHistoryRecord) => <Button
                         type={"link"} size={"small"}
                         onClick={e => {
                             showDrawer({
-                                title: `执行历史记录：${r.Params}`,
+                                title: `Exec History：${r.Params}`,
                                 width: "70%",
                                 content: <>
                                     <ExecHistoryViewer {...r}/>
                                 </>
                             })
                         }}
-                    >查看</Button>
+                    >View</Button>
                 },
             ] : [
-                {title: "时间戳", render: (r: ExecHistoryRecord) => <Tag>{formatTimestamp(r.Timestamp)}</Tag>},
+                {title: "Timestamp", render: (r: ExecHistoryRecord) => <Tag>{formatTimestamp(r.Timestamp)}</Tag>},
                 {
-                    title: "参数", render: (r: ExecHistoryRecord) => r.Params ? <Text style={{width: 230}} ellipsis={{
+                    title: "Parameter", render: (r: ExecHistoryRecord) => r.Params ? <Text style={{width: 230}} ellipsis={{
                         tooltip: true,
                     }} copyable={true}
-                    >{r.Params}</Text> : <Tag>无参数</Tag>
+                    >{r.Params}</Text> : <Tag>No Params</Tag>
                 },
                 {
-                    title: "状态",
-                    render: (r: ExecHistoryRecord) => r.Ok ? <Tag color={"green"}>执行成功</Tag> : <Tag>执行失败</Tag>
+                    title: "Status",
+                    render: (r: ExecHistoryRecord) => r.Ok ? <Tag color={"green"}>Exec Success</Tag> : <Tag>Exec Failure</Tag>
                 },
-                {title: "执行间隔(ms)", render: (r: ExecHistoryRecord) => <Tag color={"geekblue"}>{r.DurationMs}ms</Tag>},
+                {title: "Interval(ms)", render: (r: ExecHistoryRecord) => <Tag color={"geekblue"}>{r.DurationMs}ms</Tag>},
                 {
-                    title: "执行结果/失败原因", render: (r: ExecHistoryRecord) => r.Ok ? <Space>
-                        {r.Stdout && <Tag color={"geekblue"}>标准输出内容长度[{(r.StdoutLen)}]</Tag>}
-                        {r.Stderr && <Tag color={"orange"}>标准错误内容长度[{(r.StderrLen)}]</Tag>}
-                        {!r.Stdout && !r.Stderr ? <Tag>无输出</Tag> : undefined}
+                    title: "Execution Result/Failure Reason", render: (r: ExecHistoryRecord) => r.Ok ? <Space>
+                        {r.Stdout && <Tag color={"geekblue"}>StdOut Length[{(r.StdoutLen)}]</Tag>}
+                        {r.Stderr && <Tag color={"orange"}>StdErr Length[{(r.StderrLen)}]</Tag>}
+                        {!r.Stdout && !r.Stderr ? <Tag>No Output</Tag> : undefined}
                     </Space> : <Space>
                         <Tag color={"red"}>{r.Reason}</Tag>
                     </Space>

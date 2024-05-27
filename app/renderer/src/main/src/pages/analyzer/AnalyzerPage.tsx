@@ -33,7 +33,7 @@ export const AnalyzerPage: React.FC<AnalyzerPageProp> = (props) => {
     }, [])
 
     return <div>
-        <PageHeader title={"HTTP 模糊测试分析器"}/>
+        <PageHeader title={"HTTP Fuzzing Analyzer"}/>
         <Row gutter={8}>
             <Col span={12}>
                 <div style={{height: 500}}>

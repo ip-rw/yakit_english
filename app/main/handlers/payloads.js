@@ -13,7 +13,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 获取table列表
+    // Fetch Table List
     ipcMain.handle("QueryPayload", async (e, params) => {
         return await asyncQueryPayload(params)
     })
@@ -30,7 +30,7 @@ module.exports = (win, getClient) => {
         })
     }
 
-    // 获取编辑器内容
+    // Get Editor Content
     ipcMain.handle("QueryPayloadFromFile", async (e, params) => {
         return await asyncQueryPayloadFromFile(params)
     })
@@ -46,7 +46,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 更新顺序数组
+    // Update Order Array
     ipcMain.handle("UpdateAllPayloadGroup", async (e, params) => {
         return await asyncUpdateAllPayloadGroup(params)
     })
@@ -62,7 +62,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 重命名Folder
+    // Rename Folder
     ipcMain.handle("RenamePayloadFolder", async (e, params) => {
         return await asyncRenamePayloadFolder(params)
     })
@@ -78,7 +78,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 重命名Payload
+    // Rename Payload
     ipcMain.handle("RenamePayloadGroup", async (e, params) => {
         return await asyncRenamePayloadGroup(params)
     })
@@ -94,7 +94,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 新建文件夹
+    // Create Folder
     ipcMain.handle("CreatePayloadFolder", async (e, params) => {
         return await asyncCreatePayloadFolder(params)
     })
@@ -110,7 +110,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 删除文件夹
+    // Delete Folder
     ipcMain.handle("DeletePayloadByFolder", async (e, params) => {
         return await asyncDeletePayloadByFolder(params)
     })
@@ -126,14 +126,14 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 删除Payload
+    // Delete Payload
     ipcMain.handle("DeletePayloadByGroup", async (e, params) => {
         return await asyncDeletePayloadByGroup(params)
     })
 
     // message DeletePayloadByIdRequest {
-    //     int64 Id = 1; // 用于删除一个
-    //     repeated int64 Ids = 2; // 删除多个
+    //     int64 Id = 1; // For Deleting One
+    //     repeated int64 Ids = 2; // Delete Multiple
     //   }
     // asyncDeletePayload wrapper
     const asyncDeletePayload = (params) => {
@@ -153,7 +153,7 @@ module.exports = (win, getClient) => {
 
     const handlerHelper = require("./handleStreamWithContext")
 
-    // 数据库存储
+    // Database Storage
     const streamPayloadMap = new Map()
     ipcMain.handle("cancel-SavePayload", handlerHelper.cancelHandler(streamPayloadMap))
     ipcMain.handle("SavePayloadStream", (e, params, token) => {
@@ -161,7 +161,7 @@ module.exports = (win, getClient) => {
         handlerHelper.registerHandler(win, stream, streamPayloadMap, token)
     })
 
-    // 文件存储
+    // File Storage
     const streamPayloadFileMap = new Map()
     ipcMain.handle("cancel-SavePayloadFile", handlerHelper.cancelHandler(streamPayloadFileMap))
     ipcMain.handle("SavePayloadToFileStream", (e, params, token) => {
@@ -169,7 +169,7 @@ module.exports = (win, getClient) => {
         handlerHelper.registerHandler(win, stream, streamPayloadFileMap, token)
     })
 
-    // 用于导出
+    // For Export
     const streamPayloadFromFileMap = new Map()
     ipcMain.handle("cancel-ExportAllPayloadFromFile", handlerHelper.cancelHandler(streamPayloadFromFileMap))
     ipcMain.handle("ExportAllPayloadFromFile", async (e, params, token) => {
@@ -183,7 +183,7 @@ module.exports = (win, getClient) => {
         handlerHelper.registerHandler(win, stream, streamAllPayloadMap, token)
     })
 
-    // 用于去重
+    // For Deduplication
     const streamRemoveDuplicateMap = new Map()
     ipcMain.handle("cancel-RemoveDuplicatePayloads", handlerHelper.cancelHandler(streamRemoveDuplicateMap))
     ipcMain.handle("RemoveDuplicatePayloads", async (e, params, token) => {
@@ -191,7 +191,7 @@ module.exports = (win, getClient) => {
         handlerHelper.registerHandler(win, stream, streamRemoveDuplicateMap, token)
     })
 
-    // 转换为数据库保存
+    // Convert to DB Save
     const streamGroupToDatabaseMap = new Map()
     ipcMain.handle("cancel-ConvertPayloadGroupToDatabase", handlerHelper.cancelHandler(streamGroupToDatabaseMap))
     ipcMain.handle("ConvertPayloadGroupToDatabase", async (e, params, token) => {
@@ -199,7 +199,7 @@ module.exports = (win, getClient) => {
         handlerHelper.registerHandler(win, stream, streamGroupToDatabaseMap, token)
     })
 
-    // 迁移数据
+    // Migrate Data
     const streamMigratePayloadsMap = new Map()
     ipcMain.handle("cancel-MigratePayloads", handlerHelper.cancelHandler(streamMigratePayloadsMap))
     ipcMain.handle("MigratePayloads", async (e, params, token) => {
@@ -218,7 +218,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 备份到其他字典/修改table项
+    // Backup to Other Dict/Modify Table Item
     ipcMain.handle("UpdatePayload", async (e, params) => {
         return await asyncUpdatePayload(params)
     })
@@ -234,7 +234,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 移动/复制到其他字典
+    // Move/Copy to Other Dict
     ipcMain.handle("BackUpOrCopyPayloads", async (e, params) => {
         return await asyncBackUpOrCopyPayloads(params)
     })
@@ -250,7 +250,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 获取Payload列表
+    // Fetch Payload List
     ipcMain.handle("GetAllPayloadGroup", async (e, params) => {
         return await asyncGetAllPayloadGroup(params)
     })
@@ -266,7 +266,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 更新文件内容
+    // Update File Content
     ipcMain.handle("UpdatePayloadToFile", async (e, params) => {
         return await asyncUpdatePayloadToFile(params)
     })
@@ -282,7 +282,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 校验版本
+    // Verify Version
     ipcMain.handle("YakVersionAtLeast", async (e, params) => {
         return await asyncYakVersionAtLeast(params)
     })

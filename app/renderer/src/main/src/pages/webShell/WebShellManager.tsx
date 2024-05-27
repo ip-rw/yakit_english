@@ -8,8 +8,8 @@ export const deleteWebShell = (id: string, url: string, refList: () => void, ids
     const deletes = YakitModalConfirm({
         width: 420,
         type: "white",
-        onCancelText: "取消",
-        onOkText: "删除",
+        onCancelText: "Cancel",
+        onOkText: "Delete",
         icon: <ExclamationCircleOutlined/>,
         onOk: () => {
             ipcRenderer.invoke("DeleteWebShell", {Id: id, Ids: ids}).then((r) => {
@@ -23,7 +23,7 @@ export const deleteWebShell = (id: string, url: string, refList: () => void, ids
         // onCancel: () => {
         //     deletes.destroy()
         // },
-        content: `是否删除 ${url} ?`
+        content: `Delete? ${url} ?`
     })
 }
 

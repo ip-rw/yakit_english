@@ -4,97 +4,97 @@ import { EditorMenuItemType } from "./EditorMenu"
 import { EditorDetailInfoProps } from "@/pages/fuzzer/HTTPFuzzerEditorMenu"
 import { HighLightText } from "@/components/HTTPFlowDetail"
 
-/** monaco-editor 相关接口 */
+/** Monaco-Editor APIs */
 export type YakitSelection = monacoEditor.Selection
 export type YakitIMonacoEditor = monacoEditor.editor.IStandaloneCodeEditor
 export type YakitIMonacoCodeEditor = monacoEditor.editor.ICodeEditor
 export type YakitITextModel = monacoEditor.editor.ITextModel
 export type YakitIModelDecoration = monacoEditor.editor.IModelDecoration
 
-/** @name 自带的菜单组可选项 */
+/** @Built-in Menu Group Options */
 export type YakitEditorExtraRightMenuType = "code" | "decode" | "http" | "customhttp" | "customcontextmenu"
 
 export interface YakitEditorProps {
-    /** @name 是否每次更新菜单 */
+    /** @Update Menu Each Time? */
     forceRenderMenu?: boolean
 
-    /** @name 自带的菜单组可选项(多选) */
+    /** @Built-in Menu Group Options (Multi-select) */
     menuType?: YakitEditorExtraRightMenuType[]
 
-    /** @name 内容类型是否为字节码 */
+    /** @Content Type Is Bytecode */
     isBytes?: boolean
-    /** @name 编辑器内容(string类型) */
+    /** @Editor Content (String Type) */
     value?: string
-    /** @name 编辑器内容(字节码类型) */
+    /** @Editor Content (Bytecode Type) */
     valueBytes?: Uint8Array
-    /** @name 修改编辑器内容事件回调 */
+    /** @Change Editor Content Callback */
     setValue?: (content: string) => any
 
-    /** @name 文件类型 */
+    /** @File Type */
     type?: "html" | "http" | "yak" | string
-    /** @name 编辑器主题 */
+    /** @Editor Theme */
     theme?: string
 
-    /** @name 编辑器加载完成后的回调 */
+    /** @Editor Loaded Callback */
     editorDidMount?: (editor: YakitIMonacoEditor) => any
 
-    /** @name 自定义额外的右键菜单组 */
+    /** @Custom Extra Context Menu Group */
     contextMenu?: OtherMenuListProps
-    /** @name 右键菜单点击事件回调 */
+    /** @Context Menu Click Callback */
     onContextMenu?: (editor: YakitIMonacoEditor, key: string) => any
 
-    /** @name 配置项-是否禁用 */
+    /** @Config-Disable */
     disabled?: boolean
-    /** @name 配置项-是否开启只读模式 */
+    /** @Config-Enable Read-Only Mode */
     readOnly?: boolean
-    /** @name 配置项-是否关闭内容过长时的自动换行展示适配 */
+    /** @Config-Disable Wrap for Long Content */
     noWordWrap?: boolean
-    /** @name 配置项-是否关闭代码mini地图展示 */
+    /** @Config-Disable Code Minimap */
     noMiniMap?: boolean
-    /** @name 配置项-是否关闭行号展示 */
+    /** @Config-Disable Line Numbers */
     noLineNumber?: boolean
-    /** @name 配置项-展示行号的位数(默认5位) */
+    /** @Config-Display Line Numbers Digits (Default: 5) */
     lineNumbersMinChars?: number
-    /** @name 配置项-字体大小(默认为12) */
+    /** @Config-Font Size (Default: 12) */
     fontSize?: number
 
-    /** @name 是否展示换行字符(只有在[type="http"]下有效,同时可在右键菜单中关闭显示功能) */
+    /** @Show Line Break Characters (If [type="http"]Applies Below, Disable in Context Menu) */
     showLineBreaks?: boolean
 
-    /** @name 配置项-操作记录(拥有此项可记录字体大小及换行符) */
+    /** @Config-Operation Log (Tracks Font Size & Newlines) */
     editorOperationRecord?: string
 
-    /** 配置项-编辑器自带(点击/选中)菜单(菜单默显示插入标签/编解码) */
-    /** @name 配置项-是否显示编辑器自带(点击/选中)菜单(默认不显示) */
+    /** Config-Built-in Editor On Click/Selection) Menu (Default Insert Tag/Encode/Decode) */
+    /** @Config-Show Built-in Editor Options On Click/Selection) Menu (Default: Hide) */
     isShowSelectRangeMenu?: boolean
-    /** @name 配置项-菜单超出n行消失(默认3行) */
+    /** @Config-Menu Hide Over n Lines (Default: 3) */
     overLine?: number
-    /** @name 配置项-点击弹窗显示内容(默认为插入标签) */
+    /** @Config-Click Popup Content (Default: Insert Tag) */
     selectNode?: (close: () => void, editorInfo?: EditorDetailInfoProps) => ReactElement
-    /** @name 配置项-选中弹窗显示内容(默认为编/解码-编辑器可读情况下为解码) */
+    /** @Config-Selection Popup Content (Default: Code/Decode-Readable in Editor) */
     rangeNode?: (close: () => void, editorInfo?: EditorDetailInfoProps) => ReactElement
 
-    /** @name 配置项-(存在此项则将字体/换行交由emiter更新) */
+    /** @Config-Font Option (If present/Line Break Updates by Emitter) */
     editorId?: string
 
     highLightText?: HighLightText[]
 }
 
 /**
- * @name 自定义菜单组
- * @description 注意！！！key值一定和一级菜单的key值一致
+ * @Custom Menu Group
+ * @Note!!! Key Value Must Match Primary Menu Key
  */
 export interface OtherMenuListProps {
     [key: string]: {
         menu: EditorMenuItemType[]
-        // data可传额外的任何参数 目前仅用作自定义右键执行-检测是否为ai插件
+        // Custom Args for Context Menu - Check for AI Plugin
         onRun: (editor: YakitIMonacoEditor, key: string, pageId?: string, data?: any) => any
-        /** Order菜单权重排序 0为第一个 1为第二个... 负数统一放最后 */
+        /** Menu Order Weight 0-First, 1-Second, Negatives-Last */
         order?: number
     }
 }
 
-/** @name 编辑器-键盘对应按键枚举(暂时只包含字母和F1-12) */
+/** @Editor-Key Mapping Enum (Letters & F1-12)) */
 export enum YakitEditorKeyCode {
     Control = 17,
     Shift = 16,
@@ -140,12 +140,12 @@ export enum YakitEditorKeyCode {
     F11 = 122,
     F12 = 123
 }
-/** 自定义快捷键对应的菜单项key值 */
+/** Custom Shortcut Key Menu Item */
 export interface KeyboardToFuncProps {
     [key: string]: string[]
 }
 
-/** 操作记录存储 */
+/** Operation Log Storage */
 export interface OperationRecord {
     [key: string]: number | boolean
 }

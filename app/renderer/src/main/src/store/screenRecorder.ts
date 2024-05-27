@@ -1,5 +1,5 @@
 /**
- * @description 记录录屏
+ * @description Screen Recording Log
  */
 
 import { randomString } from "@/utils/randomUtil"

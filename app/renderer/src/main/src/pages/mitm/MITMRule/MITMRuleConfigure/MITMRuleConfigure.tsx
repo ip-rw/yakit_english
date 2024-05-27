@@ -24,16 +24,16 @@ export const MITMRuleExport: React.FC<MITMRuleExportProps> = (props) => {
                 setValue(r.JsonRaw)
             })
             .catch((e) => {
-                failed(`导出失败：${e}`)
+                failed(`Export Failed：${e}`)
             })
             .finally(() => setTimeout(() => setLoading(false), 300))
     }, [visible])
     return (
         <YakitModal
-            title='导出配置 JSON'
+            title='Export Config JSON'
             visible={visible}
             onCancel={() => setVisible(false)}
-            okText='另存为'
+            okText='Save As'
             width={960}
             closable={true}
             onOk={() => {
@@ -62,7 +62,7 @@ export const MITMRuleImport: React.FC<MITMRuleImportProps> = (props) => {
     const [loading, setLoading] = useState(false)
     const onImport = useMemoizedFn(() => {
         if (!new Buffer(params.JsonRaw).toString("utf8")) {
-            failed("请填入数据!")
+            failed("Please Enter Data!")
             return
         }
         try {
@@ -78,13 +78,13 @@ export const MITMRuleImport: React.FC<MITMRuleImportProps> = (props) => {
                     } else {
                         setVisible(false)
                     }
-                    info("导入成功")
+                    info("Import Success")
                 })
                 .catch((e) => {
-                    failed("导入失败:" + e)
+                    failed("Import Failed:" + e)
                 })
         } catch (error) {
-            failed("导入失败:" + error)
+            failed("Import Failed:" + error)
         }
     })
     const onUseDefaultConfig = useMemoizedFn(() => {
@@ -95,24 +95,24 @@ export const MITMRuleImport: React.FC<MITMRuleImportProps> = (props) => {
     })
     return (
         <YakitModal
-            title='从 JSON 中导入'
+            title='Import from JSON'
             subTitle={
                 <div className={styles["modal-subTitle"]}>
-                    <span>可复制 JSON 代码到方框区域内</span>
+                    <span>Copy JSON to Box</span>
                     <YakitButton type='text' onClick={() => onUseDefaultConfig()}>
-                        使用默认配置
+                        Use Default Config
                     </YakitButton>
                 </div>
             }
             visible={visible}
             onCancel={() => setVisible(false)}
-            okText='导入'
+            okText='Import'
             width={960}
             closable={true}
             onOk={() => onImport()}
             footerExtra={
                 <div className={styles["modal-footer-extra"]}>
-                    <span className={styles["modal-footer-extra-text"]}>覆盖现有规则</span>
+                    <span className={styles["modal-footer-extra-text"]}>Overwrite Rules</span>
                     <YakitSwitch
                         onChange={(ReplaceAll) => setParams({...params, ReplaceAll})}
                         checked={params.ReplaceAll}

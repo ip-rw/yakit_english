@@ -51,7 +51,7 @@ module.exports = (win, getClient) => {
         return await asyncSaveLocalPlugin(params)
     })
 
-    // 批量插件上传
+    // Batch Plugin Upload
     const streamSaveYakScriptToOnline = new Map()
     ipcMain.handle("cancel-SaveYakScriptToOnline", handlerHelper.cancelHandler(streamSaveYakScriptToOnline))
     ipcMain.handle("SaveYakScriptToOnline", async (e, params, token) => {
@@ -67,7 +67,7 @@ module.exports = (win, getClient) => {
         handlerHelper.registerHandler(win, stream, streamSmokingEvaluatePluginBatch, token)
     })
 
-    // 批量本地插件导入
+    // Batch Local Plugin Import
     let importYakScriptStream
     ipcMain.handle("ImportYakScript", async (e, params) => {
         importYakScriptStream = getClient().ImportYakScript(params)
@@ -97,7 +97,7 @@ module.exports = (win, getClient) => {
         if (importYakScriptStream) importYakScriptStream.cancel()
     })
 
-    // 批量导出本地插件
+    // Batch Export Local Plugins
     let exportYakScriptStream
     ipcMain.handle("ExportLocalYakScriptStream", async (e, params) => {
         exportYakScriptStream = getClient().ExportLocalYakScriptStream(params)
@@ -126,7 +126,7 @@ module.exports = (win, getClient) => {
         if (exportYakScriptStream) exportYakScriptStream.cancel()
     })
 
-    // 判断插件是否有老数据需要迁移提示
+    // Check if Plugin Has Legacy Data for Migration Prompt
     const asyncYaklangGetCliCodeFromDatabase = (params) => {
         return new Promise((resolve, reject) => {
             getClient().YaklangGetCliCodeFromDatabase(params, (err, data) => {
@@ -142,7 +142,7 @@ module.exports = (win, getClient) => {
         return await asyncYaklangGetCliCodeFromDatabase(params)
     })
 
-    // 代码转参数&风险
+    // Code to Parameters & Risk
     const asyncYaklangInspectInformation = (params) => {
         return new Promise((resolve, reject) => {
             getClient().YaklangInspectInformation(params, (err, data) => {

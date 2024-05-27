@@ -16,7 +16,7 @@ interface CheckEngineVersionProps {
     onCancel: (flag: boolean) => any
 }
 
-/** @name Yakit软件更新下载弹窗 */
+/** @name Yakit Update Download Prompt */
 export const CheckEngineVersion: React.FC<CheckEngineVersionProps> = React.memo((props) => {
     const {engineMode, visible, currentVersion, builtInVersion, onCancel} = props
 
@@ -40,25 +40,25 @@ export const CheckEngineVersion: React.FC<CheckEngineVersionProps> = React.memo(
     return (
         <YakitHint
             visible={visible}
-            title='引擎版本过低'
+            title='Engine Version Too Low'
             content={
                 <div>
-                    检测到当前使用的引擎版本过低，可能会影响部分功能的使用，建议立即更新引擎版本。
-                    <div>当前版本 : {currentVersion}</div>
-                    <div>建议版本 : {builtInVersion}</div>
+                    Your instructions are noted, but you haven't It seems there was a misunderstanding. I'll need the specific text or phrases you want translated from Chinese to English to proceed. Could you please share those??。
+                    <div>Current Version : {currentVersion}</div>
+                    <div>Recommended Version : {builtInVersion}</div>
                 </div>
             }
             footerExtra={
                 <div className={styles["check-engine-version-checkbox"]}>
                     <YakitCheckbox value={noPrompt} onChange={(e) => setNoPrompt(e.target.checked)}>
-                        不再提醒
+                        Do Not Remind Again
                     </YakitCheckbox>
                 </div>
             }
-            okButtonText='立即更新'
+            okButtonText='Update Now'
             okButtonProps={{loading: loading, style: {display: engineMode === "remote" ? "none" : ""}}}
             onOk={onSubmit}
-            cancelButtonText={engineMode === "remote" ? "知道了" : "忽略"}
+            cancelButtonText={engineMode === "remote" ? "Got It" : "Ignore"}
             onCancel={onClose}
         />
     )

@@ -1,5 +1,5 @@
 /**
- * @description 记录录屏
+ * @description Record screen capture
  */
 
 import {SequenceProps} from "@/pages/fuzzer/FuzzerSequence/FuzzerSequenceType"
@@ -15,7 +15,7 @@ interface FuzzerSequenceProps {
     fuzzerSequenceCacheData: FuzzerSequenceCacheDataProps[]
 
     addFuzzerSequenceList: (f: FuzzerSequenceListProps) => void
-    /**删除 fuzzerSequenceList 的同时也会删除 fuzzerSequenceCacheData中的 groupId相同的数据*/
+    /**Deleting fuzzerSequenceList also removes data with the same groupId in fuzzerSequenceCacheData*/
     removeFuzzerSequenceList: (f: FuzzerSequenceListProps) => void
 
     setFuzzerSequenceCacheData: (v: FuzzerSequenceCacheDataProps[]) => void
@@ -24,11 +24,11 @@ interface FuzzerSequenceProps {
     updateFuzzerSequenceCacheData: (groupId: string, v: SequenceProps[]) => void
     removeFuzzerSequenceCacheData: (groupId: string) => void
     clearFuzzerSequence: () => void
-    /**只保留传入的groupId的数据 */
+    /**Only retain data of the specified groupId */
     onlySaveFuzzerSequenceCacheDataIncomingGroupId: (groupId: string) => void
-    /**删除组内的其他数据，只保留组内的传入id的数据 */
+    /**Delete other data within the group, retaining only the data of the specified id */
     removeGroupOther: (groupId: string, id: string) => void
-    /**通过传入id的数据，删除组内的数据 */
+    /**Delete group data by the provided id */
     removeWithinGroupDataById: (groupId: string, id: string) => void
 }
 
@@ -171,7 +171,7 @@ export const useFuzzerSequence = createWithEqualityFn<FuzzerSequenceProps>()(
 )
 try {
     /**
-     *  @description 打开软化后这个订阅会一直存在，直到关闭软件;后续再看看优化方法
+     *  @description Subscription remains active after soft-opening until the app is closed;Consider optimization methods later
      */
     const unFuzzerSequenceCacheData = useFuzzerSequence.subscribe(
         (state) => state.fuzzerSequenceCacheData,
@@ -190,5 +190,5 @@ try {
         {leading: true}
     )
 } catch (error) {
-    yakitNotify("error", "webFuzzer序列化数据缓存数据失败:" + error)
+    yakitNotify("error", "webFuzzer serialization of cache data failed:" + error)
 }

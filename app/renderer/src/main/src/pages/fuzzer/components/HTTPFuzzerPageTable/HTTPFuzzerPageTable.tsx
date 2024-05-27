@@ -46,37 +46,37 @@ interface HTTPFuzzerPageTableProps {
     onSendToWebFuzzer?: (isHttps: boolean, request: string) => any
     setQuery: (h: HTTPFuzzerPageTableQuery) => void
     isRefresh?: boolean
-    /**@name 提取的数据 */
+    /**@Name Extracted data */
     extractedMap: Map<string, string>
-    /**@name 数据是否传输完成 */
+    /**@Name data transfer complete */
     isEnd: boolean
     setExportData?: (v: FuzzerResponse[]) => void
-    /**@name 是否可以调试匹配器或提取器 */
+    /**@Name Debug matcher or extractor usable */
     isShowDebug?: boolean
-    /**点击调试回调 */
+    /**Click for debug callback */
     onDebug?: (res: string) => void
     pageId?: string
-    /**超过限制数据，alert文案显示 */
+    /**Data exceeds limit, show alert */
     moreLimtAlertMsg?: React.ReactNode
     tableKeyUpDownEnabled?: boolean
     fuzzerTableMaxData?: number
 }
 
 /**
- * @description B转为kB M
+ * @Description B to kB M
  * @returns {string}
  */
 const convertBodyLength = (val: string) => {
     const limit = parseInt(val)
     let size = ""
     if (limit < 0.1 * 1024) {
-        //小于0.1KB，则转化成B
+        //Less than 0.1KB, convert to B
         size = limit.toFixed(2) + "B"
     } else if (limit < 0.1 * 1024 * 1024) {
-        //小于0.1MB，则转化成KB
+        //Less than 0.1MB, convert to KB
         size = (limit / 1024).toFixed(2) + "KB"
     } else if (limit < 0.1 * 1024 * 1024 * 1024) {
-        //小于0.1GB，则转化成MB
+        //Less than 0.1GB, convert to MB
         size = (limit / (1024 * 1024)).toFixed(2) + "MB"
     }
     return size
@@ -91,9 +91,9 @@ export interface HTTPFuzzerPageTableQuery {
     // bodyLengthUnit: "B" | "k" | "M"
 }
 
-// 判断数组值是否是数字 字符串类型数字也算
+// Check if array values are numeric incl. numeric strings
 const isNumericArray = (arr) => {
-    // 利用正则表达式进行匹配
+    // Match using regex
     var regex = /^\d+$/
     for (var i = 0; i < arr.length; i++) {
         if (!regex.test(arr[i])) {
@@ -104,25 +104,25 @@ const isNumericArray = (arr) => {
 }
 
 export const sorterFunction = (list, sorterTable, defSorter = "Count") => {
-    // ------------  排序 开始  ------------
+    // ------------  Sort start  ------------
     let newList = list
-    // 判断当前排序列是否既有数字又有字母的情况
+    // Check if sort column contains both numbers & letters
     const isNumber = isNumericArray(
         list.map((item) => (sorterTable?.orderBy == "" ? item[defSorter] + "" : item[sorterTable?.orderBy] + ""))
     )
-    // 重置
+    // Reset
     if (sorterTable?.order === "none") {
         newList = list.sort((a, b) => compareAsc(a, b, defSorter, isNumber))
     }
-    // 升序
+    // Ascending
     if (sorterTable?.order === "asc") {
         newList = list.sort((a, b) => compareAsc(a, b, sorterTable?.orderBy, isNumber))
     }
-    // 降序
+    // Descend
     if (sorterTable?.order === "desc") {
         newList = list.sort((a, b) => compareDesc(a, b, sorterTable?.orderBy, isNumber))
     }
-    // ------------  排序 结束  ------------
+    // ------------  Sort end  ------------
     return newList
 }
 
@@ -150,11 +150,11 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
         const [sorterTable, setSorterTable] = useState<SortProps>()
         const sorterTableRef = useRef<SortProps>()
 
-        const [firstFull, setFirstFull] = useState<boolean>(true) // 表格是否全屏
-        const [currentSelectItem, setCurrentSelectItem] = useState<FuzzerResponse>() //选中的表格项
-        const [currentSelectShowType, setCurrentSelectShowType] = useState<"request" | "response">("response") //选中的表格项
+        const [firstFull, setFirstFull] = useState<boolean>(true) // Table fullscreen?
+        const [currentSelectItem, setCurrentSelectItem] = useState<FuzzerResponse>() //Selected table items
+        const [currentSelectShowType, setCurrentSelectShowType] = useState<"request" | "response">("response") //Selected table items
 
-        const [isHaveData, setIsHaveData] = useState<boolean>(false) // 查询提取数据不为空
+        const [isHaveData, setIsHaveData] = useState<boolean>(false) // Data query not empty
 
         const [editor, setEditor] = useState<IMonacoEditor>()
         const [showResponseInfoSecondEditor, setShowResponseInfoSecondEditor] = useState<boolean>(true)
@@ -202,7 +202,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
         useImperativeHandle(
             ref,
             () => ({
-                // 减少父组件获取的DOM元素属性,只暴露给父组件需要用到的方法
+                // Reduce parent component's DOM attributes, only expose needed methods to parent
                 setCurrentSelectItem,
                 setFirstFull
             }),
@@ -213,7 +213,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
             return success
                 ? [
                       {
-                          title: "请求",
+                          title: "Request",
                           dataKey: "Count",
                           render: (v) => {
                               return v + 1
@@ -233,7 +233,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                           }
                       },
                       {
-                          title: "状态",
+                          title: "Status",
                           dataKey: "StatusCode",
                           render: (v, rowData) =>
                               v ? (
@@ -277,7 +277,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                           }
                       },
                       {
-                          title: "响应大小",
+                          title: "Response Size",
                           dataKey: "BodyLength",
                           width: 120,
                           sorterProps: {
@@ -312,7 +312,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                           }
                       },
                       {
-                          title: "延迟(ms)",
+                          title: "Latency (ms))",
                           dataKey: "DurationMs",
                           width: 100,
                           sorterProps: {
@@ -341,7 +341,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                           }
                       },
                       {
-                          title: "提取数据",
+                          title: "Extract Data",
                           dataKey: "ExtractedResults",
                           width: 300,
                           beforeIconExtra: (
@@ -350,7 +350,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                                       checked={isHaveData}
                                       onChange={(e) => setIsHaveData(e.target.checked)}
                                   />
-                                  <span className={styles["tip"]}>不为空</span>
+                                  <span className={styles["tip"]}>NotEmpty</span>
                               </div>
                           ),
                           render: (item, record) =>
@@ -373,7 +373,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                                                   color: !hasRedOpacityBg(record.cellClassName) ? undefined : "#fff"
                                               }}
                                           >
-                                              详情
+                                              Details
                                           </YakitButton>
                                       )}
                                   </div>
@@ -382,7 +382,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                               )
                       },
                       {
-                          title: "响应相似度",
+                          title: "Response Similarity",
                           dataKey: "BodySimilarity",
                           width: 120,
                           render: (v, rowData) => {
@@ -407,7 +407,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                           }
                       },
                       {
-                          title: "HTTP头相似度",
+                          title: "HTTP Header Similarity",
                           dataKey: "HeaderSimilarity",
                           render: (v) => (v ? parseFloat(`${v}`).toFixed(3) : "-"),
                           width: 120,
@@ -431,7 +431,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                           }
                       },
                       {
-                          title: "操作",
+                          title: "Action",
                           dataKey: "UUID",
                           fixed: "right",
                           width: isShowDebug !== false ? 85 : 60,
@@ -440,7 +440,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                                   <div className={styles["operate-icons"]}>
                                       {isShowDebug !== false && (
                                           <>
-                                              <Tooltip title='调试'>
+                                              <Tooltip title='Debug'>
                                                   <HollowLightningBoltIcon
                                                       onClick={(e) => {
                                                           e.stopPropagation()
@@ -491,7 +491,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                           }
                       },
                       {
-                          title: "失败原因",
+                          title: "Failure Reason",
                           dataKey: "Reason",
                           render: (v) => {
                               return v ? (
@@ -517,7 +517,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                   ]
         }, [success, query?.afterBodyLength, query?.beforeBodyLength, extractedMap, isHaveData, isShowDebug])
 
-        // 背景颜色是否标注为红色
+        // Red Background Mark
         const hasRedOpacityBg = (cellClassName: string) => cellClassName.indexOf("color-opacity-bg-red") !== -1
 
         const compareSorterTable = useCampare(sorterTable)
@@ -547,7 +547,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
         }, [])
         const onViewExecResults = useMemoizedFn((list) => {
             showYakitModal({
-                title: "提取结果",
+                title: "Extraction Result",
                 width: "60%",
                 footer: <></>,
                 content: <ExtractionResultsContent list={list} />
@@ -580,7 +580,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                     }
                 })
                     .catch((e) => {
-                        yakitFailed("搜索失败:" + e)
+                        yakitFailed("Search failed:" + e)
                     })
                     .finally(() => {
                         setTimeout(() => {
@@ -594,12 +594,12 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
         ).run
 
         /**
-         * @description 前端搜索
+         * @Description Frontend Search
          */
         const queryData = useMemoizedFn(() => {
             try {
-                // ------------  搜索 开始  ------------
-                // 有搜索条件才循环
+                // ------------  Search start  ------------
+                // Loop if search criteria exist
                 if (
                     query?.keyWord ||
                     (query?.StatusCode && query?.StatusCode?.length > 0) ||
@@ -613,15 +613,15 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                     const searchList: FuzzerResponse[] = []
                     for (let index = 0; index < l; index++) {
                         const record = newDataTable[index]
-                        // 关键字搜索是否满足，默认 满足，以下同理,搜索同时为true时，push新数组
+                        // Keywords search satisfied by default, push new array if true for both
                         let keyWordIsPush = true
                         let statusCodeIsPush = true
                         let bodyLengthMinIsPush = true
                         let bodyLengthMaxIsPush = true
                         let isHaveDataIsPush = true
                         let colorIsPush = true
-                        // 搜索满足条件 交集
-                        // 颜色搜索
+                        // Intersection of search criteria
+                        // Color search
                         if (query?.Color && query?.Color?.length > 0) {
                             const cLength = query.Color
                             const colorIsPushArr: boolean[] = []
@@ -635,13 +635,13 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                             }
                             colorIsPush = colorIsPushArr.includes(true)
                         }
-                        // 关键字搜索
+                        // Keyword search
                         if (query?.keyWord) {
                             const responseString = Uint8ArrayToString(record.ResponseRaw)
                             const payloadsString = (record.Payloads || []).join("")
                             keyWordIsPush = (responseString + payloadsString).includes(query.keyWord)
                         }
-                        // 状态码搜索
+                        // Status code search
                         if (query?.StatusCode && query?.StatusCode?.length > 0) {
                             const cLength = query.StatusCode
                             const codeIsPushArr: boolean[] = []
@@ -656,16 +656,16 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                             }
                             statusCodeIsPush = codeIsPushArr.includes(true)
                         }
-                        // 响应大小搜索
+                        // Response size search
                         if (query?.afterBodyLength) {
-                            // 最小
+                            // Min
                             bodyLengthMinIsPush = Number(record.BodyLength) >= query.afterBodyLength
                         }
                         if (query?.beforeBodyLength) {
-                            // 最大
+                            // Max
                             bodyLengthMaxIsPush = Number(record.BodyLength) <= query.beforeBodyLength
                         }
-                        // 是否有提取数据
+                        // Data extracted?
                         if (isHaveData) {
                             if (extractedMap.size > 0) {
                                 isHaveDataIsPush = !!extractedMap.get(record["UUID"])
@@ -673,7 +673,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                                 isHaveDataIsPush = record.ExtractedResults.length > 0
                             }
                         }
-                        // 搜索同时为true时，push新数组
+                        // Push new array if search true simultaneously
                         if (
                             colorIsPush &&
                             keyWordIsPush &&
@@ -698,9 +698,9 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                         scrollUpdate(newData.length)
                     }
                 }
-                // ------------  搜索 结束  ------------
+                // ------------  Search end  ------------
             } catch (error) {
-                yakitFailed("搜索失败:" + error)
+                yakitFailed("Search failed:" + error)
             }
         })
 
@@ -708,7 +708,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
             try {
                 const obj: {pageId: string; type: "all" | "payload"} = JSON.parse(v)
                 if (pageId === obj.pageId) {
-                    // 处理Uint8Array经过JSON.parse(JSON.stringify())导致数据损失和变形
+                    // Handling Uint8Array data loss/transformation after JSON.parse(JSON.stringify())
                     const newListTable = listTable.map((item) => ({
                         ...item,
                         RequestRaw: Uint8ArrayToString(item.RequestRaw),
@@ -722,7 +722,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
             } catch (error) {}
         })
 
-        // 获取最新table值 用于筛选
+        // Get latest table values for filtering
         useEffect(() => {
             emiter.on("onGetExportFuzzer", onGetExportFuzzerEvent)
             return () => {
@@ -765,7 +765,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                     menu: [
                         {
                             key: "is-show-add-overlay-widgetv",
-                            label: showResponseInfoSecondEditor ? "隐藏响应信息" : "显示响应信息"
+                            label: showResponseInfoSecondEditor ? "Hide response info" : "Display response info"
                         }
                     ],
                     onRun: () => {
@@ -876,7 +876,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                             isShowBeautifyRender={!currentSelectItem?.IsTooLargeResponse}
                             title={
                                 <div className={styles["second-node-title-wrapper"]}>
-                                    <span className={styles["second-node-title-text"]}>快速预览</span>
+                                    <span className={styles["second-node-title-text"]}>Quick Preview</span>
                                     <div className={styles["second-node-title-btns"]}>
                                         <YakitRadioButtons
                                             size='small'
@@ -888,17 +888,17 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                                             options={[
                                                 {
                                                     value: "request",
-                                                    label: "请求"
+                                                    label: "Request"
                                                 },
                                                 {
                                                     value: "response",
-                                                    label: "响应"
+                                                    label: "Response"
                                                 }
                                             ]}
                                         />
                                         {currentSelectItem?.IsTooLargeResponse && (
                                             <YakitTag style={{marginLeft: 8}} color='danger'>
-                                                超大响应
+                                                Oversized Response
                                             </YakitTag>
                                         )}
                                     </div>
@@ -930,8 +930,8 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                                         key='allRes'
                                         menu={{
                                             data: [
-                                                {key: "tooLargeResponseHeaderFile", label: "查看Header"},
-                                                {key: "tooLargeResponseBodyFile", label: "查看Body"}
+                                                {key: "tooLargeResponseHeaderFile", label: "View Header"},
+                                                {key: "tooLargeResponseBodyFile", label: "View Body"}
                                             ],
                                             onClick: ({key}) => {
                                                 switch (key) {
@@ -947,7 +947,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                                                                         currentSelectItem.TooLargeResponseHeaderFile
                                                                     )
                                                                 } else {
-                                                                    failed("目标文件已不存在!")
+                                                                    failed("Target file no longer exists!")
                                                                 }
                                                             })
                                                             .catch(() => {})
@@ -964,7 +964,7 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                                                                         currentSelectItem.TooLargeResponseBodyFile
                                                                     )
                                                                 } else {
-                                                                    failed("目标文件已不存在!")
+                                                                    failed("Target file no longer exists!")
                                                                 }
                                                             })
                                                             .catch(() => {})
@@ -980,12 +980,12 @@ export const HTTPFuzzerPageTable: React.FC<HTTPFuzzerPageTableProps> = React.mem
                                         }}
                                     >
                                         <YakitButton type='primary' size='small'>
-                                            完整响应
+                                            Full Response
                                         </YakitButton>
                                     </YakitDropdownMenu>
                                 ),
                                 <YakitButton size='small' onClick={onExecResults} key='extractData'>
-                                    提取数据
+                                    Extract Data
                                 </YakitButton>
                             ]}
                             typeOptionVal={typeOptionVal}
@@ -1018,7 +1018,7 @@ interface BodyLengthInputNumberProps {
 export const BodyLengthInputNumber: React.FC<BodyLengthInputNumberProps> = React.memo(
     React.forwardRef((props, ref) => {
         const {query, setQuery, showFooter} = props
-        // 响应大小
+        // Response Size
         const [afterBodyLength, setAfterBodyLength] = useState<number>()
         const [beforeBodyLength, setBeforeBodyLength] = useState<number>()
         useEffect(() => {

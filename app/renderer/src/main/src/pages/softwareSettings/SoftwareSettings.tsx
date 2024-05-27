@@ -28,10 +28,10 @@ interface SettingsMenuProp {
 }
 const ProjectLogo = (showMini:boolean) => {
     if(isEnpriTrace()){
-        return <img style={{height:"100%"}} src={showMini?yakitEEMiniProject:yakitEEProject} alt="暂无图片" />
+        return <img style={{height:"100%"}} src={showMini?yakitEEMiniProject:yakitEEProject} alt="No image" />
     }
     else if(isEnpriTraceAgent()){
-        return <img style={{height:"100%"}} src={showMini?yakitSEMiniProject:yakitSEProject} alt="暂无图片" />
+        return <img style={{height:"100%"}} src={showMini?yakitSEMiniProject:yakitSEProject} alt="No image" />
     }
     else{
         return <YakitLogoSvgIcon />
@@ -40,7 +40,7 @@ const ProjectLogo = (showMini:boolean) => {
 const SettingsMenu: SettingsMenuProp[] = [
     {
         key: "project",
-        name: "项目管理",
+        name: "Project Mgmt",
         icon: <DesktopComputerSvgIcon />
     }
 ]
@@ -82,7 +82,7 @@ export const SoftwareSettings: React.FC<SoftwareSettingsProp> = memo((props) => 
         }
     })
 
-    /** 获取计算机名称 */
+    /** Get Computer Name */
     useEffect(() => {
         ipcRenderer
             .invoke("fetch-computer-name")
@@ -159,7 +159,7 @@ export const SoftwareSettings: React.FC<SoftwareSettingsProp> = memo((props) => 
                         type='outline2'
                         onClick={() => onEngineModeChange("remote")}
                     >
-                        {showMini ? <SoftwareRemoteSvgIcon /> : "远程模式"}
+                        {showMini ? <SoftwareRemoteSvgIcon /> : "Remote Mode"}
                     </YakitButton>
                 </div>
 

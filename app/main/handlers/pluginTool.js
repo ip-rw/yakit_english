@@ -14,7 +14,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 设置私有域
+    // Set Private Domain
     ipcMain.handle("SetOnlineProfile", async (e, params) => {
         return await asyncSetOnlineProfile(params)
     })
@@ -29,7 +29,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 获取私有域
+    // Get Private Domain
     ipcMain.handle("GetOnlineProfile", async (e, params) => {
         return await asyncGetOnlineProfile(params)
     })
@@ -45,7 +45,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 下载插件
+    // Download Plugin
     ipcMain.handle("DownloadOnlinePluginById", async (e, params) => {
         params.Token = USER_INFO.token
         return await asyncDownloadOnlinePluginById(params)
@@ -62,13 +62,13 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 新版-下载插件
+    // New-Download Plugin
     ipcMain.handle("DownloadOnlinePluginBatch", async (e, params) => {
         params.Token = USER_INFO.token
         return await asyncDownloadOnlinePluginBatch(params)
     })
 
-    // 新版-下载所有插件 全部添加
+    // New-Download All Plugins, Add All
     const streamDownloadOnlinePluginsAll = new Map()
     ipcMain.handle("cancel-DownloadOnlinePlugins", handlerHelper.cancelHandler(streamDownloadOnlinePluginsAll))
     ipcMain.handle("DownloadOnlinePlugins", async (e, params, token) => {
@@ -88,7 +88,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 新版-根据插件名称下载插件
+    // New-Download Plugin by Name
     ipcMain.handle("DownloadOnlinePluginByPluginName", async (e, params) => {
         params.Token = USER_INFO.token
         return await asyncDownloadOnlinePluginByPluginName(params)
@@ -105,7 +105,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 删除插件
+    // Delete Plugin
     ipcMain.handle("DeletePluginByUserID", async (e, params) => {
         return await asyncDeletePluginByUserID(params)
     })
@@ -120,7 +120,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 删除本地插件 暂时废弃
+    // Delete Local Plugin Temporarily Deprecated
     ipcMain.handle("DeleteAllLocalPlugins", async (e, params) => {
         return await asyncDeleteAllLocalPlugins(params)
     })
@@ -135,7 +135,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    //通过OnlineID 查询本地插件数据
+    //Query Local Plugin Data by OnlineID
     ipcMain.handle("GetYakScriptByOnlineID", async (e, params) => {
         return await asyncGetYakScriptByOnlineID(params)
     })
@@ -151,7 +151,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    //通过OnlineBaseUrl与UserId 获取所有可上传插件
+    //Get All Uploadable Plugins by OnlineBaseUrl & UserId
     ipcMain.handle("QueryYakScriptLocalAndUser", async (e, params) => {
         return await asyncQueryYakScriptLocalAndUser(params)
     })
@@ -167,7 +167,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    //通过OnlineGroup查询
+    //Query by OnlineGroup
     ipcMain.handle("QueryYakScriptByOnlineGroup", async (e, params) => {
         return await asyncQueryYakScriptByOnlineGroup(params)
     })
@@ -183,7 +183,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    //企业版管理员获取所有可上传插件
+    //Enterprise Admin Get All Uploadable Plugins
     ipcMain.handle("QueryYakScriptLocalAll", async (e, params) => {
         return await asyncQueryYakScriptLocalAll(params)
     })
@@ -199,7 +199,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 统计
+    // Statistics
     ipcMain.handle("GetYakScriptTagsAndType", async (e, params) => {
         return await asyncGetYakScriptTagsAndType(params)
     })
@@ -216,7 +216,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 删除本地插件,带条件
+    // Conditional Delete Local Plugin
     ipcMain.handle("DeleteLocalPluginsByWhere", async (e, params) => {
         return await asyncDeleteLocalPluginsByWhere(params)
     })
@@ -232,7 +232,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 获取插件组数据
+    // Get Plugin Group Data
     ipcMain.handle("QueryYakScriptGroup", async (e, params) => {
         return await asyncQueryYakScriptGroup(params)
     })
@@ -248,7 +248,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 插件组名字修改
+    // Rename Plugin Group
     ipcMain.handle("RenameYakScriptGroup", async (e, params) => {
         return await asyncRenameYakScriptGroup(params)
     })
@@ -264,7 +264,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 插件组删除
+    // Delete Plugin Group
     ipcMain.handle("DeleteYakScriptGroup", async (e, params) => {
         return await asyncDeleteYakScriptGroup(params)
     })
@@ -280,7 +280,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 获取插件所在插件组和其他插件组
+    // Get Plugin's Current Group & Other Groups
     ipcMain.handle("GetYakScriptGroup", async (e, params) => {
         return await asyncGetYakScriptGroup(params)
     })
@@ -296,7 +296,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 更新插件所在组&新增插件组
+    // Update Plugin Group & Add New Group
     ipcMain.handle("SaveYakScriptGroup", async (e, params) => {
         return await asyncSaveYakScriptGroup(params)
     })
@@ -312,7 +312,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 重置插件组为线上插件组
+    // Reset Plugin Group to Online
     ipcMain.handle("ResetYakScriptGroup", async (e, params) => {
         return await asyncResetYakScriptGroup(params)
     })

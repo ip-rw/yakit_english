@@ -1,31 +1,31 @@
 export interface RemoteEngineProps {
     loading: boolean
     setLoading: (flag: boolean) => any
-    /** 是否已经安装引擎 */
+    /** Engine Installed? */
     installedEngine: boolean
     onSubmit: (info: RemoteLinkInfo) => any
-    /** 取消 & 切换本地连接 */
+    /** Cancel & Switch to Local Connection */
     onSwitchLocalEngine: () => any
 }
 
-/** @name 远程连接配置参数 */
+/** @name Remote Connection Config Params */
 export interface RemoteLinkInfo {
-    /** 是否保存为历史连接 */
+    /** Save as History Connection? */
     allowSave: boolean
-    /** 历史连接名称 */
+    /** History Connection Names */
     linkName?: string
-    /** 远程主机地址 */
+    /** Remote Host Address */
     host: string
-    /** 远程端口 */
+    /** Remote Port */
     port: string
-    /** 是否开启TLS */
+    /** TLS Enabled? */
     tls: boolean
-    /** 证书 */
+    /** Certificate */
     caPem?: string
     password?: string
 }
 
-/** @name 本地缓存远程连接配置信息 */
+/** @name Local Cache Remote Connection Config */
 export interface YakitAuthInfo {
     name: string
     host: string

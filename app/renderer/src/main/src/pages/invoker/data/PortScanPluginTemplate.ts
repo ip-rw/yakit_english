@@ -2,14 +2,14 @@ export const PortScanPluginTemplate = `# port scan plugin
 yakit.AutoInitYakit()
 
 /*
-本插件定义的函数主要用于端口扫描的额外扩展
+Functions defined by this plugin are mainly used for additional port scan extensions
 
-函数定义如下：
+Function definition as follows：
 func(result *fp.MatchResult)
 
-// 详细结构体定义与内容见模版结尾
-// 这里最关键的是，如果对扫描出的结果有疑问，需要对 MatchResult 进行修改，应该直接
-// 对变量.Field 进行修改。
+// Detailed struct definition and contents are at the end of the template
+// The key point here is that if there are doubts about the scan results, you should modify MatchResult directly
+// Directly modify variable.Field。
 
 DEMO:
 
@@ -29,15 +29,15 @@ handle = func(result /* *fp.MatchResult */) {
 }
 
 /*
-// 具体定义如下：
+// Specific definition as follows：
 type palm/common/fp.(MatchResult) struct {
       Target: string  
       Port: int  
       State: fp.PortState  
       Reason: string  
       Fingerprint: *fp.FingerprintInfo  
-  StructMethods(结构方法/函数): 
-  PtrStructMethods(指针结构方法/函数): 
+  StructMethods(Struct Methods/Function): 
+  PtrStructMethods(Pointer Struct Methods/Function): 
       func GetBanner() return(string) 
       func GetCPEs() return([]string) 
       func GetDomains() return([]string) 
@@ -65,8 +65,8 @@ type palm/common/fp.(FingerprintInfo) struct {
       Banner: string  
       CPEFromUrls: map[string][]*webfingerprint.CPE  
       HttpFlows: []*fp.HTTPFlow  
-  StructMethods(结构方法/函数): 
-  PtrStructMethods(指针结构方法/函数): 
+  StructMethods(Struct Methods/Function): 
+  PtrStructMethods(Pointer Struct Methods/Function): 
       func FromRegexp2Match(v1: *regexp2.Match) 
 }
 */

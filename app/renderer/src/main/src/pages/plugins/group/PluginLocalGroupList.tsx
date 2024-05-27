@@ -34,8 +34,8 @@ export const PluginLocalGroupList: React.FC<PluginLocalGroupListProps> = (props)
     const {pluginsGroupsInViewport, onLocalGroupLen, activeLocalGroup, onActiveGroup} = props
     const [groupList, setGroupList] = useState<GroupListItem[]>([])
     const [menuOpen, setMenuOpen] = useState<boolean>(false)
-    const [editGroup, setEditGroup] = useState<GroupListItem>() // 编辑插件组
-    const [delGroup, setDelGroup] = useState<GroupListItem>() // 删除插件组
+    const [editGroup, setEditGroup] = useState<GroupListItem>() // Edit Plugin Group
+    const [delGroup, setDelGroup] = useState<GroupListItem>() // Delete Plugin Group
     const [delGroupConfirmPopVisible, setDelGroupConfirmPopVisible] = useState<boolean>(false)
     const delGroupConfirmPopRef = useRef<any>()
     const [visibleOnline, setVisibleOnline] = useState<boolean>(false)
@@ -53,14 +53,14 @@ export const PluginLocalGroupList: React.FC<PluginLocalGroupListProps> = (props)
 
     const assemblyExtraField = (isDefault: boolean, groupName: string, field: string) => {
         const noGroupItem = {
-            全部: {icon: <SolidViewgridIcon />, iconColor: "#56c991", showOptBtns: false},
-            未分组: {icon: <SolidQuestionmarkcircleIcon />, iconColor: "#8863f7", showOptBtns: false}
+            Deselect: {icon: <SolidViewgridIcon />, iconColor: "#56c991", showOptBtns: false},
+            Ungrouped: {icon: <SolidQuestionmarkcircleIcon />, iconColor: "#8863f7", showOptBtns: false}
         }
         const groupItem = {icon: <SolidFolderopenIcon />, iconColor: "#ffb660", showOptBtns: true}
         return isDefault ? noGroupItem[groupName][field] : groupItem[field]
     }
 
-    // 获取组列表数据
+    // Fetch Group List Data
     const getGroupList = () => {
         apiFetchQueryYakScriptGroupLocal().then((group: GroupCount[]) => {
             const copyGroup = structuredClone(group)
@@ -81,7 +81,7 @@ export const PluginLocalGroupList: React.FC<PluginLocalGroupListProps> = (props)
         })
     }
 
-    // 插件组名input失焦
+    // Plugin Group Name Input Blur
     const onEditGroupNameBlur = (groupItem: GroupListItem, newName: string, successCallback: () => void) => {
         setEditGroup(undefined)
         if (!newName || newName === groupItem.name) return
@@ -94,7 +94,7 @@ export const PluginLocalGroupList: React.FC<PluginLocalGroupListProps> = (props)
         })
     }
 
-    // 点击删除
+    // Click to Delete
     const onClickBtn = (groupItem: GroupListItem) => {
         setDelGroup(groupItem)
         getRemoteValue(RemoteGV.PluginGroupDelNoPrompt).then((result: string) => {
@@ -108,14 +108,14 @@ export const PluginLocalGroupList: React.FC<PluginLocalGroupListProps> = (props)
         })
     }
 
-    // 插件组删除
+    // Plugin Group Deletion
     const onGroupDel = (groupItem: GroupListItem, callBack?: () => void) => {
         apiFetchDeleteYakScriptGroupLocal(groupItem.name).then(() => {
             getGroupList()
-            // 发送事件到组件 <PluginGroup></PluginGroup>
+            // Send Event to Component <PluginGroup></PluginGroup>
             emiter.emit("onRefpluginGroupSelectGroup", "true")
-            // 如果当前选中组为固定的未分组 刷新右侧插件列表
-            if (activeLocalGroup?.default && activeLocalGroup.id === "未分组") {
+            // If current group is fixed "Ungrouped", refresh right plugin list
+            if (activeLocalGroup?.default && activeLocalGroup.id === "Ungrouped") {
                 emiter.emit("onRefPluginGroupMagLocalPluginList", "")
             }
             callBack && callBack()
@@ -162,7 +162,7 @@ export const PluginLocalGroupList: React.FC<PluginLocalGroupListProps> = (props)
                                                 label: (
                                                     <div className={styles["extra-opt-menu"]}>
                                                         <OutlinePencilaltIcon />
-                                                        <div className={styles["extra-opt-name"]}>重命名</div>
+                                                        <div className={styles["extra-opt-name"]}>Rename</div>
                                                     </div>
                                                 )
                                             },
@@ -171,7 +171,7 @@ export const PluginLocalGroupList: React.FC<PluginLocalGroupListProps> = (props)
                                                 label: (
                                                     <div className={styles["extra-opt-menu"]}>
                                                         <OutlineTrashIcon />
-                                                        <div className={styles["extra-opt-name"]}>删除</div>
+                                                        <div className={styles["extra-opt-name"]}>Delete</div>
                                                     </div>
                                                 ),
                                                 type: "danger"
@@ -216,8 +216,8 @@ export const PluginLocalGroupList: React.FC<PluginLocalGroupListProps> = (props)
             {groupList.length <= 2 && (
                 <div className={styles["plugin-local-empty"]}>
                     <YakitEmpty
-                        title='暂无数据'
-                        description='可一键获取官方默认分组，或勾选插件新建分组'
+                        title='No Data Available'
+                        description='One-click to get official default groups or check to create new group'
                         style={{marginTop: 80}}
                     />
                     <div className={styles["plugin-local-buttons"]}>
@@ -226,7 +226,7 @@ export const PluginLocalGroupList: React.FC<PluginLocalGroupListProps> = (props)
                             icon={<CloudDownloadIcon />}
                             onClick={() => setVisibleOnline(true)}
                         >
-                            一键下载
+                            One-click download
                         </YakitButton>
                     </div>
                 </div>
@@ -240,7 +240,7 @@ export const PluginLocalGroupList: React.FC<PluginLocalGroupListProps> = (props)
                     }}
                 />
             )}
-            {/* 删除确认框 */}
+            {/* Delete Confirmation */}
             <DelGroupConfirmPop
                 ref={delGroupConfirmPopRef}
                 visible={delGroupConfirmPopVisible}

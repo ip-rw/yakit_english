@@ -62,7 +62,7 @@ const RouteTitle: React.FC<RouteTitleProps> = (props) => {
             {title}
             {(echartsLoading || increLoading) && (
                 <div className={styles["spin-wrapper"]}>
-                    加载中...
+                    Loading...
                     <div className={styles["spin-style"]}>
                         <YakitSpin size='small' spinning={true} />
                     </div>
@@ -70,7 +70,7 @@ const RouteTitle: React.FC<RouteTitleProps> = (props) => {
             )}
             {echartsError && (
                 <div className={styles["spin-wrapper"]}>
-                    加载失败
+                    Loading Failed
                     <div className={styles["spin-style"]}>
                         <YakitButton
                             type='text2'
@@ -96,7 +96,7 @@ interface RouteItemProps {
 const RouteItem: React.FC<RouteItemProps> = (props) => {
     const {dataSource, setOpenPage, load, getCustomizeMenus} = props
 
-    // 全局登录状态
+    // Global Login Status
     const {userInfo} = useStore()
     const goRoute = () => {
         const info: RouteToPageProps = {route: dataSource.key}
@@ -116,13 +116,13 @@ const RouteItem: React.FC<RouteItemProps> = (props) => {
             })
             .then((rsp: DownloadOnlinePluginByScriptNamesResponse) => {
                 if (rsp.Data.length > 0) {
-                    success("添加菜单成功")
+                    success("Add Menu Success")
                     if (isCommunityEdition()) ipcRenderer.invoke("refresh-public-menu")
                     else ipcRenderer.invoke("change-main-menu")
                 }
             })
             .catch((e) => {
-                failed(`添加菜单失败:${e}`)
+                failed(`Add Menu Failed:${e}`)
             })
             .finally(() => {
                 getCustomizeMenus && getCustomizeMenus()
@@ -159,7 +159,7 @@ const RouteItem: React.FC<RouteItemProps> = (props) => {
                                     addMenu(dataSource.pluginName || dataSource.label)
                                 }}
                             >
-                                获取菜单
+                                Get Menu
                             </div>
                         )}
                     </div>
@@ -249,7 +249,7 @@ interface echartListProps {
 const PieEcharts: React.FC<PieChartProps> = React.forwardRef((props, ref) => {
     const {goStoreRoute, inViewport, echartsError, setEchartsError, echartsLoading, setEchartsLoading} = props
     const {width} = useSize(document.querySelector("body")) || {width: 0, height: 0}
-    // 全局登录状态
+    // Global Login Status
     const {userInfo} = useStore()
     const [_, setChartList, getChartList] = useGetState<echartListProps[]>([])
     const colorList = ["#FFB660", "#4A94F8", "#5F69DD", "#56C991", "#8863F7", "#35D8EE"]
@@ -258,7 +258,7 @@ const PieEcharts: React.FC<PieChartProps> = React.forwardRef((props, ref) => {
         title: {
             show: false,
             text: 0,
-            subtext: "插件总数",
+            subtext: "Total Plugins",
             top: "38%",
             left: "23%",
             textAlign: "center",
@@ -288,7 +288,7 @@ const PieEcharts: React.FC<PieChartProps> = React.forwardRef((props, ref) => {
             orient: "vertical",
             icon: "circle",
             padding: [0, 0, 0, 0],
-            // 点的大小位置
+            // Dot size & position
             itemWidth: 13,
             itemHeight: 7,
             itemStyle: {
@@ -323,9 +323,9 @@ const PieEcharts: React.FC<PieChartProps> = React.forwardRef((props, ref) => {
 
         series: [
             {
-                // 空心饼图内外径
+                // Pie chart inner & outer radius
                 radius: ["60%", "77%"],
-                // 饼图上下左右位置
+                // Pie chart position
                 center: ["24%", "50%"],
                 itemStyle: {
                     borderColor: "#F0F1F3",
@@ -372,15 +372,15 @@ const PieEcharts: React.FC<PieChartProps> = React.forwardRef((props, ref) => {
     useEffect(() => {
         setEchartsError(false)
         getPluginSearch()
-        //先解绑事件，防止事件重复触发
+        //Unbind events to prevent duplicates
         echartsRef.current.off("click")
         echartsRef.current.off("legendselectchanged")
         echartsRef.current.on("click", function (params) {
-            // console.log("点击", params)
+            // console.log("Click", params)
             onSendToTab(params.name ?? "")
         })
         echartsRef.current.on("legendselectchanged", (e) => {
-            // console.log("点击了", e) // 如果不加off事件，就会叠加触发
+            // console.log("Clicked", e) // Without Off Event, Triggers Stack
             onSendToTab(e.name ?? "")
             echartsRef.current.setOption({
                 legend: {selected: {[e.name]: true}}
@@ -401,7 +401,7 @@ const PieEcharts: React.FC<PieChartProps> = React.forwardRef((props, ref) => {
                 if (list.length > 0) {
                     const data = list[0].data
                     const chartListCache = data.map((item) => ({
-                        name: PluginType[item.value] ?? "未识别",
+                        name: PluginType[item.value] ?? "Unrecognized",
                         value: item.count
                     }))
                     // @ts-ignore
@@ -413,7 +413,7 @@ const PieEcharts: React.FC<PieChartProps> = React.forwardRef((props, ref) => {
                 }
             })
             .catch((err) => {
-                // failed("失败getPluginSearch：" + err)
+                // failed("Failed getPluginSearch：" + err)
                 setEchartsError(true)
             })
             .finally(() => {
@@ -481,7 +481,7 @@ const PlugInShop: React.FC<PlugInShopProps> = (props) => {
     const [hotError, setHotError] = useState<boolean>(false)
     const [hotLoading, setHotLoading] = useState<boolean>(false)
     const [increLoading, setIncreLoading] = useState<boolean>(false)
-    /** 判断插件图标接口是否请求成功 */
+    /** Check If Plugin Icon API Request Succeeded */
     const [echartsLoading, setEchartsLoading] = useState<boolean>(false)
     const [echartsError, setEchartsError] = useState<boolean>(false)
     const childRef = useRef<any>(null)
@@ -523,7 +523,7 @@ const PlugInShop: React.FC<PlugInShopProps> = (props) => {
             .catch((err) => {
                 setHotError(true)
                 setHotArr([])
-                // failed("失败getPlugInShopHot：" + err)
+                // failed("Failed getPlugInShopHot：" + err)
             })
             .finally(() => {
                 setHotLoading(false)
@@ -557,15 +557,15 @@ const PlugInShop: React.FC<PlugInShopProps> = (props) => {
             })
             .catch((err) => {
                 setCountAddObj(undefined)
-                // failed("失败plugin/newIncre：" + err)
+                // failed("Failed plugin/newIncre：" + err)
             })
             .finally(() => {
                 setIncreLoading(false)
             })
     }
     /**
-     * 首页点击今日新增、本周新增不做筛选，只是跳转,点击类型需要筛选
-     * @description 带参数的页面跳转
+     * Homepage Clicks on Today's New/This Week's New No Filter, Just Navigation, Click Type Needs Filtering
+     * @Description: Parametrized Page Navigation
      */
     const goStoreRoute = (params) => {
         emiter.emit("openPage", JSON.stringify({route: YakitRoute.Plugin_Store, params: {...params}}))
@@ -577,7 +577,7 @@ const PlugInShop: React.FC<PlugInShopProps> = (props) => {
         else if (v === "<") return <ReduceCountIcon style={{paddingLeft: 4}} />
         else return <></>
     }
-    /**切换至插件商店页面，不带参数 */
+    /**Switch to Plugin Store, No Param */
     const openStoreRoute = useMemoizedFn(() => {
         setOpenPage({route: YakitRoute.Plugin_Store})
     })
@@ -591,7 +591,7 @@ const PlugInShop: React.FC<PlugInShopProps> = (props) => {
     return (
         <>
             <RouteTitle
-                title='插件商店'
+                title='Plugin Store'
                 echartsError={echartsError}
                 increLoading={increLoading}
                 echartsLoading={echartsLoading}
@@ -617,7 +617,7 @@ const PlugInShop: React.FC<PlugInShopProps> = (props) => {
                                         style={{cursor: "pointer"}}
                                         onClick={() => openStoreRoute()}
                                     >
-                                        <div className={styles["add-title"]}>今日新增数</div>
+                                        <div className={styles["add-title"]}>Today's New Count</div>
                                         <div className={styles["add-content"]}>
                                             <span>
                                                 <CountUp
@@ -639,7 +639,7 @@ const PlugInShop: React.FC<PlugInShopProps> = (props) => {
                                         style={{cursor: "pointer"}}
                                         onClick={() => openStoreRoute()}
                                     >
-                                        <div className={styles["add-title"]}>本周新增数</div>
+                                        <div className={styles["add-title"]}>This Week's New Count</div>
                                         <div className={styles["add-content"]}>
                                             <span>
                                                 <CountUp
@@ -663,7 +663,7 @@ const PlugInShop: React.FC<PlugInShopProps> = (props) => {
                         })}
                         ref={listHeightRef}
                     >
-                        {/* 放大窗口图表宽度确实会自适应，但是缩小就挂掉了（并不自适应），原因：如果Chart组件的父组件Father采用flex布局 就会出现上述的问题 建议采用百分比*/}
+                        {/* Zooming In Chart Adjusts, Zooming Out Breaks (Not Adaptive). Reason: Flex Layout of Chart's Parent Causes Issue. Suggest Using Percentage.*/}
                         <PieEcharts
                             ref={childRef}
                             goStoreRoute={goStoreRoute}
@@ -677,10 +677,10 @@ const PlugInShop: React.FC<PlugInShopProps> = (props) => {
                 </div>
                 <div className={styles["show-bottom-box"]}>
                     <div className={styles["bottom-box-title"]}>
-                        热搜词
+                        Hot Search Terms
                         {hotLoading && (
                             <div className={styles["spin-wrapper"]}>
-                                加载中...
+                                Loading...
                                 <div className={styles["spin-style"]}>
                                     <YakitSpin size='small' spinning={true} />
                                 </div>
@@ -688,7 +688,7 @@ const PlugInShop: React.FC<PlugInShopProps> = (props) => {
                         )}
                         {hotError && (
                             <div className={styles["spin-wrapper"]}>
-                                加载失败
+                                Loading Failed
                                 <div className={styles["spin-style"]}>
                                     <YakitButton
                                         type='text2'
@@ -716,7 +716,7 @@ const PlugInShop: React.FC<PlugInShopProps> = (props) => {
                                     )
                                 })
                             ) : (
-                                <div className={styles["hot-no-data"]}>暂无数据</div>
+                                <div className={styles["hot-no-data"]}>No Data Available</div>
                             )}
                         </div>
                     )}
@@ -729,7 +729,7 @@ const PlugInShop: React.FC<PlugInShopProps> = (props) => {
 export const newHomeList: newHomeListData[] = [
     {
         id: "1",
-        label: "资产搜集",
+        label: "Asset Collection",
         subMenuData: [
             {
                 id: "1-1",
@@ -741,18 +741,18 @@ export const newHomeList: newHomeListData[] = [
             {
                 id: "1-2",
                 key: YakitRoute.Plugin_OP,
-                label: "基础爬虫",
+                label: "Basic Crawler",
                 icon: <PrivateSolidBasicCrawlerIcon />,
-                describe: "通过爬虫可快速了解网站的整体架构",
+                describe: "Rapidly Understand Site Structure via Crawling",
                 pluginName: ResidentPluginName.BasicCrawler,
                 isShow: false
             },
             {
                 id: "1-3",
                 key: YakitRoute.Plugin_OP,
-                label: "目录扫描",
+                label: "Directory Scanning",
                 icon: <PrivateSolidDirectoryScanningIcon />,
-                describe: "带有内置字典的综合目录扫描与爆破",
+                describe: "Comprehensive Directory Scan & Brute-Force with Built-In Dictionary",
                 pluginName: ResidentPluginName.DirectoryScanning,
                 isShow: false
             }
@@ -760,7 +760,7 @@ export const newHomeList: newHomeListData[] = [
     },
     {
         id: "2",
-        label: "漏洞检测",
+        label: "Vulnerability Scan",
         subMenuData: [
             {
                 id: "2-1",
@@ -780,7 +780,7 @@ export const newHomeList: newHomeListData[] = [
     },
     {
         id: "3",
-        label: "进阶功能",
+        label: "Advanced Features",
         subMenuData: [
             {
                 id: "3-1",
@@ -800,7 +800,7 @@ export const newHomeList: newHomeListData[] = [
     },
     {
         id: "4",
-        label: "渗透测试工具",
+        label: "Penetration Testing Tools",
         subMenuData: [
             {
                 id: "4-1",
@@ -827,7 +827,7 @@ export const newHomeList: newHomeListData[] = [
     },
     {
         id: "5",
-        label: "小工具",
+        label: "Utilities",
         subMenuData: [
             {
                 id: "5-1",
@@ -854,7 +854,7 @@ export const newHomeList: newHomeListData[] = [
     },
     {
         id: "6",
-        label: "反连管理",
+        label: "Reverse Connection Mgmt",
         subMenuData: [
             {
                 id: "6-1",
@@ -908,7 +908,7 @@ const NewHome: React.FC<NewHomeProps> = (props) => {
     const ref = useRef(null)
     const [inViewport] = useInViewport(ref)
     const [newHomeData, setNewHomeData, getNewHomeData] = useGetState(newHomeList)
-    // 加载是否完成
+    // Loading Complete
     const [load, setLoad] = useState<boolean>(false)
     useEffect(() => {
         getCustomizeMenus()
@@ -918,7 +918,7 @@ const NewHome: React.FC<NewHomeProps> = (props) => {
         ipcRenderer.invoke("open-route-page", param)
     }
 
-    // 获取自定义菜单
+    // Get Custom Menu
     const getCustomizeMenus = () => {
         ipcRenderer
             .invoke("QueryYakScript", {

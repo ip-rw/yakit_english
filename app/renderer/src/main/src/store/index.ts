@@ -2,9 +2,9 @@ import {ResultObjProps} from "@/pages/dynamicControl/DynamicControl"
 import {create} from "zustand"
 
 export interface UserInfoProps {
-    /** 是否登录 */
+    /** Logged In? */
     isLogin: boolean
-    /** 登录平台 */
+    /** Login Platform */
     platform: string | null
     githubName: string | null
     githubHeadImg: string | null
@@ -14,15 +14,15 @@ export interface UserInfoProps {
     qqHeadImg: string | null
     companyName: string | null
     companyHeadImg: string | null
-    /** 角色 */
+    /** Role */
     role: string | null
     user_id: number | null
     token: string
-    /** 是否有插件管理权限 */
+    /** Plugin Management Permission? */
     checkPlugin?: boolean
 }
 interface StoreProps {
-    /**@name 登录用户信息 */
+    /**@name Login User Info */
     userInfo: UserInfoProps
     setStoreUserInfo: (info: UserInfoProps) => void
 }
@@ -47,27 +47,27 @@ export const useStore = create<StoreProps>((set, get) => ({
 }))
 
 export interface StoreParamsProps {
-    // 关键字搜索参数
+    // Keyword Search Param
     keywords: string
-    // 插件类型参数
+    // Plugin Type Param
     plugin_type: string
-    // 今日/本周
+    // Today/This Week
     time_search: string
-    // 插件仓库页是否已渲染
+    // Plugin Store Rendered?
     isShowYakitStorePage: boolean
 }
 
 export interface DynamicStatusProps extends ResultObjProps {
-    /**是否远程控制中*/
+    /**Remote Control?*/
     isDynamicStatus: boolean
-    /**是否被远程控制中*/
+    /**Being Remotely Controlled?*/
     isDynamicSelfStatus: boolean
-    /**私有域地址*/
+    /**Private Domain Address*/
     baseUrl: string
 }
 
 interface YakitDynamicStatusProps {
-    /**@name 远程控制状态参数 */
+    /**@name Remote Control Status Param */
     dynamicStatus: DynamicStatusProps
     setDynamicStatus: (info: DynamicStatusProps) => void
 }

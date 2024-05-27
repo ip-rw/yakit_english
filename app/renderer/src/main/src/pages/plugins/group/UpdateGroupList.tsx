@@ -13,7 +13,7 @@ export interface UpdateGroupListItem {
 
 interface UpdateGroupListProps {
     ref: React.Ref<any>
-    originGroupList: UpdateGroupListItem[] // 原始组数据
+    originGroupList: UpdateGroupListItem[] // Original Group Data
 }
 
 export const UpdateGroupList: React.FC<UpdateGroupListProps> = React.forwardRef((props, ref) => {
@@ -107,7 +107,7 @@ export const UpdateGroupList: React.FC<UpdateGroupListProps> = React.forwardRef(
             setGroupList(changeFiled(groupList, item.groupName, checked))
         }
 
-        // 新增组 需要清除搜索的值
+        // Add & Clear Search
         if (newAddFlag) {
             resetSearch()
         }
@@ -130,14 +130,14 @@ export const UpdateGroupList: React.FC<UpdateGroupListProps> = React.forwardRef(
                         ? addGroupList.map((item) => (
                               <div className={styles["group-list-item"]} key={item.groupName}>
                                   <Tooltip
-                                      title={getTextWidth(`新增分组 “${item.groupName}"`) > 204 ? item.groupName : ""}
+                                      title={getTextWidth(`Add Group “${item.groupName}"`) > 204 ? item.groupName : ""}
                                   >
                                       <YakitCheckbox
                                           wrapperClassName={styles["group-name-wrap"]}
                                           checked={item.checked}
                                           onChange={(e) => onCheckedChange(e, item, true)}
                                       >
-                                          新增分组 “{item.groupName}"
+                                          Add Group “{item.groupName}"
                                       </YakitCheckbox>
                                   </Tooltip>
                               </div>

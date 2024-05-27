@@ -1,7 +1,7 @@
 import omitBy from "lodash/omitBy"
 import isNil from "lodash/isNil"
 
-/** @name 将传入对象中值为null或undefined的键值对删除 */
+/** @name Remove null/undefined key-values */
 export const toolDelInvalidKV = (data: any) => {
     try {
         if (!data) return data
@@ -19,16 +19,16 @@ export const toolDelInvalidKV = (data: any) => {
     }
 }
 
-/**判断值是否为对象 */
+/**Object check */
 export const isObject = (value) => {
     return Object.prototype.toString.call(value) === "[object Object]"
 }
-/**判断值是否为数组 */
+/**Array check */
 export const isArray = (value) => {
     return Object.prototype.toString.call(value) === "[object Array]"
 }
 
-/**是否为空对象 */
+/**Empty object check */
 export const isEmptyObject = (obj: object) => {
     return !(obj && Object.keys(obj).length > 0)
 }

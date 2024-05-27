@@ -30,44 +30,44 @@ module.exports = (win, getClient) => {
         }
     })
 
-    /** 窗口最大化 */
+    /** Maximize */
     win.on("maximize", () => {
         win.webContents.send("callback-win-maximize")
     })
-    /** 窗口退出最大化 */
+    /** Exit Maximize */
     win.on("unmaximize", () => {
         win.webContents.send("callback-win-unmaximize")
     })
-    /** 窗口全屏 */
+    /** Fullscreen */
     win.on("enter-full-screen", () => {
         win.webContents.send("callback-win-enter-full")
     })
-    /** 窗口退出全屏 */
+    /** Exit Fullscreen */
     win.on("leave-full-screen", () => {
         win.webContents.send("callback-win-leave-full")
     })
-    /** 窗口当前是否为全屏状态 */
+    /** Is Fullscreen? */
     ipcMain.handle("is-full-screen", () => {
         win.webContents.send("callback-is-full-screen", win.isFullScreen())
     })
-    /** 窗口当前是否为最大化 */
+    /** Is Maximized? */
     ipcMain.handle("is-maximize-screen", () => {
         win.webContents.send("callback-is-maximize-screen", win.isMaximized())
     })
 
-    /** 打开/关闭 devtool */
+    /** Open/Close DevTool */
     ipcMain.handle("trigger-devtool", () => {
         const flag = win.webContents.isDevToolsOpened()
         if (flag) win.webContents.closeDevTools()
         else win.webContents.openDevTools()
         return
     })
-    /** 刷新缓存 */
+    /** Refresh Cache */
     ipcMain.handle("trigger-reload", () => {
         win.webContents.reload()
         return
     })
-    /** 强制清空刷新缓存 */
+    /** Force Clear Cache */
     ipcMain.handle("trigger-reload-cache", () => {
         win.webContents.reloadIgnoringCache()
         return

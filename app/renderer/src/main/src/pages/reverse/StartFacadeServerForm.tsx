@@ -56,7 +56,7 @@ export const StartFacadeServerForm: React.FC<StartFacadeServerFormProp> = (props
             }}
         >
             <InputItem
-                label={"反连服务器地址"}
+                label={"Reverse Connect Server Address"}
                 setValue={LocalFacadeHost => setParams({...params, LocalFacadeHost})}
                 value={params.LocalFacadeHost}
                 autoComplete={[
@@ -64,31 +64,31 @@ export const StartFacadeServerForm: React.FC<StartFacadeServerFormProp> = (props
                 ]}
             />
             <InputInteger
-                label={"反连服务器端口"}
+                label={"Reverse Connect Server Port"}
                 setValue={LocalFacadePort => setParams({...params, LocalFacadePort})} value={params.LocalFacadePort}
             />
             <SwitchItem label={"DNSLog"} setValue={EnableDNSLogServer => setParams({...params, EnableDNSLogServer})}
-                        value={params.EnableDNSLogServer} help={"在本地启动一个 DNS 服务器(UDP)"}
+                        value={params.EnableDNSLogServer} help={"Start a Local DNS Server (UDP)"}
             />
             {params.EnableDNSLogServer && <>
                 <InputInteger
-                    label={"DNSLog 本地端口"}
+                    label={"DNSLog Local Port"}
                     setValue={DNSLogLocalPort => setParams({...params, DNSLogLocalPort})} value={params.DNSLogLocalPort}
                 />
             </>}
             {props.remoteMode && <>
-                <SwitchItem label={"公网穿透"} value={remoteMode} setValue={setRemoteMode}/>
+                <SwitchItem label={"Public Network Penetration"} value={remoteMode} setValue={setRemoteMode}/>
                 {remoteMode && <>
-                    {/*<InputInteger label={"公网 DNSLog 端口"}*/}
+                    {/*<InputInteger label={"Public DNSLog Port"}*/}
                     {/*              setValue={DNSLogRemotePort => setParams({...params, DNSLogRemotePort})}*/}
                     {/*              value={params.DNSLogRemotePort}/>*/}
-                    <InputInteger label={"公网反连服务器端口"}
+                    <InputInteger label={"Public Reverse Connect Server Port"}
                                   setValue={FacadeRemotePort => setParams({...params, FacadeRemotePort})}
                                   value={params.FacadeRemotePort}/>
                 </>}
             </>}
             <Form.Item colon={false} label={" "}>
-                <Button type="primary" htmlType="submit"> 启动反连服务器 </Button>
+                <Button type="primary" htmlType="submit"> Start Reverse Connect Server </Button>
             </Form.Item>
         </Form>
     </div>

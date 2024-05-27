@@ -41,14 +41,14 @@ export default function useHoldBatchGRPCStream(params: HoldBatchGRPCStreamParams
         pluginExecuteLog: []
     })
 
-    // 启动数据流处理定时器
+    // Start Data Stream Timer
     const timeRef = useRef<any>(null)
 
     // runtime-id
     const runTimeId = useRef<{cache: string; sent: string}>({cache: "", sent: ""})
     // task-status
     const taskStatus = useRef<{cache: TaskStatus; sent: TaskStatus}>({cache: "default", sent: "default"})
-    /** 输入模块值 */
+    /** Input Module Value */
     const inputValueRef = useRef<{
         cache: HybridScanControlAfterRequest | null
         sent: HybridScanControlAfterRequest | null
@@ -75,16 +75,16 @@ export default function useHoldBatchGRPCStream(params: HoldBatchGRPCStreamParams
     /**plugin log */
     let pluginLog = useRef<StreamResult.PluginExecuteLog[]>([])
 
-    /** 放入日志队列 */
+    /** Enqueue Log */
     const pushLogs = useMemoizedFn((log: StreamResult.Message) => {
         messages.current.unshift(log)
-        // 只缓存 100 条结果（日志类型 + 数据类型）
+        // Cache Only 100 Results (Log + Data Type)）
         if (messages.current.length > 100) {
             messages.current.pop()
         }
     })
 
-    /** 判断是否为无效数据 */
+    /** Check Invalid Data */
     const checkStreamValidity = useMemoizedFn((stream: StreamResult.Log) => {
         try {
             const check = JSON.parse(stream.data)
@@ -125,7 +125,7 @@ export default function useHoldBatchGRPCStream(params: HoldBatchGRPCStreamParams
                 try {
                     let obj: StreamResult.Message = JSON.parse(Buffer.from(data.Message).toString())
                     const logData = obj.content as StreamResult.Log
-                    // feature-status-card-data 卡片展示
+                    // feature-status-card-data Card Display
                     if (obj.type === "log" && logData.level === "feature-status-card-data") {
                         try {
                             const checkInfo = checkStreamValidity(logData)
@@ -148,7 +148,7 @@ export default function useHoldBatchGRPCStream(params: HoldBatchGRPCStreamParams
                         return
                     }
 
-                    // risk 风险信息列表
+                    // risk Risk Info List
                     if (obj.type === "log" && logData.level === "json-risk") {
                         try {
                             const checkInfo = checkStreamValidity(logData)
@@ -159,9 +159,9 @@ export default function useHoldBatchGRPCStream(params: HoldBatchGRPCStreamParams
                         return
                     }
 
-                    // 外界传入的筛选方法
+                    // External Filter Method
                     if (dataFilter && dataFilter(obj, logData)) return
-                    // 日志信息
+                    // Log Info
                     pushLogs(obj)
                 } catch (e) {}
             }
@@ -191,7 +191,7 @@ export default function useHoldBatchGRPCStream(params: HoldBatchGRPCStreamParams
             ipcRenderer.removeAllListeners(`${token}-end`)
         }
     }, [token])
-    /**处理插件执行日志 */
+    /**Process Plugin Execution Log */
     const onHandleActiveTask = useMemoizedFn((updateActiveTask: HybridScanActiveTask) => {
         if (updateActiveTask.Operator === "create") {
             const time = Date.now()
@@ -206,7 +206,7 @@ export default function useHoldBatchGRPCStream(params: HoldBatchGRPCStreamParams
         }
     })
 
-    /** @name 数据流处理逻辑 */
+    /** @name Data Stream Logic */
     const handleResults = useMemoizedFn(() => {
         // runtime-id
         if (runTimeId.current.sent !== runTimeId.current.cache && setRuntimeId) {
@@ -218,7 +218,7 @@ export default function useHoldBatchGRPCStream(params: HoldBatchGRPCStreamParams
             setTaskStatus(taskStatus.current.cache)
             taskStatus.current.sent = taskStatus.current.cache
         }
-        // 输入模块值
+        // Input Module Value
         if (
             inputValueRef.current.cache &&
             !isEqual(inputValueRef.current.sent, inputValueRef.current.cache) &&
@@ -291,7 +291,7 @@ export default function useHoldBatchGRPCStream(params: HoldBatchGRPCStreamParams
         }
     }, [waitTime])
 
-    /** @name 开始处理数据流 */
+    /** @name Start Data Stream */
     const start = useMemoizedFn(() => {
         if (timeRef.current) {
             clearInterval(timeRef.current)
@@ -299,18 +299,18 @@ export default function useHoldBatchGRPCStream(params: HoldBatchGRPCStreamParams
         }
         timeRef.current = setInterval(() => handleResults(), waitTime)
     })
-    /** @name 停止处理数据流 */
+    /** @name Stop Data Stream */
     const stop = useMemoizedFn(() => {
         if (timeRef.current) {
             clearInterval(timeRef.current)
             timeRef.current = null
         }
     })
-    /** @name 关闭处理数据流 */
+    /** @name Close Data Stream */
     const cancel = useMemoizedFn(() => {
         ipcRenderer.invoke(`cancel-${apiKey}`, token)
     })
-    /** @name 重置数据流 */
+    /** @name Reset Data Stream */
     const reset = useMemoizedFn(() => {
         setStreamInfo({
             progressState: [],

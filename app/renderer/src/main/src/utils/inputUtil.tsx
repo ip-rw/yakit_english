@@ -98,11 +98,11 @@ export interface InputItemProps {
     prefix?: React.ReactNode
     suffix?: React.ReactNode
 
-    // 放在form-item里面的前缀元素
+    // Prefix Element in Form-Item
     prefixNode?: React.ReactNode
-    // 放在form-item里面的前缀元素
+    // Prefix Element in Form-Item
     suffixNode?: React.ReactNode
-    // 是否阻止事件冒泡
+    // Prevent Event Propagation
     isBubbing?: boolean
 }
 
@@ -252,7 +252,7 @@ export const InputStringOrJsonItem: React.FC<InputStringOrJsonItemProps> = (prop
                 value={props.value} onChange={e => props.setValue && props.setValue(e.target.value)}
             />
         </Item> : <>{items.map((item, index) => {
-            return <Form.Item label={`参数[${index}]`}>
+            return <Form.Item label={`Parameter[${index}]`}>
                 <Input.Group>
                     <Row gutter={10}>
                         <Col span={6}>
@@ -271,7 +271,7 @@ export const InputStringOrJsonItem: React.FC<InputStringOrJsonItemProps> = (prop
                                         style={{width: "100%"}}
                                         allowClear={true}
                                         autoClearSearchValue={true}
-                                        placeholder={"参数使用 | 分割数组"}
+                                        placeholder={"Parameter Usage | Split Array"}
                                         dropdownMatchSelectWidth={200}
                                         mode={"tags"}
                                         value={items[index].value?.split("|") || []} maxTagTextLength={20}
@@ -331,7 +331,7 @@ export const InputStringOrJsonItem: React.FC<InputStringOrJsonItemProps> = (prop
                         onClick={e => {
                             setItems([...items, {key: "", value: undefined}])
                         }}
-                >添加 Key-Value Pair</Button></Item>
+                >Add Key-Value Pair</Button></Item>
         </>}
     </div>
 }
@@ -549,7 +549,7 @@ export interface InputFileNameItemProps {
     disabled?: boolean
     autoComplete?: string[]
 
-    // 提示信息内容组件
+    // Message Content Component
     hint?: React.ReactNode
 }
 
@@ -565,7 +565,7 @@ export const InputFileNameItem: React.FC<InputFileNameItemProps> = p => {
             maxCount={1}
             showUploadList={false}
             beforeUpload={(f: any) => {
-                // 设置名字
+                // Set Name
                 p.setFileName && p.setFileName(f?.path)
                 if (!p.loadContent) {
                     return false
@@ -586,18 +586,18 @@ export const InputFileNameItem: React.FC<InputFileNameItemProps> = p => {
                     label={""}
                     setValue={Targets => p.setContent && p.setContent(Targets)}
                     value={p.content} textarea={true} textareaRow={6}
-                    placeholder="请输入绝对路径"
+                    placeholder="Enter absolute path"
                     isBubbing={true}
                     help={p.hint ? p.hint : (<div>
-                        可将文件拖入框内或<span style={{color: 'var(--yakit-primary-5'}}>点击此处</span>上传
+                        Drag Files Here or<span style={{color: 'var(--yakit-primary-5'}}>Click here</span>Upload
                     </div>)}
                 /> : <InputItem
                     autoComplete={p.autoComplete}
                     label={""}
                     value={p.filename} setValue={f => p.setFileName && p.setFileName(f)}
-                    placeholder="请输入绝对路径"
+                    placeholder="Enter absolute path"
                     isBubbing={true} allowClear={false} help={p.hint ? p.hint : (<div>
-                    可将文件拖入框内或<span style={{color: 'var(--yakit-primary-5'}}>点击此处</span>上传
+                    Drag Files Here or<span style={{color: 'var(--yakit-primary-5'}}>Click here</span>Upload
                 </div>)}
                 />
                 }
@@ -712,7 +712,7 @@ export const EditableTagsGroup: React.FC<EditableTagsGroupProps> = (p) => {
                                 p.onTags && p.onTags(tags)
                             }
                         }}
-                    >删除 Tag</Button>,
+                    >Delete Tag</Button>,
                 ]}
             ><Tag
                 color={p.randomColor ? randomColor() : "geekblue"}

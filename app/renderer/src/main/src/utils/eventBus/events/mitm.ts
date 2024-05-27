@@ -2,8 +2,8 @@ export type MitmEventProps = {
     cleanMitmLogEvent?: string
     cancleMitmFilterEvent: string
     onGetMITMShieldDataEvent: string
-    /** 是否配置过过滤器白名单文案 */
+    /** Configured filter whitelist? */
     onSetFilterWhiteListEvent: string
-    /** 是否开启替换规则 */
+    /** Rule replacement enabled? */
     onOpenRepRuleEvent: string
 }

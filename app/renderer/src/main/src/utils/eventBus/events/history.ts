@@ -1,6 +1,6 @@
 export type HistoryEventProps = {
     onScrollToByClick: string
-    // History页面通知Mitm页面删除
+    // History page notify Mitm page delete
     onDeleteToUpdate: string
-    onHistoryJumpWebTree: string // 跳转到指定树节点
+    onHistoryJumpWebTree: string // Jump to specific tree node
 }

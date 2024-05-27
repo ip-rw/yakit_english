@@ -21,13 +21,13 @@ export const YakitHintModal: React.FC<YakitHintModalProps> = memo((props) => {
         heardIcon,
         extraIcon,
         title,
-        content = "请写入合适的提示内容",
+        content = "Enter appropriate prompt content",
         footer,
         footerExtra,
-        okButtonText = "确定",
+        okButtonText = "Confirm",
         okButtonProps,
         onOk,
-        cancelButtonText = "取消",
+        cancelButtonText = "Cancel",
         cancelButtonProps,
         onCancel,
         children
@@ -38,7 +38,7 @@ export const YakitHintModal: React.FC<YakitHintModalProps> = memo((props) => {
     const debouncedBounds = useDebounce(bounds, {wait: 500})
     const draggleRef = useRef<HTMLDivElement>(null)
 
-    /** 弹窗拖拽移动触发事件 */
+    /** Popup Drag Event */
     const onStart = useMemoizedFn((_event: DraggableEvent, uiData: DraggableData) => {
         const {clientWidth, clientHeight} = window.document.documentElement
         const targetRect = draggleRef.current?.getBoundingClientRect()

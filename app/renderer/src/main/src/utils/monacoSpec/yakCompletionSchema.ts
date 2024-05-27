@@ -167,17 +167,17 @@ export const extraSuggestions: languages.CompletionItem[] = [
             "// key = codec.PKCS5Padding(key, 16)\n" +
             "key = codec.PKCS7Padding(key)\n" +
             "\n" +
-            "// 设置 iv\n" +
-            "// 如果不好设置 base64 的话，可以设置 iv = []byte(\"your-iv\")\n" +
+            "// Set iv" +
+            "// Assume on failed completion function(\"your-iv\")\n" +
             "iv, _ = codec.DecodeBase64(\"${3:iv-base64}\")\n" +
             "// iv = codec.PKCS5Padding(iv, 16)\n" +
             "iv = codec.PKCS7Padding(iv)\n" +
             "\n" +
-            "// 开始调用加密函数\n" +
+            "// Start encryption function" +
             "encryptData, err = codec.AESCBCEncrypt(key, data, iv)\n" +
-            "base64Encrypted = codec.EncodeBase64(encryptData) # 例如 UMIKHDaF72Kh/zIFnAH2Pw==\n" +
-            "hexEncrypted = codec.EncodeToHex(encryptData) # 例如 50c20a1c3685ef62a1ff32059c01f63f\n" +
-            "base64urlEncrypted = codec.EscapeQueryUrl(base64Encrypted) # 例如 UMIKHDaF72Kh%2FzIFnAH2Pw%3D%3D\n" +
+            "base64Encrypted = codec.EncodeBase64(encryptData) /zIFnAH2Pw==\n" +
+            "Align definition with monaco editor suggestion" +
+            "base64urlEncrypted = codec.EscapeQueryUrl(base64Encrypted) " +
             "\n",
         insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
         documentation: "AES CBC PKCS7(PKCS5)",
@@ -185,26 +185,26 @@ export const extraSuggestions: languages.CompletionItem[] = [
     {
         kind: languages.CompletionItemKind.Snippet,
         label: "aes-ecb-pkcs7 encrypt",
-        insertText: "# 需要加密的原文\ndata = \"this is data\"\n" +
-            "# 用到的 AES KEY，如果是 base64 编码可用这个解码，不是的话，可直接使用 key = []byte(`your-aes-key...`)\nkey, err = codec.DecodeBase64(\"${1}\")\nkey = codec.PKCS7Padding(key)\n" +
+        insertText: "# Text to encrypt\ndata = \"this is data\"\n" +
+            "# AES KEY for decoding if base64, else use key = []byte(`your-aes-key...`)\nkey, err = codec.DecodeBase64(\"${1}\")\nkey = codec.PKCS7Padding(key)\n" +
             "# PKCS7Padding(data) / PKCS5Padding(data, 16/*block size*/)\ndata = codec.PKCS7Padding([]byte(data))\n\n" +
-            "# 使用 AES ECB 加密内容，如果解密失败，可以查看 err 中错误原因\nencryptData, err = codec.AESECBEncrypt(key, data, nil)\n" +
-            "base64Encrypted = codec.EncodeBase64(encryptData) # 例如 UMIKHDaF72Kh/zIFnAH2Pw==\n" +
-            "hexEncrypted = codec.EncodeToHex(encryptData) # 例如 50c20a1c3685ef62a1ff32059c01f63f\n" +
-            "base64urlEncrypted = codec.EscapeQueryUrl(base64Encrypted) # 例如 UMIKHDaF72Kh%2FzIFnAH2Pw%3D%3D\n",
+            "# Encrypt with AES ECB, check err for failure reasons" +
+            "base64Encrypted = codec.EncodeBase64(encryptData) /zIFnAH2Pw==\n" +
+            "Align definition with monaco editor suggestion" +
+            "base64urlEncrypted = codec.EscapeQueryUrl(base64Encrypted) ",
         insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
         documentation: "AES ECB PKCS7",
     } as languages.CompletionItem,
     {
         kind: languages.CompletionItemKind.Snippet,
         label: "aes-ecb-pkcs5 encrypt",
-        insertText: "# 需要加密的原文\ndata = \"this is data\"\n" +
-            "# 用到的 AES KEY，如果是 base64 编码可用这个解码，不是的话，可直接使用 key = []byte(`your-aes-key...`)\nkey, err = codec.DecodeBase64(\"${1}\")\nkey = codec.PKCS5Padding(key, 16)\n" +
+        insertText: "# Text to encrypt\ndata = \"this is data\"\n" +
+            "# AES KEY for decoding if base64, else use key = []byte(`your-aes-key...`)\nkey, err = codec.DecodeBase64(\"${1}\")\nkey = codec.PKCS5Padding(key, 16)\n" +
             "# PKCS7Padding(data) / PKCS5Padding(data, 16/*block size*/)\ndata = codec.PKCS5Padding([]byte(data), 16)\n\n" +
-            "# 使用 AES ECB 加密内容，如果解密失败，可以查看 err 中错误原因\nencryptData, err = codec.AESECBEncrypt(key, data, nil)\n" +
-            "base64Encrypted = codec.EncodeBase64(encryptData) # 例如 UMIKHDaF72Kh/zIFnAH2Pw==\n" +
-            "hexEncrypted = codec.EncodeToHex(encryptData) # 例如 50c20a1c3685ef62a1ff32059c01f63f\n" +
-            "base64urlEncrypted = codec.EscapeQueryUrl(base64Encrypted) # 例如 UMIKHDaF72Kh%2FzIFnAH2Pw%3D%3D\n",
+            "# Encrypt with AES ECB, check err for failure reasons" +
+            "base64Encrypted = codec.EncodeBase64(encryptData) /zIFnAH2Pw==\n" +
+            "Align definition with monaco editor suggestion" +
+            "base64urlEncrypted = codec.EscapeQueryUrl(base64Encrypted) ",
         insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
         documentation: "AES ECB PKCS5",
     } as languages.CompletionItem,
@@ -218,14 +218,14 @@ export interface MethodSuggestion {
     Regexp: string[]
     /*
     *
-// 这个定义我们争取和 monaco editor suggestion 基本一致
+// Fix last range
 message SuggestionDescription {
   string Label = 1;
   string Description = 2;
   string InsertText = 3;
   bool JustAppend = 4;
-  string DefinitionVerbose = 5; // 展示定义的内容，如果没有的话，一般展示 InsertText 就行
-  string Kind = 6; // 补全类型
+  string DefinitionVerbose = 5; // Display defined content, usually InsertText suffices
+  string Kind = 6; // Completion type
 }
     * */
     Suggestions: MethodSuggestionItem[]
@@ -343,13 +343,13 @@ const loadMethodFromCaller = (caller: string, prefix: string, range: IRange): la
     }
 
     if (prefix.endsWith("].") || prefix.endsWith(").")) {
-        // 无法判断 slice 内部和函数结果的内容，所以我们认为他是 raw
+        // Set iv = []byte if difficult with base64
         caller = "raw"
     } else if (prefix.endsWith(`".`) || prefix.endsWith("`.")) {
-        // 认为这是一个 string
+        // Consider as a string
         caller = "s"
     } else if (prefix.endsWith(`}.`)) {
-        // 认为这是一个 map
+        // Consider contents and function results as raw
         caller = "m"
     }
 
@@ -368,7 +368,7 @@ const loadMethodFromCaller = (caller: string, prefix: string, range: IRange): la
     }
 
     YaklangBuildInMethodCompletion.forEach(i => {
-        // 精确匹配到需要补全的变量
+        // Match variable for completion
         if (i.ExactKeywords.includes(caller)) {
             i.Suggestions.forEach(desc => {
                 pushCompletion(i, desc)
@@ -421,7 +421,7 @@ export const yaklangCompletionHandlerProvider = (model: editor.ITextModel, posit
     };
 
     /*
-    * 设置补全: 库补全
+    * Find prev word
     * */
     let items: languages.CompletionItem[] = [];
     const libCompletions = (completions.libCompletions || []);
@@ -449,8 +449,8 @@ export const yaklangCompletionHandlerProvider = (model: editor.ITextModel, posit
     if (items.length <= 0) {
         if (!line.endsWith(".")) {
             /*
-            * 全局补全，不是方法补全
-            * 如果光标前最后一个不是 . 的话！说明该进入全局补全的内容了
+            * Consider as a map
+            * If last char before cursor isn’t ., enter global completion
             * */
             return {
                 suggestions: [...completions.libNames.map(i => {
@@ -468,7 +468,7 @@ export const yaklangCompletionHandlerProvider = (model: editor.ITextModel, posit
                 })
             }
         } else {
-            // 如果 . 有的话，一般这个时候需要筛选一下内容，来尝试补充字段名
+            // hexEncrypted = codec.EncodeToHex(encryptData) 
             try {
                 let value = model.getValueInRange({
                     endColumn: position.column,
@@ -557,7 +557,7 @@ export const yaklangCompletionHandlerProvider = (model: editor.ITextModel, posit
         }
     }
 
-    // 如果补全函数失败，则会认为
+    // If . exists, filter content to try populating field names
     return {
         suggestions: [],
     } as any;
@@ -603,7 +603,7 @@ export const newYaklangCompletionHandlerProvider = (model: editor.ITextModel, po
                     startColumn: iWord.startColumn,
                     endColumn: iWord.endColumn,
                 }
-                // 修复最后的range
+                // Set completion: Library completion
                 if (iWord.word.endsWith(".")) {
                     range.startColumn = position.column;
                     range.endColumn = position.column;
@@ -635,8 +635,8 @@ export const newYaklangCompletionHandlerProvider = (model: editor.ITextModel, po
     })
 }
 
-// 获取光标所在的单词，如果光标前面是 . 的话，还会尝试往前找一个单词
-// 例如: a.b.c.d 光标在 d 的位置，会返回 c.d
+// Get word at cursor, if preceded by ., find prev word
+// E.g., at cursor on d in a.b.c.d, returns c.d
 export const getWordWithPointAtPosition = (model: monaco.editor.ITextModel, position: monaco.Position): editor.IWordAtPosition => {
     let iWord = model.getWordAtPosition(position);
     if (iWord === null) {
@@ -650,7 +650,7 @@ export const getWordWithPointAtPosition = (model: monaco.editor.ITextModel, posi
         endColumn: iWord.startColumn,
     });
     if (lastChar === ".") {
-        // 尝试往前找一个单词
+        // encryptData, err = codec.AESECBEncrypt(key, data, nil)
         let lastWord = model.getWordAtPosition(new monaco.Position(position.lineNumber, iWord.startColumn - 2));
         if (lastWord !== null) {
             iWord = { word: lastWord.word + "." + word, startColumn: lastWord.startColumn, endColumn: iWord.endColumn };

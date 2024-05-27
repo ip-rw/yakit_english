@@ -91,13 +91,13 @@ const VirtualTableContent: React.FC<VirtualTableContentProps> = (props) => {
                     clientHeight: 0,
                     scrollHeight: 0
                 }
-                const contentScrollTop = dom.scrollTop //滚动条距离顶部
-                const clientHeight = dom.clientHeight //可视区域
-                const scrollHeight = dom.scrollHeight //滚动条内容的总高度
+                const contentScrollTop = dom.scrollTop //Scrollbar Distance from Top
+                const clientHeight = dom.clientHeight //Viewport
+                const scrollHeight = dom.scrollHeight //Scrollbar total height
                 const scrollBottom = scrollHeight - contentScrollTop - clientHeight
                 if (scrollBottom <= 500) {
-                    // console.log("获取数据的方法")
-                    loadMoreData&&loadMoreData() // 获取数据的方法
+                    // console.log("Get Data Method")
+                    loadMoreData&&loadMoreData() // Get Data Method
                 }
             }
         },
@@ -151,7 +151,7 @@ const VirtualTableContent: React.FC<VirtualTableContentProps> = (props) => {
                         </div>
                     )}
                     {!loading && !hasMore && (page || 0) > 0 && (
-                        <div className='grid-block text-center no-more-text'>暂无更多数据</div>
+                        <div className='grid-block text-center no-more-text'>No More Data</div>
                     )}
                 </div>
             </div>

@@ -20,7 +20,7 @@ const EnterpriseJudgeLogin: React.FC<EnterpriseJudgeLoginProps> = (props) => {
     const [loading, setLoading] = useState<boolean>(true)
     const [licensePageLoading, setLicensePageLoading] = useState<boolean>(false)
     useEffect(() => {
-        // 验证License
+        // Verify License
         judgeLicense()
     }, [])
 
@@ -72,7 +72,7 @@ const EnterpriseJudgeLogin: React.FC<EnterpriseJudgeLoginProps> = (props) => {
                 }
             })
             .catch((e) => {
-                info("请重新激活License")
+                info("Please Reactivate License")
                 setLoading(false)
                 setLicensePageLoading(false)
             })
@@ -87,7 +87,7 @@ const EnterpriseJudgeLogin: React.FC<EnterpriseJudgeLoginProps> = (props) => {
         <>
             {loading ? (
                 <div style={{paddingTop: 10, textAlign: "center"}}>
-                    <Spin tip='验证License中'></Spin>
+                    <Spin tip='Verifying License'></Spin>
                 </div>
             ) : (
                 <>

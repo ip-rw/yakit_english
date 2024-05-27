@@ -20,7 +20,7 @@ export const RandStrWithLen: React.FC<RandStrWithLenProp> = (props) => {
 
     return (
         <>
-            <Form.Item label={"随机字符串长度"}>
+            <Form.Item label={"Rand Str Len"}>
                 <YakitInputNumber value={len} onChange={(v) => setLen(v as number)} />
             </Form.Item>
         </>
@@ -40,10 +40,10 @@ export const RandStrWithMax: React.FC<RandStrWithMaxProp> = (props) => {
 
     return (
         <>
-            <Form.Item label={"最小长度"}>
+            <Form.Item label={"Min Length"}>
                 <YakitInputNumber value={min} min={1} max={max} onChange={(v) => setMin(v as number)} />
             </Form.Item>
-            <Form.Item label={"最大长度"}>
+            <Form.Item label={"Max Length"}>
                 <YakitInputNumber value={max} min={min} onChange={(v) => setMax(v as number)} />
             </Form.Item>
         </>
@@ -64,13 +64,13 @@ export const RandStrWIthRepeat: React.FC<RandStrWIthRepeatProp> = (props) => {
 
     return (
         <>
-            <Form.Item label={"最小长度"}>
+            <Form.Item label={"Min Length"}>
                 <YakitInputNumber value={min} min={1} max={max} onChange={(v) => setMin(v as number)} />
             </Form.Item>
-            <Form.Item label={"最大长度"}>
+            <Form.Item label={"Max Length"}>
                 <YakitInputNumber value={max} min={min} onChange={(v) => setMax(v as number)} />
             </Form.Item>
-            <Form.Item label={"重复次数"}>
+            <Form.Item label={"Repeat Times"}>
                 <YakitInputNumber value={count} min={1} onChange={(v) => setCount(v as number)} />
             </Form.Item>
         </>
@@ -95,13 +95,13 @@ export const RandInt: React.FC<RandIntProp> = (props) => {
 
     return (
         <>
-            <Form.Item label={"最小值"}>
+            <Form.Item label={"Min Value"}>
                 <YakitInputNumber value={min} min={1} max={max} onChange={(v) => setMin(v as number)} />
             </Form.Item>
-            <Form.Item label={"最大值"}>
+            <Form.Item label={"Max Value"}>
                 <YakitInputNumber value={max} min={min} onChange={(v) => setMax(v as number)} />
             </Form.Item>
-            <Form.Item label={"重复次数"}>
+            <Form.Item label={"Repeat Times"}>
                 <YakitInputNumber value={count} min={1} onChange={(v) => setCount(v as number)} />
             </Form.Item>
         </>

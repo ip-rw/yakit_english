@@ -23,11 +23,11 @@ export const LocalEngine: React.FC<LocalEngineProps> = memo(
         const [latestYaklang, setLatestYaklang] = useState<string>("")
 
         /**
-         * 只在软件打开时|引擎从无到有时执行该逻辑
-         * 检查本地数据库权限
+         * Only at software startup|Engine logic from nonexistent to existent
+         * Check local DB permissions
          */
         const handleCheckDataBase = useMemoizedFn(() => {
-            const firstHint = "开始检查数据库权限是否正常"
+            const firstHint = "Start checking DB permissions"
             setLog([firstHint])
             let isError: boolean = false
             ipcRenderer
@@ -35,20 +35,20 @@ export const LocalEngine: React.FC<LocalEngineProps> = memo(
                 .then((e) => {
                     isError = e === "not allow to write" && system !== "Windows_NT"
                     if (isError) {
-                        setLog([firstHint, "数据库权限错误，开始进行调整操作(非WIN系统检查)"])
+                        setLog([firstHint, "Adjusting DB permissions error, non-WIN check)"])
                         setDatabaseErrorVisible(true)
                     } else {
-                        setLog([firstHint, "数据库权限无问题"])
+                        setLog([firstHint, "DB permissions OK"])
                         handleLinkEnginePort()
                     }
                 })
                 .catch((e) => {
-                    setLog([firstHint, `检查出错: ${e}`])
+                    setLog([firstHint, `Check failed: ${e}`])
                     handleLinkEnginePort()
                 })
         })
 
-        /** 获取上次本地连接引擎的端口缓存 */
+        /** Get last local engine port cache */
         const handleLinkEnginePort = useMemoizedFn(() => {
             getLocalValue(LocalGVS.YaklangEnginePort)
                 .then((portRaw) => {
@@ -77,9 +77,9 @@ export const LocalEngine: React.FC<LocalEngineProps> = memo(
             }, 500)
         })
 
-        /** 是否阻止更新弹窗出现 */
+        /** Block update popups? */
         const preventUpdateHint = useRef<boolean>(false)
-        /** 是否已弹出更新框 */
+        /** Update dialog popped? */
         const isShowedUpdateHint = useRef<boolean>(false)
 
         const handleFetchYakitAndYaklangLocalVersion = useMemoizedFn(async (callback?: () => any) => {
@@ -89,18 +89,18 @@ export const LocalEngine: React.FC<LocalEngineProps> = memo(
             } catch (error) {}
 
             try {
-                setLog(["获取引擎版本号..."])
+                setLog(["Get engine version..."])
                 let localYaklang = (await ipcRenderer.invoke("get-current-yak")) || ""
-                setLog(["获取引擎版本号...", `引擎版本号——${localYaklang}`, "准备开始本地连接中"])
+                setLog(["Get engine version...", `Engine version——${localYaklang}`, "Preparing for local connection"])
                 setCurrentYaklang(localYaklang)
                 setTimeout(() => {
                     if (isShowedUpdateHint.current) return
                     preventUpdateHint.current = true
-                    // 这里的2秒是判断是否有更新弹窗出现
+                    // 2s to detect update dialog
                     handleLinkLocalEnging()
                 }, 2000)
             } catch (error) {
-                setLog(["获取引擎版本号...", `错误: ${error}`])
+                setLog(["Get engine version...", `Error: ${error}`])
                 setYakitStatus("checkError")
             }
 
@@ -109,7 +109,7 @@ export const LocalEngine: React.FC<LocalEngineProps> = memo(
 
         const handleFetchYakitAndYaklangLatestVersion = useMemoizedFn(() => {
             if (!isCommunityEdition()) {
-                // 非CE版本不检查更新
+                // No update checks for non-CE
                 preventUpdateHint.current = true
                 return
             }
@@ -135,13 +135,13 @@ export const LocalEngine: React.FC<LocalEngineProps> = memo(
             })
         })
 
-        // 初始化后的本地连接-前置项检查
+        // Init local conn pre-check
         const initLink = useMemoizedFn(() => {
             isShowedUpdateHint.current = false
             preventUpdateHint.current = isCommunityEdition() ? false : true
             handleCheckDataBase()
         })
-        // 检查版本后直接连接
+        // Direct connect after version check
         const toLink = useMemoizedFn(() => {
             isShowedUpdateHint.current = false
             preventUpdateHint.current = true
@@ -157,16 +157,16 @@ export const LocalEngine: React.FC<LocalEngineProps> = memo(
             []
         )
 
-        // 开始进行本地引擎连接
+        // Start local engine connection
         const handleLinkLocalEnging = useMemoizedFn(() => {
-            // 开始连接本地引擎
+            // Begin local engine connection
             onLinkEngine(localPort)
-            // 一旦启动本地连接了，后续就不用再检查更新情况了
+            // No more update checks after local conn
             setLatestYakit("")
             setLatestYaklang("")
         })
 
-        /** ---------- 软件自启的更新检测弹框 Start ---------- */
+        /** ---------- Autostart Update Check Dialog Start ---------- */
         const isShowUpdate = useMemo(() => {
             if (!isCommunityEdition()) return false
 
@@ -186,9 +186,9 @@ export const LocalEngine: React.FC<LocalEngineProps> = memo(
             preventUpdateHint.current = true
             handleLinkLocalEnging()
         })
-        /** ---------- 软件自启的更新检测弹框 End ---------- */
+        /** ---------- Autostart Update Check Dialog End ---------- */
 
-        /** ---------- 数据库权限逻辑 Start ---------- */
+        /** ---------- DB Permissions Logic Start ---------- */
         const [databaseErrorVisible, setDatabaseErrorVisible] = useState<boolean>(false)
         const [databaseErrorLoading, setDatabaseErrorLoading] = useState<boolean>(false)
         const onFixDatabaseError = useMemoizedFn(() => {
@@ -196,10 +196,10 @@ export const LocalEngine: React.FC<LocalEngineProps> = memo(
             ipcRenderer
                 .invoke("fix-local-database")
                 .then((e) => {
-                    info("修复成功")
+                    info("Repair successful")
                 })
                 .catch((e) => {
-                    failed(`修复数据库权限错误：${e}`)
+                    failed(`Fix DB permissions error：${e}`)
                 })
                 .finally(() => {
                     setTimeout(() => {
@@ -209,7 +209,7 @@ export const LocalEngine: React.FC<LocalEngineProps> = memo(
                     }, 300)
                 })
         })
-        /** ---------- 数据库权限逻辑 End ---------- */
+        /** ---------- DB Permissions Logic End ---------- */
 
         return (
             <>
@@ -231,9 +231,9 @@ export const LocalEngine: React.FC<LocalEngineProps> = memo(
                         mask={false}
                         isDrag={true}
                         visible={databaseErrorVisible}
-                        title='yaklang 数据库错误'
-                        content='尝试修复数据库写权限（可能要求 ROOT 权限）'
-                        okButtonText='立即修复'
+                        title='yaklang DB error'
+                        content='Attempt to fix DB write perms (may need ROOT)）'
+                        okButtonText='Fix now'
                         okButtonProps={{loading: databaseErrorLoading}}
                         cancelButtonProps={{style: {display: "none"}}}
                         onOk={onFixDatabaseError}

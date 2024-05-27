@@ -18,11 +18,11 @@ import {useTemporaryProjectStore} from "./store/temporaryProject"
 import {useRunNodeStore} from "./store/runNode"
 import {LocalGVS} from "./enums/localGlobal"
 
-/** 部分页面懒加载 */
+/** Partial Page Lazy Load */
 const Main = lazy(() => import("./pages/MainOperator"))
 const {ipcRenderer} = window.require("electron")
 
-/** 快捷键目录 */
+/** Shortcut Directory */
 const InterceptKeyword = ["KeyR", "KeyW"]
 
 interface OnlineProfileProps {
@@ -32,17 +32,17 @@ interface OnlineProfileProps {
 }
 
 function NewApp() {
-    /** 是否展示用户协议 */
+    /** Display User Agreement */
     const [agreed, setAgreed] = useState(false)
     const {userInfo} = useStore()
 
     useEffect(() => {
-        // 解压命令执行引擎脚本压缩包
+        // Unzip Command Engine Script
         ipcRenderer.invoke("generate-start-engine")
     }, [])
 
     /**
-     * 渲染端全局错误监听，并收集到错误信息文件里
+     * Render Global Error Listening & Collect Errors
      */
     useEffect(() => {
         const unhandledrejectionError = (e) => {
@@ -65,7 +65,7 @@ function NewApp() {
         }
     }, [])
 
-    // 全局记录鼠标坐标位置(为右键菜单提供定位)
+    // Global Mouse Position Tracking)
     const handleMouseMove = useDebounceFn(
         useMemoizedFn((e: MouseEvent) => {
             const {screenX, screenY, clientX, clientY, pageX, pageY} = e
@@ -86,7 +86,7 @@ function NewApp() {
         }
     }, [])
 
-    // 全局监听change事件 input & textrea 都去掉浏览器自带的拼写校验
+    // Disable Browser Spell Check on change for input & textarea
     useEffect(() => {
         const handleInputEvent = (event) => {
             const {target} = event
@@ -104,7 +104,7 @@ function NewApp() {
         }
     }, [])
 
-    /** 是否展示用户协议 */
+    /** Display User Agreement */
     useEffect(() => {
         getLocalValue(LocalGVS.UserProtocolAgreed)
             .then((value: any) => {
@@ -113,10 +113,10 @@ function NewApp() {
             .catch(() => {})
     }, [])
 
-    // 全局监听登录状态
+    // Global Login Status Listener
     const setStoreUserInfo = useStore((state) => state.setStoreUserInfo)
 
-    /** yaklang引擎 连接成功后的配置事件 */
+    /** Yaklang Engine Config Post-Connection */
     const linkSuccess = () => {
         testYak()
     }
@@ -127,12 +127,12 @@ function NewApp() {
                 ipcRenderer
                     .invoke("GetOnlineProfile", {})
                     .then((data: OnlineProfileProps) => {
-                        ipcRenderer.sendSync("sync-edit-baseUrl", {baseUrl: data.BaseUrl}) // 同步
+                        ipcRenderer.sendSync("sync-edit-baseUrl", {baseUrl: data.BaseUrl}) // Sync
                         setRemoteValue(RemoteGV.HttpSetting, JSON.stringify({BaseUrl: data.BaseUrl}))
                         refreshLogin()
                     })
                     .catch((e) => {
-                        failed(`获取失败:${e}`)
+                        failed(`Fetch Failed:${e}`)
                     })
             } else {
                 const values = JSON.parse(setting)
@@ -142,26 +142,26 @@ function NewApp() {
                         IsCompany: true
                     } as OnlineProfileProps)
                     .then(() => {
-                        ipcRenderer.sendSync("sync-edit-baseUrl", {baseUrl: values.BaseUrl}) // 同步
+                        ipcRenderer.sendSync("sync-edit-baseUrl", {baseUrl: values.BaseUrl}) // Sync
                         setRemoteValue(RemoteGV.HttpSetting, JSON.stringify(values))
                         refreshLogin()
                     })
-                    .catch((e: any) => failed("设置私有域失败:" + e))
+                    .catch((e: any) => failed("Set Private Domain Failed:" + e))
             }
         })
     }
 
     const refreshLogin = useMemoizedFn(() => {
-        // 获取引擎中的token(区分企业版与社区版)
+        // Get Engine Token (Enterprise/Community))
         const TokenSource = isCommunityEdition() ? RemoteGV.TokenOnline : RemoteGV.TokenOnlineEnterprise
-        // 企业版暂时不需要自动登录功能
+        // Enterprise Version Skips Auto-Login
         if (!isCommunityEdition()) return
         getRemoteValue(TokenSource)
             .then((resToken) => {
                 if (!resToken) {
                     return
                 }
-                // 通过token获取用户信息
+                // Get User Info by Token
                 NetWorkApi<API.UserInfoByToken, API.UserData>({
                     method: "post",
                     url: "auth/user",
@@ -197,12 +197,12 @@ function NewApp() {
     })
 
     /**
-     * 拦截软件全局快捷键[(win:ctrl|mac:command) + 26字母]
-     * 通过 InterceptKeyword 变量进行拦截控制
+     * Intercept Global Shortcuts [(win:ctrl|mac:command) + 26 Letters]
+     * Control via InterceptKeyword
      */
     const handlekey = useMemoizedFn((ev: KeyboardEvent) => {
         let code = ev.code
-        // 屏蔽当前事件
+        // Block Current Event
         if ((ev.metaKey || ev.ctrlKey) && InterceptKeyword.includes(code)) {
             ev.stopPropagation()
             ev.preventDefault()
@@ -237,19 +237,19 @@ function NewApp() {
         }
     }
 
-    // 退出时 确保渲染进程各类事项已经处理完毕
+    // Ensure Render Process Tasks Complete on Exit
     const {dynamicStatus} = yakitDynamicStatus()
     useEffect(() => {
         ipcRenderer.on("close-windows-renderer", async (e, res: any) => {
-            // 如果关闭按钮有其他的弹窗 则不显示 showMessageBox
+            // Hide showMessageBox if Other Popups Exist
             const showCloseMessageBox = !(Array.from(runNodeList).length || temporaryProjectIdRef.current)
-            // 关闭前的所有接口调用都放到allSettled里面
+            // API Calls in allSettled Before Closing
             try {
                 await Promise.allSettled([handleKillAllRunNode(), delTemporaryProject()])
             } catch (error) {}
-            // 通知应用退出
+            // Notify App Exit
             if (dynamicStatus.isDynamicStatus) {
-                warn("远程控制关闭中...")
+                warn("Remote Control Off...")
                 await remoteOperation(false, dynamicStatus)
                 ipcRenderer.invoke("app-exit", {showCloseMessageBox})
             } else {
@@ -274,46 +274,46 @@ function NewApp() {
             <>
                 <div className={styles["yakit-mask-drag-wrapper"]}></div>
                 <YakitModal
-                    title='用户协议'
+                    title='User Agreement'
                     centered={true}
                     visible={true}
                     closable={false}
                     width='75%'
-                    cancelText={"关闭 / Closed"}
+                    cancelText={"Close / Closed"}
                     onCancel={() => ipcRenderer.invoke("UIOperate", "close")}
                     onOk={() => {
                         setLocalValue(LocalGVS.UserProtocolAgreed, true)
                         setAgreed(true)
                     }}
-                    okText='我已认真阅读本协议，认同协议内容'
+                    okText='Ive Read & Agree to the Agreement'
                     bodyStyle={{padding: "16px 24px 24px 24px"}}
                 >
                     <div className={styles["yakit-agr-modal-body"]}>
-                        <div className={styles["body-title"]}>免责声明</div>
+                        <div className={styles["body-title"]}>Disclaimer</div>
                         <div className={styles["body-content"]}>
-                            1. 本工具仅面向 <span className={styles["sign-content"]}>合法授权</span>{" "}
-                            的企业安全建设行为与个人学习行为，如您需要测试本工具的可用性，请自行搭建靶机环境。
+                            1. Tool for <span className={styles["sign-content"]}>Authorized Use Only</span>{" "}
+                            为公司安全与自我学习，配置目标环境。
                             <br />
-                            2. 在使用本工具进行检测时，您应确保该行为符合当地的法律法规，并且已经取得了足够的授权。
-                            <span className={styles["underline-content"]}>请勿对非授权目标进行扫描。</span>
+                            确保合法性与授权。
+                            <span className={styles["underline-content"]}>禁止未授权扫描。</span>
                             <br />
-                            3. 禁止对本软件实施逆向工程、反编译、试图破译源代码，植入后门传播恶意软件等行为。
+                            I'阅读并完全同意后使用?。
                             <br />
                             <span className={styles["sign-bold-content"]}>
-                                如果发现上述禁止行为，我们将保留追究您法律责任的权利。
+                                违禁行为的法律后果。
                             </span>
                             <br />
-                            如您在使用本工具的过程中存在任何非法行为，您需自行承担相应后果，我们将不承担任何法律及连带责任。
+                            为公司安全与自我学习，配置目标环境。
                             <br />
-                            在安装并使用本工具前，请您{" "}
-                            <span className={styles["sign-bold-content"]}>务必审慎阅读、充分理解各条款内容。</span>
+                            Before Using, Please{" "}
+                            <span className={styles["sign-bold-content"]}>阅读并完全同意后使用。</span>
                             <br />
-                            限制、免责条款或者其他涉及您重大权益的条款可能会以{" "}
-                            <span className={styles["sign-bold-content"]}>加粗</span>、
-                            <span className={styles["underline-content"]}>加下划线</span>
-                            等形式提示您重点注意。
+                            Important Terms Notice{" "}
+                            <span className={styles["sign-bold-content"]}>Bold</span>、
+                            <span className={styles["underline-content"]}>Underline</span>
+                            突出警告。
                             <br />
-                            除非您已充分阅读、完全理解并接受本协议所有条款，否则，请您不要安装并使用本工具。您的使用行为或者您以其他任何明示或者默示方式表示接受本协议的，即视为您已阅读并同意本协议的约束。
+                            为公司安全与自我学习，配置目标环境。
                         </div>
                     </div>
                 </YakitModal>

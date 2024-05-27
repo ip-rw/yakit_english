@@ -46,7 +46,7 @@ const FuzzerPageSetting: React.FC<FuzzerPageSettingProps> = React.memo((props) =
         }
     })
     const [form] = Form.useForm()
-    const [activeKey, setActiveKey] = useState<string[]>() // Collapse打开的key
+    const [activeKey, setActiveKey] = useState<string[]>() // Collapse opened key
     const [advancedConfigValue, setAdvancedConfigValue] = useState<AdvancedConfigValueProps>(
         initWebFuzzerPageInfo().advancedConfigValue
     )
@@ -57,16 +57,16 @@ const FuzzerPageSetting: React.FC<FuzzerPageSettingProps> = React.memo((props) =
     useEffect(() => {
         getRemoteValue(RemoteGV.FuzzerSequenceSettingShow).then((data) => {
             try {
-                setActiveKey(data ? JSON.parse(data) : ["匹配器", "数据提取器", "设置变量"])
+                setActiveKey(data ? JSON.parse(data) : ["Matcher", "Data Extractor", "Set Variable"])
             } catch (error) {
-                yakitFailed("获取序列配置折叠面板的激活key失败:" + error)
+                yakitFailed("Failed To Retrieve ActiveKey For SeqConfig Collapse:" + error)
             }
         })
     }, [])
     useUpdateEffect(() => {
         if (!inViewport) return
         const newAdvancedConfigValue = initWebFuzzerPageInfo().advancedConfigValue
-        form.setFieldsValue({...newAdvancedConfigValue}) // form.setFieldsValue不会触发Form表单的 onValuesChange 事件
+        form.setFieldsValue({...newAdvancedConfigValue}) // form.setFieldsValue Does Not Trigger onValuesChange
         setAdvancedConfigValue({...newAdvancedConfigValue})
     }, [pageId, inViewport, triggerIn])
     const onSetValue = useMemoizedFn((allFields: AdvancedConfigValueProps) => {
@@ -94,20 +94,20 @@ const FuzzerPageSetting: React.FC<FuzzerPageSettingProps> = React.memo((props) =
                     }
                 }
                 updatePagesDataCacheById(YakitRoute.HTTPFuzzer, {...newCurrentItem})
-                // 主要目的是刷新外界的 pageId 下最新的值
+                // Refresh Latest Value Under pageId
                 setTriggerOut(!triggerOut)
             }
         },
         {wait: 500, leading: true}
     ).run
     /**
-     * @description 切换折叠面板，缓存activeKey
+     * @Toggle Collapse, Cache activeKey
      */
     const onSwitchCollapse = useMemoizedFn((key) => {
         setActiveKey(key)
         setRemoteValue(RemoteGV.FuzzerSequenceSettingShow, JSON.stringify(key))
     })
-    /**修改匹配器和提取器 */
+    /**Edit Matchers & Extractors */
     const onEdit = useMemoizedFn((index, type: MatchingAndExtraction) => {
         onDebug({
             httpResponse: defaultHttpResponse,
@@ -117,8 +117,8 @@ const FuzzerPageSetting: React.FC<FuzzerPageSettingProps> = React.memo((props) =
     })
     const onAddMatchingAndExtractionCard = useMemoizedFn((type: MatchingAndExtraction) => {
         const keyMap = {
-            matchers: "匹配器",
-            extractors: "数据提取器"
+            matchers: "Matcher",
+            extractors: "Data Extractor"
         }
         if (activeKey?.findIndex((ele) => ele === keyMap[type]) === -1) {
             onSwitchCollapse([...activeKey, keyMap[type]])
@@ -129,7 +129,7 @@ const FuzzerPageSetting: React.FC<FuzzerPageSettingProps> = React.memo((props) =
             activeKey: `ID:0`
         })
     })
-    /**添加的额外操作，例如没有展开的时候点击添加需要展开该项 */
+    /**Add Extra Ops, Expand On Add When Collapsed */
     const onAddExtra = useMemoizedFn((type: string) => {
         if (activeKey?.findIndex((ele) => ele === type) === -1) {
             onSwitchCollapse([...activeKey, type])
@@ -157,27 +157,27 @@ const FuzzerPageSetting: React.FC<FuzzerPageSettingProps> = React.memo((props) =
                     bordered={false}
                 >
                     <MatchersPanel
-                        key='匹配器'
+                        key='Matcher'
                         onAddMatchingAndExtractionCard={onAddMatchingAndExtractionCard}
                         onEdit={onEdit}
                         onSetValue={onSetValue}
                     />
                     <ExtractorsPanel
-                        key='数据提取器'
+                        key='Data Extractor'
                         onAddMatchingAndExtractionCard={onAddMatchingAndExtractionCard}
                         onEdit={onEdit}
                         onSetValue={onSetValue}
                     />
                     <VariablePanel
                         pageId={pageId}
-                        key='设置变量'
+                        key='Set Variable'
                         defaultHttpResponse={defaultHttpResponse}
                         onAdd={onAddExtra}
                         onSetValue={onSetValue}
                     />
                 </YakitCollapse>
 
-                <div className={styles["to-end"]}>已经到底啦～</div>
+                <div className={styles["to-end"]}>Reached Bottom～</div>
             </Form>
         </div>
     )

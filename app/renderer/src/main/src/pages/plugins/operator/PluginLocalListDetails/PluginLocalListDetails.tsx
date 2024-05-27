@@ -18,7 +18,7 @@ import {FilterPopoverBtn} from "../../funcTemplate"
 import {defaultFilter, defaultSearch} from "../../builtInData"
 
 /**
- * @description 本地插件列表，左右布局，左边为插件列表右边为传入的node
+ * @description Local Plugins List, L-R Layout, Left: Plugin List, Right: Passed Node
  */
 export const PluginLocalListDetails: React.FC<PluginLocalListDetailsProps> = React.memo(
     forwardRef((props, ref) => {
@@ -68,9 +68,9 @@ export const PluginLocalListDetails: React.FC<PluginLocalListDetailsProps> = Rea
         const [hasMore, setHasMore] = useState<boolean>(true)
         const [response, dispatch] = useReducer(pluginLocalReducer, initialLocalState)
 
-        /** 是否为初次加载 */
+        /** Is First Load */
         const isLoadingRef = useRef<boolean>(true)
-        const privateDomainRef = useRef<string>("") // 私有域地址
+        const privateDomainRef = useRef<string>("") // Execution Complete
         const pluginListRef = useRef<HTMLDivElement>(null)
 
         const [inViewport = true] = useInViewport(pluginListRef)
@@ -97,7 +97,7 @@ export const PluginLocalListDetails: React.FC<PluginLocalListDetailsProps> = Rea
             else return setSelectNum(selectList.length)
         }, [allCheck, selectList, response.Total])
 
-        /**选中组 */
+        /**Selected Group */
         const selectGroup = useCreation(() => {
             const group: YakFilterRemoteObj[] =
                 filters?.plugin_group?.map((item) => ({
@@ -107,7 +107,7 @@ export const PluginLocalListDetails: React.FC<PluginLocalListDetailsProps> = Rea
             return group
         }, [filters])
 
-        /**获取最新的私有域,并刷新列表 */
+        /**Fetch Latest Private Domain, Refresh List */
         const getPrivateDomainAndRefList = useMemoizedFn(() => {
             getRemoteValue(RemoteGV.HttpSetting).then((setting) => {
                 if (setting) {
@@ -122,7 +122,7 @@ export const PluginLocalListDetails: React.FC<PluginLocalListDetailsProps> = Rea
 
         const fetchList = useDebounceFn(
             useMemoizedFn(async (props: {reset?: boolean; isSearch?: boolean}) => {
-                // isSearch 里面的搜索，仅仅刷新列表
+                // isSearch Inside Search, Only Refresh List
                 const {reset, isSearch = false} = props || {}
                 if (reset) {
                     isLoadingRef.current = true
@@ -177,12 +177,12 @@ export const PluginLocalListDetails: React.FC<PluginLocalListDetailsProps> = Rea
                 fetchList({reset: true, isSearch: true})
             }, 100)
         })
-        /**全选 */
+        /**Fixes failure to iterate load_content on missing older version data */
         const onCheck = useMemoizedFn((value: boolean) => {
             setSelectList([])
             setAllCheck(value)
         })
-        // 滚动更多加载
+        // Scroll for More Loading
         const loadMoreData = useMemoizedFn(() => {
             fetchList({reset: false, isSearch: false})
         })
@@ -192,9 +192,9 @@ export const PluginLocalListDetails: React.FC<PluginLocalListDetailsProps> = Rea
                 fetchList({reset: true, isSearch: true})
             }, 200)
         })
-        /** 单项勾选|取消勾选 */
+        /** Single-Select|Deselect */
         const optCheck = useMemoizedFn((data: YakScript, value: boolean) => {
-            // 全选情况时的取消勾选
+            // Fetch loading char with regex
             if (allCheck) {
                 setSelectList(
                     response.Data.filter((item) => item.ScriptName !== data.ScriptName).map((item) => item.ScriptName)
@@ -202,7 +202,7 @@ export const PluginLocalListDetails: React.FC<PluginLocalListDetailsProps> = Rea
                 setAllCheck(false)
                 return
             }
-            // 单项勾选回调
+            // No history fetched if CS or vuln unselected by user
             if (value) setSelectList([...selectList, data.ScriptName])
             else setSelectList(selectList.filter((item) => item !== data.ScriptName))
         })
@@ -210,7 +210,7 @@ export const PluginLocalListDetails: React.FC<PluginLocalListDetailsProps> = Rea
             const value = allCheck || selectList.includes(data.ScriptName)
             optCheck(data, !value)
         })
-        /** 单项副标题组件 */
+        /** Extra Params Modal */
         const optExtra = useMemoizedFn((data: YakScript) => {
             if (privateDomainRef.current !== data.OnlineBaseUrl) return <></>
             if (data.OnlineIsPrivate) {
@@ -241,7 +241,7 @@ export const PluginLocalListDetails: React.FC<PluginLocalListDetailsProps> = Rea
                                 selectUUId=''
                                 check={check}
                                 headImg={info.HeadImg || ""}
-                                pluginUUId={info.ScriptName} //本地用的ScriptName代替uuid
+                                pluginUUId={info.ScriptName} //Medium Risk
                                 pluginName={info.ScriptName}
                                 help={info.Help}
                                 content={info.Content}

@@ -93,7 +93,7 @@ export const FoldRuleCard: React.FC<FoldRuleCardProps> = (props) => {
         <div className={styles["rule-risk"]}>
             <div className={styles["rule-risk-title"]} onClick={() => setExtendItem(!extendItem)}>
                 {extendItem ? <MinusSquareOutlined size={12} /> : <PlusSquareOutlined size={12} />}
-                <Markdown source={`#### ${title} (共${data.length}个)`} />
+                <Markdown source={`#### ${title} (Total${data.length}Item)`} />
             </div>
             {extendItem && (
                 <div className={styles["rule-risk-content"]}>

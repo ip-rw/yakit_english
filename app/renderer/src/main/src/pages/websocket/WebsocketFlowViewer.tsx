@@ -47,7 +47,7 @@ export const WebsocketFlowViewer: React.FC<WebsocketFlowViewerProp> = (props) =>
 
         const flows: WebsocketFlowFromFuzzer[] = [];
 
-        // 监控数据
+        // Monitoring Data
         const token = props.token;
         ipcRenderer.on(`${token}-data`, async (e, data: WebsocketFlowFromFuzzer) => {
             if (data.DataLength > 0) {
@@ -57,13 +57,13 @@ export const WebsocketFlowViewer: React.FC<WebsocketFlowViewerProp> = (props) =>
 
         let newFlow: WebsocketFlowFromFuzzer[] = []
         const update = () => {
-            // 都是空就不要更新了
+            // Don't update if both are empty
             if (flows.length <= 0 && newFlow.length <= 0) {
                 return
             }
 
-            // 1. 如果没有更新过，就更新一下
-            // 2. 如果新数据的 DataFrameIndex 小于旧数据，说明有新数据来了，更新下
+            // 1. Update if not previously updated
+            // 2. If new DataFrameIndex < old, update for new data
             if (
                 newFlow.length <= 0 ||
                 newFlow.length !== flows.length ||
@@ -87,7 +87,7 @@ export const WebsocketFlowViewer: React.FC<WebsocketFlowViewerProp> = (props) =>
     return <ResizeBox
         isVer={true}
         firstNode={<AutoCard
-            title={"Websocket 数据帧实时预览"} size={"small"} bordered={false}
+            title={"Websocket DataFrame Live Preview"} size={"small"} bordered={false}
             bodyStyle={{overflowY: "auto", overflowX: "hidden", padding: 0}}
         >
             <List<WebsocketFlowFromFuzzer>
@@ -114,8 +114,8 @@ export const WebsocketFlowViewer: React.FC<WebsocketFlowViewerProp> = (props) =>
                                 {item.FromServer ? <Tag
                                         color={"orange"}
                                         style={{width: "76px"}}
-                                    >服务器响应</Tag> :
-                                    <Tag color={"green"} style={{width: "76px"}}>客户端请求</Tag>}
+                                    >Server Response</Tag> :
+                                    <Tag color={"green"} style={{width: "76px"}}>Client Request</Tag>}
                                 {item.IsJson && <Tag color={"geekblue"}>JSON</Tag>}
                                 {item.IsProtobuf && <Tag color={"red"}>Protobuf</Tag>}
                                 <div style={{width: "100%"}}>
@@ -129,14 +129,14 @@ export const WebsocketFlowViewer: React.FC<WebsocketFlowViewerProp> = (props) =>
         </AutoCard>}
         secondNode={selected ? <AutoCard
             title={<Space>
-                <div>数据帧详情</div>
+                <div>DataFrame Details</div>
                 {selected.FromServer ? <Tag
                         color={"orange"}
                         style={{width: "76px"}}
-                    >服务器响应</Tag> :
-                    <Tag color={"green"} style={{width: "76px"}}>客户端请求</Tag>}
+                    >Server Response</Tag> :
+                    <Tag color={"green"} style={{width: "76px"}}>Client Request</Tag>}
                 <Tag>Index: {selected?.DataFrameIndex}</Tag>
-                <Tag>数据大小: {selected.DataSizeVerbose}</Tag>
+                <Tag>Data Size: {selected.DataSizeVerbose}</Tag>
             </Space>} size={"small"} bordered={true}
             bodyStyle={{padding: 0}}
             extra={<Space>
@@ -157,7 +157,7 @@ export const WebsocketFlowViewer: React.FC<WebsocketFlowViewerProp> = (props) =>
                 readOnly={true}
                 noMiniMap={true}
             />
-        </AutoCard> : <Empty description={"选择 Websocket Data Frame 以查看详情"}>
+        </AutoCard> : <Empty description={"Select Websocket DataFrame to view details"}>
 
         </Empty>}
     />

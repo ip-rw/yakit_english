@@ -26,16 +26,16 @@ export const SecondConfirm: React.FC<SecondConfirmProps> = memo((props) => {
             onCancel={() => kindClick(0)}
         >
             <div className='second-confirm-container'>
-                <div className='container-title'>确认关闭?</div>
+                <div className='container-title'>Confirm closure?</div>
 
-                <div className='container-subtitle'>关闭之后将不可恢复</div>
+                <div className='container-subtitle'>Irreversible after closure</div>
 
                 <div className='container-btn'>
                     <YakitButton type="outline1" onClick={() => kindClick(1)} size="large">
-                        取消
+                        Cancel
                     </YakitButton>
                     <YakitButton type="primary" onClick={() => kindClick(2)} size="large">
-                        确认
+                        Confirm
                     </YakitButton>
                 </div>
             </div>

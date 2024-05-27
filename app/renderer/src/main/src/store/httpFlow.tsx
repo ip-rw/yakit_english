@@ -12,7 +12,7 @@ interface HttpFlowStoreProps {
 }
 
 export const useHttpFlowStore = create<HttpFlowStoreProps>((set, get) => ({
-    compareState: 0, // 用于记录发送代码对比
+    compareState: 0, // For logging code diffs
     compareLeft: {content: "", language: "http"},
     compareRight: {content: "", language: "http"},
     setCompareState: (num: number) => {

@@ -15,8 +15,8 @@ import {TextAreaRef} from "antd/lib/input/TextArea"
 
 
 /**
- * @description: 输入
- * @augments InputProps 继承antd的Input默认属性
+ * @description: Input
+ * @augments InputProps Inherits antd's default Input properties
  */
 const InternalInput: React.FC<YakitInputProps & React.RefAttributes<InputRef>> = forwardRef(
     (props, ref: React.Ref<InputRef>) => {
@@ -156,8 +156,8 @@ type CompoundedComponent = React.ForwardRefExoticComponent<YakitInputProps & Rea
 }
 
 /**
- * @description: 输入
- * @augments InputProps 继承antd的Input默认属性
+ * @description: Input
+ * @augments InputProps Inherits antd's default Input properties
  */
 export const YakitInput = InternalInput as CompoundedComponent
 

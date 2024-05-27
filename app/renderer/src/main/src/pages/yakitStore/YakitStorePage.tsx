@@ -42,7 +42,7 @@ export interface YakModuleListProp {
     emptyNode?: ReactNode
     targetRef?: React.RefObject<any>
 }
-/**@description 目前MITM、PluginDebuggerPage在使用 但是这两处item渲染都是自己渲染的，组件内置的渲染没有使用，已删除 */
+/**@Description: Currently used by MITM, PluginDebuggerPage, but they render items themselves, built-in rendering not used, deleted */
 export const YakModuleList: React.FC<YakModuleListProp> = (props) => {
     const defaultQuery = useCreation(() => {
         return {
@@ -70,7 +70,7 @@ export const YakModuleList: React.FC<YakModuleListProp> = (props) => {
         targetRef
     } = props
 
-    // 全局登录状态
+    // Global Login Status
     const {userInfo} = useStore()
     const [params, setParams] = useState<QueryYakScriptRequest>({
         ...queryLocal
@@ -89,7 +89,7 @@ export const YakModuleList: React.FC<YakModuleListProp> = (props) => {
     const [loading, setLoading] = useState(false)
     const [listBodyLoading, setListBodyLoading] = useState(false)
     const [recalculation, setRecalculation] = useState(false)
-    const numberLocal = useRef<number>(0) // 本地 选择的插件index
+    const numberLocal = useRef<number>(0) // Local Selected Plugin Index
     useEffect(() => {
         if (isSelectAll) {
             if (onSelectList) onSelectList(response.Data)
@@ -97,9 +97,9 @@ export const YakModuleList: React.FC<YakModuleListProp> = (props) => {
     }, [isSelectAll])
     useEffect(() => {
         if (!updatePluginRecordLocal) return
-        // 列表中第一次上传的时候,本地返回的数据有OnlineId ,但是列表中的上传的那个没有OnlineId
-        // 且列表中的本地Id和更新的那个Id不一样
-        // 所有以本地ScriptName进行查找 ,ScriptName在本地和线上都是唯一的
+        // First upload in list, local data returns OnlineId, but the uploaded one in the list doesn't have OnlineId
+        // And the local Id in the list is different from the updated Id
+        // All searches are by local ScriptName, which is unique both locally and online
         let index = response.Data.findIndex((ele) => ele.ScriptName === updatePluginRecordLocal.ScriptName)
         if (index === -1) return
         response.Data[index] = {...updatePluginRecordLocal}
@@ -225,7 +225,7 @@ interface PluginListLocalProps {
     onYakScriptRender?: (i: YakScript, maxWidth?: number) => any
     maxWidth: number
 }
-/**组件内置的渲染没有使用，已删除 */
+/**Built-in rendering not used, deleted */
 export const PluginListLocalItem: React.FC<PluginListLocalProps> = (props) => {
     const {plugin} = props
     const {maxWidth} = props
@@ -235,11 +235,11 @@ export const PluginListLocalItem: React.FC<PluginListLocalProps> = (props) => {
     return <></>
 }
 export const PluginType = {
-    yak: "YAK 插件",
-    mitm: "MITM 插件",
-    "packet-hack": "数据包扫描",
-    "port-scan": "端口扫描插件",
-    codec: "CODEC插件",
+    yak: "YAK Plugin",
+    mitm: "MITM Plugin",
+    "packet-hack": "Data Packet Scan",
+    "port-scan": "Port Scan Plugin",
+    codec: "CODEC Plugin",
     nuclei: "YAML POC"
 }
 

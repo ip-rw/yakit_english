@@ -64,7 +64,7 @@ export const MITMServerStartForm: React.FC<MITMServerStartFormProp> = React.memo
     const [isUseDefRules, setIsUseDefRules] = useState<boolean>(false)
     const [advancedFormVisible, setAdvancedFormVisible] = useState<boolean>(false)
 
-    // 高级配置 关闭后存的最新的form值
+    // Advanced settings, save latest form values on close
     const [advancedValue, setAdvancedValue] = useState<AdvancedConfigurationFromValue>()
 
     const ruleButtonRef = useRef<any>()
@@ -82,7 +82,7 @@ export const MITMServerStartForm: React.FC<MITMServerStartFormProp> = React.memo
 
     useEffect(() => {
         if (props.status !== "idle") return
-        // 设置 MITM 初始启动插件选项
+        // Set MITM initial plugin options
         getRemoteValue(CONST_DEFAULT_ENABLE_INITIAL_PLUGIN).then((a) => {
             form.setFieldsValue({enableInitialPlugin: !!a})
         })
@@ -117,20 +117,20 @@ export const MITMServerStartForm: React.FC<MITMServerStartFormProp> = React.memo
                 setOpenRepRuleFlag(findOpenRepRule !== undefined)
                 setRules(newRules)
             })
-            .catch((e) => yakitFailed("获取规则列表失败:" + e))
+            .catch((e) => yakitFailed("Failed to fetch rule list:" + e))
     })
     const onSwitchPlugin = useMemoizedFn((checked) => {
         props.setEnableInitialPlugin(checked)
     })
     const onStartMITM = useMemoizedFn((values) => {
-        // 开启替换规则
+        // Enable replacement rules
         if (openRepRuleFlag) {
             Modal.confirm({
-                title: "温馨提示",
+                title: "Prompt",
                 icon: <ExclamationCircleOutlined />,
-                content: "检测到开启了替换规则，可能会影响劫持，是否确认开启？",
-                okText: "确认",
-                cancelText: "取消",
+                content: "Replacement rules detected, may affect hijacking, confirm enable?？",
+                okText: "Confirm",
+                cancelText: "Cancel",
                 closable: true,
                 centered: true,
                 closeIcon: (
@@ -155,7 +155,7 @@ export const MITMServerStartForm: React.FC<MITMServerStartFormProp> = React.memo
         execStartMITM(values)
     })
     const execStartMITM = useMemoizedFn((values) => {
-        // 获取高级配置的默认值
+        // Get default advanced settings
         const advancedFormValue = advancedFormRef.current?.getValue()
         let params = {
             ...values,
@@ -189,7 +189,7 @@ export const MITMServerStartForm: React.FC<MITMServerStartFormProp> = React.memo
         setRemoteValue(MITMConsts.MITMDefaultEnableHTTP2, `${params.enableHttp2 ? "1" : ""}`)
         setRemoteValue(MITMConsts.MITMDefaultEnableGMTLS, `${params.enableGMTLS ? "1" : ""}`)
         setRemoteValue(CONST_DEFAULT_ENABLE_INITIAL_PLUGIN, params.enableInitialPlugin ? "true" : "")
-        // 记录时间戳
+        // Record timestamp
         const nowTime: string = Math.floor(new Date().getTime() / 1000).toString()
         setRemoteValue(MITMConsts.MITMStartTimeStamp, nowTime)
     })
@@ -218,36 +218,36 @@ export const MITMServerStartForm: React.FC<MITMServerStartFormProp> = React.memo
                 wrapperCol={{span: width > 610 ? 13 : 11}}
             >
                 <Item
-                    label={"劫持代理监听主机"}
-                    help={"远程模式可以修改为 0.0.0.0 以监听主机所有网卡"}
-                    rules={[{required: true, message: "该项为必填"}]}
+                    label={"Hijack listens on host"}
+                    help={"Remote mode can change to 0.0.0.0 to listen on all network cards"}
+                    rules={[{required: true, message: "Required Field"}]}
                     name='host'
                 >
                     <YakitAutoComplete
                         ref={hostRef}
                         cacheHistoryDataKey={CacheDropDownGV.MITMDefaultHostHistoryList}
-                        placeholder='请输入'
+                        placeholder='Please Enter'
                         initValue={defHost}
                     />
                 </Item>
-                <Item label={"劫持代理监听端口"} name='port' rules={[{required: true, message: "该项为必填"}]}>
+                <Item label={"Hijack listen port"} name='port' rules={[{required: true, message: "Required Field"}]}>
                     <YakitInputNumber
                         wrapperClassName={styles["form-input-number"]}
                         style={{width: "100%", maxWidth: "none"}}
                     />
                 </Item>
                 <Item
-                    label='下游代理'
+                    label='Downstream Proxy'
                     name='downstreamProxy'
                     help={
                         <span className={styles["form-rule-help"]}>
-                            为经过该 MITM
-                            代理的请求再设置一个代理，通常用于访问中国大陆无法访问的网站或访问特殊网络/内网，也可用于接入被动扫描，代理如有密码格式为：http://user:pass@ip:port
+                            Not through this MITM
+                            Proxy Chaining, typically for accessing sites blocked in China or special networks/LAN, also for passive scanning, proxy format if passworded: http://user:pass@ip:port
                             <span
                                 className={styles["form-rule-help-setting"]}
                                 onClick={() => setAgentConfigModalVisible(true)}
                             >
-                                配置代理认证&nbsp;
+                                Configure proxy auth&nbsp;
                             </span>
                         </span>
                     }
@@ -255,33 +255,33 @@ export const MITMServerStartForm: React.FC<MITMServerStartFormProp> = React.memo
                     <YakitAutoComplete
                         ref={downstreamProxyRef}
                         cacheHistoryDataKey={MITMConsts.MITMDefaultDownstreamProxyHistory}
-                        placeholder='例如 http://127.0.0.1:7890 或者 socks5://127.0.0.1:7890'
+                        placeholder='E.g., http://127.0.0.1:7890 or socks5://127.0.0.1:7890'
                     />
                 </Item>
                 <Item
-                    label={"HTTP/2.0 支持"}
+                    label={"HTTP/2.0 Support"}
                     name='enableHttp2'
                     help={
-                        "开启该选项将支持 HTTP/2.0 劫持，关闭后自动降级为 HTTP/1.1，开启后 HTTP2 协商失败也会自动降级"
+                        "Enabling supports HTTP/2.0 Hijacking, auto-downgrades to HTTP when disabled/1.1, auto-downgrades if HTTP2 negotiation fails"
                     }
                     valuePropName='checked'
                 >
                     <YakitSwitch size='large' />
                 </Item>
                 <Item
-                    label={"国密劫持"}
+                    label={"GM hijacking"}
                     name='enableGMTLS'
                     initialValue={true}
-                    help={"适配国密算法的 TLS (GM-tls) 劫持，对目标网站发起国密 TLS 的连接"}
+                    help={"TLS hijacking with GM-tls for China encryption, initiates GM-TLS connections to target sites"}
                     valuePropName='checked'
                 >
                     <YakitSwitch size='large' />
                 </Item>
                 <Item
-                    label={"内容规则"}
+                    label={"Content rules"}
                     help={
                         <span className={styles["form-rule-help"]}>
-                            使用规则进行匹配、替换、标记、染色，同时配置生效位置
+                            Use rules to match, replace, tag, color, and configure active locations
                             <span
                                 className={styles["form-rule-help-setting"]}
                                 onClick={() => {
@@ -289,7 +289,7 @@ export const MITMServerStartForm: React.FC<MITMServerStartFormProp> = React.memo
                                     ruleButtonRef.current.onSetImportVisible(true)
                                 }}
                             >
-                                默认配置&nbsp;
+                                Default config&nbsp;
                                 <RefreshIcon />
                             </span>
                         </span>
@@ -297,7 +297,7 @@ export const MITMServerStartForm: React.FC<MITMServerStartFormProp> = React.memo
                 >
                     <div className={styles["form-rule-body"]}>
                         <div className={styles["form-rule"]} onClick={() => props.setVisible(true)}>
-                            <div className={styles["form-rule-text"]}>现有规则 {rules.length} 条</div>
+                            <div className={styles["form-rule-text"]}>Current rules {rules.length} Items</div>
                             <div className={styles["form-rule-icon"]}>
                                 <CogIcon />
                             </div>
@@ -312,13 +312,13 @@ export const MITMServerStartForm: React.FC<MITMServerStartFormProp> = React.memo
                         />
                     </div>
                 </Item>
-                <Item label='启用插件' name='enableInitialPlugin' valuePropName='checked'>
+                <Item label='Enable plugin' name='enableInitialPlugin' valuePropName='checked'>
                     <YakitSwitch size='large' onChange={(checked) => onSwitchPlugin(checked)} />
                 </Item>
                 <Item label={" "} colon={false}>
                     <Space>
                         <YakitButton type='primary' size='large' htmlType='submit'>
-                            劫持启动
+                            Hijack start
                         </YakitButton>
                         <ChromeLauncherButton
                             host={useWatch("host", form)}
@@ -334,12 +334,12 @@ export const MITMServerStartForm: React.FC<MITMServerStartFormProp> = React.memo
                             repRuleFlag={openRepRuleFlag}
                         />
                         <YakitButton type='text' size='large' onClick={() => setAdvancedFormVisible(true)}>
-                            高级配置
+                            Advanced Config
                         </YakitButton>
                     </Space>
                 </Item>
             </Form>
-            {/* 代理劫持弹窗 */}
+            {/* Proxy hijack alert */}
             <AgentConfigModal
                 agentConfigModalVisible={agentConfigModalVisible}
                 onCloseModal={() => setAgentConfigModalVisible(false)}
@@ -391,7 +391,7 @@ interface AgentConfigModalProp {
     generateURL: (url: string) => void
 }
 
-// 代理劫持弹窗
+// Proxy hijack alert
 export const AgentConfigModal: React.FC<AgentConfigModalProp> = React.memo((props) => {
     const {agentConfigModalVisible, onCloseModal, generateURL} = props
     const [form] = Form.useForm()
@@ -445,13 +445,13 @@ export const AgentConfigModal: React.FC<AgentConfigModalProp> = React.memo((prop
     return (
         <YakitModal
             visible={agentConfigModalVisible}
-            title='配置代理认证'
+            title='Configure Proxy Auth'
             width={506}
             maskClosable={false}
             destroyOnClose={true}
             closable
             centered
-            okText='确认'
+            okText='Confirm'
             onCancel={onClose}
             onOk={onOKFun}
             bodyStyle={{padding: 0}}
@@ -467,7 +467,7 @@ export const AgentConfigModal: React.FC<AgentConfigModalProp> = React.memo((prop
                     style={{height: "100%"}}
                     onValuesChange={onValuesChange}
                 >
-                    <Form.Item label='协议' name='Scheme' style={{marginBottom: 4}}>
+                    <Form.Item label='Protocol' name='Scheme' style={{marginBottom: 4}}>
                         <YakitSelect
                             options={["http", "https", "socks4", "socks4a", "socks5"].map((item) => ({
                                 value: item,
@@ -477,35 +477,35 @@ export const AgentConfigModal: React.FC<AgentConfigModalProp> = React.memo((prop
                         />
                     </Form.Item>
                     <Form.Item
-                        label='地址'
+                        label='Address'
                         name='Address'
                         style={{marginBottom: 4}}
                         rules={[
-                            {required: true, message: "请输入地址"},
+                            {required: true, message: "Enter address"},
                             {
                                 pattern:
                                     /^((([a-z\d]([a-z\d-]*[a-z\d])*)\.)*[a-z]([a-z\d-]*[a-z\d])?|(?:\d{1,3}\.){3}\d{1,3})(:\d+)?$/,
-                                message: "输入地址格式不正确"
+                                message: "Invalid address format"
                             }
                         ]}
                     >
-                        <YakitInput placeholder='例如：127.0.0.1:7890' />
+                        <YakitInput placeholder='Example: 127.0.0.1:7890' />
                     </Form.Item>
                     <Form.Item
-                        label='用户名'
+                        label='Username'
                         name='Username'
                         style={{marginBottom: 4}}
-                        rules={[{required: false, message: "请输入用户名"}]}
+                        rules={[{required: false, message: "Enter Username"}]}
                     >
-                        <YakitInput placeholder='请输入用户名' />
+                        <YakitInput placeholder='Enter Username' />
                     </Form.Item>
                     <Form.Item
-                        label='密码'
+                        label='Password'
                         name='Password'
                         style={{marginBottom: 4}}
-                        rules={[{required: false, message: "请输入密码"}]}
+                        rules={[{required: false, message: "Enter Password"}]}
                     >
-                        <YakitInput placeholder='请输入密码' />
+                        <YakitInput placeholder='Enter Password' />
                     </Form.Item>
                 </Form>
             </div>

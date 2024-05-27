@@ -47,7 +47,7 @@ export const ChaosMakerOperators: React.FC<ChaosMakerOperatorsProp> = (props) =>
             // debugYakitModal(data)
         }).catch(e => {
             if (e) {
-                failed(`获取探针列表失败: ${e}`)
+                failed(`Fetch Probe List Failed: ${e}`)
             }
         })
     })
@@ -58,7 +58,7 @@ export const ChaosMakerOperators: React.FC<ChaosMakerOperatorsProp> = (props) =>
             debugYakitModal(data)
         }).catch(e => {
             if (e) {
-                failed(`获取探针列表失败: ${e}`)
+                failed(`Fetch Probe List Failed: ${e}`)
             }
         })
     })
@@ -88,7 +88,7 @@ export const ChaosMakerOperators: React.FC<ChaosMakerOperatorsProp> = (props) =>
         e.preventDefault()
 
     }} layout={"vertical"} disabled={props.running}>
-        <Form.Item help={"如果添加探针，模拟攻击流量将会额外对探针进行发送"}>
+        <Form.Item help={"Adding Probe Sends Extra Sim Attack Traffic"}>
             <div style={{display: 'flex', gap: '8px'}}>
                 {availableAddrs.map(i => {
                     return <AutoCard
@@ -96,13 +96,13 @@ export const ChaosMakerOperators: React.FC<ChaosMakerOperatorsProp> = (props) =>
                             showByCursorMenu({
                                 content: [
                                     {
-                                        title: "断开并移除Agent", onClick: () => {
+                                        title: "Disconnect & Remove Agent", onClick: () => {
                                             ipcRenderer.invoke("DisconnectVulinboxAgent", {
                                                 Addr: i.Addr,
                                             }).then(() => {
-                                                info("断开并移除成功")
+                                                info("Disconnect & Remove Succeeded")
                                             }).catch(e => {
-                                                failed(`断开并移除失败: ${e}`)
+                                                failed(`Disconnect & Remove Failed: ${e}`)
                                             }).finally(() => {
                                                 updateAvailableAddrs()
                                             })
@@ -128,11 +128,11 @@ export const ChaosMakerOperators: React.FC<ChaosMakerOperatorsProp> = (props) =>
                     >{i.Addr}[{(() => {
                         switch (i.Status) {
                             case "offline":
-                                return "离线"
+                                return "Offline"
                             case "online":
-                                return "在线"
+                                return "Online"
                             default:
-                                return "外部"
+                                return "External"
                         }
                     })()}]</AutoCard>
                 })}
@@ -141,9 +141,9 @@ export const ChaosMakerOperators: React.FC<ChaosMakerOperatorsProp> = (props) =>
                         showByCursorMenu({
                             content: [
                                 {
-                                    title: "添加节点", onClick: () => {
+                                    title: "Add Node", onClick: () => {
                                         const m = showModal({
-                                            title: "添加一个新的 BAS 节点", width: "50%",
+                                            title: "Add New BAS Node", width: "50%",
                                             content: (
                                                 <AddBASAgent onFinished={(data) => {
                                                     if (data.IsAvailable) {
@@ -152,16 +152,16 @@ export const ChaosMakerOperators: React.FC<ChaosMakerOperatorsProp> = (props) =>
                                                         return
                                                     } else {
                                                         showYakitModal({
-                                                            title: "错误提示",
+                                                            title: "Error Alert",
                                                             content: (
                                                                 <div style={{margin: 24}}>
-                                                                    添加 Agent 失败：{data.Reason}
+                                                                    Add Agent Failed：{data.Reason}
                                                                 </div>
                                                             ),
                                                             okButtonProps: {hidden: true},
                                                             cancelButtonProps: {hidden: true},
                                                         })
-                                                        failed(`添加 BAS Agent 失败：${data.Reason}`)
+                                                        failed(`Add BAS Agent Failed：${data.Reason}`)
                                                     }
                                                 }}/>
                                             )
@@ -169,13 +169,13 @@ export const ChaosMakerOperators: React.FC<ChaosMakerOperatorsProp> = (props) =>
                                     }
                                 },
                                 {
-                                    title: "查看节点信息", onClick: () => {
+                                    title: "View Node Info", onClick: () => {
                                         debugUpdateAvailableAddrs()
                                     }
                                 }
                             ]
                         }, e.clientX, e.clientY)
-                    }}>添加探针</YakitButton>
+                    }}>Add Probe</YakitButton>
                 </AutoCard>
                 {
                     props.couldBeenReset ? <AutoCard
@@ -193,7 +193,7 @@ export const ChaosMakerOperators: React.FC<ChaosMakerOperatorsProp> = (props) =>
                         }}
                     >
                         <div style={{fontWeight: "bold", color: "#fff"}}>
-                            重置 BAS 操作台
+                            Reset BAS Console
                         </div>
                     </AutoCard> : <AutoCard style={{
                         height: 60, width: 200, borderRadius: '6px',
@@ -206,7 +206,7 @@ export const ChaosMakerOperators: React.FC<ChaosMakerOperatorsProp> = (props) =>
                         }
                     }}>
                         <div style={{fontWeight: "bold", color: "#fff"}}>
-                            配置模拟攻击参数
+                            Configure Sim Attack Params
                         </div>
                     </AutoCard>
                 }
@@ -252,18 +252,18 @@ export const AddBASAgent: React.FC<AddBASAgentProp> = (props) => {
                     props.onFinished(data)
                 }
             }).catch(e => {
-                failed(`检测BAS节点失败：${e}`)
+                failed(`Detect BAS Node Failed：${e}`)
             }).finally(() => setTimeout(() => setLoading(false), 300))
         }}
     >
         <InputItem
-            label={"需要导入的地址"} required={true} setValue={Addr => setParams({...params, Addr})}
+            label={"Import Address Needed"} required={true} setValue={Addr => setParams({...params, Addr})}
             value={params.Addr} disable={loading} autoComplete={["127.0.0.1:8787"]}
         />
-        <InputInteger label={"连接超时"} setValue={Timeout => setParams({...params, Timeout})} value={params.Timeout}
+        <InputInteger label={"Connection Timeout"} setValue={Timeout => setParams({...params, Timeout})} value={params.Timeout}
                       disable={loading}/>
         <Form.Item colon={false} label={" "}>
-            <YakitButton type="primary" htmlType="submit" loading={loading}> 添加该节点 </YakitButton>
+            <YakitButton type="primary" htmlType="submit" loading={loading}> Add This Node </YakitButton>
         </Form.Item>
     </Form>
 };

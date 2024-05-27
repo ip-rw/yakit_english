@@ -7,22 +7,22 @@ import {CheckIcon, RemoveIcon} from "@/assets/newIcon"
 import "./yakitSwitchAnimation.scss"
 
 /**
- * 更新说明
- * 1.增加环境变量加载主题色
- * 2.修改 disabled 状态下checked没有变灰
- * 3.disabled状态变换时，动画问题
- * 4.更换颜色变量
+ * Update Notes
+ * 1. Load theme color from env var
+ * 2. Fix disabled state not graying when checked
+ * 3. Animation issue when toggling disabled state
+ * 4. Change Color Var
  */
 
 /**
  * @description: tag
- * @augments TagProps 继承antd的TagProps默认属性
- * @param {"small" | "middle" | "large" | "maxLarge" } size 默认middle  small默认时showInnerText不起作用
+ * @augments TagProps Inherits default TagProps from antd
+ * @param {"small" | "middle" | "large" | "maxLarge" } size default middle, small default when showInnerText ineffective
  * @private checkedChildren
  * @private unCheckedChildren
- * @param {boolean} showInnerText  是否显示里面有 开/关 的文字  仅支持["large", "middle"]
- * @param {boolean} showInnerIcon  是否显示里面图标 仅支持["large", "middle"]
- * @param {string} wrapperClassName Switch装饰div的className
+ * @param {boolean} showInnerText Show inner text when On/Text for Off, support only["large", "middle"]
+ * @param {boolean} showInnerIcon Show inner icon, support only["large", "middle"]
+ * @param {string} wrapperClassName Switch decorator div className
  */
 
 const showExtraSize: string[] = ["large", "middle"]
@@ -31,8 +31,8 @@ export const YakitSwitch: React.FC<YakitSwitchProps> = (props) => {
     let children = {}
     if (showInnerText && showExtraSize.findIndex((ele) => ele === size) !== -1) {
         children = {
-            checkedChildren: "开",
-            unCheckedChildren: "关"
+            checkedChildren: "On",
+            unCheckedChildren: "Off"
         }
     }
     if (showInnerIcon && showExtraSize.findIndex((ele) => ele === size) !== -1) {

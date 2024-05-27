@@ -9,7 +9,7 @@ export interface GetSpaceEngineStatusProps {
     Type: string
 }
 /**
- * @description 获取空间引擎状态
+ * @Get Space Engine State
  */
 export const apiGetSpaceEngineStatus: (params: GetSpaceEngineStatusProps) => Promise<SpaceEngineStatus> = (params) => {
     return new Promise((resolve, reject) => {
@@ -17,7 +17,7 @@ export const apiGetSpaceEngineStatus: (params: GetSpaceEngineStatusProps) => Pro
             .invoke("GetSpaceEngineStatus", {...params})
             .then(resolve)
             .catch((e: any) => {
-                yakitNotify("error", "获取空间引擎错误:" + e)
+                yakitNotify("error", "Get Space Engine Error:" + e)
                 reject(e)
             })
     })
@@ -28,7 +28,7 @@ export interface GetSpaceEngineAccountStatusRequest {
     Account: string
 }
 /**
- * @description 校验引擎状态，根据前端传的值
+ * @Verify Engine State, Based on Frontend Value
  */
 export const apiGetSpaceEngineAccountStatus: (
     params: GetSpaceEngineAccountStatusRequest
@@ -38,32 +38,32 @@ export const apiGetSpaceEngineAccountStatus: (
             .invoke("GetSpaceEngineAccountStatus", {...params})
             .then(resolve)
             .catch((e: any) => {
-                yakitNotify("error", "校验引擎失败:" + e)
+                yakitNotify("error", "Engine Verification Failed:" + e)
                 reject(e)
             })
     })
 }
-/**获取全局配置 */
+/**Get Global Config */
 export const apiGetGlobalNetworkConfig: () => Promise<GlobalNetworkConfig> = () => {
     return new Promise((resolve, reject) => {
         ipcRenderer
             .invoke("GetGlobalNetworkConfig")
             .then(resolve)
             .catch((e: any) => {
-                yakitNotify("error", "获取全局配置错误:" + e)
+                yakitNotify("error", "Get Global Config Error:" + e)
                 reject(e)
             })
     })
 }
 
-/**设置全局配置 */
+/**Set Global Configuration */
 export const apiSetGlobalNetworkConfig: (params: GlobalNetworkConfig) => Promise<GlobalNetworkConfig> = (params) => {
     return new Promise((resolve, reject) => {
         ipcRenderer
             .invoke("SetGlobalNetworkConfig", params)
             .then(resolve)
             .catch((e: any) => {
-                yakitNotify("error", "设置全局配置错误:" + e)
+                yakitNotify("error", "Global Configuration Setting Error:" + e)
                 reject(e)
             })
     })
@@ -76,14 +76,14 @@ export const apiGetPcapMetadata: () => Promise<PcapMetadata> = () => {
             .invoke("GetPcapMetadata", {})
             .then(resolve)
             .catch((e: any) => {
-                yakitNotify("error", "GetPcapMetadata数据获取错误:" + e)
+                yakitNotify("error", "GetPcapMetadata Data Retrieval Error:" + e)
                 reject(e)
             })
     })
 }
 
 /**
- * @description 空间引擎 执行接口
+ * @Space Engine Execution Interface
  */
 export const apiFetchPortAssetFromSpaceEngine: (params: SpaceEngineStartParams, token: string) => Promise<null> = (
     params,
@@ -93,18 +93,18 @@ export const apiFetchPortAssetFromSpaceEngine: (params: SpaceEngineStartParams, 
         ipcRenderer
             .invoke("FetchPortAssetFromSpaceEngine", {...params}, token)
             .then(() => {
-                yakitNotify("info", "启动任务成功")
+                yakitNotify("info", "Task Launched Successfully")
                 resolve(null)
             })
             .catch((e: any) => {
-                yakitNotify("error", "空间引擎执行错误:" + e)
+                yakitNotify("error", "Space Engine Execution Error:" + e)
                 reject(e)
             })
     })
 }
 
 /**
- * @description 取消 FetchPortAssetFromSpaceEngine
+ * @Cancel FetchPortAssetFromSpaceEngine
  */
 export const apiCancelFetchPortAssetFromSpaceEngine: (token: string) => Promise<null> = (token) => {
     return new Promise((resolve, reject) => {
@@ -114,7 +114,7 @@ export const apiCancelFetchPortAssetFromSpaceEngine: (token: string) => Promise<
                 resolve(null)
             })
             .catch((e: any) => {
-                yakitNotify("error", "取消空间引擎执行出错:" + e)
+                yakitNotify("error", "Cancel Space Engine Execution Error:" + e)
                 reject(e)
             })
     })

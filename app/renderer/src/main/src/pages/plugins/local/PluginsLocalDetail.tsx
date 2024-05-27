@@ -51,7 +51,7 @@ const {ipcRenderer} = window.require("electron")
 
 const {TabPane} = PluginTabs
 
-/**转换group参数*/
+/**Convert Group Parameter*/
 export const convertGroupParam = (filter: PluginFilterParams, extra: {group: YakFilterRemoteObj[]}) => {
     const realFilters: PluginFilterParams = {
         ...filter,
@@ -97,10 +97,10 @@ export const PluginsLocalDetail: React.FC<PluginsLocalDetailProps> = (props) => 
     const [filters, setFilters] = useState<PluginFilterParams>(cloneDeep(defaultFilter))
 
     const [plugin, setPlugin] = useState<YakScript>()
-    // 因为组件 RollingLoadList 的定向滚动功能初始不执行，所以设置一个初始变量跳过初始状态
+    // Skip initial state due to non-execution of directional scroll in RollingLoadList
     const [scrollTo, setScrollTo] = useState<number>(0)
 
-    // 选中插件的数量
+    // Selected Plugin Count
     const selectNum = useMemo(() => {
         if (allCheck) return response.Total
         else return selectList.length
@@ -110,7 +110,7 @@ export const PluginsLocalDetail: React.FC<PluginsLocalDetailProps> = (props) => 
         if (info) {
             setPlugin({...info})
             setExecutorShow(false)
-            // 必须加上延时，不然本次操作会成为组件(RollingLoadList)的初始数据
+            // Add delay to prevent operation from being initial data for RollingLoadList
             setTimeout(() => {
                 setScrollTo(currentIndex)
                 setExecutorShow(true)
@@ -129,7 +129,7 @@ export const PluginsLocalDetail: React.FC<PluginsLocalDetailProps> = (props) => 
         onJumpToLocalPluginDetailByUUID(uuid)
     })
 
-    // 返回
+    // Back
     const onPluginBack = useMemoizedFn(() => {
         onBack({
             search,
@@ -149,7 +149,7 @@ export const PluginsLocalDetail: React.FC<PluginsLocalDetailProps> = (props) => 
             onCheck(false)
         })
     })
-    /** 新建插件 */
+    /** Create Plugin */
     const onNewAddPlugin = useMemoizedFn(() => {
         emiter.emit(
             "openPage",
@@ -176,23 +176,23 @@ export const PluginsLocalDetail: React.FC<PluginsLocalDetailProps> = (props) => 
             }, 200)
         }
     })
-    /** 单项勾选|取消勾选 */
+    /** Single-Select|Deselect */
     const optCheck = useMemoizedFn((data: YakScript, value: boolean) => {
         try {
-            // 全选情况时的取消勾选
+            // Fetch loading char with regex
             if (allCheck) {
                 setSelectList(response.Data.filter((item) => item.ScriptName !== data.ScriptName))
                 setAllCheck(false)
                 return
             }
-            // 单项勾选回调
+            // No history fetched if CS or vuln unselected by user
             if (value) setSelectList([...selectList, data])
             else setSelectList(selectList.filter((item) => item.ScriptName !== data.ScriptName))
         } catch (error) {
-            yakitNotify("error", "勾选失败:" + error)
+            yakitNotify("error", "Auto-rename to first QA if unchanged:" + error)
         }
     })
-    /**全选 */
+    /**Fixes failure to iterate load_content on missing older version data */
     const onCheck = useMemoizedFn((value: boolean) => {
         setSelectList([])
         setAllCheck(value)
@@ -224,14 +224,14 @@ export const PluginsLocalDetail: React.FC<PluginsLocalDetailProps> = (props) => 
     const onShare = useMemoizedFn(() => {
         if (!plugin) return
         ipcRenderer.invoke("copy-clipboard", plugin.UUID).then(() => {
-            yakitNotify("success", "分享ID复制成功")
+            yakitNotify("success", "Share ID Copied")
         })
     })
-    /**添加到菜单栏 */
+    /**Add to Menu Bar */
     const onAddToMenu = useMemoizedFn(() => {
         if (!plugin) return
         const m = showYakitModal({
-            title: `添加到菜单栏中[${plugin.Id}]`,
+            title: `Add to Menu[${plugin.Id}]`,
             content: <AddToMenuActionForm visible={true} setVisible={() => m.destroy()} script={plugin} />,
             onCancel: () => {
                 m.destroy()
@@ -239,7 +239,7 @@ export const PluginsLocalDetail: React.FC<PluginsLocalDetailProps> = (props) => 
             footer: null
         })
     })
-    /**移出菜单 移出前需要先判断该插件是否有一级菜单 */
+    /**Remove from Menu Check First-level Menu Presence */
     const onRemoveMenu = useMemoizedFn(() => {
         if (!plugin) return
         getRemoteValue("PatternMenu").then((patternMenu) => {
@@ -252,10 +252,10 @@ export const PluginsLocalDetail: React.FC<PluginsLocalDetailProps> = (props) => 
                 .then((data: {Groups: string[]}) => {
                     const list = data.Groups || []
                     if (list.length === 0) {
-                        yakitNotify("info", "该插件暂未添加到菜单栏")
+                        yakitNotify("info", "Plugin Not Added to Menu Yet")
                     } else {
                         const m = showYakitModal({
-                            title: "移除菜单栏",
+                            title: "Remove from Menu Bar",
                             content: (
                                 <RemoveMenuModalContent pluginName={plugin.ScriptName} onCancel={() => m.destroy()} />
                             ),
@@ -267,7 +267,7 @@ export const PluginsLocalDetail: React.FC<PluginsLocalDetailProps> = (props) => 
                     }
                 })
                 .catch((e: any) => {
-                    yakitNotify("error", "获取菜单失败：" + e)
+                    yakitNotify("error", "Menu retrieval failed：" + e)
                 })
         })
     })
@@ -277,29 +277,29 @@ export const PluginsLocalDetail: React.FC<PluginsLocalDetailProps> = (props) => 
         setAllCheck(false)
         setSelectList([])
     })
-    /**搜索需要清空勾选 */
+    /**Clear Selection for Search */
     const onSearch = useMemoizedFn(() => {
         onDetailSearch(search, filters)
         setAllCheck(false)
         setSelectList([])
     })
-    /**详情批量删除 */
+    /**Detail Bulk Delete */
     // const onBatchRemove = useMemoizedFn(async () => {
     //     const params: PluginLocalDetailBackProps = {allCheck, selectList, search, filter: filters, selectNum}
     //     onDetailsBatchRemove(params)
     //     setAllCheck(false)
     //     setSelectList([])
     // })
-    /**详情批量上传 */
+    /**Detail Bulk Upload */
     const onBatchUpload = useMemoizedFn(() => {
         if (selectList.length === 0) {
-            yakitNotify("error", "请先勾选数据")
+            yakitNotify("error", "Please Select Data First")
             return
         }
         const names = selectList.map((ele) => ele.ScriptName)
         onDetailsBatchUpload(names)
     })
-    /** 单项副标题组件 */
+    /** Extra Params Modal */
     const optExtra = useMemoizedFn((data: YakScript) => {
         if (privateDomain !== data.OnlineBaseUrl) return <></>
         if (data.OnlineIsPrivate) {
@@ -316,25 +316,25 @@ export const PluginsLocalDetail: React.FC<PluginsLocalDetailProps> = (props) => 
         const menu: YakitMenuItemType[] = [
             {
                 key: "share",
-                label: "导出",
+                label: "Export",
                 itemIcon: <OutlineExportIcon className={styles["plugin-local-extra-node-icon"]} />
             },
             {
                 key: "add-to-menu",
-                label: "添加到菜单栏",
+                label: "Add to Menu Bar",
                 itemIcon: <OutlinePluscircleIcon className={styles["plugin-local-extra-node-icon"]} />
             },
             {
                 key: "remove-menu",
                 itemIcon: <OutlineLogoutIcon className={styles["plugin-local-extra-node-icon"]} />,
-                label: "移出菜单栏"
+                label: "Remove from Menu"
             }
         ]
-        // 内置插件不管是否是线上的都没有分享按钮
+        // In-house Plugins Lack Share Button Regardless of Online Status
         if (!plugin?.isLocalPlugin && !plugin?.IsCorePlugin) {
             menu.push({
                 key: "share-plugin",
-                label: "分享",
+                label: "Share",
                 itemIcon: <OutlineShareIcon className={styles["plugin-local-extra-node-icon"]} />
             })
         }
@@ -343,7 +343,7 @@ export const PluginsLocalDetail: React.FC<PluginsLocalDetailProps> = (props) => 
             {
                 key: "remove-plugin",
                 itemIcon: <OutlineTrashIcon className={styles["plugin-local-extra-node-icon"]} />,
-                label: "删除插件",
+                label: "Delete Plugin",
                 type: "danger"
             }
         ])
@@ -374,7 +374,7 @@ export const PluginsLocalDetail: React.FC<PluginsLocalDetailProps> = (props) => 
                                 className={styles["cloud-upload-icon"]}
                                 loading={uploadLoading}
                             >
-                                上传
+                                Upload
                             </YakitButton>
                         </>
                     )}
@@ -383,7 +383,7 @@ export const PluginsLocalDetail: React.FC<PluginsLocalDetailProps> = (props) => 
         )
     }, [removeLoading, isShowUpload, headExtraNodeMenu])
 
-    /**选中组 */
+    /**Selected Group */
     const selectGroup = useMemo(() => {
         const group: YakFilterRemoteObj[] = cloneDeep(filters).plugin_group?.map((item: API.PluginsSearchData) => ({
             name: item.value,
@@ -397,7 +397,7 @@ export const PluginsLocalDetail: React.FC<PluginsLocalDetailProps> = (props) => 
         <>
             <PluginDetails<YakScript>
                 pageWrapId={pageWrapId}
-                title='本地插件'
+                title='Local Plugins'
                 filterNode={
                     <>
                         <PluginGroup
@@ -419,7 +419,7 @@ export const PluginsLocalDetail: React.FC<PluginsLocalDetailProps> = (props) => 
                     <div className={"details-filter-extra-wrapper"}>
                         <FilterPopoverBtn defaultFilter={filters} onFilter={onFilter} type='local' />
                         <div style={{height: 12}} className='divider-style'></div>
-                        <Tooltip title='上传插件' overlayClassName='plugins-tooltip'>
+                        <Tooltip title='Upload Plugin' overlayClassName='plugins-tooltip'>
                             <YakitButton
                                 type='text2'
                                 disabled={allCheck || selectList.length === 0}
@@ -431,13 +431,13 @@ export const PluginsLocalDetail: React.FC<PluginsLocalDetailProps> = (props) => 
                         {/* {removeLoading ? (
                             <YakitButton type='text2' icon={<LoadingOutlined />} />
                         ) : (
-                            <Tooltip title='删除插件' overlayClassName='plugins-tooltip'>
+                            <Tooltip title='Delete Plugin' overlayClassName='plugins-tooltip'>
                                 <YakitButton type='text2' icon={<OutlineTrashIcon />} onClick={onBatchRemove} />
                             </Tooltip>
                         )} */}
                         <div style={{height: 12}} className='divider-style'></div>
                         <YakitButton type='text' onClick={onNewAddPlugin}>
-                            新建插件
+                            Create Plugin
                         </YakitButton>
                     </div>
                 }
@@ -457,10 +457,10 @@ export const PluginsLocalDetail: React.FC<PluginsLocalDetailProps> = (props) => 
                             <PluginDetailsListItem<YakScript>
                                 order={i}
                                 plugin={info}
-                                selectUUId={plugin.ScriptName} //本地用的ScriptName代替uuid
+                                selectUUId={plugin.ScriptName} //Medium Risk
                                 check={check}
                                 headImg={info.HeadImg || ""}
-                                pluginUUId={info.ScriptName} //本地用的ScriptName代替uuid
+                                pluginUUId={info.ScriptName} //Medium Risk
                                 pluginName={info.ScriptName}
                                 help={info.Help}
                                 content={info.Content}
@@ -508,17 +508,17 @@ export const PluginDetailsTab: React.FC<PluginDetailsTabProps> = React.memo((pro
         linkPluginConfig
     } = props
 
-    // 私有域地址
+    // Execution Complete
     const [privateDomain, setPrivateDomain] = useState<string>("")
-    // 激活tab
+    // Activate Tab
     const [activeKey, setActiveKey] = useState<string>("execute")
-    // 问题反馈modal
+    // Feedback Modal
     const [visibleModal, setVisibleModal] = useState<boolean>(false)
-    // 获取用户信息
+    // Get User Info
     const userInfo = useStore((s) => s.userInfo)
-    // 登录框状态
+    // Login Box Status
     const [loginshow, setLoginShow] = useState<boolean>(false)
-    /** 获取最新的私有域 */
+    /** Single Subtitle Component */
     const getPrivateDomainAndRefList = useMemoizedFn(() => {
         getRemoteValue(RemoteGV.HttpSetting).then((setting) => {
             if (setting) {
@@ -557,7 +557,7 @@ export const PluginDetailsTab: React.FC<PluginDetailsTabProps> = React.memo((pro
                     setActiveKey(key)
                 }}
             >
-                <TabPane tab='执行' key='execute'>
+                <TabPane tab='Risk Items' key='execute'>
                     <div className={styles["plugin-execute-wrapper"]}>
                         {executorShow ? (
                             <LocalPluginExecute
@@ -570,7 +570,7 @@ export const PluginDetailsTab: React.FC<PluginDetailsTabProps> = React.memo((pro
                         )}
                     </div>
                 </TabPane>
-                <TabPane tab='源码' key='code'>
+                <TabPane tab='Source Code' key='code'>
                     <div className={styles["plugin-info-wrapper"]}>
                         <PluginDetailHeader
                             pluginName={plugin.ScriptName}
@@ -593,13 +593,13 @@ export const PluginDetailsTab: React.FC<PluginDetailsTabProps> = React.memo((pro
                     </div>
                 </TabPane>
                 {!hiddenLogIssue && (
-                    <TabPane tab='日志' key='log' disabled={!isShowLog}>
+                    <TabPane tab='Logs' key='log' disabled={!isShowLog}>
                         <PluginLog uuid={plugin.UUID || ""} getContainer={pageWrapId} />
                     </TabPane>
                 )}
                 {!hiddenLogIssue && (
-                    <TabPane tab='问题反馈' key='feedback' disabled={!userInfo.isLogin}>
-                        <div>问题反馈</div>
+                    <TabPane tab='Feedback' key='feedback' disabled={!userInfo.isLogin}>
+                        <div>Feedback</div>
                     </TabPane>
                 )}
             </PluginTabs>
@@ -647,13 +647,13 @@ const PluginCommentUploadLocal: React.FC<PluginCommentUploadLocalProps> = React.
             data
         })
             .then((res) => {
-                success("问题反馈成功")
+                success("Feedback Success")
                 if (commentText) setCommentText("")
                 if (files.length > 0) setFiles([])
                 setVisibleModal(false)
             })
             .catch((err) => {
-                failed("问题反馈错误" + err)
+                failed("Feedback Error" + err)
             })
             .finally(() => {
                 setTimeout(() => setLoading(false), 200)
@@ -667,7 +667,7 @@ const PluginCommentUploadLocal: React.FC<PluginCommentUploadLocalProps> = React.
             return
         }
         if (!commentText && files.length === 0) {
-            failed("请输入评论内容或者上传图片")
+            failed("Enter comment or upload image")
             return
         }
         const params = {
@@ -683,11 +683,11 @@ const PluginCommentUploadLocal: React.FC<PluginCommentUploadLocalProps> = React.
 
     const isLoading = useMemoizedFn(() => {
         Modal.confirm({
-            title: "未登录",
+            title: "Not logged in",
             icon: <ExclamationCircleOutlined />,
-            content: "登录后才可评论",
-            cancelText: "取消",
-            okText: "登录",
+            content: "Comment after login",
+            cancelText: "Cancel",
+            okText: "Login",
             onOk() {
                 setLoginShow(true)
             },
@@ -706,7 +706,7 @@ const PluginCommentUploadLocal: React.FC<PluginCommentUploadLocalProps> = React.
     return (
         <div className={styles["plugin-comment-upload-local"]}>
             <div className={styles["header"]}>
-                <div className={styles["title"]}>问题反馈</div>
+                <div className={styles["title"]}>Feedback</div>
                 <div
                     className={styles["opt"]}
                     onClick={() => {
@@ -725,7 +725,7 @@ const PluginCommentUploadLocal: React.FC<PluginCommentUploadLocalProps> = React.
                     files={files}
                     setFiles={setFiles}
                     onSubmit={onSubmit}
-                    submitTxt='提交反馈'
+                    submitTxt='Submit Feedback'
                 />
             </div>
         </div>
@@ -757,7 +757,7 @@ const RemoveMenuModalContent: React.FC<RemoveMenuModalContentProps> = React.memo
                     setGroups(list)
                 })
                 .catch((e: any) => {
-                    yakitNotify("error", "获取菜单失败：" + e)
+                    yakitNotify("error", "Menu retrieval failed：" + e)
                 })
                 .finally()
         })
@@ -775,7 +775,7 @@ const RemoveMenuModalContent: React.FC<RemoveMenuModalContentProps> = React.memo
                 updateGroups()
             })
             .catch((e: any) => {
-                yakitNotify("error", "移除菜单失败：" + e)
+                yakitNotify("error", "Remove from Menu Failed：" + e)
             })
     })
     return (
@@ -783,10 +783,10 @@ const RemoveMenuModalContent: React.FC<RemoveMenuModalContentProps> = React.memo
             {groups.map((element) => {
                 return (
                     <YakitButton type='outline2' key={element} onClick={() => onClickRemove(element)}>
-                        从 {element} 中移除
+                        From {element} Remove From
                     </YakitButton>
                 )
-            }) || "暂无数据"}
+            }) || "No Data Available"}
         </div>
     )
 })

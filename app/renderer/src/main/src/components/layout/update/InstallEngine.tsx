@@ -31,7 +31,7 @@ export interface InstallEngineProps {
 export const InstallEngine: React.FC<InstallEngineProps> = React.memo((props) => {
     const {system, visible, onSuccess, onRemoreLink} = props
 
-    /** ---------- 获取操作系统和架构 & 内置引擎相关 Start ---------- */
+    /** ---------- OS, Arch & Built-in Engine Related Start ---------- */
     const [platformArch, setPlatformArch] = useState<string>("")
 
     const [buildInEngineVersion, setBuildInEngineVersion] = useState("")
@@ -53,13 +53,13 @@ export const InstallEngine: React.FC<InstallEngineProps> = React.memo((props) =>
         ipcRenderer
             .invoke("InitBuildInEngine", {})
             .then(() => {
-                info(`解压内置引擎成功`)
+                info(`Built-in Engine Unzip Success`)
                 showYakitModal({
                     closable: false,
                     maskClosable: false,
                     keyboard: false,
                     type: "white",
-                    title: "引擎解压成功，需要重启",
+                    title: "Engine Unzip Success, Restart Needed",
                     content: (
                         <div className={styles["relaunch-hint"]}>
                             <YakitButton
@@ -68,11 +68,11 @@ export const InstallEngine: React.FC<InstallEngineProps> = React.memo((props) =>
                                         .invoke("relaunch")
                                         .then(() => {})
                                         .catch((e) => {
-                                            failed(`重启失败: ${e}`)
+                                            failed(`Restart Failed: ${e}`)
                                         })
                                 }}
                             >
-                                点此立即重启
+                                Click to Restart Now
                             </YakitButton>
                         </div>
                     ),
@@ -80,13 +80,13 @@ export const InstallEngine: React.FC<InstallEngineProps> = React.memo((props) =>
                 })
             })
             .catch((e) => {
-                failed(`初始化内置引擎失败：${e}`)
+                failed(`Built-in Engine Init Failed：${e}`)
             })
             .finally(() => setTimeout(() => setExtractingBuildInEngine(false), 300))
     })
-    /** ---------- 获取操作系统和架构 & 判断是否有内置引擎 End ---------- */
+    /** ---------- Get OS & Arch & Check Built-in Engine End ---------- */
 
-    /** ---------- 下载状态信息 Start ---------- */
+    /** ---------- Download Status Start ---------- */
     const [downloadProgress, setDownloadProgress, getDownloadProgress] = useGetState<DownloadingState>()
 
     useEffect(() => {
@@ -99,14 +99,14 @@ export const InstallEngine: React.FC<InstallEngineProps> = React.memo((props) =>
         }
     }, [])
 
-    /** ---------- 下载状态信息 End ---------- */
+    /** ---------- Download Status End ---------- */
 
-    /** ---------- 弹窗拖拽 & 多窗口位置 Start ---------- */
+    /** ---------- Window Drag & Multiple Positions Start ---------- */
     const [disabled, setDisabled] = useState(true)
     const [bounds, setBounds] = useState({left: 0, top: 0, bottom: 0, right: 0})
     const draggleRef = useRef<HTMLDivElement>(null)
 
-    /** 弹窗拖拽移动触发事件 */
+    /** Window Drag Event */
     const onStart = useMemoizedFn((_event: DraggableEvent, uiData: DraggableData) => {
         const {clientWidth, clientHeight} = window.document.documentElement
         const targetRect = draggleRef.current?.getBoundingClientRect()
@@ -120,19 +120,19 @@ export const InstallEngine: React.FC<InstallEngineProps> = React.memo((props) =>
         })
     })
 
-    // 弹窗置顶
+    // Window Topmost
     const [isTop, setIsTop] = useState<0 | 1 | 2>(0)
-    // 弹窗置顶
+    // Window Topmost
     const [agrShow, setAgrShow] = useState<boolean>(false)
-    // 弹窗置顶
+    // Window Topmost
     const [qsShow, setQSShow] = useState<boolean>(false)
-    /** ---------- 弹窗拖拽 & 多窗口位置 End ---------- */
+    /** ---------- Window Drag & Multiple Positions End ---------- */
 
-    /** 用户协议勾选状态 */
+    /** Utilizer Agreement Checked Status */
     const [agrCheck, setAgrCheck] = useState<boolean>(false)
-    /** 执行一键安装功能时判断用户协议状态 */
+    /** Check Utilizer Agreement Status on One-click Install */
     const [checkStatus, setCheckStatus] = useState<boolean>(false)
-    /** 展示抖动动画 */
+    /** Shake Animation */
     const [isShake, setIsShake] = useState<boolean>(false)
     useEffect(() => {
         getLocalValue(LocalGV.IsCheckedUserAgreement).then((val: boolean) => {
@@ -151,13 +151,13 @@ export const InstallEngine: React.FC<InstallEngineProps> = React.memo((props) =>
 
     const [install, setInstall] = useState<boolean>(false)
 
-    /** 远端最新yaklang引擎版本 */
+    /** Latest Remote yaklang Engine Version */
     const latestVersionRef = useRef<string>("")
 
-    /** 是否中断下载记录 */
+    /** Interrupt Download Log? */
     const [cancelLoading, setCancelLoading] = useState<boolean>(false)
     const isBreakDownload = useRef<boolean>(false)
-    /** 取消事件 */
+    /** Cancel Event */
     const onClose = useMemoizedFn(() => {
         setCancelLoading(true)
         isBreakDownload.current = true
@@ -167,14 +167,14 @@ export const InstallEngine: React.FC<InstallEngineProps> = React.memo((props) =>
             setCancelLoading(false)
         }, 500)
     })
-    /** 取消下载事件 */
+    /** Cancel Download Event */
     const onInstallClose = useMemoizedFn(() => {
         isBreakDownload.current = false
         if (downloadProgress) setDownloadProgress(undefined)
         if (install) setInstall(false)
     })
 
-    /** 获取引擎线上最新版本 */
+    /** Get Latest Online Engine Version */
     const fetchEngineLatestVersion = useMemoizedFn((callback?: () => any) => {
         ipcRenderer
             .invoke("fetch-latest-yaklang-version")
@@ -184,7 +184,7 @@ export const InstallEngine: React.FC<InstallEngineProps> = React.memo((props) =>
                 if (callback) callback()
             })
             .catch((e: any) => {
-                failed(`获取线上引擎最新版本失败 ${e}`)
+                failed(`Online Engine Version Fetch Failed ${e}`)
                 onInstallClose()
             })
     })
@@ -206,34 +206,34 @@ export const InstallEngine: React.FC<InstallEngineProps> = React.memo((props) =>
                     // @ts-ignore
                     size: getDownloadProgress().size
                 })
-                success("下载完毕")
-                // 清空主进程yaklang版本缓存
+                success("Download Complete")
+                // Clear Main Process yaklang Version Cache
                 ipcRenderer.invoke("clear-local-yaklang-version-cache")
-                /** 安装yaklang引擎 */
+                /** Install yaklang Engine */
                 ipcRenderer
                     .invoke("install-yak-engine", `${latestVersionRef.current}`)
                     .then(() => {
                         if (isBreakDownload.current) return
-                        success(`安装成功，如未生效，重启 ${getReleaseEditionName()} 即可`)
+                        success(`Install Success, Restart if Ineffective ${getReleaseEditionName()} Just So`)
                         onSuccess()
                     })
                     .catch((err: any) => {
-                        failed(`安装失败: ${err}`)
+                        failed(`Install Failed: ${err}`)
                         onInstallClose()
                     })
             })
             .catch((e: any) => {
                 if (isBreakDownload.current) return
-                failed(`引擎下载失败: ${e}`)
+                failed(`Engine Download Failed: ${e}`)
                 onInstallClose()
             })
     })
 
-    /** 一键安装事件 */
+    /** One-click Install Event */
     const installEngine = useMemoizedFn(() => {
         setCheckStatus(true)
         if (!agrCheck) {
-            /** 抖动提示动画 */
+            /** Shake Prompt Animation */
             setIsShake(true)
             setTimeout(() => setIsShake(false), 1000)
             return
@@ -244,7 +244,7 @@ export const InstallEngine: React.FC<InstallEngineProps> = React.memo((props) =>
         fetchEngineLatestVersion(() => downloadEngine())
     })
 
-    /** 远程连接 */
+    /** Remote Connection */
     const remoteLink = useMemoizedFn(() => {
         setCheckStatus(true)
         if (!agrCheck) {
@@ -296,7 +296,7 @@ export const InstallEngine: React.FC<InstallEngineProps> = React.memo((props) =>
                             <div className={styles["hint-right-wrapper"]}>
                                 {install ? (
                                     <div className={styles["hint-right-download"]}>
-                                        <div className={styles["hint-right-title"]}>引擎安装中...</div>
+                                        <div className={styles["hint-right-title"]}>Engine Installing...</div>
                                         <div className={styles["download-progress"]}>
                                             <Progress
                                                 strokeColor='#F28B44'
@@ -305,16 +305,16 @@ export const InstallEngine: React.FC<InstallEngineProps> = React.memo((props) =>
                                             />
                                         </div>
                                         <div className={styles["download-info-wrapper"]}>
-                                            <div>剩余时间 : {(downloadProgress?.time.remaining || 0).toFixed(2)}s</div>
+                                            <div>Remaining Time : {(downloadProgress?.time.remaining || 0).toFixed(2)}s</div>
                                             <div className={styles["divider-wrapper"]}>
                                                 <div className={styles["divider-style"]}></div>
                                             </div>
-                                            <div>耗时 : {(downloadProgress?.time.elapsed || 0).toFixed(2)}s</div>
+                                            <div>Duration : {(downloadProgress?.time.elapsed || 0).toFixed(2)}s</div>
                                             <div className={styles["divider-wrapper"]}>
                                                 <div className={styles["divider-style"]}></div>
                                             </div>
                                             <div>
-                                                下载速度 : {((downloadProgress?.speed || 0) / 1000000).toFixed(2)}M/s
+                                                Download Speed : {((downloadProgress?.speed || 0) / 1000000).toFixed(2)}M/s
                                             </div>
                                         </div>
                                         <div className={styles["download-btn"]}>
@@ -324,29 +324,29 @@ export const InstallEngine: React.FC<InstallEngineProps> = React.memo((props) =>
                                                 type='outline2'
                                                 onClick={onClose}
                                             >
-                                                取消
+                                                Cancel
                                             </YakitButton>
                                         </div>
                                     </div>
                                 ) : (
                                     <>
                                         <div className={styles["hint-right-title"]}>
-                                            {haveBuildInEngine ? "本地引擎未初始化" : "未安装引擎"}
+                                            {haveBuildInEngine ? "Local Engine Uninitiated" : "Engine Not Installed"}
                                         </div>
                                         <div className={styles["hint-right-content"]}>
                                             {haveBuildInEngine
-                                                ? `授权使用内置引擎: ${buildInEngineVersion}，或远程连接启动`
-                                                : "你可选择安装 Yak 引擎启动软件，或远程连接"}
+                                                ? `Authorize Built-in Engine: ${buildInEngineVersion}，Or Remote Start`
+                                                : "Choose Yak Engine or Remote Connection"}
                                         </div>
 
                                         {platformArch === "darwin-arm64" && (
                                             <div className={styles["hint-right-macarm"]}>
                                                 <div>
                                                     <div className={styles["mac-arm-hint"]}>
-                                                        当前系统为(darwin-arm64)，如果未安装 Rosetta 2, 将无法运行 Yak
-                                                        核心引擎
+                                                        Current System (darwin-arm64), Rosetta 2 Required for Yak
+                                                        Core Engine
                                                         <br />
-                                                        运行以下命令可手动安装 Rosetta，如已安装可忽略
+                                                        Manual Rosetta Install Command
                                                     </div>
                                                     <div className={styles["mac-arm-command"]}>
                                                         softwareupdate --install-rosetta
@@ -375,7 +375,7 @@ export const InstallEngine: React.FC<InstallEngineProps> = React.memo((props) =>
                                                 onChange={(e) => setAgrCheck(e.target.checked)}
                                             ></Checkbox>
                                             <span>
-                                                勾选同意{" "}
+                                                Check to Agree{" "}
                                                 <span
                                                     className={styles["agreement-style"]}
                                                     onClick={(e) => {
@@ -384,22 +384,22 @@ export const InstallEngine: React.FC<InstallEngineProps> = React.memo((props) =>
                                                         setIsTop(1)
                                                     }}
                                                 >
-                                                    《用户协议》
+                                                    《Utilizer Agreement》
                                                 </span>
-                                                以继续使用
+                                                To Continue Utilize
                                             </span>
                                         </div>
 
                                         <div className={styles["hint-right-btn"]}>
                                             <div>
                                                 <YakitButton size='max' type='outline2' onClick={remoteLink}>
-                                                    远程连接
+                                                    Remote Connection
                                                 </YakitButton>
                                                 {haveBuildInEngine && (
                                                     <YakitPopconfirm
                                                         placement='top'
                                                         title={
-                                                            "网络安装需要公网环境，请知晓，请优先使用内置引擎（初始化引擎）"
+                                                            "Network Install Requires Public Internet, Prefer Built-in (Engine Init）"
                                                         }
                                                         onConfirm={installEngine}
                                                     >
@@ -409,7 +409,7 @@ export const InstallEngine: React.FC<InstallEngineProps> = React.memo((props) =>
                                                             style={{fontSize: 12}}
                                                             disabled={!agrCheck}
                                                         >
-                                                            联网安装
+                                                            Online Install
                                                         </YakitButton>
                                                     </YakitPopconfirm>
                                                 )}
@@ -420,24 +420,24 @@ export const InstallEngine: React.FC<InstallEngineProps> = React.memo((props) =>
                                                     type='outline2'
                                                     onClick={() => ipcRenderer.invoke("UIOperate", "close")}
                                                 >
-                                                    取消
+                                                    Cancel
                                                 </YakitButton>
 
                                                 {!haveBuildInEngine && (
-                                                    // 无内置引擎
+                                                    // No Built-in Engine
                                                     <YakitButton size='max' onClick={installEngine}>
-                                                        一键安装
+                                                        One-click Install
                                                     </YakitButton>
                                                 )}
                                                 {haveBuildInEngine && (
-                                                    // 有内置引擎
+                                                    // Built-in Engine Available
                                                     <YakitButton
                                                         size='max'
                                                         loading={extractingBuildInEngine}
                                                         disabled={!agrCheck}
                                                         onClick={initBuildInEngine}
                                                     >
-                                                        初始化引擎
+                                                        Initialize Engine
                                                     </YakitButton>
                                                 )}
                                             </div>
@@ -469,7 +469,7 @@ interface AgrAndQSModalProps {
     setVisible: (flag: boolean) => any
 }
 
-/** @name 用户协议弹窗 */
+/** @Utilizer Agreement Popup */
 const AgreementContentModal: React.FC<AgrAndQSModalProps> = React.memo((props) => {
     const {isTop, setIsTop, system, visible, setVisible} = props
 
@@ -529,7 +529,7 @@ const AgreementContentModal: React.FC<AgrAndQSModalProps> = React.memo((props) =
                                         </div>
                                     )}
                                 </div>
-                                <span>用户协议</span>
+                                <span>Utilizer Agreement</span>
                             </div>
                         ) : (
                             <div
@@ -540,38 +540,38 @@ const AgreementContentModal: React.FC<AgrAndQSModalProps> = React.memo((props) =
                                 onMouseOut={() => setDisabled(true)}
                                 onMouseDown={() => setIsTop(1)}
                             >
-                                <span className={styles["header-title"]}>用户协议</span>
+                                <span className={styles["header-title"]}>Utilizer Agreement</span>
                                 <div className={styles["close-wrapper"]} onClick={() => setVisible(false)}>
                                     <WinUIOpCloseSvgIcon className={styles["icon-style"]} />
                                 </div>
                             </div>
                         )}
                         <div className={styles["modal-body"]}>
-                            <div className={styles["body-title"]}>免责声明</div>
+                            <div className={styles["body-title"]}>Disclaimer</div>
                             <div className={styles["body-content"]}>
-                                1. 本工具仅面向 <span className={styles["sign-content"]}>合法授权</span>{" "}
-                                的企业安全建设行为与个人学习行为，如您需要测试本工具的可用性，请自行搭建靶机环境。
+                                1. Tool Intended For <span className={styles["sign-content"]}>Authorized Utilize</span>{" "}
+                                Legal Testing Env - Biz & Edu。
                                 <br />
-                                2. 在使用本工具进行检测时，您应确保该行为符合当地的法律法规，并且已经取得了足够的授权。
-                                <span className={styles["underline-content"]}>请勿对非授权目标进行扫描。</span>
+                                2. Legal & Authorized Scans。
+                                <span className={styles["underline-content"]}>No Unauthorized Scans。</span>
                                 <br />
-                                3. 禁止对本软件实施逆向工程、反编译、试图破译源代码，植入后门传播恶意软件等行为。
+                                3. No Reverse-Engineering, Decompiling, Cracking, Malware Distribution。
                                 <br />
                                 <span className={styles["sign-bold-content"]}>
-                                    如果发现上述禁止行为，我们将保留追究您法律责任的权利。
+                                    Anti-Illegal Action Rights。
                                 </span>
                                 <br />
-                                如您在使用本工具的过程中存在任何非法行为，您需自行承担相应后果，我们将不承担任何法律及连带责任。
+                                Misuse Liability。
                                 <br />
-                                在安装并使用本工具前，请您{" "}
-                                <span className={styles["sign-bold-content"]}>务必审慎阅读、充分理解各条款内容。</span>
+                                Before Using, Please{" "}
+                                <span className={styles["sign-bold-content"]}>Read Terms Carefully。</span>
                                 <br />
-                                限制、免责条款或者其他涉及您重大权益的条款可能会以{" "}
-                                <span className={styles["sign-bold-content"]}>加粗</span>、
-                                <span className={styles["underline-content"]}>加下划线</span>
-                                等形式提示您重点注意。
+                                Limitation, Disclaimer & Other Significant Terms Notice{" "}
+                                <span className={styles["sign-bold-content"]}>Bold</span>、
+                                <span className={styles["underline-content"]}>Underline</span>
+                                Notice Summary。
                                 <br />
-                                除非您已充分阅读、完全理解并接受本协议所有条款，否则，请您不要安装并使用本工具。您的使用行为或者您以其他任何明示或者默示方式表示接受本协议的，即视为您已阅读并同意本协议的约束。
+                                Don't Must Agree to Install/Utilize。
                             </div>
                         </div>
                     </div>
@@ -580,7 +580,7 @@ const AgreementContentModal: React.FC<AgrAndQSModalProps> = React.memo((props) =
         </Draggable>
     )
 })
-/** @name Yaklang-常见问题弹窗 */
+/** @Yaklang-FAQ Popup */
 export const QuestionModal: React.FC<AgrAndQSModalProps> = React.memo((props) => {
     const {isTop, setIsTop, system, visible, setVisible} = props
 
@@ -607,7 +607,7 @@ export const QuestionModal: React.FC<AgrAndQSModalProps> = React.memo((props) =>
                 break
         }
         ipcRenderer.invoke("set-copy-clipboard", link)
-        success("复制成功")
+        success("Copy Success")
     })
 
     useEffect(() => {
@@ -667,7 +667,7 @@ export const QuestionModal: React.FC<AgrAndQSModalProps> = React.memo((props) =>
                                         </div>
                                     )}
                                 </div>
-                                <span>Yak 核心引擎下载链接</span>
+                                <span>Yak Core Engine Download URL</span>
                             </div>
                         ) : (
                             <div
@@ -678,7 +678,7 @@ export const QuestionModal: React.FC<AgrAndQSModalProps> = React.memo((props) =>
                                 onMouseOut={() => setDisabled(true)}
                                 onMouseDown={() => setIsTop(2)}
                             >
-                                <span className={styles["header-title"]}>Yak 核心引擎下载链接</span>
+                                <span className={styles["header-title"]}>Yak Core Engine Download URL</span>
                                 <div className={styles["close-wrapper"]} onClick={() => setVisible(false)}>
                                     <WinUIOpCloseSvgIcon className={styles["icon-style"]} />
                                 </div>
@@ -686,16 +686,16 @@ export const QuestionModal: React.FC<AgrAndQSModalProps> = React.memo((props) =>
                         )}
                         <div className={styles["modal-body"]}>
                             <div className={styles["body-hint"]}>
-                                <span className={styles["hint-sign"]}>如遇网络问题无法下载，可手动下载安装：</span>
+                                <span className={styles["hint-sign"]}>Manual Install if Download Fails：</span>
                                 <br />
-                                Windows 用户可以把引擎放在 安装目录(一般为%HOME%)/yakit-projects/yak-engine/yak.exe
-                                即可识别 MacOS / Linux 用户可以把引擎放在 ~/yakit-projects/yak-engine/yak 即可识别
+                                Windows Engine Directory %HOME%)/yakit-projects/yak-engine/yak.exe
+                                Identifies MacOS as / Linux Engine Placement ~/yakit-projects/yak-engine/Recognizes as yak
                             </div>
 
                             <div className={styles["body-link"]}>
                                 <div className={styles["link-opt"]}>
                                     <div style={{width: 107}} className={styles["link-title"]}>
-                                        Windows(x64)下载
+                                        Windows(x64) Download
                                     </div>
                                     <div className={styles["link-style"]}>
                                         https://yaklang.oss-cn-beijing.aliyuncs.com/yak/{latestVersion || "latest"}
@@ -707,7 +707,7 @@ export const QuestionModal: React.FC<AgrAndQSModalProps> = React.memo((props) =>
                                 </div>
                                 <div className={styles["link-opt"]}>
                                     <div style={{width: 122}} className={styles["link-title"]}>
-                                        MacOS(intel/m1)下载
+                                        MacOS(intel/m1) Download
                                     </div>
                                     <div className={styles["link-style"]}>
                                         https://yaklang.oss-cn-beijing.aliyuncs.com/yak/{latestVersion || "latest"}
@@ -719,7 +719,7 @@ export const QuestionModal: React.FC<AgrAndQSModalProps> = React.memo((props) =>
                                 </div>
                                 <div className={styles["link-opt"]}>
                                     <div style={{width: 87}} className={styles["link-title"]}>
-                                        Linux(x64)下载
+                                        Linux(x64) Download
                                     </div>
                                     <div className={styles["link-style"]}>
                                         https://yaklang.oss-cn-beijing.aliyuncs.com/yak/{latestVersion || "latest"}

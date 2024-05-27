@@ -6,12 +6,12 @@ import {
     Player,
     ControlBar,
     BigPlayButton,
-    PlayToggle, // PlayToggle 播放/暂停按钮 若需禁止加 disabled
-    ReplayControl, // 后退按钮
-    ForwardControl, // 前进按钮
+    PlayToggle, // PlayToggle/Pause button Add disabled to disable
+    ReplayControl, // Back button
+    ForwardControl, // Forward button
     CurrentTimeDisplay,
     TimeDivider,
-    PlaybackRateMenuButton, // 倍速播放选项
+    PlaybackRateMenuButton, // Playback Speed Options
     VolumeMenuButton
 } from "video-react"
 import "video-react/dist/video-react.css" // import css
@@ -52,9 +52,9 @@ export const ReactPlayerVideo: React.FC<ReactPlayerVideoProps> = React.memo((pro
                 className={styles["player-video"]}
             >
                 <BigPlayButton position='center' />
-                {error && <div className={styles["player-video-tip"]}>该视频文件不可播放</div>}
+                {error && <div className={styles["player-video-tip"]}>Video file cannot be played</div>}
                 <ControlBar autoHide={true} disableDefaultControls={false} className={styles["player-control-bar"]}>
-                    <div className={isPre ? "hint--top-right" : ""} aria-label='上一个'>
+                    <div className={isPre ? "hint--top-right" : ""} aria-label='Previous'>
                         <RewindIcon
                             className={classNames(styles["bar-icon"], {
                                 [styles["not-allowed-icon"]]: !isPre
@@ -70,7 +70,7 @@ export const ReactPlayerVideo: React.FC<ReactPlayerVideoProps> = React.memo((pro
                             [styles["not-allowed-icon"]]: error
                         })}
                     />
-                    <div className={isNext ? "hint--top" : ""} aria-label='下一个'>
+                    <div className={isNext ? "hint--top" : ""} aria-label='Next'>
                         <FastForwardIcon
                             className={classNames(styles["bar-icon"], {
                                 [styles["not-allowed-icon"]]: !isNext

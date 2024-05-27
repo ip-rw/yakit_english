@@ -29,14 +29,14 @@ type Exchange<T> = T extends number ? boolean : never
 type Joins<T extends object[]> = T extends [infer H extends object, ...infer U extends object[]] ? H & Joins<U> : {}
 
 /**
- * @name 事件总线的信号源定义
- * @description 事件信号的定义规则
- * - 各页面的事件信号定义变量命名: `${页面名(英文)}EventProps`
+ * @name Definition of the event bus signal source
+ * @description Rules for defining event signals
+ * - Event signal definition variable naming for each page: `${Page name (English)}EventProps`
  *
- * - 页面内事件信号的发送值，如不附加值则建议TS定义为选填，
- *   首选类型建议为string(注: 复杂的类型可能导致各页面信号定义交叉类型时出现never类型)
+ * - The value sent by the event signal within the page, if no value is added, it is recommended to define as optional in TS，
+ *   Prefer type string for definitions (Note: Complex types may lead to cross-type never type in signal definitions across pages.)
  *
- * - 建议不要在map方法内的组件设置事件监听，如果需要设置，请自行解决如何区别不同页面同事件监听的问题
+ * - It’s advised not to set event listeners inside the map method of components; if necessary, solve how to distinguish listeners for the same event across different pages on your own.
  */
 type Events = [
     MitmEventProps,
@@ -56,8 +56,8 @@ type Events = [
 ]
 
 type CheckVal = Exchange<ArrContrast<Events>>
-// !!! 该变量声明不能改动
-// 如果编辑器(vscode)对该变量报错，则说明声明的信号有重名情况，请自行检查重名的位置
+// !!! This variable declaration must not be changed
+// If the editor (vscode) reports an error for this variable, it indicates a duplicate signal declaration; please check for duplicates.
 let checkVal: CheckVal = true
 
 const emiter = mitt<Joins<Events>>()

@@ -6,7 +6,7 @@ interface removeProps<T> {
     params: T
     interfaceName: string
     isShowError?: boolean
-    noEnterQuery?: string[] // 查询条件不需要添加
+    noEnterQuery?: string[] // No Conditions Needed
     selectedRowKeysNmae?:string
 }
 
@@ -15,7 +15,7 @@ export const onRemoveToolFC = (props: removeProps<any>) => {
     let newParams = {}
     let newNoEnterQuery = ["Pagination", ...noEnterQuery]
     const queryHaveValue = {}
-    // 找出有查询条件
+    // Find Query Conditions
     for (const key in params) {
         const objItem = params[key]
         if (!newNoEnterQuery.includes(key) && objItem) {
@@ -23,19 +23,19 @@ export const onRemoveToolFC = (props: removeProps<any>) => {
         }
     }
     if (selectedRowKeys.length > 0) {
-        // 删除选择的数据
+        // Delete Selected
         newParams = {
             [selectedRowKeysNmae]: selectedRowKeys
         }
     } else if (Object.getOwnPropertyNames(queryHaveValue).length > 0) {
-        // 删除带查询条件的数据
+        // Delete with Conditions
         newParams = {
             Filter: {
                 ...queryHaveValue
             }
         }
     } else {
-        // 删除所有
+        // Delete All
         newParams = {
             DeleteAll: true
         }

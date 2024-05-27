@@ -126,7 +126,7 @@ const getLatestYakLocalEngine = () => {
     }
 }
 
-// 获取Yakit所处平台
+// Get Yakit platform
 const getYakitPlatform = () => {
     switch (process.platform) {
         case "darwin":
@@ -299,26 +299,26 @@ module.exports = {
             fs.access(commandPath, fs.constants.X_OK, err => {
                 if (err) {
                     if (err.code === 'ENOENT') {
-                        reject(new Error(`命令未找到: ${commandPath}`));
+                        reject(new Error(`Command not found: ${commandPath}`));
                     } else if (err.code === 'EACCES') {
-                        reject(new Error(`命令无法执行(无权限): ${commandPath}`));
+                        reject(new Error(`Command execution failed (no permission)): ${commandPath}`));
                     } else {
-                        reject(new Error(`命令无法执行: ${commandPath}`));
+                        reject(new Error(`Command unexecutable: ${commandPath}`));
                     }
                     return;
                 }
 
                 childProcess.execFile(commandPath, ['-v'], {timeout: 20000}, (error, stdout, stderr) => {
                     if (error) {
-                        let errorMessage = `命令执行失败: ${error.message}\nStdout: ${stdout}\nStderr: ${stderr}`;
+                        let errorMessage = `Command execution failure: ${error.message}\nStdout: ${stdout}\nStderr: ${stderr}`;
                         if (error.code === 'ENOENT') {
-                            errorMessage = `无法执行命令，引擎未找到: ${commandPath}\nStderr: ${stderr}`;
+                            errorMessage = `Cannot execute command, engine not found: ${commandPath}\nStderr: ${stderr}`;
                         } else if (error.killed) {
-                            errorMessage = `引擎启动被系统强制终止，可能的原因为内存占用过多或系统退出或安全防护软件: ${commandPath}\nStderr: ${stderr}`;
+                            errorMessage = `Engine forcibly terminated by system, possible reasons: excessive memory usage, system exit, security software: ${commandPath}\nStderr: ${stderr}`;
                         } else if (error.signal) {
-                            errorMessage = `引擎由于信号而终止: ${error.signal}\nStderr: ${stderr}`;
+                            errorMessage = `Engine terminated due to signal: ${error.signal}\nStderr: ${stderr}`;
                         } else if (error.code === 'ETIMEDOUT') {
-                            errorMessage = `命令执行超时，进程遭遇未知问题，需要用户在命令行中执行引擎调试: ${commandPath}\nStdout: ${stdout}\nStderr: ${stderr}`;
+                            errorMessage = `Command times out, process encounters unknown issue, manual engine debugging required: ${commandPath}\nStdout: ${stdout}\nStderr: ${stderr}`;
                         }
 
                         reject(new Error(errorMessage));
@@ -362,7 +362,7 @@ module.exports = {
                 console.info("start to fetching download-url for yakit")
 
                 const downloadUrl = isEnterprise ? await getYakitEEDownloadUrl(version) : await getYakitCommunityDownloadUrl(version)
-                // 可能存在中文的下载文件夹，就判断下Downloads文件夹是否存在，不存在则新建一个
+                // Check if Downloads folder exists, create if not
                 if (!fs.existsSync(yakitInstallDir)) fs.mkdirSync(yakitInstallDir, {recursive: true})
                 const dest = path.join(yakitInstallDir, path.basename(downloadUrl));
                 try {
@@ -455,12 +455,12 @@ module.exports = {
             return await installYakEngine(version);
         })
 
-        // 获取yak code文件根目录路径
+        // Get yak code root directory
         ipcMain.handle("fetch-code-path", () => {
             return codeDir
         });
 
-        // 打开指定路径文件
+        // Open file at specified path
         ipcMain.handle("open-specified-file", async (e, path) => {
             return shell.showItemInFolder(path)
         })
@@ -483,7 +483,7 @@ module.exports = {
                         if (!fs.existsSync(targetPath)) {
                             reject(`Extract Cert Script Failed`)
                         } else {
-                            // 如果不是 Windows，给脚本文件添加执行权限
+                            // Add execution permission to script if not Windows
                             if (!isWindows) {
                                 fs.chmodSync(targetPath, 0o755);
                             }
@@ -551,7 +551,7 @@ module.exports = {
                         } else {
 
                             /**
-                             * 复制引擎到真实地址
+                             * Copy engine to true location
                              * */
                             try {
                                 let targetEngine = path.join(yaklangEngineDir, isWindows ? "yak.exe" : "yak")
@@ -582,7 +582,7 @@ module.exports = {
             return await asyncInitBuildInEngine(params)
         })
 
-        // 尝试初始化数据库
+        // Attempt to initialize database
         ipcMain.handle("InitCVEDatabase", async (e) => {
             const targetFile = path.join(YakitProjectPath, "default-cve.db.gzip")
             if (fs.existsSync(targetFile)) {
@@ -594,7 +594,7 @@ module.exports = {
             }
         })
 
-        // 获取内置引擎版本
+        // Get built-in engine version
         ipcMain.handle("GetBuildInEngineVersion"
             /*"IsBinsExisted"*/, async (e) => {
                 const yakZipName = path.join("bins", "yak.zip")
@@ -632,13 +632,13 @@ module.exports = {
             return await asyncInitBuildInEngine({})
         })
 
-        // 解压 start-engine.zip
+        // Unzip start-engine.zip
         const generateStartEngineGRPC = () => {
             return new Promise((resolve, reject) => {
                 const all = "start-engine.zip"
                 const output_name = isWindows ? `start-engine-grpc.bat` : `start-engine-grpc.sh`
 
-                // 如果存在就不在解压
+                // Do not unzip if exists
                 if(fs.existsSync(path.join(yaklangEngineDir,output_name))){
                     resolve("")
                     return
@@ -657,7 +657,7 @@ module.exports = {
                         if (!fs.existsSync(targetPath)) {
                             reject(`Extract Start Engine GRPC Script Failed`)
                         } else {
-                            // 如果不是 Windows，给脚本文件添加执行权限
+                            // Add execution permission to script if not Windows
                             if (!isWindows) {
                                 fs.chmodSync(targetPath, 0o755);
                             }

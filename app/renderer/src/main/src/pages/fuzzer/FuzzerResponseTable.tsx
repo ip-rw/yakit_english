@@ -30,14 +30,14 @@ export const FuzzerResponseTableEx: React.FC<FuzzerResponseTableProp> = React.me
                 if ((res || []).length > 0) {
                     analyzeFuzzerResponse(res[0], index, content)
                 }
-            }}>详情</a>
+            }}>Details</a>
         </>
     })
 
     const getArtColumns = useMemoizedFn((): ArtColumn[] => {
         return props.success ? [
             {
-                name: "请求", code: "Count", features: {
+                name: "Request", code: "Count", features: {
                     sortable: sortAsNumber,
                 },
                 width: 70,
@@ -54,7 +54,7 @@ export const FuzzerResponseTableEx: React.FC<FuzzerResponseTableProp> = React.me
                 render: v => <div style={{color: StatusCodeToColor(v)}}>{`${v}`}</div>, width: 100,
             },
             {
-                name: "响应大小",
+                name: "Response Size",
                 code: "BodyLength",
                 render: v => v,
                 features: {
@@ -63,7 +63,7 @@ export const FuzzerResponseTableEx: React.FC<FuzzerResponseTableProp> = React.me
                 width: 100,
             },
             {
-                name: "响应相似度",
+                name: "Response Similarity",
                 code: "BodySimilarity",
                 render: v => {
                     const text = parseFloat(`${v}`).toFixed(3);
@@ -76,7 +76,7 @@ export const FuzzerResponseTableEx: React.FC<FuzzerResponseTableProp> = React.me
                 width: 100,
             },
             {
-                name: "HTTP头相似度",
+                name: "HTTP Header Similarity",
                 code: "HeaderSimilarity",
                 render: v => parseFloat(`${v}`).toFixed(3),
                 features: {
@@ -93,7 +93,7 @@ export const FuzzerResponseTableEx: React.FC<FuzzerResponseTableProp> = React.me
                 }, width: 300,
             },
             {
-                name: "延迟(ms)",
+                name: "Latency (ms))",
                 code: "DurationMs",
                 render: (value: any, row: any, rowIndex: number) => {
                     return value
@@ -116,7 +116,7 @@ export const FuzzerResponseTableEx: React.FC<FuzzerResponseTableProp> = React.me
                 render: v => `${formatTimestamp(v)}`, width: 165,
             },
             {
-                name: "操作", code: "UUID", render: successResponseOperationHandler,
+                name: "Action", code: "UUID", render: successResponseOperationHandler,
                 width: 80, lock: true,
             }
         ] : [
@@ -126,11 +126,11 @@ export const FuzzerResponseTableEx: React.FC<FuzzerResponseTableProp> = React.me
                 }
             },
             {
-                name: "失败原因", code: "Reason", render: (v) => {
+                name: "Failure Reason", code: "Reason", render: (v) => {
                     return v ? <CopyableField style={{color: "red"}} noCopy={true} text={v}/> : "-"
                 }, features: {
                     tips: <>
-                        如果请求失败才会有内容~
+                        Content on Failure~
                     </>
                 }
             },

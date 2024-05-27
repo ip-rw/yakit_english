@@ -45,7 +45,7 @@ export const MITMFilters: React.FC<MITMFiltersProp> = React.forwardRef((props, r
     return (
         <Spin spinning={loading}>
             <Form labelCol={{span: 6}} wrapperCol={{span: 16}} className={styles["mitm-filters-form"]}>
-                <Form.Item label='包含 Hostname'>
+                <Form.Item label='Include Hostname'>
                     <YakitSelect
                         mode='tags'
                         value={params?.includeHostname}
@@ -54,7 +54,7 @@ export const MITMFilters: React.FC<MITMFiltersProp> = React.forwardRef((props, r
                         }}
                     ></YakitSelect>
                 </Form.Item>
-                <Form.Item label='排除 Hostname'>
+                <Form.Item label='Exclude Hostname'>
                     <YakitSelect
                         mode='tags'
                         value={params?.excludeHostname || undefined}
@@ -64,8 +64,8 @@ export const MITMFilters: React.FC<MITMFiltersProp> = React.forwardRef((props, r
                     ></YakitSelect>
                 </Form.Item>
                 <Form.Item
-                    label='包含 URL 路径'
-                    help={"可理解为 URI 匹配，例如 /main/index.php?a=123 或者 /*/index 或 /admin* "}
+                    label='Include URL Path'
+                    help={"Interpreted as URI Matching, e.g. /main/index.php?a=123 or /*/index or /admin* "}
                 >
                     <YakitSelect
                         mode='tags'
@@ -75,7 +75,7 @@ export const MITMFilters: React.FC<MITMFiltersProp> = React.forwardRef((props, r
                         }}
                     ></YakitSelect>
                 </Form.Item>
-                <Form.Item label={"排除 URL 路径"} help={"可理解为 URI 过滤，例如 /main/index "}>
+                <Form.Item label={"Exclude URL Path"} help={"Interpreted as URI Filtering, e.g. /main/index "}>
                     <YakitSelect
                         mode='tags'
                         value={params?.excludeUri || undefined}
@@ -84,7 +84,7 @@ export const MITMFilters: React.FC<MITMFiltersProp> = React.forwardRef((props, r
                         }}
                     ></YakitSelect>
                 </Form.Item>
-                <Form.Item label={"包含文件后缀"}>
+                <Form.Item label={"Include File Extension"}>
                     <YakitSelect
                         mode='tags'
                         value={params?.includeSuffix || undefined}
@@ -93,7 +93,7 @@ export const MITMFilters: React.FC<MITMFiltersProp> = React.forwardRef((props, r
                         }}
                     ></YakitSelect>
                 </Form.Item>
-                <Form.Item label={"排除文件后缀"}>
+                <Form.Item label={"Exclude File Extension"}>
                     <YakitSelect
                         mode='tags'
                         value={params?.excludeSuffix || undefined}
@@ -102,7 +102,7 @@ export const MITMFilters: React.FC<MITMFiltersProp> = React.forwardRef((props, r
                         }}
                     ></YakitSelect>
                 </Form.Item>
-                <Form.Item label={"排除 Content-Type"}>
+                <Form.Item label={"Exclude Content-Type"}>
                     <YakitSelect
                         mode='tags'
                         value={params?.excludeContentTypes || undefined}
@@ -111,7 +111,7 @@ export const MITMFilters: React.FC<MITMFiltersProp> = React.forwardRef((props, r
                         }}
                     ></YakitSelect>
                 </Form.Item>
-                <Form.Item label={"排除 HTTP 方法"}>
+                <Form.Item label={"Exclude HTTP Method"}>
                     <YakitSelect
                         mode='tags'
                         value={params?.excludeMethod || undefined}

@@ -1,15 +1,15 @@
 /**
- * 该文件只存放公共工具方法,不存放通信接口等逻辑操作
+ * Utilities only, no comm/logic operations
  */
 
 const path = require("path")
 const fs = require("fs")
 
 /**
- * @name 判断文件夹里的文件数量，并只保留时间最近的 ${length} 个文件
- * @description 注意，该方法只适合文件夹里全是文件的环境，存在子文件夹则不适用
- * @param {string} folderPath 目标文件夹
- * @param {number} length 保留文件数量
+ * @Name: Keep newest files based on count in folder ${length} Single file
+ * @Note: Only for folders with files, not subfolders
+ * @param {string} Target folder
+ * @param {number} Keep file count
  */
 const clearFolder = (folderPath, length) => {
     try {
@@ -19,7 +19,7 @@ const clearFolder = (folderPath, length) => {
                 return
             }
 
-            // 获取文件夹中所有文件的详细信息
+            // Get all file details in folder
             const fileStats = files.map((file) => {
                 const filePath = path.join(folderPath, file)
                 return {
@@ -28,15 +28,15 @@ const clearFolder = (folderPath, length) => {
                     stats: fs.statSync(filePath)
                 }
             })
-            // 有信息的文件集合
+            // Info file set
             const validFiles = fileStats.filter((item) => item.stats.size && item.stats.size > 0)
-            // 没信息的文件集合
+            // No-info file set
             const invalidFiles = fileStats.filter((item) => !item.stats.size || item.stats.size <= 0)
 
-            // 按最后修改时间进行排序
+            // Sort by last modified
             const sortedFiles = validFiles.sort((a, b) => b.stats.mtime.getTime() - a.stats.mtime.getTime())
 
-            // 保留最近的十个文件，删除其他文件
+            // Keep latest 10 files, delete others
             const filesToDelete = sortedFiles.slice(length).concat([...invalidFiles])
             filesToDelete.forEach((file) => {
                 fs.unlink(file.path, (err) => {
@@ -51,7 +51,7 @@ const clearFolder = (folderPath, length) => {
     }
 }
 
-/** 生成 年-月-日-时-分-秒 */
+/** Generate YYYY-MM-DD-HH-MM-SS */
 const getNowTime = () => {
     let now = new Date()
     let year = now.getFullYear()

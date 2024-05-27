@@ -2,7 +2,7 @@ const templateStr = `<!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>验证成功</title>
+    <title>Auth Successful</title>
     <style>
       html,
       body {
@@ -173,9 +173,9 @@ const templateStr = `<!DOCTYPE html>
             />
           </svg>
         </div>
-        <h1>验证成功</h1>
-        <p>账号验证成功，点击返回开启Yakit安全之旅。</p>
-        <a id="goBackSuccee">返回 Yakit</a>
+        <h1>Auth Successful</h1>
+        <p>账户认证成功，点击开始安全Yakit之旅。</p>
+        <a id="goBackSuccee">Return to Yakit</a>
       </div>
 
       <div id="fail" class="container fail-box">
@@ -224,9 +224,9 @@ const templateStr = `<!DOCTYPE html>
             />
           </svg>
         </div>
-        <h1>验证失败</h1>
-        <p>请求异常，请返回Yakit重新登录。</p>
-        <a id="goBackFail">返回 Yakit</a>
+        <h1>Auth Failed</h1>
+        <p>请求错误，请重新登录Yakit。</p>
+        <a id="goBackFail">Return to Yakit</a>
       </div>
 
       <div id="load" class="middle-loading-body">
@@ -243,14 +243,14 @@ const templateStr = `<!DOCTYPE html>
             </div>
           </div>
         </div>
-        <div class="loading-body-title">正在登录验证中，请稍等片刻......</div>
+        <div class="loading-body-title">Authenticating, Please Wait Momentarily......</div>
       </div>
     </div>
 
     <script>
       function GetQueryString(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-        var r = window.location.search.substr(1).match(reg); //获取url中"?"符后的字符串并正则匹配
+        var r = window.location.search.substr(1).match(reg); //Retrieve from URL"?"RegEx Match Post-Character String
         var context = "";
         if (r != null) context = decodeURIComponent(r[2]);
         reg = null;
@@ -260,16 +260,16 @@ const templateStr = `<!DOCTYPE html>
           : context;
       }
       const goBackXhr = () => {
-        //1、创建一个 xhr 的对象
+        //1. Create an xhr object
         let xhr = new XMLHttpRequest();
-        //2、调用xhr中的open()函数,创建一个Ajax的请求
+        //2. Call xhr.open() to create an Ajax request
         xhr.open("GET", "/goback");
-        //3、调用xhr的send函数，发起请求
+        //3. Call xhr.send() to make a request
         xhr.send();
-        //4、监听 onreadystatechange 事件
+        //4. Listen to onreadystatechange event
         xhr.onreadystatechange = function () {
           if (xhr.readyState === 4 && xhr.status === 200) {
-            //数据获取成功，获取服务器响应的数据
+            //Data Retrieved Successfully, Server Response Received
             console.log("goBack", xhr.responseText);
             window.location.replace("about:blank");
             window.close();
@@ -277,19 +277,19 @@ const templateStr = `<!DOCTYPE html>
         };
       };
       const judgeSignin = () => {
-        //1、创建一个 xhr 的对象
+        //1. Create an xhr object
         let xhr = new XMLHttpRequest();
-        //2、调用xhr中的open()函数,创建一个Ajax的请求
+        //2. Call xhr.open() to create an Ajax request
         xhr.open("GET", "/judgeSignin?code="+GetQueryString("code"));
-        //3、调用xhr的send函数，发起请求
+        //3. Call xhr.send() to make a request
         xhr.send();
-        //4、监听 onreadystatechange 事件
+        //4. Listen to onreadystatechange event
         xhr.onreadystatechange = function () {
           if (xhr.readyState === 4 && xhr.status === 200) {
-            //数据获取成功，获取服务器响应的数据
+            //Data Retrieved Successfully, Server Response Received
             const res = JSON.parse(xhr.responseText);
             document.getElementById("load").style.display = "none";
-            // 是否登录
+            // Logged In?
             if (res.login) {
               document.getElementById("succee").style.display = "block";
             } else {

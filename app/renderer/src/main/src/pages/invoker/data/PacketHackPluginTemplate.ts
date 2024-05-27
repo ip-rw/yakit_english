@@ -2,11 +2,11 @@ export const PacketHackPluginTemplate = `# packet hack plugin
 yakit.AutoInitYakit()
 
 /*
-本插件定义的函数(Hook)的参数来源于以下内容 
+Parameters for functions (Hooks) defined by this plugin derive from the following content 
 1. HTTP History
 2. Repeater
 
-函数定义如下：
+Function definition as follows：
 func(requestRaw: []byte|string|url, responseBody: []byte, isHttps: bool)
 
 

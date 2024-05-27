@@ -40,7 +40,7 @@ export const FramerateData = [
     },
     {
         value: "7",
-        label: "7fps(推荐)"
+        label: "7fps (Recommended))"
     },
     {
         value: "10",
@@ -67,15 +67,15 @@ export const FramerateData = [
 export const CoefficientPTSData = [
     {
         value: 1,
-        label: "X1：1倍速"
+        label: "X1: 1x Speed"
     },
     {
         value: 0.33,
-        label: "X3：3倍速"
+        label: "X3: 3x Speed"
     },
     {
         value: 0.2,
-        label: "X5：5倍速"
+        label: "X5: 5x Speed"
     },
 ]
 
@@ -83,9 +83,9 @@ export const ScrecorderModal: React.FC<ScrecorderModalProp> = React.memo((props)
     const {onClose, token, onStartCallback, formStyle, footer, disabled} = props
     const [params, setParams] = useState<StartScrecorderParams>({
         CoefficientPTS: 1,
-        DisableMouse: true, // 鼠标捕捉
-        Framerate: "7", // 帧率
-        ResolutionSize: "" // 分辨率
+        DisableMouse: true, // Mouse Capture
+        Framerate: "7", // FPS
+        ResolutionSize: "" // Resolution
     })
     const [form] = Form.useForm()
     useEffect(() => {
@@ -116,7 +116,7 @@ export const ScrecorderModal: React.FC<ScrecorderModalProp> = React.memo((props)
     return (
         <div className={styles["screcorder-modal-content"]}>
             <div className={classNames(styles["tip"])}>
-                本录屏在 Windows 下，会同时录制所有屏幕，合并在一个文件中；在 MacOS 下多屏会生成多个文件
+                On Windows, records all screens into one file; on MacOS, multi-screen setup generates multiple files
             </div>
             <Form
                 layout='vertical'
@@ -128,10 +128,10 @@ export const ScrecorderModal: React.FC<ScrecorderModalProp> = React.memo((props)
                 form={form}
             >
                 <Form.Item
-                    label='帧率'
-                    help='渗透测试过程记录推荐使用低帧率（5fps 以下）以免 CPU 占用过高'
+                    label='FPS'
+                    help='For penetration testing, low FPS (below 5fps) is recommended to avoid high CPU usage'
                     tooltip={{
-                        title: "帧率即每秒截屏次数",
+                        title: "FPS refers to screenshots taken per second",
                         icon: <InformationCircleIcon style={{cursor: "auto"}} />
                     }}
                     name='Framerate'
@@ -139,8 +139,8 @@ export const ScrecorderModal: React.FC<ScrecorderModalProp> = React.memo((props)
                     <YakitSelect options={FramerateData} disabled={disabled} />
                 </Form.Item>
                 <Form.Item
-                    label='倍速'
-                    help='直接录制倍速视频，免视频后期处理'
+                    label='Speed-up'
+                    help='Record sped-up videos directly, no post-processing needed'
                     name='CoefficientPTS'
                 >
                     <YakitSelect options={CoefficientPTSData} disabled={disabled} />
@@ -149,18 +149,18 @@ export const ScrecorderModal: React.FC<ScrecorderModalProp> = React.memo((props)
                     <Form.Item noStyle valuePropName='checked' name='DisableMouse'>
                         <YakitSwitch size='large' disabled={disabled} />
                     </Form.Item>
-                    鼠标捕捉
+                    Mouse Capture
                 </div>
                 {footer ? (
                     footer
                 ) : (
                     <div className={styles["footer-btns"]}>
                         <YakitButton type='outline2' size='large' onClick={() => onClose()}>
-                            取消
+                            Cancel
                         </YakitButton>
                         <YakitButton htmlType='submit' type='primary' size='large'>
                             <PlayIcon style={{height: 16}} />
-                            开始录屏
+                            Start Recording
                         </YakitButton>
                     </div>
                 )}

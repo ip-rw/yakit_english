@@ -6,16 +6,16 @@ import {useMemoizedFn} from "ahooks"
 import emiter from "@/utils/eventBus/eventBus"
 import {webFuzzerTabs} from "./WebFuzzerPage"
 
-/**只包裹序列 */
+/**Only Wrap Sequence */
 const FuzzerSequenceWrapper: React.FC<FuzzerSequenceWrapperProps> = React.memo((props) => {
-    /**点击切换tab，带其他操作 */
+    /**Click Switch Tab, With Additional Actions */
     const onSetType = useMemoizedFn((key: WebFuzzerType) => {
         switch (key) {
             case "sequence":
                 break
             default:
                 emiter.emit("sendSwitchSequenceToMainOperatorContent", JSON.stringify({type: key}))
-                // 先切换展示的tab再发送事件,切换【配置】/【规则】tab 得选中type
+                // 标签切换&发送事件, 配置切换】/【活动标签规则类型
                 emiter.emit("sequenceSendSwitchTypeToFuzzer", JSON.stringify({type: key}))
                 break
         }

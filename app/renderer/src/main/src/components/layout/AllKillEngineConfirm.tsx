@@ -17,11 +17,11 @@ export interface AllKillEngineConfirmProps {
     setVisible: (flag: boolean) => any
     onSuccess: () => any
 }
-/** 更新引擎-确认二次弹窗和kill操作 */
+/** Update Engine - Confirm Again and Kill */
 export const AllKillEngineConfirm: React.FC<AllKillEngineConfirmProps> = React.memo((props) => {
     const {
-        title = "更新引擎，需关闭所有本地进程",
-        content = "关闭所有引擎，包括正在连接的本地引擎进程，同时页面将进入加载页。",
+        title = "Update Engine, Close All Local Processes",
+        content = "关闭所有引擎和活动的本地程序，页面将加载。",
         visible,
         setVisible,
         onSuccess
@@ -49,7 +49,7 @@ export const AllKillEngineConfirm: React.FC<AllKillEngineConfirmProps> = React.m
                 if (+hosts[1]) setCurrentPort(+hosts[1] || 0)
             })
             .catch((e) => {
-                failed(`获取连接引擎端口错误 ${e}`)
+                failed(`Get Engine Port Error ${e}`)
             })
             .finally(() => {
                 ipcRenderer
@@ -80,14 +80,14 @@ export const AllKillEngineConfirm: React.FC<AllKillEngineConfirmProps> = React.m
 
     const onExecute = useMemoizedFn(async () => {
         if (process.length === 0) {
-            warn("未识别到已启动的引擎进程")
+            warn("No Engine Process Detected")
             onLoadingToFalse()
             return
         }
 
         const currentPS = process.find((item) => +item.port === currentPort)
         const otherPS = process.filter((item) => +item.port !== currentPort)
-        /** 关闭是否正常进行标识位 */
+        /** Close Normal Indicator */
         let killFlag: string = ""
 
         if (otherPS.length > 0) {
@@ -96,7 +96,7 @@ export const AllKillEngineConfirm: React.FC<AllKillEngineConfirmProps> = React.m
                     killFlag = await ipcRenderer.invoke("kill-yak-grpc", i.pid)
                 } catch (error) {}
                 if (!!killFlag) {
-                    failed(`引擎进程(pid:${i.pid},port:${i.port})关闭失败 ${killFlag}`)
+                    failed(`Engine Process (pid:${i.pid},port:${i.port})Close Failed ${killFlag}`)
                     onLoadingToFalse()
                     return
                 } else {
@@ -110,7 +110,7 @@ export const AllKillEngineConfirm: React.FC<AllKillEngineConfirmProps> = React.m
                 killFlag = await ipcRenderer.invoke("kill-yak-grpc", currentPS.pid)
             } catch (error) {}
             if (!!killFlag) {
-                failed(`引擎进程(pid:${currentPS.pid},port:${currentPS.port})关闭失败 ${killFlag}`)
+                failed(`Engine Process (pid:${currentPS.pid},port:${currentPS.port})Close Failed ${killFlag}`)
                 onLoadingToFalse()
                 return
             }
@@ -129,7 +129,7 @@ export const AllKillEngineConfirm: React.FC<AllKillEngineConfirmProps> = React.m
     const {delTemporaryProject} = useTemporaryProjectStore()
 
     const onOK = useMemoizedFn(async () => {
-        // 删掉临时项目
+        // Delete Temp Project
         await delTemporaryProject()
         fetchProcess(() => {
             onExecute()
@@ -140,12 +140,12 @@ export const AllKillEngineConfirm: React.FC<AllKillEngineConfirmProps> = React.m
         <YakitHint
             visible={visible}
             heardIcon={loading ? <OutlineLoadingIcon className={styles["icon-rotate-animation"]} /> : undefined}
-            title={loading ? "进程关闭中，请稍等 ..." : title}
+            title={loading ? "Closing Process, Please Wait ..." : title}
             content={content}
-            okButtonText='立即关闭'
+            okButtonText='Close Now'
             okButtonProps={{loading: loading}}
             onOk={onOK}
-            cancelButtonText='稍后再说'
+            cancelButtonText='Later'
             cancelButtonProps={{loading: loading}}
             onCancel={onCancel}
         />

@@ -32,20 +32,20 @@ export const DemoPacketTable: React.FC<DemoPacketTableProp> = (props) => {
                         colRender: (item) => item.Id
                     },
                     {
-                        headerTitle: "来源",
+                        headerTitle: "Source",
                         key: "source",
                         width: 160,
                         colRender: (i) => i.NetworkEndpointIPSrc + ":" + i.TransportEndpointPortSrc
                     },
                     {
-                        headerTitle: "目标",
+                        headerTitle: "Target",
                         key: "destination",
                         width: 160,
                         colRender: (i) => i.NetworkEndpointIPDst + ":" + i.TransportEndpointPortDst
                     },
-                    {headerTitle: "协议", key: "Protocol", width: 160, colRender: (i) => i.Protocol},
-                    {headerTitle: "长度", key: "Length", width: 80, colRender: (i) => (i.Raw || []).length},
-                    {headerTitle: "信息", key: "Info", width: 160, colRender: (i) => i.Info}
+                    {headerTitle: "Protocol", key: "Protocol", width: 160, colRender: (i) => i.Protocol},
+                    {headerTitle: "Length", key: "Length", width: 80, colRender: (i) => (i.Raw || []).length},
+                    {headerTitle: "Info", key: "Info", width: 160, colRender: (i) => i.Info}
                 ]}
                 rowClick={(data) => {
                     onSelectFun(data)
@@ -53,7 +53,7 @@ export const DemoPacketTable: React.FC<DemoPacketTableProp> = (props) => {
                 loadMore={(data: TrafficPacket | undefined) => {
                     return new Promise((resolve, reject) => {
                         if (!data) {
-                            // info("加载初始化数据")
+                            // info("Load Init Data")
                             ipcRenderer
                                 .invoke("QueryTrafficPacket", {
                                     TimestampNow: props.fromTimestamp,

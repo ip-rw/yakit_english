@@ -130,8 +130,8 @@ export const PortTable: React.FC<PortTableProps> = React.memo(
             }
         }, interval)
         /**
-         * 1.获取所有数据，带查询条件
-         * 2.获取数据总数，因为有BeforeId/AfterId字段查询回来的总数并不是真正的总数
+         * 1.Get All Data with Filters
+         * 2.Get Total Count due to BeforeId/Total Count from AfterId Query Not Actual Count
          */
         const getAllData: () => Promise<QueryGeneralResponse<PortAsset>> = useMemoizedFn(() => {
             return new Promise((resolve, reject) => {
@@ -174,7 +174,7 @@ export const PortTable: React.FC<PortTableProps> = React.memo(
             })
         })
 
-        /**搜索，刷新数据 */
+        /**Search, Refresh Data */
         const onRefreshData = useMemoizedFn(() => {
             limitRef.current = defLimitRef.current
             setOffsetDataInTop([])
@@ -186,7 +186,7 @@ export const PortTable: React.FC<PortTableProps> = React.memo(
             return tableRef.current?.containerRef?.scrollTop || 0
         })
 
-        /**滚动加载数据 */
+        /**Scroll Load Data */
         const update = useDebounceFn(
             (init?: boolean) => {
                 const params: QueryPortsRequest = {
@@ -215,14 +215,14 @@ export const PortTable: React.FC<PortTableProps> = React.memo(
                         const d = init ? rsp.Data : response.Data.concat(rsp.Data)
                         prePage.current += 1
                         if (init) {
-                            // 初始数据回来后，再开始刷新实时数据
+                            // Refresh Real-Time Data After Initial Data
                             setInterval(1000)
                         }
                         setResponse({
                             Total: 0,
                             Pagination: {
                                 ...rsp.Pagination,
-                                Page: prePage.current // 虚假的page，只是为了让表格滚动加载下一页数据
+                                Page: prePage.current // Dummy Page for Table Scroll Load Next Page
                             },
                             Data: d
                         })
@@ -245,7 +245,7 @@ export const PortTable: React.FC<PortTableProps> = React.memo(
             },
             {wait: 200, leading: true}
         ).run
-        /**获取滚动条在顶部的数据 */
+        /**Get Data at Top of Scroll */
         const getIncrementInTop = useMemoizedFn(() => {
             const params: QueryPortsRequest = {
                 ...query,
@@ -258,13 +258,13 @@ export const PortTable: React.FC<PortTableProps> = React.memo(
                 AfterId: afterId.current ? afterId.current : undefined
             }
             if (query.Pagination.Order === "asc" || query.Pagination.OrderBy !== "id") {
-                // 升序时，顶部不实时刷新，避免数据混乱
-                // 排序字段为Id才实时刷新数据
+                // Ascending, No Real-Time Refresh at Top to Avoid Data Confusion
+                // Sort By Id for Real-Time Data Refresh
                 return
             }
             const scrollTop = getScrollTop()
             if (scrollTop < 10 && offsetDataInTop?.length > 0) {
-                // 滚动条滚动到顶部的时候，如果偏移缓存数据中有数据，第一次优先将缓存数据放在总的数据中
+                // Scroll to Top, First Prioritize Cache Data in Total Data if Offset Cache Has Data
                 setResponse({
                     ...response,
                     Data: [...offsetDataInTop, ...response.Data]
@@ -301,7 +301,7 @@ export const PortTable: React.FC<PortTableProps> = React.memo(
         const columns: ColumnsTypeProps[] = useMemo<ColumnsTypeProps[]>(() => {
             return [
                 {
-                    title: "序号",
+                    title: "Index",
                     dataKey: "Id",
                     fixed: "left",
                     ellipsis: false,
@@ -309,7 +309,7 @@ export const PortTable: React.FC<PortTableProps> = React.memo(
                     enableDrag: false
                 },
                 {
-                    title: "网络地址",
+                    title: "Network Address",
                     dataKey: "Host",
                     // fixed: "left",
                     render: (text) => (
@@ -320,19 +320,19 @@ export const PortTable: React.FC<PortTableProps> = React.memo(
                     )
                 },
                 {
-                    title: "端口",
+                    title: "Port",
                     dataKey: "Port",
                     width: 100,
                     render: (text) => <YakitTag color='blue'>{text}</YakitTag>
                 },
                 {
-                    title: "协议",
+                    title: "Protocol",
                     dataKey: "Proto",
                     width: 100,
                     render: (text) => <YakitTag color='success'>{text}</YakitTag>
                 },
                 {
-                    title: "服务指纹",
+                    title: "Service Fingerprint",
                     dataKey: "ServiceType"
                 },
                 {
@@ -350,12 +350,12 @@ export const PortTable: React.FC<PortTableProps> = React.memo(
                                     })
                                 }}
                             />
-                            <span className={styles["valid-data"]}>有效数据</span>
+                            <span className={styles["valid-data"]}>Valid Data</span>
                         </div>
                     )
                 },
                 {
-                    title: "最近更新时间",
+                    title: "Last Updated Time",
                     dataKey: "UpdatedAt",
                     fixed: "right",
                     sorterProps: {
@@ -366,7 +366,7 @@ export const PortTable: React.FC<PortTableProps> = React.memo(
                 }
             ]
         }, [query.TitleEffective])
-        /**导出数据 */
+        /**Data Export */
         const getData = useMemoizedFn(() => {
             return new Promise((resolve, reject) => {
                 let exportData: PortAsset[] = []
@@ -395,10 +395,10 @@ export const PortTable: React.FC<PortTableProps> = React.memo(
         const menuData: YakitMenuItemType[] = useMemo(() => {
             return [
                 {
-                    label: "发送到漏洞检测",
+                    label: "Send To Vulnerability Detection",
                     key: "bug-test"
                 },
-                {label: "发送到爆破", key: "brute"}
+                {label: "Send To Brute Force", key: "brute"}
             ]
         }, [])
         const onRowContextMenu = useMemoizedFn(
@@ -423,7 +423,7 @@ export const PortTable: React.FC<PortTableProps> = React.memo(
                 openExternalPage(key, urls)
             }
         })
-        /**发送到其他页面 */
+        /**Send To Other Page */
         const openExternalPage = useMemoizedFn((key, urls) => {
             switch (key) {
                 case "brute":
@@ -458,7 +458,7 @@ export const PortTable: React.FC<PortTableProps> = React.memo(
                 sort.order = "desc"
                 sort.orderBy = "id"
             }
-            setOffsetDataInTop([]) // 排序条件变化，清空缓存的实时数据
+            setOffsetDataInTop([]) // Sort Criteria Change, Clear Real-Time Cache
             setIsRefresh(!isRefresh)
             setQuery({
                 ...query,
@@ -470,7 +470,7 @@ export const PortTable: React.FC<PortTableProps> = React.memo(
             })
             limitRef.current = defLimitRef.current
         })
-        /**table所在的div大小发生变化 */
+        /**Div Size of Table Changed */
         const onTableResize = useMemoizedFn((width, height) => {
             if (!height) {
                 return
@@ -483,7 +483,7 @@ export const PortTable: React.FC<PortTableProps> = React.memo(
                 update(true)
                 return
             } else if (tableBodyHeightRef.current <= height) {
-                // 窗口由小变大时 重新拉取数据
+                // Fetch Data on Resize
                 const length = response.Data.length
                 const h = length * tableCellHeight
                 if (h < height) {
@@ -539,7 +539,7 @@ export const PortTable: React.FC<PortTableProps> = React.memo(
                                                 type: "outline2"
                                             }}
                                             getData={getData}
-                                            text='导出全部'
+                                            text='Export All'
                                         />
                                         {!isEnpriTraceAgent() && (
                                             <YakitDropdownMenu
@@ -562,7 +562,7 @@ export const PortTable: React.FC<PortTableProps> = React.memo(
                                                     disabled={selectNum === 0}
                                                     size={btnSize}
                                                 >
-                                                    发送到...
+                                                    Send To...
                                                 </YakitButton>
                                             </YakitDropdownMenu>
                                         )}

@@ -16,7 +16,7 @@ import {YakitTimeLineItemIcon} from "./icon"
 
 import styles from "./YakitTimeLineList.module.scss"
 
-/** 列表状态信息初始值 */
+/** List State Initial Value */
 const DefaultState: YakitVirtualListProps = {
     viewHeight: 0,
     listHeight: 0,
@@ -25,16 +25,16 @@ const DefaultState: YakitVirtualListProps = {
     preLen: 0
 }
 
-/** @name time-line的单项高度默认值为44px */
+/** @name Default height of a single item in time-line is 44px */
 const DefaultItemHeight = 44
 
 /**
- * @name 单项不定高的虚拟列表-时间轴
- * 注意：
- * 该组件只支持数据的增加，不支持数据的删除|换位，后续操作可能不会对视图进行更新
+ * @Name VarHeight VirtualList - Timeline
+ * Note：
+ * Comp Supports Only Data Addition, Not Deletion|Swap, No View Update in Subsequent Ops
  *
- * 因为不定高虚拟列表自身无法计算传入数据的数量由多变少时的逻辑,
- * 所以需要使用者手动清空虚拟列表的位置状态信息(参考方法：onClear)
+ * Indef-H VirtualList Can't Auto-Calc Data Qty Reduction,
+ * Thus, Users Must Manually Clear VirtualList Position Info (See Method: onClear))
  */
 export const YakitTimeLineList: <T>(props: YakitTimeLineListProps<T>) => any = memo(
     forwardRef((props, ref) => {
@@ -72,33 +72,33 @@ export const YakitTimeLineList: <T>(props: YakitTimeLineListProps<T>) => any = m
         const wrapperRef = useRef<HTMLDivElement>(null)
         const bodyRef = useRef<HTMLDivElement>(null)
 
-        /** 记录单项的位置信息 */
+        /** Record Item Position */
         const positions = useRef<YakitVirtualListPositionProps[]>([])
 
-        /** 基础信息 */
+        /** Base Info */
         const [state, setState] = useState<YakitVirtualListProps>({...DefaultState})
-        /** 最新的基础信息 */
+        /** Latest Base Info */
         const latestState = useRef<YakitVirtualListProps>({...DefaultState})
         const handleSetState = useMemoizedFn((value: YakitVirtualListProps) => {
             latestState.current = {...value}
             setState({...value})
         })
 
-        // 视口最后一个单项的索引
+        // Last Viewport Index
         const endIndex = useMemo(() => {
             return Math.min(dataSource.length, state.startIndex + state.maxCount)
         }, [dataSource, state.startIndex, state.maxCount])
-        // 视口渲染列表的数据
+        // Viewport Render List Data
         const renderList = useMemo(() => {
             return dataSource.slice(state.startIndex, endIndex)
         }, [dataSource, state.startIndex, endIndex])
-        // 视口偏移位置
+        // Viewport Offset
         const offsetDis = useMemo(() => {
             if (positions.current.length === 0) return 0
             return state.startIndex > 0 ? positions.current[state.startIndex - 1].bottom : 0
         }, [state.startIndex])
 
-        // 滚动样式
+        // Scroll Style
         const scrollStyle = useMemo(() => {
             return {
                 height: `${state.listHeight - offsetDis}px`,
@@ -106,19 +106,19 @@ export const YakitTimeLineList: <T>(props: YakitTimeLineListProps<T>) => any = m
             } as CSSProperties
         }, [state.listHeight, offsetDis])
 
-        // 数据源改变的初始化
+        // Data Source Change Initialization
         useLayoutEffect(() => {
             initPosition()
         }, [dataSource])
-        // 数据源渲染后的实际数据收集
-        // 不加延时获取不到初始时的数据节点dom
+        // Actual Data Collection Post-DataSource Render
+        // Delay Needed to Access Initial Data Node DOM
         useEffect(() => {
             setTimeout(() => {
                 setPosition()
             }, 300)
         }, [dataSource])
 
-        // 初始化position信息
+        // Initialize Position Info
         const initPosition = useMemoizedFn(() => {
             const pos: YakitVirtualListPositionProps[] = []
             const disLen = dataSource.length - latestState.current.preLen
@@ -136,21 +136,21 @@ export const YakitTimeLineList: <T>(props: YakitTimeLineListProps<T>) => any = m
             positions.current = [...positions.current, ...pos]
             handleSetState({...latestState.current, preLen: dataSource.length})
         })
-        // 数据 item 渲染完成后，更新数据item的真实高度
+        // Update Actual Height Post Data Item Render
         const setPosition = useMemoizedFn(() => {
             if (!bodyRef || !bodyRef.current) return
             const nodes = bodyRef.current.children
             if (!nodes || !nodes.length) return
-            // positions被重置后触发视口的位置计算问题避免
+            // Trigger Viewport Position Calc on Position Reset
             if (positions.current.length === 0) return
 
-            // 视口第一个元素索引
+            // First Viewport Element Index
             let viewFirst: number = -1
             ;[...nodes].forEach((node) => {
                 const rect = node.getBoundingClientRect()
 
                 let key: number = -1
-                // 获取节点的索引
+                // Get Node Index
                 const {attributes} = node || {}
                 if (!attributes) return
                 for (let el of attributes) {
@@ -158,7 +158,7 @@ export const YakitTimeLineList: <T>(props: YakitTimeLineListProps<T>) => any = m
                         try {
                             let strs = el.value.split("-")
                             key = +strs[strs.length - 1] === 0 ? 0 : +strs[strs.length - 1] || -1
-                            // 供下面设置真实position使用
+                            // For Setting Real Position Below
                             if (viewFirst === -1 && key !== -1) viewFirst = key
                         } catch (error) {}
                         break
@@ -190,7 +190,7 @@ export const YakitTimeLineList: <T>(props: YakitTimeLineListProps<T>) => any = m
             }
             handleSetState({...latestState.current, listHeight: positions.current[len - 1].bottom})
 
-            // 数据不足以撑满页面时，自动加载更多
+            // Auto-load More on Insufficient Data to Fill Page
             if (wrapperRef && wrapperRef.current) {
                 try {
                     const rect = wrapperRef.current.getBoundingClientRect()
@@ -205,7 +205,7 @@ export const YakitTimeLineList: <T>(props: YakitTimeLineListProps<T>) => any = m
             setPosition()
         }, [state.startIndex])
 
-        // 滚动事件
+        // Scroll Event
         const handleScroll = useMemoizedFn(() => {
             if (wrapperRef && wrapperRef.current) {
                 const {scrollTop, clientHeight, scrollHeight} = wrapperRef.current
@@ -216,7 +216,7 @@ export const YakitTimeLineList: <T>(props: YakitTimeLineListProps<T>) => any = m
                 }
             }
         })
-        // 二分法查找 startIndex
+        // Binary Search for startIndex
         const binarySearch = (list: YakitVirtualListPositionProps[], value: number) => {
             let left = 0,
                 right = list.length - 1,
@@ -234,7 +234,7 @@ export const YakitTimeLineList: <T>(props: YakitTimeLineListProps<T>) => any = m
             return templateIndex === -1 ? 0 : templateIndex
         }
 
-        // 初始化 基础信息
+        // Initialize Base Info
         const init = useMemoizedFn(() => {
             if (wrapperRef && wrapperRef.current) {
                 const view = wrapperRef.current.offsetHeight || 0
@@ -283,7 +283,7 @@ export const YakitTimeLineList: <T>(props: YakitTimeLineListProps<T>) => any = m
                             <YakitSpin spinning={true} wrapperClassName={styles["spin-style"]} />
                         </div>
                     )}
-                    {!loading && !hasMore && <div className={styles["time-line-item-bottom"]}>已经到底啦 ~</div>}
+                    {!loading && !hasMore && <div className={styles["time-line-item-bottom"]}>Reached Bottom ~</div>}
                 </div>
             </div>
         )

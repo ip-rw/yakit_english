@@ -4,7 +4,7 @@ const {USER_INFO, HttpSetting} = require("../state")
 const {templateStr} = require("./wechatWebTemplate/index")
 const urltt = require("url")
 const http = require("http")
-// http 服务
+// HTTP Service
 let server = null
 module.exports = (win, getClient) => {
     const commonSignIn = (res) => {
@@ -41,7 +41,7 @@ module.exports = (win, getClient) => {
         USER_INFO.companyName = user.companyName
         USER_INFO.companyHeadImg = user.companyHeadImg
         win.webContents.send("fetch-signin-token", user)
-        win.webContents.send("fetch-signin-data", {ok: true, info: "登录成功"})
+        win.webContents.send("fetch-signin-data", {ok: true, info: "Login Successful"})
     }
 
     // login modal
@@ -86,7 +86,7 @@ module.exports = (win, getClient) => {
                 const wxCode = params.get("code")
                 if (!wxCode) {
                     authWindow.webContents.session.clearStorageData()
-                    win.webContents.send("fetch-signin-data", {ok: false, info: "code获取失败,请重新登录！"})
+                    win.webContents.send("fetch-signin-data", {ok: false, info: "Failed to Retrieve Code, Please Login Again！"})
                     authWindow.close()
                     return
                 }
@@ -97,7 +97,7 @@ module.exports = (win, getClient) => {
                             authWindow.webContents.session.clearStorageData()
                             win.webContents.send("fetch-signin-data", {
                                 ok: false,
-                                info: res.data.reason || "请求异常，请重新登录！"
+                                info: res.data.reason || "Request error, please login again！"
                             })
                             authWindow.close()
                             return
@@ -109,7 +109,7 @@ module.exports = (win, getClient) => {
                     })
                     .catch((err) => {
                         authWindow.webContents.session.clearStorageData()
-                        win.webContents.send("fetch-signin-data", {ok: false, info: "登录错误:" + err})
+                        win.webContents.send("fetch-signin-data", {ok: false, info: "Login Error:" + err})
                         authWindow.close()
                     })
             })
@@ -121,7 +121,7 @@ module.exports = (win, getClient) => {
         }
         if (type === "github") {
             if (server) {
-                // 关闭之前 HTTP 服务器
+                // Shutdown Previous HTTP Server
                 server.close()
             }
             server = http
@@ -132,7 +132,7 @@ module.exports = (win, getClient) => {
                         res.end()
                     } else if (pathname === "/judgeSignin") {
                         const {query} = urltt.parse(req.url, true)
-                        // 处理回调的逻辑
+                        // Process Callback Logic
                         const ghCode = query.code
                         if (!ghCode) {
                             res.end(
@@ -150,7 +150,7 @@ module.exports = (win, getClient) => {
                                     if (resp.code !== 200) {
                                         win.webContents.send("fetch-signin-data", {
                                             ok: false,
-                                            info: resp.data.reason || "请求异常，请重新登录！"
+                                            info: resp.data.reason || "Request error, please login again！"
                                         })
                                         res.end(
                                             JSON.stringify({
@@ -169,7 +169,7 @@ module.exports = (win, getClient) => {
                                     resolve()
                                 })
                                 .catch((err) => {
-                                    win.webContents.send("fetch-signin-data", {ok: false, info: "登录错误:" + err})
+                                    win.webContents.send("fetch-signin-data", {ok: false, info: "Login Error:" + err})
                                     res.end(
                                         JSON.stringify({
                                             login: false
@@ -179,11 +179,11 @@ module.exports = (win, getClient) => {
                                 })
                         })
                     } else if (pathname === "/goback") {
-                        // 方法1（效果未实现）
+                        // Method 1 (Not Implemented）
                         // win.blur()
                         // win.focus()
                         // win.moveTop()
-                        // 方法2
+                        // Method 2
                         win.setAlwaysOnTop(true)
                         setTimeout(() => {
                             win.setAlwaysOnTop(false)
@@ -191,7 +191,7 @@ module.exports = (win, getClient) => {
                         win.show()
                         res.statusCode = 200
                         res.end()
-                        // 关闭 HTTP 服务器
+                        // Shutdown HTTP Server
                         server.close()
                     }
 
@@ -235,7 +235,7 @@ module.exports = (win, getClient) => {
         USER_INFO.companyName = user.companyName
         USER_INFO.companyHeadImg = user.companyHeadImg
         win.webContents.send("fetch-signin-token", user)
-        win.webContents.send("fetch-signin-data", {ok: true, info: "登录成功"})
+        win.webContents.send("fetch-signin-data", {ok: true, info: "Login Successful"})
 
         return new Promise((resolve, reject) => {
             resolve({next: true})
@@ -244,7 +244,7 @@ module.exports = (win, getClient) => {
 
     ipcMain.on("company-refresh-in", (event) => {
         win.webContents.send("fetch-signin-token", USER_INFO)
-        win.webContents.send("fetch-signin-data", {ok: true, info: "登录成功"})
+        win.webContents.send("fetch-signin-data", {ok: true, info: "Login Successful"})
     })
 
     ipcMain.handle("get-login-user-info", async (e) => {
@@ -269,7 +269,7 @@ module.exports = (win, getClient) => {
         USER_INFO.companyName = null
         USER_INFO.companyHeadImg = null
         win.webContents.send("login-out")
-        // 企业版为强制登录 - 退出登录则需重新回到登录页
+        // Enterprise Mandatory Login - Logout Requires Return to Login Page
         if(arg?.isEnpriTrace){
             win.webContents.send("again-judge-license-login")
         }
@@ -296,8 +296,8 @@ module.exports = (win, getClient) => {
     ipcMain.on("edit-baseUrl", (event, arg) => {
         HttpSetting.httpBaseURL = arg.baseUrl
         USER_INFO.token = ''
-        win.webContents.send("edit-baseUrl-status", {ok: true, info: "更改成功"})
-        win.webContents.send("refresh-new-home", {ok: true, info: "刷新成功"})
+        win.webContents.send("edit-baseUrl-status", {ok: true, info: "Update Successful"})
+        win.webContents.send("refresh-new-home", {ok: true, info: "Refresh Successful"})
     })
 
     ipcMain.handle("reset-password", (event, arg) => {

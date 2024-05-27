@@ -27,7 +27,7 @@ export const DataCompare: React.FC<DataCompareProps> = (props) => {
     const codeComparisonRef = useRef<any>(null)
     return (
         <AutoCard
-            title={"数据对比"}
+            title={"Data Comparison"}
             bodyStyle={{ padding: 0 }}
             bordered={false}
             extra={
@@ -66,7 +66,7 @@ export const DataCompareModal : React.FC<DataCompareModalProps> = (props) => {
     return (
         <div className={styles['data-compare-modal']}>
             <div className={styles['header']}>
-                <div className={styles['title']}>代码对比</div>
+                <div className={styles['title']}>Code Comparison</div>
                 <div className={styles['close']}>
                    <RemoveIcon onClick={()=>onClose()}/> 
                 </div>
@@ -85,8 +85,8 @@ export const DataCompareModal : React.FC<DataCompareModalProps> = (props) => {
                 </div>
             </div>
             {/* <div className={styles['footer']}>
-                <YakitButton type="outline2" onClick={()=>onClose()}>取消</YakitButton>
-                <YakitButton>合并</YakitButton>
+                <YakitButton type="outline2" onClick={()=>onClose()}>Cancel</YakitButton>
+                <YakitButton>Merge</YakitButton>
             </div> */}
         </div>
     )
@@ -112,7 +112,7 @@ export const CodeComparison: React.FC<CodeComparisonProps> = React.forwardRef((p
     const diffEditorRef = useRef<monacoEditor.editor.IStandaloneDiffEditor>()
     const [language, setLanguage] = useState<string>("")
     useImperativeHandle(ref, () => ({
-        // 减少父组件获取的DOM元素属性,只暴露给父组件需要用到的方法
+        // Reduce parent component's DOM attributes, only expose needed methods to parent
         onChangeLineConversion: (newVal) => {
             changeLineConversion()
         }
@@ -151,12 +151,12 @@ export const CodeComparison: React.FC<CodeComparisonProps> = React.forwardRef((p
         })
     }
     useEffect(() => {
-        //如果存在先销毁以前的组件
+        //If exists, destroy previous component
         if (diffEditorRef.current) diffEditorRef.current.dispose()
         ipcRenderer
             .invoke("create-compare-token")
             .then((res) => {
-                // 获取生成diff组件的ref
+                // Get ref for generating diff component
                 if (!diffDivRef || !diffDivRef.current) return
 
                 const diff = diffDivRef.current as unknown as HTMLDivElement

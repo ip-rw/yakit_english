@@ -18,7 +18,7 @@ const PluginsGridCheck = () => (
     </svg>
 )
 /**
- * @description  插件列表页面/网格布局/勾选icon
+ * @description  Plugin List Page/Grid Layout/Checkbox Icon
  */
 export const PluginsGridCheckIcon = (props: Partial<IconProps>) => {
     return <Icon component={PluginsGridCheck} {...props} />
@@ -36,7 +36,7 @@ const PluginTestError = () => (
     </svg>
 )
 /**
- * @description  icon/log 节点状态/错误 Error
+ * @description  icon/log  Node Status/Error  Error
  */
 export const PluginTestErrorIcon = (props: Partial<IconProps>) => {
     return <Icon component={PluginTestError} {...props} />
@@ -54,7 +54,7 @@ const PluginTestWarning = () => (
     </svg>
 )
 /**
- * @description  icon/log 节点状态/警告 Warning
+ * @description  icon/log  Node Status/Warning  Warning
  */
 export const PluginTestWarningIcon = (props: Partial<IconProps>) => {
     return <Icon component={PluginTestWarning} {...props} />

@@ -5,7 +5,7 @@ import {YakitSpin} from "@/components/yakitUI/YakitSpin/YakitSpin"
 
 import "../demoStyle.scss"
 
-/** @name 自动加载的虚拟表格 */
+/** @Autoload Virtual Table */
 export const DemoVirtualTable: <T>(props: VirtualTableProps<T>) => any = memo((p) => {
     const {
         isHideHeader = false,
@@ -40,9 +40,9 @@ export const DemoVirtualTable: <T>(props: VirtualTableProps<T>) => any = memo((p
         overscan: 300
     })
 
-    // 滚动条置底|置顶
+    // Scrollbar to Bottom|Scroll to Top
     const onScrollY = useMemoizedFn((isBottom: boolean) => {
-        // 触底更新时才有滚动条不跟随更新效果
+        // Scrollbar Update Only on Reach Bottom
         if (!isTopLoadMore && !isScrollUpdate) return
 
         if (isBottom) {
@@ -78,11 +78,11 @@ export const DemoVirtualTable: <T>(props: VirtualTableProps<T>) => any = memo((p
                 }, 300)
             })
     })
-    // 是否中断自动请求
+    // Interrupt Auto-Request
     const isBreakRef = useRef<boolean>(false)
 
     const timeRef = useRef<any>(null)
-    // 清除计时器
+    // Clear Timer
     const clearTime = useMemoizedFn(() => {
         if (timeRef.current) {
             clearInterval(timeRef.current)
@@ -102,7 +102,7 @@ export const DemoVirtualTable: <T>(props: VirtualTableProps<T>) => any = memo((p
         }
     }, [isStop])
 
-    // 开发模式生效，防止因热加载清空数据引起的UI样式缓存问题
+    // Effective in Dev Mode, Prevents UI Style Cache Issues Due to Hot Reload Data Reset
     useEffect(() => {
         if (containerRef?.current) {
             if (containerRef.current.scrollTop > data.length * 40 + 80) {
@@ -113,12 +113,12 @@ export const DemoVirtualTable: <T>(props: VirtualTableProps<T>) => any = memo((p
         }
     })
 
-    // 外界手动清空数据
+    // Externally Clear Data
     useEffect(() => {
         setData([])
     }, [triggerClear])
 
-    // 设置|取消定时器
+    // Settings|Cancel Timer
     const setTime = useMemoizedFn((isSet: boolean) => {
         if (isSet) {
             if (isStop) return
@@ -131,11 +131,11 @@ export const DemoVirtualTable: <T>(props: VirtualTableProps<T>) => any = memo((p
             isBreakRef.current = true
         }
     })
-    // 滚动事件(节流)
+    // Scroll Event (Throttle)
     const onScrollCapture = useThrottleFn(
         () => {
             if (containerRef && containerRef.current) {
-                // 触底更新时才有滚动条不跟随更新效果
+                // Scrollbar Update Only on Reach Bottom
                 if (!isTopLoadMore && !isScrollUpdate) return
 
                 const {scrollTop, clientHeight, scrollHeight} = fetchListHeight()
@@ -173,7 +173,7 @@ export const DemoVirtualTable: <T>(props: VirtualTableProps<T>) => any = memo((p
             <div className='list-body'>
                 <div ref={containerRef} className='list-container' onScroll={() => onScrollCapture.run()}>
                     <div ref={wrapperRef}>
-                        {!loading && data.length === 0 && <div className={"no-more-wrapper"}>暂无数据</div>}
+                        {!loading && data.length === 0 && <div className={"no-more-wrapper"}>No Data Available</div>}
                         {/* {isTopLoadMore && loading && (
                             <div className='loading-wrapper'>
                                 <YakitSpin className='loading-style' />

@@ -57,14 +57,14 @@ export const PluginsOnlineDetail: React.FC<PluginsOnlineDetailProps> = (props) =
     const [selectList, setSelectList] = useState<string[]>(defaultSelectList)
     const [filters, setFilters] = useState<PluginFilterParams>(cloneDeep(defaultFilter))
 
-    // 因为组件 RollingLoadList 的定向滚动功能初始不执行，所以设置一个初始变量跳过初始状态
+    // Skip initial state due to non-execution of directional scroll in RollingLoadList
     const [scrollTo, setScrollTo] = useState<number>(0)
 
     const [plugin, setPlugin] = useState<YakitPluginOnlineDetail>()
 
     const userInfo = useStore((s) => s.userInfo)
 
-    // 选中插件的数量
+    // Selected Plugin Count
     const selectNum = useMemo(() => {
         if (allCheck) return response.pagemeta.total
         else return selectList.length
@@ -73,18 +73,18 @@ export const PluginsOnlineDetail: React.FC<PluginsOnlineDetailProps> = (props) =
     useEffect(() => {
         if (info) {
             setPlugin({...info})
-            // 必须加上延时，不然本次操作会成为组件(RollingLoadList)的初始数据
+            // Add delay to prevent operation from being initial data for RollingLoadList
             setTimeout(() => {
                 setScrollTo(currentIndex)
             }, 100)
         } else setPlugin(undefined)
     }, [info])
-    /**去使用，跳转到本地插件详情页面 */
+    /**Go to Use, Navigate to Local Plugin Details */
     const onUse = useMemoizedFn(() => {
         if (!plugin) return
         onlineUseToLocalDetail(plugin.uuid, "online")
     })
-    // 返回
+    // Back
     const onPluginBack = useMemoizedFn(() => {
         onBack({
             search,
@@ -110,7 +110,7 @@ export const PluginsOnlineDetail: React.FC<PluginsOnlineDetailProps> = (props) =
         }
     })
     const onCommentClick = useMemoizedFn(() => {
-        yakitNotify("success", "评论~~~")
+        yakitNotify("success", "Comment~~~")
     })
     const onDownloadClick = useMemoizedFn(() => {
         if (plugin) {
@@ -120,23 +120,23 @@ export const PluginsOnlineDetail: React.FC<PluginsOnlineDetailProps> = (props) =
             setPlugin({...newDownloadItem})
         }
     })
-    /** 单项勾选|取消勾选 */
+    /** Single-Select|Deselect */
     const optCheck = useMemoizedFn((data: YakitPluginOnlineDetail, value: boolean) => {
         try {
-            // 全选情况时的取消勾选
+            // Fetch loading char with regex
             if (allCheck) {
                 setSelectList(response.data.map((item) => item.uuid).filter((item) => item !== data.uuid))
                 setAllCheck(false)
                 return
             }
-            // 单项勾选回调
+            // No history fetched if CS or vuln unselected by user
             if (value) setSelectList([...selectList, data.uuid])
             else setSelectList(selectList.filter((item) => item !== data.uuid))
         } catch (error) {
-            yakitNotify("error", "勾选失败:" + error)
+            yakitNotify("error", "Auto-rename to first QA if unchanged:" + error)
         }
     })
-    /**全选 */
+    /**Fixes failure to iterate load_content on missing older version data */
     const onCheck = useMemoizedFn((value: boolean) => {
         setSelectList([])
         setAllCheck(value)
@@ -151,7 +151,7 @@ export const PluginsOnlineDetail: React.FC<PluginsOnlineDetailProps> = (props) =
             onCheck(false)
         })
     })
-    /**转换group参数*/
+    /**Convert Group Parameter*/
     const convertGroupParam = (filter: PluginFilterParams, extra: {group: YakFilterRemoteObj[]}) => {
         const realFilters: PluginFilterParams = {
             ...filter,
@@ -165,21 +165,21 @@ export const PluginsOnlineDetail: React.FC<PluginsOnlineDetailProps> = (props) =
         setAllCheck(false)
         setSelectList([])
     })
-    /** 新建插件 */
+    /** Create Plugin */
     const onNewAddPlugin = useMemoizedFn(() => {
         emiter.emit(
             "openPage",
             JSON.stringify({route: YakitRoute.AddYakitScript, params: {source: YakitRoute.Plugin_Store}})
         )
     })
-    /**搜索需要清空勾选 */
+    /**Clear Selection for Search */
     const onSearch = useMemoizedFn(() => {
         onDetailSearch(search, filters)
         setAllCheck(false)
         setSelectList([])
     })
 
-    /**选中组 */
+    /**Selected Group */
     const selectGroup = useMemo(() => {
         const group: YakFilterRemoteObj[] = cloneDeep(filters).plugin_group?.map((item: API.PluginsSearchData) => ({
             name: item.value,
@@ -191,7 +191,7 @@ export const PluginsOnlineDetail: React.FC<PluginsOnlineDetailProps> = (props) =
     if (!plugin) return null
     return (
         <PluginDetails<YakitPluginOnlineDetail>
-            title='插件商店'
+            title='Plugin Store'
             pageWrapId={wrapperId}
             filterNode={
                 <>
@@ -219,13 +219,13 @@ export const PluginsOnlineDetail: React.FC<PluginsOnlineDetailProps> = (props) =
                     {downloadLoading ? (
                         <LoadingOutlined className='loading-icon' />
                     ) : (
-                        <Tooltip title='下载插件' overlayClassName='plugins-tooltip'>
+                        <Tooltip title='Download Plugin' overlayClassName='plugins-tooltip'>
                             <YakitButton type='text2' icon={<OutlineClouddownloadIcon />} onClick={onDownload} />
                         </Tooltip>
                     )}
                     <div style={{height: 12}} className='divider-style'></div>
                     <YakitButton type='text' onClick={onNewAddPlugin}>
-                        新建插件
+                        Create Plugin
                     </YakitButton>
                 </div>
             }
@@ -274,7 +274,7 @@ export const PluginsOnlineDetail: React.FC<PluginsOnlineDetailProps> = (props) =
         >
             <div className={styles["details-content-wrapper"]}>
                 <PluginTabs tabPosition='right'>
-                    <TabPane tab='源 码' key='code'>
+                    <TabPane tab='Source Code' key='code'>
                         <div className={styles["plugin-info-wrapper"]}>
                             <PluginDetailHeader
                                 pluginName={plugin.script_name}
@@ -303,7 +303,7 @@ export const PluginsOnlineDetail: React.FC<PluginsOnlineDetailProps> = (props) =
                                         <FuncBtn
                                             maxWidth={1100}
                                             icon={<OutlineCursorclickIcon />}
-                                            name={"去使用"}
+                                            name={"Go to Use"}
                                             onClick={onUse}
                                         />
                                     </div>
@@ -323,7 +323,7 @@ export const PluginsOnlineDetail: React.FC<PluginsOnlineDetailProps> = (props) =
                             </div>
                         </div>
                     </TabPane>
-                    <TabPane tab='评论' key='comment'>
+                    <TabPane tab='Comment' key='comment'>
                         <div className={styles["plugin-comment-wrapper"]}>
                             <PluginDetailHeader
                                 pluginName={plugin.script_name}
@@ -353,7 +353,7 @@ export const PluginsOnlineDetail: React.FC<PluginsOnlineDetailProps> = (props) =
                                         <FuncBtn
                                             maxWidth={1100}
                                             icon={<OutlineCursorclickIcon />}
-                                            name={"去使用"}
+                                            name={"Go to Use"}
                                             onClick={onUse}
                                         />
                                     </div>
@@ -371,7 +371,7 @@ export const PluginsOnlineDetail: React.FC<PluginsOnlineDetailProps> = (props) =
                             <PluginComment isLogin={userInfo.isLogin} plugin={{...plugin}} />
                         </div>
                     </TabPane>
-                    <TabPane tab='日志' key='log'>
+                    <TabPane tab='Logs' key='log'>
                         <PluginLog uuid={plugin.uuid || ""} getContainer={wrapperId} />
                     </TabPane>
                 </PluginTabs>

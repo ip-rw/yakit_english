@@ -21,7 +21,7 @@ const ResponseCard: React.FC<ResponseCardProps> = React.memo((props) => {
     const [defaultResponseSearch, setDefaultResponseSearch] = useState<string>("")
     const [isRefresh, setIsRefresh] = useState<boolean>(false)
 
-    const [showExtra, setShowExtra] = useState<boolean>(false) // Response中显示payload和提取内容
+    const [showExtra, setShowExtra] = useState<boolean>(false) // Show payload and extract content in Response
     const [showResponseInfoSecondEditor, setShowResponseInfoSecondEditor] = useState<boolean>(true)
 
     const [extractedMap, {setAll, reset}] = useMap<string, string>()
@@ -129,7 +129,7 @@ const ResponseCard: React.FC<ResponseCardProps> = React.memo((props) => {
                         type='text2'
                         icon={<OutlineReplyIcon />}
                     >
-                        返回
+                        Back
                     </YakitButton>
                 </div>
             </div>

@@ -213,7 +213,7 @@ module.exports = (win, getClient) => {
         return await asyncResetRiskTableStats(params)
     })
 
-    /** 获取最新的风险与漏洞数据 */
+    /** Get latest risk and vulnerability data */
     const asyncFetchLatestRisk = (params) => {
         return new Promise((resolve, reject) => {
             getClient().QueryNewRisk(params, (err, data) => {
@@ -240,7 +240,7 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    /** 将单条/全部风险未读数据设置为已读 */
+    /** Copy single item/Mark all risk data as read */
     ipcMain.handle("set-risk-info-read", async (e, params) => {
         return await asyncSetRiskInfoRead(params)
     })
@@ -257,7 +257,7 @@ module.exports = (win, getClient) => {
         })
     }
 
-    /** 同步数据 */
+    /** Sync data */
     ipcMain.handle("upload-risk-to-online", async (e, params) => {
         return await asyncUploadRiskToOnline(params)
     })
@@ -310,20 +310,20 @@ module.exports = (win, getClient) => {
         return await asyncQueryReport(params)
     })
 
-    // 文件复制
+    // If folder exists, clear previous content
     const copyFileByDir = (src1, src2) => {
         return new Promise((resolve, reject) => {
             fs.readFile(src1, (err, data) => {
                 if (err) return reject(err)
                 fs.writeFile(src2, data, (err) => {
                     if (err) return reject(err)
-                    resolve("复制文件成功")
+                    resolve("Copy file succeeded")
                 })
             })
         })
     }
 
-    // 删除文件夹下所有文件
+    // Delete all files in folder
     const delDir = (path) => {
         let files = []
         if (fs.existsSync(path)) {
@@ -331,9 +331,9 @@ module.exports = (win, getClient) => {
             files.forEach((file, index) => {
                 let curPath = path + "/" + file
                 if (fs.statSync(curPath).isDirectory()) {
-                    delDir(curPath) //递归删除文件夹
+                    delDir(curPath) //Recursively delete folder
                 } else {
-                    fs.unlinkSync(curPath) //删除文件
+                    fs.unlinkSync(curPath) //Delete file
                 }
             })
             fs.rmdirSync(path)
@@ -345,34 +345,34 @@ module.exports = (win, getClient) => {
             const {outputDir, JsonRaw, reportName} = params
             const inputFile = path.join(htmlTemplateDir, "template.zip")
             const outputFile = path.join(outputDir, "template.zip")
-            const reportNameFile = reportName.replaceAll(/\\|\/|\:|\*|\?|\"|\<|\>|\|/g, "") || "html报告"
-            // 判断报告名是否存在
+            const reportNameFile = reportName.replaceAll(/\\|\/|\:|\*|\?|\"|\<|\>|\|/g, "") || "HTML report"
+            // Check if report name exists
             const ReportItemName = path.join(outputDir, reportNameFile)
             const judgeReportName = fs.existsSync(ReportItemName)
             let isCreatDir = false
             try {
-                // 复制模板到生成文件地址
+                // Copy template to output directory
                 await copyFileByDir(inputFile, outputFile)
-                // 文件夹已存在 则先清空之前内容
+                // Delete file
                 if (judgeReportName) delDir(ReportItemName)
                 if (!judgeReportName) {
                     fs.mkdirSync(ReportItemName)
                     isCreatDir = true
                 }
-                // 解压模板
+                // Unzip template
                 await compressing.zip.uncompress(outputFile, ReportItemName)
-                // 删除zip
+                // Delete zip
                 fs.unlinkSync(outputFile)
-                // 修改模板入口文件
+                // Modify template entry file
                 const initDir = path.join(ReportItemName, "js", "init.js")
-                // 模板源注入
+                // Inject template source
                 fs.writeFileSync(initDir, `let initData = ${JSON.stringify(JsonRaw)}`)
                 resolve({
                     ok: true,
                     outputDir: ReportItemName
                 })
             } catch (error) {
-                // 如若错误 删除已创建文件夹
+                // If error, delete created folder
                 if (isCreatDir) delDir(ReportItemName)
                 reject(error)
             }

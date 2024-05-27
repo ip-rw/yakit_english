@@ -136,7 +136,7 @@ const User = () => (
 )
 
 /**
- * @description:  头像
+ * @description: Avatar
  */
 export const UserIcon = (props: Partial<IconProps>) => {
     return <Icon component={User} {...props} />

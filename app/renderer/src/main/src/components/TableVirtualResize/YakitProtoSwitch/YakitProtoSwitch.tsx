@@ -10,7 +10,7 @@ interface YakitProtoSwitchProps {
     wrapperStyle?: React.CSSProperties
 }
 /**
- * @description: 开关
+ * @description: Switch
  */
 export const YakitProtoSwitch: React.FC<YakitProtoSwitchProps> = React.memo((props) => {
     const {wrapperClassName, wrapperStyle, checked, onChange, disabled} = props
@@ -43,7 +43,7 @@ export const YakitProtoSwitch: React.FC<YakitProtoSwitchProps> = React.memo((pro
                         if (onChange) onChange(!checked)
                     }}
                 />
-                {/* 圆点 */}
+                {/* Dot */}
                 <span
                     className={classNames(styles["yakit-proto-switch"], {
                         [styles["yakit-proto-switch-checked"]]: checked,

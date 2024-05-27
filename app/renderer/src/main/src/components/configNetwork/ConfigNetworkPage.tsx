@@ -155,9 +155,9 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
     const [visible, setVisible] = useState<boolean>(false)
     const configRef = useRef<any>()
     const [inViewport] = useInViewport(configRef)
-    const [netInterfaceList, setNetInterfaceList] = useState<SelectOptionProps[]>([]) // 代理代表
+    const [netInterfaceList, setNetInterfaceList] = useState<SelectOptionProps[]>([]) // Proxy Delegate
 
-    /** ---------- 是否删除私密插件逻辑 Start ---------- */
+    /** ---------- Remove Private Plugin Logic Start? ---------- */
     const [isDelPrivatePlugin, setIsDelPrivatePlugin] = useState<boolean>(false)
     useEffect(() => {
         getLocalValue(LocalGVS.IsDeletePrivatePluginsOnLogout).then((v: boolean) => {
@@ -170,7 +170,7 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
     const onResetDelPrivatePlugin = useMemoizedFn(() => {
         setLocalValue(LocalGVS.IsDeletePrivatePluginsOnLogout, false)
     })
-    /** ---------- 私密插件逻辑 End ---------- */
+    /** ---------- Private Plugin Logic End ---------- */
 
     const update = useMemoizedFn(() => {
         isShowLoading.current && setLoading(true)
@@ -196,7 +196,7 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
             if (Array.isArray(ClientCertificates) && ClientCertificates.length > 0 && format === 1) {
                 let newArr = ClientCertificates.map((item, index) => {
                     const {Pkcs12Bytes, Pkcs12Password} = item
-                    return {Pkcs12Bytes, Pkcs12Password, name: `证书${index + 1}`}
+                    return {Pkcs12Bytes, Pkcs12Password, name: `Certificate${index + 1}`}
                 })
                 setCertificateParams(newArr)
                 currentIndex.current = ClientCertificates.length
@@ -211,7 +211,7 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
 
     const onCertificate = useMemoizedFn((file: any) => {
         if (!["application/x-pkcs12"].includes(file.type)) {
-            warn("仅支持格式为：application/x-pkcs12")
+            warn("Supports Only application Format/x-pkcs12")
             return false
         }
         ipcRenderer
@@ -219,7 +219,7 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
             .then((res) => {
                 currentIndex.current += 1
 
-                // 验证证书是否需要密码
+                // Verify Certificate Password Requirement
                 ipcRenderer
                     .invoke("ValidP12PassWord", {
                         Pkcs12Bytes: res
@@ -229,17 +229,17 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                             setCertificateParams([
                                 ...(certificateParams || []),
                                 {
-                                    name: `证书${currentIndex.current}`,
+                                    name: `Certificate${currentIndex.current}`,
                                     Pkcs12Bytes: res,
                                     Pkcs12Password: new Uint8Array()
                                 }
                             ])
                         } else {
-                            // 需要密码
+                            // Password Required
                             setCertificateParams([
                                 ...(certificateParams || []),
                                 {
-                                    name: `证书${currentIndex.current}`,
+                                    name: `Certificate${currentIndex.current}`,
                                     Pkcs12Bytes: res,
                                     Pkcs12Password: new Uint8Array(),
                                     password: true
@@ -249,7 +249,7 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                     })
             })
             .catch((e) => {
-                failed(`无法获取该文件内容，请检查后后重试！${e}`)
+                failed(`Unable to Retrieve File Content, Check and Retry！${e}`)
             })
         return false
     })
@@ -257,7 +257,7 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
     const ipcSubmit = useMemoizedFn((params: GlobalNetworkConfig, isNtml?: boolean) => {
         console.log("SetGlobalNetworkConfig", params)
         ipcRenderer.invoke("SetGlobalNetworkConfig", params).then(() => {
-            yakitInfo("更新配置成功")
+            yakitInfo("Configuration Update Success")
             update()
             if (isNtml) setVisible(false)
         })
@@ -268,15 +268,15 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
     })
 
     const submit = useMemoizedFn((isNtml?: boolean) => {
-        // 更新 隐私配置 数据
+        // Update Privacy Config Data
         onSetDelPrivatePlugin()
 
-        // 更新 免配置启动路径
+        // Update No-Config Startup Path
         onSetChromePath()
 
         if (format === 1) {
             // if (!(Array.isArray(certificateParams)&&certificateParams.length>0)) {
-            //     warn("请添加证书")
+            //     warn("Add Certificate Request")
             //     return
             // }
 
@@ -285,7 +285,7 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                 certificateParams.length > 0 &&
                 certificateParams.filter((item) => item.password === true).length === certificateParams.length
             ) {
-                warn("无效证书")
+                warn("Invalid Certificate")
                 return
             }
             const obj: ClientCertificatePem = {
@@ -348,16 +348,16 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                     </div>
                     <div className={styles["title"]}>{item.name}</div>
                     <SolidLockClosedIcon />
-                    <div className={styles["content"]}>未解密</div>
+                    <div className={styles["content"]}>Not Decrypted</div>
                     <YakitButton
                         type='outline2'
                         onClick={() => {
                             const m = showYakitModal({
-                                title: "密码解锁",
+                                title: "Password Unlock",
                                 content: (
                                     <div style={{padding: 20}}>
                                         <YakitInput.Password
-                                            placeholder='请输入证书密码'
+                                            placeholder='Enter Certificate Password'
                                             allowClear
                                             onChange={(e) => {
                                                 const {value} = e.target
@@ -389,7 +389,7 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                                                     m.destroy()
                                                 }
                                             } else {
-                                                failed(`密码错误`)
+                                                failed(`Wrong Password`)
                                             }
                                         })
                                 },
@@ -397,7 +397,7 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                             })
                         }}
                     >
-                        密码解锁
+                        Password Unlock
                     </YakitButton>
                 </div>
             </div>
@@ -426,7 +426,7 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                     </div>
                     <div className={styles["title"]}>{item.name}</div>
                     <SolidCheckCircleIcon />
-                    <div className={styles["content"]}>可用</div>
+                    <div className={styles["content"]}>Available</div>
                     <div className={styles["password"]}>******</div>
                 </div>
             </div>
@@ -483,7 +483,7 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
         <>
             <div ref={configRef}>
                 <AutoCard style={{height: "auto"}}>
-                    <AutoSpin spinning={loading} tip='网络配置加载中...'>
+                    <AutoSpin spinning={loading} tip='Loading Network Config...'>
                         {params && (
                             <Form
                                 size={"small"}
@@ -492,16 +492,16 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                                 onSubmitCapture={() => submit()}
                             >
                                 <Divider orientation={"left"} style={{marginTop: "0px"}}>
-                                    DNS 配置
+                                    DNS Configuration
                                 </Divider>
                                 <SwitchItem
-                                    label={"禁用系统 DNS"}
+                                    label={"Disable System DNS"}
                                     setValue={(DisableSystemDNS) => setParams({...params, DisableSystemDNS})}
                                     value={params.DisableSystemDNS}
                                     oldTheme={false}
                                 />
                                 <ManyMultiSelectForString
-                                    label={"备用 DNS"}
+                                    label={"Alternate DNS"}
                                     setValue={(CustomDNSServers) =>
                                         setParams({...params, CustomDNSServers: CustomDNSServers.split(",")})
                                     }
@@ -510,20 +510,20 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                                     mode={"tags"}
                                 />
                                 <SwitchItem
-                                    label={"启用 TCP DNS"}
+                                    label={"Enable TCP DNS"}
                                     setValue={(DNSFallbackTCP) => setParams({...params, DNSFallbackTCP})}
                                     value={params.DNSFallbackTCP}
                                     oldTheme={false}
                                 />
                                 <SwitchItem
-                                    label={"启用 DoH 抗污染"}
+                                    label={"Enable DoH Anti-Pollution"}
                                     setValue={(DNSFallbackDoH) => setParams({...params, DNSFallbackDoH})}
                                     value={params.DNSFallbackDoH}
                                     oldTheme={false}
                                 />
                                 {params.DNSFallbackDoH && (
                                     <ManyMultiSelectForString
-                                        label={"备用 DoH"}
+                                        label={"Alternate DoH"}
                                         setValue={(data) => setParams({...params, CustomDoHServers: data.split(",")})}
                                         value={params.CustomDoHServers.join(",")}
                                         data={[]}
@@ -531,9 +531,9 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                                     />
                                 )}
                                 <Divider orientation={"left"} style={{marginTop: "0px"}}>
-                                    TLS 客户端证书（双向认证）
+                                    TLS Client Certificate (Mutual Authentication)）
                                 </Divider>
-                                <Form.Item label={"选择格式"}>
+                                <Form.Item label={"Select Format"}>
                                     <YakitRadioButtons
                                         size='small'
                                         value={format}
@@ -544,18 +544,18 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                                         options={[
                                             {
                                                 value: 1,
-                                                label: "p12/pfx 格式"
+                                                label: "p12/pfx Format"
                                             },
                                             {
                                                 value: 2,
-                                                label: "pem 格式"
+                                                label: "pem Format"
                                             }
                                         ]}
                                     />
                                 </Form.Item>
                                 {format === 1 && (
                                     <>
-                                        <Form.Item label={"添加证书"}>
+                                        <Form.Item label={"Add Certificate"}>
                                             {/*
                                     PEM: 3 - CERT / KEY / CA-CERT
                                     PKCS12(P12/PFX)(.p12 .pfx): File + Password
@@ -567,7 +567,7 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                                                 showUploadList={false}
                                                 beforeUpload={(file) => onCertificate(file)}
                                             >
-                                                <YakitButton type={"outline2"}>添加 TLS 客户端证书</YakitButton>
+                                                <YakitButton type={"outline2"}>Add TLS Client Certificate</YakitButton>
                                             </Upload>
                                             {certificateList}
                                         </Form.Item>
@@ -584,16 +584,16 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                                     />
                                 )}
                                 <Divider orientation={"left"} style={{marginTop: "0px"}}>
-                                    第三方应用配置
+                                    Third-Party App Config
                                 </Divider>
-                                <Form.Item label={"第三方应用"}>
+                                <Form.Item label={"Third-Party Application"}>
                                     {(params.AppConfigs || []).map((i, index) => {
                                         return (
                                             <YakitTag
                                                 key={index}
                                                 onClick={() => {
                                                     let m = showYakitModal({
-                                                        title: "修改第三方应用",
+                                                        title: "Edit Third-Party App",
                                                         width: 600,
                                                         closable: true,
                                                         maskClosable: false,
@@ -641,7 +641,7 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                                         type={"outline1"}
                                         onClick={() => {
                                             let m = showYakitModal({
-                                                title: "添加第三方应用",
+                                                title: "Add Third-Party App",
                                                 width: 600,
                                                 footer: null,
                                                 closable: true,
@@ -674,14 +674,14 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                                             })
                                         }}
                                     >
-                                        添加第三方应用
+                                        Add Third-Party App
                                     </YakitButton>
                                 </Form.Item>
-                                <Form.Item label={"AI使用优先级"}>
+                                <Form.Item label={"AI Priority"}>
                                     <YakitButton type={"outline1"} onClick={()=>{
                                         let AiApiPriority:string[] = params.AiApiPriority
                                         let m = showYakitModal({
-                                            title: "配置AI使用优先级",
+                                            title: "Set AI Usage Priority",
                                             width: 460,
                                             // footer: null,
                                             closable: true,
@@ -700,16 +700,16 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                                                 m.destroy()
                                             }
                                         })
-                                    }}>配置</YakitButton>
+                                    }}>Configuration</YakitButton>
                                 </Form.Item>
                                 <Divider orientation={"left"} style={{marginTop: "0px"}}>
-                                    其他配置
+                                    Other Configuration
                                 </Divider>
-                                <Form.Item label={"HTTP认证全局配置"}>
+                                <Form.Item label={"HTTP Authentication Global Config"}>
                                     <div className={styles["form-rule-body"]}>
                                         <div className={styles["form-rule"]} onClick={() => setVisible(true)}>
                                             <div className={styles["form-rule-text"]}>
-                                                现有配置 {params.AuthInfos.filter((item) => !item.Forbidden).length} 条
+                                                Current Config {params.AuthInfos.filter((item) => !item.Forbidden).length} Rule
                                             </div>
                                             <div className={styles["form-rule-icon"]}>
                                                 <CogIcon />
@@ -718,7 +718,7 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                                     </div>
                                 </Form.Item>
 
-                                <Form.Item label={"禁用IP"} tooltip='配置禁用IP后，yakit将会过滤不会访问'>
+                                <Form.Item label={"Disable IP"} tooltip='After Disabling IP, yakit Will Filter Unreachable'>
                                     <YakitSelect
                                         mode='tags'
                                         value={params.DisallowIPAddress}
@@ -727,7 +727,7 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                                         }}
                                     ></YakitSelect>
                                 </Form.Item>
-                                <Form.Item label={"禁用域名"} tooltip='配置禁用域名后，yakit将会过滤不会访问'>
+                                <Form.Item label={"Disable Domain"} tooltip='After Disabling Domain, yakit Will Filter Unreachable'>
                                     <YakitSelect
                                         mode='tags'
                                         value={params.DisallowDomain}
@@ -737,8 +737,8 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                                     ></YakitSelect>
                                 </Form.Item>
                                 <Form.Item
-                                    label={"插件扫描白名单"}
-                                    tooltip='配置插件扫描白名单后，插件仅会对匹配的URL进行扫描。支持以兼容模式进行匹配，即先尝试以正则模式匹配 → glob 模式匹配 → 关键字匹配。'
+                                    label={"Plugin Scan Whitelist"}
+                                    tooltip='Configure Plugin Scan Whitelist (Regex → Glob → Keyword)。'
                                 >
                                     <YakitSelect
                                         mode='tags'
@@ -749,8 +749,8 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                                     ></YakitSelect>
                                 </Form.Item>
                                 <Form.Item
-                                    label={"插件扫描黑名单"}
-                                    tooltip='配置插件扫描黑名单后，插件不会对匹配的URL进行扫描。支持以兼容模式进行匹配，即先尝试以正则模式匹配 → glob 模式匹配 → 关键字匹配。'
+                                    label={"Plugin Scan Blacklist"}
+                                    tooltip='Configure Plugin Scan Blacklist (Regex → Glob → Keyword)。'
                                 >
                                     <YakitSelect
                                         mode='tags'
@@ -760,7 +760,7 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                                         }}
                                     ></YakitSelect>
                                 </Form.Item>
-                                <Form.Item label={"全局代理"}>
+                                <Form.Item label={"Global Proxy"}>
                                     <YakitInput
                                         allowClear
                                         size='small'
@@ -771,10 +771,10 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                                         }}
                                     />
                                 </Form.Item>
-                                <Form.Item label={"免配置启动路径"}>
+                                <Form.Item label={"No-Config Startup Path"}>
                                     <YakitInput
                                         value={chromePath}
-                                        placeholder={"请选择启动路径"}
+                                        placeholder={"Select Startup Path"}
                                         size='small'
                                         onChange={(e) => setChromePath(e.target.value)}
                                     />
@@ -787,7 +787,7 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                                             const file_name = f.name
                                             const suffix = suffixFun(file_name)
                                             if (![".exe"].includes(suffix)) {
-                                                warn("上传文件格式错误，请重新上传")
+                                                warn("Invalid File Format, Please Re-upload")
                                                 return false
                                             }
                                             // @ts-ignore
@@ -798,12 +798,12 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                                             return false
                                         }}
                                     >
-                                        <div className={styles["config-select-path"]}>选择路径</div>
+                                        <div className={styles["config-select-path"]}>Select Path</div>
                                     </Upload>
                                 </Form.Item>
                                 <Form.Item
-                                    label={"系统代理"}
-                                    tooltip='开启以后如未配置代理，会默认走系统代理；如配置其他代理，其优先级高于系统代理'
+                                    label={"System Proxy"}
+                                    tooltip='If No Proxy Configured, Uses System Proxy by Default; Has Priority Over Other Proxies'
                                 >
                                     <YakitSwitch
                                         checked={params.EnableSystemProxyFromEnv}
@@ -812,20 +812,20 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                                         }
                                     />
                                 </Form.Item>
-                                <Form.Item label={"保存HTTP流量"} tooltip='打开则会保存MITM以外的流量数据到History表中'>
+                                <Form.Item label={"Save HTTP Traffic"} tooltip='Save Non-MITM Traffic to History'>
                                     <YakitSwitch
                                         checked={!params.SkipSaveHTTPFlow}
                                         onChange={(val) => setParams({...params, SkipSaveHTTPFlow: !val})}
                                     />
                                 </Form.Item>
                                 <Divider orientation={"left"} style={{marginTop: "0px"}}>
-                                    SYN 扫描网卡配置
+                                    SYN Scan NIC Config
                                 </Divider>
-                                <Form.Item label={"网卡"} tooltip='为SYN扫描选择网卡'>
+                                <Form.Item label={"NIC"} tooltip='Select NIC for SYN Scan'>
                                     <YakitSelect
                                         // showSearch
                                         options={netInterfaceList}
-                                        placeholder='请选择...'
+                                        placeholder='Please Select...'
                                         size='small'
                                         value={params.SynScanNetInterface}
                                         onChange={(netInterface) => {
@@ -835,32 +835,32 @@ export const ConfigNetworkPage: React.FC<ConfigNetworkPageProp> = (props) => {
                                     />
                                 </Form.Item>
                                 <Divider orientation={"left"} style={{marginTop: "0px"}}>
-                                    隐私配置
+                                    Privacy Configuration
                                 </Divider>
                                 <Form.Item
-                                    label={"退出登陆删除本地私密插件"}
-                                    tooltip='账号退出登录后,会删除该账号的本地私密插件,便于保护用户隐私数据'
+                                    label={"Log Out & Delete Private Plugins"}
+                                    tooltip='Deleting Local Private Plugins on Logout to Protect User Data'
                                 >
                                     <YakitSwitch checked={isDelPrivatePlugin} onChange={setIsDelPrivatePlugin} />
                                 </Form.Item>
                                 <Form.Item colon={false} label={" "}>
                                     <Space>
                                         <YakitButton type='primary' htmlType='submit'>
-                                            更新全局配置
+                                            Update Global Config
                                         </YakitButton>
                                         <YakitPopconfirm
-                                            title={"确定需要重置配置吗？"}
+                                            title={"Confirm Config Reset?？"}
                                             onConfirm={() => {
                                                 onResetDelPrivatePlugin()
                                                 onResetChromePath()
                                                 ipcRenderer.invoke("ResetGlobalNetworkConfig", {}).then(() => {
                                                     update()
-                                                    yakitInfo("重置配置成功")
+                                                    yakitInfo("Reset Config Success")
                                                 })
                                             }}
                                             placement='top'
                                         >
-                                            <YakitButton type='outline1'> 重置配置 </YakitButton>
+                                            <YakitButton type='outline1'> Reset Config </YakitButton>
                                         </YakitPopconfirm>
                                     </Space>
                                 </Form.Item>
@@ -904,7 +904,7 @@ export const NTMLConfig: React.FC<NTMLConfigProps> = (props) => {
     const [currentItem, setCurrentItem] = useState<DataProps>()
     const [modalStatus, setModalStatus] = useState<boolean>(false)
     const [isEdit, setIsEdit] = useState<boolean>(false)
-    // initData 初始数据 用于校验数据是否改变
+    // initData for Data Validation
     const initData = useRef<DataProps[]>([])
 
     useEffect(() => {
@@ -931,11 +931,11 @@ export const NTMLConfig: React.FC<NTMLConfigProps> = (props) => {
     const onClose = useMemoizedFn(() => {
         if (JSON.stringify(initData.current) !== JSON.stringify(data)) {
             Modal.confirm({
-                title: "温馨提示",
+                title: "Reminder",
                 icon: <ExclamationCircleOutlined />,
-                content: "请问是否要保存HTTP认证全局配置并关闭弹框？",
-                okText: "保存",
-                cancelText: "不保存",
+                content: "Confirm Saving HTTP Authentication Global Config and Close？",
+                okText: "Save",
+                cancelText: "Don't Save",
                 closable: true,
                 closeIcon: (
                     <div
@@ -1004,7 +1004,7 @@ export const NTMLConfig: React.FC<NTMLConfigProps> = (props) => {
     const columns: ColumnsTypeProps[] = useMemo<ColumnsTypeProps[]>(() => {
         return [
             {
-                title: "执行顺序",
+                title: "Execution Order",
                 dataKey: "Index",
                 fixed: "left",
                 width: 130,
@@ -1016,23 +1016,23 @@ export const NTMLConfig: React.FC<NTMLConfigProps> = (props) => {
                 width: 150
             },
             {
-                title: "用户名",
+                title: "Username",
                 dataKey: "AuthUsername",
                 width: 150
             },
             {
-                title: "密码",
+                title: "Password",
                 dataKey: "AuthPassword",
                 width: 150,
                 render: () => <>***</>
             },
             {
-                title: "认证类型",
+                title: "Authentication Type",
                 dataKey: "AuthType"
                 // minWidth: 120
             },
             {
-                title: "操作",
+                title: "Action",
                 dataKey: "action",
                 fixed: "right",
                 width: 128,
@@ -1098,9 +1098,9 @@ export const NTMLConfig: React.FC<NTMLConfigProps> = (props) => {
                 return item
             })
             setData(newData)
-            success("编辑成功")
+            success("Edit Success")
         } else {
-            success("新增成功")
+            success("Add Success")
             setData([v, ...data])
         }
         setModalStatus(false)
@@ -1122,9 +1122,9 @@ export const NTMLConfig: React.FC<NTMLConfigProps> = (props) => {
                 contentWrapperStyle={{boxShadow: "0px -2px 4px rgba(133, 137, 158, 0.2)"}}
                 title={
                     <div className={styles["heard-title"]}>
-                        <div className={styles["title"]}>HTTP认证全局配置</div>
+                        <div className={styles["title"]}>HTTP Authentication Global Config</div>
                         <div className={styles["table-total"]}>
-                            共 <span>{params.AuthInfos.length}</span> 条认证配置
+                            Total <span>{params.AuthInfos.length}</span> Authentication Rule
                         </div>
                     </div>
                 }
@@ -1135,10 +1135,10 @@ export const NTMLConfig: React.FC<NTMLConfigProps> = (props) => {
                             className={styles["button-create"]}
                             onClick={() => onCreateAuthInfo()}
                         >
-                            新增
+                            New Addition
                         </YakitButton>
                         <YakitButton type='primary' className={styles["button-save"]} onClick={() => onOk()}>
-                            保存
+                            Save
                         </YakitButton>
                         <div onClick={() => onClose()} className={styles["icon-remove"]}>
                             <RemoveIcon />
@@ -1233,22 +1233,22 @@ export const NTMLConfigModal: React.FC<NTMLConfigModalProps> = (props) => {
             }
         })
     })
-    // 判断是否为IP地址 或 域名
+    // Check if IP or Domain
     const judgeUrl = () => [
         {
             validator: (_, value: string) => {
-                // 正则表达式匹配IPv4地址
+                // Regex Match IPv4 Address
                 const ipv4RegexWithPort =
                     /^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})(\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})){3}(:\d+)?$/
-                // 正则表达式匹配域名（支持通配符域名）
+                // Regex Match Domain (Wildcard Support)）
                 const domainRegex = /^(\*\.|\*\*\.)?([a-zA-Z0-9-]+\.){1,}[a-zA-Z]{2,}$/
-                // 匹配 CIDR 表示的 IPv4 地址范围（包含端口号）
+                // Match CIDR IPv4 Address Range (Includes Port)）
                 const cidrRegexWithPort =
                     /^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})(\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})){3}\/([0-2]?[0-9]|3[0-2])(:\d+)?$/
                 if (ipv4RegexWithPort.test(value) || domainRegex.test(value) || cidrRegexWithPort.test(value)) {
                     return Promise.resolve()
                 } else {
-                    return Promise.reject("请输入符合要求的Host")
+                    return Promise.reject("Enter Valid Host")
                 }
             }
         }
@@ -1256,7 +1256,7 @@ export const NTMLConfigModal: React.FC<NTMLConfigModalProps> = (props) => {
     return (
         <YakitModal
             maskClosable={false}
-            title={isEdit ? "编辑" : "新增"}
+            title={isEdit ? "Edit" : "New Addition"}
             visible={modalStatus}
             onCancel={() => onClose()}
             closable
@@ -1266,17 +1266,17 @@ export const NTMLConfigModal: React.FC<NTMLConfigModalProps> = (props) => {
             bodyStyle={{padding: "24px 16px"}}
         >
             <Form form={form} labelCol={{span: 5}} wrapperCol={{span: 16}} className={styles["modal-from"]}>
-                <Form.Item label='Host' name='Host' rules={[{required: true, message: "该项为必填"}, ...judgeUrl()]}>
-                    <YakitInput placeholder='请输入...' />
+                <Form.Item label='Host' name='Host' rules={[{required: true, message: "Required Field"}, ...judgeUrl()]}>
+                    <YakitInput placeholder='Enter...' />
                 </Form.Item>
-                <Form.Item label='用户名' name='AuthUsername' rules={[{required: true, message: "该项为必填"}]}>
-                    <YakitInput placeholder='请输入...' />
+                <Form.Item label='Username' name='AuthUsername' rules={[{required: true, message: "Required Field"}]}>
+                    <YakitInput placeholder='Enter...' />
                 </Form.Item>
-                <Form.Item label='密码' name='AuthPassword' rules={[{required: true, message: "该项为必填"}]}>
-                    <YakitInput placeholder='请输入...' />
+                <Form.Item label='Password' name='AuthPassword' rules={[{required: true, message: "Required Field"}]}>
+                    <YakitInput placeholder='Enter...' />
                 </Form.Item>
-                <Form.Item label='认证类型' name='AuthType' rules={[{required: true, message: "该项为必填"}]}>
-                    <YakitSelect placeholder='请选择...'>
+                <Form.Item label='Authentication Type' name='AuthType' rules={[{required: true, message: "Required Field"}]}>
+                    <YakitSelect placeholder='Please Select...'>
                         <YakitSelect value='ntlm'>ntlm</YakitSelect>
                         <YakitSelect value='any'>any</YakitSelect>
                         <YakitSelect value='basic'>basic</YakitSelect>
@@ -1301,10 +1301,10 @@ const getItemStyle = (isDragging, draggableStyle) => {
     let transform: string = draggableStyle["transform"] || ""
     // console.log("transform---",transform,isDragging);
     if (isDragging) {
-        // 使用正则表达式匹配 translate 函数中的两个参数
+        // Match Two Parameters in translate Function Using Regex
         const match = transform.match(/translate\((-?\d+)px, (-?\d+)px\)/)
         if (match) {
-            // 提取匹配到的两个值，并将它们转换为数字
+            // Extract and Convert Two Matched Values to Numbers
             const [value1, value2] = match.slice(1).map(Number)
                 const modifiedString = transform.replace(
                     /translate\((-?\d+)px, (-?\d+)px\)/,
@@ -1352,7 +1352,7 @@ export const AISortContent: React.FC<AISortContentProps> = (props) => {
     })
 
     return(<div className={styles['ai-sort-content']}>
-        <div>优先级为从上到下</div>
+        <div>Priority from Top to Bottom</div>
         <div className={styles['menu-list']}>
             <DragDropContext
             onDragEnd={onDragEnd}

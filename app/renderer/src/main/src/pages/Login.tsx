@@ -22,7 +22,7 @@ interface LoginParamsProp {
 
 const Login: React.FC<LoginProp> = (props) => {
     const [loading, setLoading] = useState<boolean>(false)
-    // 打开企业登录面板
+    // Open Corp Login Panel
     const openEnterpriseModal = () => {
         props.onCancel()
         const m = showModal({
@@ -33,7 +33,7 @@ const Login: React.FC<LoginProp> = (props) => {
         return m
     }
     {
-        /* 屏蔽企业登录选择 将登录直接替换为企业登录 */
+        /* Bypass Corp Login Selection; Switch to Corp Login Directly */
     }
     useLayoutEffect(() => {
         if (isEnterpriseEdition()) {
@@ -56,22 +56,22 @@ const Login: React.FC<LoginProp> = (props) => {
                     if (res) ipcRenderer.send("user-sign-in", {url: res, type: type})
                 })
                 .catch((err) => {
-                    failed("登录错误:" + err)
+                    failed("Login Error:" + err)
                 })
                 .finally(() => {
                     setTimeout(() => setLoading(false), 200)
                 })
         }
     }
-    // 全局监听登录状态
+    // Global Login Listener
     useEffect(() => {
         ipcRenderer.on("fetch-signin-data", (e, res: any) => {
             const {ok, info} = res
             if (ok) {
                 Modal.confirm({
-                    title: "数据同步",
+                    title: "Data Sync",
                     icon: <ExclamationCircleOutlined />,
-                    content: "是否选择将远端的数据同步本地",
+                    content: "Sync Remote Data Locally?",
                     onOk() {
                         apiDownloadPluginMine()
                         setTimeout(() => setLoading(false), 200)
@@ -104,27 +104,27 @@ const Login: React.FC<LoginProp> = (props) => {
         >
             <AutoSpin spinning={loading}>
                 <div className='login-type-body'>
-                    <h2 className='login-text'>登录</h2>
+                    <h2 className='login-text'>Login</h2>
                     <div className='login-icon-body'>
                         {/*<div className='login-icon' onClick={() => githubAuth()}>*/}
                         <div className='login-icon' onClick={() => fetchLogin("github")}>
                             <div className='login-icon-text'>
                                 <GithubOutlined className='type-icon' />
-                                使用 GitHub 账号登录
+                                GitHub Login
                             </div>
                             <RightOutlined className='icon-right' />
                         </div>
                         <div className='login-icon' onClick={() => fetchLogin("wechat")}>
                             <div className='login-icon-text'>
                                 <WechatOutlined className='type-icon icon-wx' />
-                                使用微信账号登录
+                                WeChat Login
                             </div>
                             <RightOutlined className='icon-right' />
                         </div>
                         {/* <div className='login-icon' onClick={() => fetchLogin("login")}>
                             <div className='login-icon-text'>
                                 <img src={yakitImg} className="type-icon type-icon-img"/>
-                                企业登录
+                                Corp Login
                             </div>
                             <RightOutlined className='icon-right' />
                         </div> */}

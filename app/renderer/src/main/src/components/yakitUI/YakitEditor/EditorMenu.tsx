@@ -10,15 +10,15 @@ import classNames from "classnames"
 import styles from "@/components/yakitUI/YakitMenu/yakitMenu.module.scss"
 
 export interface EditorMenuItemProps {
-    /** 不建议使用reactnode类型 */
+    /** Avoid ReactNode type */
     label: string | ReactNode
     key: string
     disabled?: boolean
     children?: EditorMenuItemType[]
-    /** 不建议使用 */
+    /** Not recommended */
     itemIcon?: ReactNode
     title?: string
-    /** @description !!! 请最少使用其中一个(ctrl/alt/meta/shift)[不能重复使用] 搭配 字母或F1-12 使用快捷键功能 */
+    /** @description !!! Use at least one(ctrl/alt/meta/shift)[No repeat] Combine with Alphabets or F1-12 for Shortcut Func */
     keybindings?: YakitEditorKeyCode[]
 }
 export interface EditorMenuItemDividerProps {
@@ -29,10 +29,10 @@ export type EditorMenuItemType = EditorMenuItemProps | EditorMenuItemDividerProp
 export interface EditorMenuProp extends MenuProps {
     data?: EditorMenuItemType[]
     type?: "primary" | "grey"
-    /** 是否鼠标悬浮展示文字内容弹窗 */
+    /** Show Tooltip on Hover Toggle */
     isHint?: boolean
     popupClassName?: string
-    /** @name 组件尺寸类型(默认|右键高度紧凑型) */
+    /** @name Component Size Type (default|Right-click Compact Height) */
     size?: "default" | "rightMenu"
 }
 

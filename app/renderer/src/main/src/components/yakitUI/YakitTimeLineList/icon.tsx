@@ -24,7 +24,7 @@ const YakitTimeLineItem = () => (
         />
     </svg>
 )
-/** yakittimeline默认icon */
+/** yakittimeline default icon */
 export const YakitTimeLineItemIcon = (props: Partial<IconProps>) => {
     return <Icon component={YakitTimeLineItem} {...props} />
 }

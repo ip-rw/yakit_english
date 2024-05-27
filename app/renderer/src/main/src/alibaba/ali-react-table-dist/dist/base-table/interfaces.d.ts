@@ -45,10 +45,10 @@ export interface RenderInfo {
     stickyLeftMap: Map<number, number>;
     stickyRightMap: Map<number, number>;
     useVirtual: ResolvedUseVirtual;
-    /** props.columns 是否包含有效的锁列 */
+    /** HasValidLockCol */
     hasLockColumn: boolean;
-    /** 左侧锁定列的总宽度 */
+    /** TotalWidthLeftLockCol */
     leftLockTotalWidth: number;
-    /** 右侧锁定列的总宽度 */
+    /** TotalWidthRightLockCol */
     rightLockTotalWidth: number;
 }

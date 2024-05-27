@@ -67,7 +67,7 @@ const YakChatLog = () => (
         </defs>
     </svg>
 )
-/** @description yak 牛牛 */
+/** @description yak CowCow */
 export const YakChatLogIcon = (props: Partial<IconProps>) => {
     return <Icon component={YakChatLog} {...props} />
 }
@@ -265,7 +265,7 @@ const YakChatBook = () => (
     </svg>
 )
 
-/** @description yak 书书 */
+/** @description yak BookBook */
 export const YakChatBookIcon = (props: Partial<IconProps>) => {
     return <Icon component={YakChatBook} {...props} />
 }

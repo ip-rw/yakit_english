@@ -19,11 +19,11 @@ interface ItemDraggerProps extends DraggerProps {
 }
 interface ItemExtraProps extends FormItemProps {}
 interface ItemInputProps extends InputProps {
-    isBubbing?: boolean // 是否阻止事件冒泡
+    isBubbing?: boolean // Prevent Event Bubbling
     setValue?: (s: string) => any
 }
 interface ItemTextAreaProps extends TextAreaProps {
-    isBubbing?: boolean // 是否阻止事件冒泡
+    isBubbing?: boolean // Prevent Event Bubbling
     setValue?: (s: string) => any
 }
 interface ItemSelectProps<T> extends YakitSelectProps<T> {
@@ -38,21 +38,21 @@ interface ItemSelectProps<T> extends YakitSelectProps<T> {
 }
 
 interface ItemGeneralParams {
-    // item组件属性
+    // Item Attributes
     item?: ItemExtraProps
-    // 是否外层包裹item组件，为false时prefixNode和suffixNode参数无效
+    // Wrap with item Component, false disables prefixNode & suffixNode
     isItem?: boolean
-    // 放在form-item里面的前缀元素
+    // Prefix Element in Form-Item
     prefixNode?: ReactNode
-    // 放在form-item里面的前缀元素
+    // Prefix Element in Form-Item
     suffixNode?: ReactNode
 }
 
-/* 拖拽式上传组件，内部组件为textarea类型 */
+/* Drag-n-Drop Upload, textarea type */
 export interface ItemDraggerTextAreaProps extends ItemGeneralParams {
-    // dragger组件属性
+    // Dragger Attributes
     dragger?: ItemDraggerProps
-    // textarea组件属性
+    // Textarea Attributes
     textarea?: ItemTextAreaProps
 }
 export const ItemDraggerTextArea: React.FC<ItemDraggerTextAreaProps> = (props) => {
@@ -142,11 +142,11 @@ export const ItemDraggerTextArea: React.FC<ItemDraggerTextAreaProps> = (props) =
     )
 }
 
-/* 拖拽式上传组件，内部组件为input类型 */
+/* Drag-n-Drop Upload, input type */
 export interface ItemDraggerInputProps extends ItemGeneralParams {
-    // dragger组件属性
+    // Dragger Attributes
     dragger?: ItemDraggerProps
-    // input组件属性
+    // Input Attributes
     input?: ItemInputProps
 }
 export const ItemDraggerInput: React.FC<ItemDraggerInputProps> = (props) => {
@@ -232,9 +232,9 @@ export const ItemDraggerInput: React.FC<ItemDraggerInputProps> = (props) => {
     )
 }
 
-/* 下拉框类型组件 */
+/* Dropdown Component */
 export interface ItemSelectsProps<T> extends ItemGeneralParams {
-    // select组件属性
+    // Select Attributes
     select?: ItemSelectProps<T>
 }
 export const ItemSelects: React.FC<ItemSelectsProps<any>> = (props) => {

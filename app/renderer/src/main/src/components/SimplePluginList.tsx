@@ -15,8 +15,8 @@ export interface SimplePluginListFromYakScriptNamesProp {
 }
 
 /**
- * @deprecated 暂时不删，批量执行任务列表功能做参考
- * @description ReadOnlyBatchExecutorByRecoverUid再用，等ReadOnlyBatchExecutorByRecoverUid删除后同步删除
+ * @deprecated Temporarily not deleted, reference for batch task execution function
+ * @description Use ReadOnlyBatchExecutorByRecoverUid again, delete synchronously after ReadOnlyBatchExecutorByRecoverUid is deleted
  */
 export const SimplePluginListFromYakScriptNames: React.FC<SimplePluginListFromYakScriptNamesProp> = React.memo(
     (props: SimplePluginListFromYakScriptNamesProp) => {
@@ -36,12 +36,12 @@ export const SimplePluginListFromYakScriptNames: React.FC<SimplePluginListFromYa
         return (
             <div className={"plugin-list-body"}>
                 <AutoCard
-                    title={"未完成的任务列表"}
+                    title={"Unfinished Tasks List"}
                     size={"small"}
                     bordered={false}
                     extra={[
                         <Space>
-                            <Tag>共{getLists().length}个</Tag>
+                            <Tag>Total{getLists().length}Qty</Tag>
                         </Space>
                     ]}
                 >

@@ -5,11 +5,11 @@ export interface ReportItem {
 }
 
 /**
- * @name 报告-json数据类型种类
+ * @name Report-JSON Data Types
  */
 export type ReportJsonKindData = {
     /**
-     * @name 柱状图
+     * @name Bar Chart
      */
     "bar-graph": {
       color: string[];
@@ -18,7 +18,7 @@ export type ReportJsonKindData = {
       title?: string
     };
     /**
-     * @name 报告封面
+     * @name Report Cover
      */
     "report-cover": {
       type: string;

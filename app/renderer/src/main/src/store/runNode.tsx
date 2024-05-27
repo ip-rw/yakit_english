@@ -13,7 +13,7 @@ interface StoreProps {
 export const useRunNodeStore = create<StoreProps>((set, get) => ({
     firstRunNodeFlag: false,
     runNodeList: new Map(),
-    // 是否第一次运行节点
+    // First Run?
     setFirstRunNodeFlag: (flag) => {
         set({
             firstRunNodeFlag: flag

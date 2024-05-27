@@ -70,7 +70,7 @@ export const PluginBatchExecutor: React.FC<PluginBatchExecutorProps> = React.mem
         }),
         shallow
     )
-    /**获取数据中心中的页面数据 */
+    /**Fetch Page Data from Data Center */
     const initPluginBatchExecutorPageInfo = useMemoizedFn(() => {
         const currentItem: PageNodeItemProps | undefined = queryPagesDataById(YakitRoute.BatchExecutorPage, props.id)
         if (currentItem && currentItem.pageParamsInfo.pluginBatchExecutorPageInfo) {
@@ -88,34 +88,34 @@ export const PluginBatchExecutor: React.FC<PluginBatchExecutorProps> = React.mem
     const [selectList, setSelectList] = useState<string[]>([])
     const [allCheck, setAllCheck] = useState<boolean>(false)
 
-    // 隐藏插件列表
+    // Hide Plugin List
     const [hidden, setHidden] = useState<boolean>(false)
-    /**是否展开/收起 */
+    /**Is Expanded/Collapse */
     const [isExpand, setIsExpand] = useState<boolean>(true)
-    /**是否在执行中 */
+    /**Is Executing */
     const [executeStatus, setExecuteStatus] = useState<ExpandAndRetractExcessiveState>("default")
     const [progressList, setProgressList] = useState<StreamResult.Progress[]>([])
-    /**暂停 */
+    /**Pause */
     const [pauseLoading, setPauseLoading] = useState<boolean>(false)
-    /**继续 */
+    /**Continue */
     const [continueLoading, setContinueLoading] = useState<boolean>(false)
 
     const [refreshList, setRefreshList] = useState<boolean>(false)
     const [selectNum, setSelectNum] = useState<number>(0)
     const [pluginExecuteLog, setPluginExecuteLog] = useState<StreamResult.PluginExecuteLog[]>([])
 
-    // 任务列表抽屉
+    // Task List Drawer
     const [visibleRaskList, setVisibleRaskList] = useState<boolean>(false)
 
     const userInfo = useStore((s) => s.userInfo)
 
-    /** 是否为初次加载 */
+    /** Is First Load */
     const pluginBatchExecuteContentRef = useRef<PluginBatchExecuteContentRefProps>(null)
 
     const batchExecuteDomRef = useRef<HTMLDivElement>(null)
     const [inViewport = true] = useInViewport(batchExecuteDomRef)
 
-    // userInfo.isLogin, filters发生变化的时候触发；
+    // Trigger on userInfo.isLogin, filters Change；
     useUpdateEffect(() => {
         setRefreshList(!refreshList)
     }, [userInfo.isLogin])
@@ -128,12 +128,12 @@ export const PluginBatchExecutor: React.FC<PluginBatchExecutorProps> = React.mem
         }
     }, [inViewport])
 
-    /**设置输入模块的初始值后，根据value刷新列表相关数据 */
+    /**Refresh Related Data in List Based on value after Setting Initial Value for Input Module */
     const onInitInputValueAfter = useMemoizedFn((value: HybridScanControlAfterRequest) => {
         try {
             const inputValue: PluginBatchExecutorInputValueProps = hybridScanParamsConvertToInputValue(value)
             const {pluginInfo} = inputValue
-            // 插件数据
+            // Plugin Data
             if (pluginInfo.selectPluginName.length > 0) {
                 setSelectList(pluginInfo.selectPluginName)
             } else {
@@ -150,7 +150,7 @@ export const PluginBatchExecutor: React.FC<PluginBatchExecutorProps> = React.mem
     const fetchListInPageFirstAfter = useMemoizedFn(() => {
         onActionHybridScanByRuntimeId(pageInfo.runtimeId)
     })
-    /** 通过runtimeId查询该条记录详情 */
+    /** Query Record Detail by runtimeId */
     const onActionHybridScanByRuntimeId = useMemoizedFn((runtimeId: string) => {
         if (!runtimeId) return
         pluginBatchExecuteContentRef.current
@@ -185,7 +185,7 @@ export const PluginBatchExecutor: React.FC<PluginBatchExecutorProps> = React.mem
     const onContinue = useMemoizedFn((e) => {
         pluginBatchExecuteContentRef.current?.onContinue()
     })
-    /**在顶部的执行按钮 */
+    /**Execute Button at Top */
     const onExecuteInTop = useMemoizedFn((e) => {
         e.stopPropagation()
         pluginBatchExecuteContentRef.current?.onStartExecute()
@@ -227,7 +227,7 @@ export const PluginBatchExecutor: React.FC<PluginBatchExecutorProps> = React.mem
                 plugin_type: cloneDeep(pluginTypeFilterList)
             }}
             pluginDetailsProps={{
-                title: "选择插件",
+                title: "Select Plugin",
                 bodyClassName: styles["plugin-batch-executor-body"]
             }}
             fetchListInPageFirstAfter={fetchListInPageFirstAfter}
@@ -237,7 +237,7 @@ export const PluginBatchExecutor: React.FC<PluginBatchExecutorProps> = React.mem
             <div className={styles["right-wrapper"]}>
                 {isShowPluginLog && (
                     <div className={styles["log-wrapper"]}>
-                        <div className={styles["log-heard"]}>插件日志</div>
+                        <div className={styles["log-heard"]}>Plugin Logs</div>
                         <PluginExecuteLog
                             hidden={false}
                             pluginExecuteLog={pluginExecuteLog}
@@ -248,7 +248,7 @@ export const PluginBatchExecutor: React.FC<PluginBatchExecutorProps> = React.mem
                 <div className={styles["plugin-batch-executor-wrapper"]}>
                     <ExpandAndRetract isExpand={isExpand} onExpand={onExpand} status={executeStatus}>
                         <div className={styles["plugin-batch-executor-title"]} ref={batchExecuteDomRef}>
-                            <span className={styles["plugin-batch-executor-title-text"]}>已选插件</span>
+                            <span className={styles["plugin-batch-executor-title-text"]}>Selected Plugin</span>
                             {selectNum > 0 && (
                                 <YakitTag closable onClose={onRemove} color='info'>
                                     {selectNum}
@@ -267,19 +267,19 @@ export const PluginBatchExecutor: React.FC<PluginBatchExecutorProps> = React.mem
                                 }}
                                 style={{padding: 0}}
                             >
-                                任务列表
+                                Task List
                             </YakitButton>
                             {isExecuting
                                 ? !isExpand && (
                                       <>
                                           {executeStatus === "paused" && !pauseLoading && (
                                               <YakitButton onClick={onContinue} loading={continueLoading}>
-                                                  继续
+                                                  Continue
                                               </YakitButton>
                                           )}
                                           {(executeStatus === "process" || pauseLoading) && (
                                               <YakitButton onClick={onPause} loading={pauseLoading}>
-                                                  暂停
+                                                  Pause
                                               </YakitButton>
                                           )}
                                           <YakitButton
@@ -287,7 +287,7 @@ export const PluginBatchExecutor: React.FC<PluginBatchExecutorProps> = React.mem
                                               onClick={onStopExecute}
                                               disabled={pauseLoading || continueLoading}
                                           >
-                                              停止
+                                              Exec Plugin Names Array
                                           </YakitButton>
                                           <div className={styles["divider-style"]}></div>
                                       </>
@@ -295,7 +295,7 @@ export const PluginBatchExecutor: React.FC<PluginBatchExecutorProps> = React.mem
                                 : !isExpand && (
                                       <>
                                           <YakitButton onClick={onExecuteInTop} disabled={selectNum === 0}>
-                                              执行
+                                              Risk Items
                                           </YakitButton>
                                           <div className={styles["divider-style"]}></div>
                                       </>
@@ -349,50 +349,50 @@ export const PluginBatchExecutor: React.FC<PluginBatchExecutorProps> = React.mem
     )
 })
 export interface DataScanParamsProps {
-    /**是否为https */
+    /**Is HTTPS */
     https: boolean
-    /**选中的数据History id */
+    /**Selected Data History ID */
     httpFlowIds: []
-    /**请求包 */
+    /**Request Packet */
     request: Uint8Array
 }
 interface PluginBatchExecuteContentProps {
     ref?: React.ForwardedRef<PluginBatchExecuteContentRefProps>
     pluginInfo: PluginInfoProps
-    /**选择插件得数量 */
+    /**Number of Selected Plugins */
     selectNum: number
-    /**插件执行输出结果默认选择得tabKey */
+    /**Default Selected tabKey for Plugin Execution Output */
     defaultActiveKey?: string
-    /** 设置输入模块的初始值后得回调事件，例如：插件批量执行页面(设置完初始值后，刷新左侧得插件列表页面) */
+    /** Callback after Setting Initial Value for Input Module, e.g., Refresh Plugin List on Plugin Batch Execution Page) */
     onInitInputValueAfter?: (value: HybridScanControlAfterRequest) => void
-    /**进度条新鲜 */
+    /**Progress Bar Fresh */
     setProgressList: (s: StreamResult.Progress[]) => void
 
-    /**停止 */
+    /**Exec Plugin Names Array */
     pauseLoading: boolean
     setPauseLoading: (value: boolean) => void
 
-    /**继续 */
+    /**Continue */
     continueLoading?: boolean
     setContinueLoading?: (value: boolean) => void
 
-    /**是否展开收起表单内容 */
+    /**Expand/Collapse Form Content */
     isExpand: boolean
     setIsExpand: (value: boolean) => void
 
-    /**执行状态 */
+    /**Execution Status */
     executeStatus: ExpandAndRetractExcessiveState
     setExecuteStatus: (value: ExpandAndRetractExcessiveState) => void
 
-    /**插件执行日志 */
+    /**Plugin Execution Log */
     setPluginExecuteLog?: (s: StreamResult.PluginExecuteLog[]) => void
 
     pluginExecuteResultWrapper?: string
-    /**设置某部分的显示与隐藏 eg:poc设置最左侧的显示与隐藏 */
+    /**Set Visibility for Parts, eg: Show/Hide in poc Settings */
     setHidden?: (value: boolean) => void
     dataScanParams?: DataScanParamsProps
     pageId?: string
-    /**运行时id */
+    /**Runtime ID */
     initRuntimeId?: string
 
     hybridScanTaskSource: HybridScanTaskSourceType
@@ -448,12 +448,12 @@ export const PluginBatchExecuteContent: React.FC<PluginBatchExecuteContentProps>
             }),
             [form]
         )
-        /**额外参数弹出框 */
+        /**For cache modification */
         const [extraParamsVisible, setExtraParamsVisible] = useState<boolean>(false)
         const [extraParamsValue, setExtraParamsValue] = useState<PluginBatchExecuteExtraFormValue>({
             ...cloneDeep(defPluginBatchExecuteExtraFormValue)
         })
-        /**初始的原始请求数据包，不受额外参数中的 RawHTTPRequest 影响 */
+        /**Initial Raw HTTP Request Data, unaffected by RawHTTPRequest in additional parameters */
         const [initRawHTTPRequest, setInitRawHTTPRequest] = useState<string>("")
 
         const [pauseLoading, setPauseLoading] = useControllableValue<boolean>(props, {
@@ -466,13 +466,13 @@ export const PluginBatchExecuteContent: React.FC<PluginBatchExecuteContentProps>
             valuePropName: "continueLoading",
             trigger: "setContinueLoading"
         })
-        /**是否展开/收起 */
+        /**Is Expanded/Collapse */
         const [isExpand, setIsExpand] = useControllableValue<boolean>(props, {
             defaultValue: false,
             valuePropName: "isExpand",
             trigger: "setIsExpand"
         })
-        /**执行状态 */
+        /**Execution Status */
         const [executeStatus, setExecuteStatus] = useControllableValue<ExpandAndRetractExcessiveState>(props, {
             defaultValue: "default",
             valuePropName: "executeStatus",
@@ -481,7 +481,7 @@ export const PluginBatchExecuteContent: React.FC<PluginBatchExecuteContentProps>
         const [runtimeId, setRuntimeId] = useState<string>(initRuntimeId || "")
 
         const tokenRef = useRef<string>(randomString(40))
-        const isRetryRef = useRef<boolean>(false) //是否为重试
+        const isRetryRef = useRef<boolean>(false) //Is Retry
         const batchExecuteFormRef = useRef<HTMLDivElement>(null)
         const [inViewport = true] = useInViewport(batchExecuteFormRef)
 
@@ -558,18 +558,18 @@ export const PluginBatchExecuteContent: React.FC<PluginBatchExecuteContentProps>
                 emiter.off("switchTaskStatus", onSwitchTaskStatus)
             }
         }, [inViewport])
-        /**切换任务状态 */
+        /**Toggle Task Status */
         const onSwitchTaskStatus = useMemoizedFn((res) => {
             try {
                 const value = JSON.parse(res)
                 const {runtimeId, hybridScanMode, pageId: pId} = value
                 if (pageId !== pId) return
                 if (!runtimeId) {
-                    yakitNotify("error", "未设置正常得 runtimeId")
+                    yakitNotify("error", "No Valid runtimeId Set")
                     return
                 }
                 if (hybridScanMode == "new") {
-                    yakitNotify("error", "重试(new)不走该操作,请传入正确的hybridScanMode")
+                    yakitNotify("error", "Retry (new) Bypass, Please Provide Correct hybridScanMode")
                     return
                 }
                 apiHybridScanByMode(runtimeId, hybridScanMode, tokenRef.current)
@@ -583,13 +583,13 @@ export const PluginBatchExecuteContent: React.FC<PluginBatchExecuteContentProps>
                         }
                     })
                     .catch((error) => {
-                        yakitNotify("error", `apiHybridScanByMode失败${error}`)
+                        yakitNotify("error", `apiHybridScanByMode Failed${error}`)
                     })
             } catch (error) {
-                yakitNotify("error", `任务操作参数解析失败${error}`)
+                yakitNotify("error", `Task Operation Parameter Parsing Failed${error}`)
             }
         })
-        /**更新该页面最新的runtimeId */
+        /**Update Latest runtimeId for Page */
         const onUpdatePluginBatchExecutorPageInfo = useMemoizedFn((runtimeId: string) => {
             if (!pageId) return
             const currentItem: PageNodeItemProps | undefined = queryPagesDataById(YakitRoute.BatchExecutorPage, pageId)
@@ -624,7 +624,7 @@ export const PluginBatchExecuteContent: React.FC<PluginBatchExecuteContentProps>
             }
             const initRawHTTPRequestString = Uint8ArrayToString(formValue.RawHTTPRequest)
             setExtraParamsValue((v) => ({...v, ...formValue}))
-            /**目前只有webfuzzer带数据包的参数进入poc */
+            /**Only webfuzzer Enters poc with Data Packet Parameters */
             setInitRawHTTPRequest(initRawHTTPRequestString)
             form.setFieldsValue({
                 ...formValue,
@@ -633,13 +633,13 @@ export const PluginBatchExecuteContent: React.FC<PluginBatchExecuteContentProps>
         })
 
         /**
-         * @description 初次打开的操作函数
-         * 通过runtimeId操作该条记录
+         * @First-time Open Function
+         * Operate Record by runtimeId
          * */
         const onActionHybridScanByRuntimeId: (runtimeId: string, hybridScanMode: HybridScanModeType) => Promise<null> =
             useMemoizedFn((runtimeId, hybridScanMode) => {
                 return new Promise((resolve, reject) => {
-                    if (!runtimeId) reject("未设置正常得 runtimeId")
+                    if (!runtimeId) reject("No Valid runtimeId Set")
                     hybridScanStreamEvent.reset()
                     const action = (mode) => {
                         apiHybridScanByMode(runtimeId, mode, tokenRef.current)
@@ -656,7 +656,7 @@ export const PluginBatchExecuteContent: React.FC<PluginBatchExecuteContentProps>
                             action(hybridScanMode)
                             break
                         case "new":
-                            //重试 先查询回来输入模块的值，用该值去新建任务，新建任务的逻辑在设置完输入模块后(onInitInputValue)
+                            //Retry Fetch Input Module's Value, Use This Value to Create New Task, Logic in Set Input Module(after onInitInputValue)
                             isRetryRef.current = true
                             action("status")
                             break
@@ -666,7 +666,7 @@ export const PluginBatchExecuteContent: React.FC<PluginBatchExecuteContentProps>
                     }
                 })
             })
-        /**设置输入模块的初始值 */
+        /**Set Initial Value for Input Module */
         const onInitInputValue = useMemoizedFn((value: HybridScanControlAfterRequest) => {
             const inputValue: PluginBatchExecutorInputValueProps = hybridScanParamsConvertToInputValue(value)
             const {params} = inputValue
@@ -675,14 +675,14 @@ export const PluginBatchExecuteContent: React.FC<PluginBatchExecuteContentProps>
             const httpFlowId = !!params.HTTPRequestTemplate.HTTPFlowId
                 ? params.HTTPRequestTemplate.HTTPFlowId.join(",")
                 : ""
-            // 请求类型新增了请求id，兼容之前的版本
+            // Request Type Added Request ID, Backward Compatible
             const requestType = {
                 IsRawHTTPRequest: isRawHTTPRequest,
                 IsHttpFlowId: isHttpFlowId,
                 httpFlowId,
                 requestType: (isHttpFlowId ? "httpFlowId" : isRawHTTPRequest ? "original" : "input") as RequestType
             }
-            // form表单数据
+            // Form Data
             const extraForm = {
                 ...params.HTTPRequestTemplate,
                 ...requestType,
@@ -700,7 +700,7 @@ export const PluginBatchExecuteContent: React.FC<PluginBatchExecuteContentProps>
             form.setFieldsValue({...formValue})
             setExtraParamsValue(extraForm)
             setInitRawHTTPRequest(initRawHTTPRequestString)
-            // 重试
+            // Retry
             if (isRetryRef.current) {
                 isRetryRef.current = false
                 onStartExecute(formValue)
@@ -708,7 +708,7 @@ export const PluginBatchExecuteContent: React.FC<PluginBatchExecuteContentProps>
             if (onInitInputValueAfter) onInitInputValueAfter(value)
         })
         const getHybridScanParams: (value) => HybridScanControlAfterRequest = useMemoizedFn((value) => {
-            // 任务配置参数
+            // Clear AI Plugin
             const taskParams: PluginBatchExecutorTaskProps = {
                 Concurrent: extraParamsValue.Concurrent,
                 TotalTimeoutSecond: extraParamsValue.TotalTimeoutSecond,
@@ -731,7 +731,7 @@ export const PluginBatchExecuteContent: React.FC<PluginBatchExecuteContentProps>
             }
             return convertHybridScanParams(params, pluginInfo)
         })
-        /**开始执行 */
+        /**Start Execution */
         const onStartExecute = useMemoizedFn(async (value) => {
             const hybridScanParams: HybridScanControlAfterRequest = {
                 ...getHybridScanParams(value),
@@ -748,23 +748,23 @@ export const PluginBatchExecuteContent: React.FC<PluginBatchExecuteContentProps>
         const openExtraPropsDrawer = useMemoizedFn(() => {
             setExtraParamsVisible(true)
         })
-        /**保存额外参数 */
+        /**Save Extra Parameters */
         const onSaveExtraParams = useMemoizedFn((v: PluginBatchExecuteExtraFormValue) => {
             setExtraParamsValue((val) => ({...val, ...v}) as PluginBatchExecuteExtraFormValue)
             setExtraParamsVisible(false)
         })
-        /**取消执行 */
+        /**Code Gen */
         const onStopExecute = useMemoizedFn(() => {
             apiCancelHybridScan(tokenRef.current).then(() => {
                 setExecuteStatus("finished")
             })
         })
-        /**暂停 */
+        /**Pause */
         const onPause = useMemoizedFn(() => {
             setPauseLoading(true)
             apiHybridScanByMode(runtimeId, "pause", tokenRef.current)
         })
-        /**继续 */
+        /**Continue */
         const onContinue = useMemoizedFn(() => {
             setContinueLoading(true)
             hybridScanStreamEvent.reset()
@@ -792,10 +792,10 @@ export const PluginBatchExecuteContent: React.FC<PluginBatchExecuteContentProps>
                         form={form}
                         onFinish={onStartExecute}
                         labelCol={{span: 6}}
-                        wrapperCol={{span: 12}} //这样设置是为了让输入框居中
+                        wrapperCol={{span: 12}} //Center Input Field
                         validateMessages={{
                             /* eslint-disable no-template-curly-in-string */
-                            required: "${label} 是必填字段"
+                            required: "${label} Required Field"
                         }}
                         labelWrap={true}
                     >
@@ -811,12 +811,12 @@ export const PluginBatchExecuteContent: React.FC<PluginBatchExecuteContentProps>
                                     <>
                                         {executeStatus === "paused" && !pauseLoading && (
                                             <YakitButton size='large' onClick={onContinue} loading={continueLoading}>
-                                                继续
+                                                Continue
                                             </YakitButton>
                                         )}
                                         {(executeStatus === "process" || pauseLoading) && (
                                             <YakitButton size='large' onClick={onPause} loading={pauseLoading}>
-                                                暂停
+                                                Pause
                                             </YakitButton>
                                         )}
                                         <YakitButton
@@ -825,13 +825,13 @@ export const PluginBatchExecuteContent: React.FC<PluginBatchExecuteContentProps>
                                             size='large'
                                             disabled={pauseLoading || continueLoading}
                                         >
-                                            停止
+                                            Exec Plugin Names Array
                                         </YakitButton>
                                     </>
                                 ) : (
                                     <>
                                         <YakitButton htmlType='submit' size='large' disabled={selectNum === 0}>
-                                            开始执行
+                                            Start Execution
                                         </YakitButton>
                                     </>
                                 )}
@@ -841,7 +841,7 @@ export const PluginBatchExecuteContent: React.FC<PluginBatchExecuteContentProps>
                                     disabled={isExecuting}
                                     size='large'
                                 >
-                                    额外参数
+                                    Extra params
                                 </YakitButton>
                             </div>
                         </Form.Item>

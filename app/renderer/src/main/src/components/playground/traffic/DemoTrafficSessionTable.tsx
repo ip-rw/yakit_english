@@ -27,23 +27,23 @@ export const DemoTrafficSessionTable: React.FC<DemoTrafficSessionTableProp> = (p
         <DemoVirtualTable<TrafficSession>
             columns={[
                 {headerTitle: "ID", key: "Id", width: 80, colRender: (i) => i.Id},
-                {headerTitle: "类型", key: "Id", width: 80, colRender: (i) => i.SessionType},
-                {headerTitle: "设备类型", key: "Id", width: 80, colRender: (i) => i.DeviceType},
+                {headerTitle: "Type", key: "Id", width: 80, colRender: (i) => i.SessionType},
+                {headerTitle: "Device Type", key: "Id", width: 80, colRender: (i) => i.DeviceType},
 
                 {headerTitle: "ID", key: "id", width: 80, colRender: (i) => i.Id},
                 {
-                    headerTitle: "来源",
+                    headerTitle: "Source",
                     key: "source",
                     width: 160,
                     colRender: (i) => i.NetworkSrcIP + ":" + i.TransportLayerSrcPort
                 },
                 {
-                    headerTitle: "目标",
+                    headerTitle: "Target",
                     key: "destination",
                     width: 160,
                     colRender: (i) => i.NetworkDstIP + ":" + i.TransportLayerDstPort
                 },
-                {headerTitle: "协议", key: "protocol", width: 160, colRender: (i) => i.Protocol}
+                {headerTitle: "Protocol", key: "protocol", width: 160, colRender: (i) => i.Protocol}
             ]}
             rowClick={(data) => {
                 setSelected(data)
@@ -51,7 +51,7 @@ export const DemoTrafficSessionTable: React.FC<DemoTrafficSessionTableProp> = (p
             loadMore={(data: TrafficSession | undefined) => {
                 return new Promise((resolve, reject) => {
                     if (!data) {
-                        // info("加载初始化数据")
+                        // info("Load Init Data")
                         ipcRenderer
                             .invoke("QueryTrafficSession", {
                                 TimestampNow: props.fromTimestamp,

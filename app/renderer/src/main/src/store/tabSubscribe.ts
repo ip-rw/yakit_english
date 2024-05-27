@@ -5,8 +5,8 @@ export interface YakitSecondaryConfirmProps extends Omit<YakitModalConfirmProps,
 }
 
 /**
- * @name 存放一级菜单各种操作时===二次确认提示的配置信息
- * @description Map结构存放的是各种情况的二次确认提示的配置信息(比如close，reset等等)
+ * @name First-Level Menu Operations Confirmation Config
+ * @description Map Structure for Confirmation Config Info (e.g., close, reset, etc.))
  */
 
 interface SubscribeCloseProps {

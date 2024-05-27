@@ -37,26 +37,26 @@ export const LocalPluginList: React.FC<PluginLocalGroupsListProps> = React.memo(
     const {pluginsGroupsInViewport, activeGroup} = props
     const [allCheck, setAllCheck] = useState<boolean>(false)
     const [selectList, setSelectList] = useState<YakScript[]>([])
-    const showPluginIndex = useRef<number>(0) // 当前展示的插件序列
-    const [isList, setIsList] = useState<boolean>(false) // 网格与列表之间切换
+    const showPluginIndex = useRef<number>(0) // Current plugin display sequence
+    const [isList, setIsList] = useState<boolean>(false) // Toggle between grid and list
     const [search, setSearch] = useState<PluginSearchParams>(cloneDeep(defaultSearch))
     const [filters, setFilters] = useState<PluginFilterParams>(cloneDeep(defaultFilter))
     const userInfo = useStore((s) => s.userInfo)
     const [response, dispatch] = useReducer(pluginLocalReducer, initialLocalState)
     const [loading, setLoading] = useState<boolean>(false)
     const latestLoadingRef = useLatest(loading)
-    const isLoadingRef = useRef<boolean>(true) // 是否为初次加载
+    const isLoadingRef = useRef<boolean>(true) // First load check
     const pluginsLocalListRef = useRef<HTMLDivElement>(null)
     const [inViewport = true] = useInViewport(pluginsLocalListRef)
     const [initTotal, setInitTotal] = useState<number>(0)
-    const [privateDomain, setPrivateDomain] = useState<string>("") // 私有域地址
+    const [privateDomain, setPrivateDomain] = useState<string>("") // Execution Complete
     const [hasMore, setHasMore] = useState<boolean>(true)
-    const [groupList, setGroupList] = useState<UpdateGroupListItem[]>([]) // 组数据
+    const [groupList, setGroupList] = useState<UpdateGroupListItem[]>([]) // Group Data
     const updateGroupListRef = useRef<any>()
 
     useUpdateEffect(() => {
         const groups =
-            activeGroup.default && activeGroup.id === "全部"
+            activeGroup.default && activeGroup.id === "Deselect"
                 ? []
                 : [{value: activeGroup.name, count: activeGroup.number, label: activeGroup.name}]
         setFilters({...filters, plugin_group: groups})
@@ -70,7 +70,7 @@ export const LocalPluginList: React.FC<PluginLocalGroupsListProps> = React.memo(
         getInitTotal()
     }, [userInfo.isLogin, inViewport])
 
-    // 获取插件total
+    // Fetch plugin total
     const getInitTotal = useMemoizedFn(() => {
         apiQueryYakScriptTotal().then((res) => {
             setInitTotal(+res.Total)
@@ -98,7 +98,7 @@ export const LocalPluginList: React.FC<PluginLocalGroupsListProps> = React.memo(
         fetchList(true)
     }
 
-    // 获取私有域
+    // Fetch private domain
     const getPrivateDomainAndRefList = useMemoizedFn(() => {
         getRemoteValue(RemoteGV.HttpSetting).then((setting) => {
             if (setting) {
@@ -111,22 +111,22 @@ export const LocalPluginList: React.FC<PluginLocalGroupsListProps> = React.memo(
         })
     })
 
-    // 滚动更多加载
+    // Scroll for more loading
     const onUpdateList = useMemoizedFn(() => {
         fetchList()
     })
 
-    // 点击刷新按钮重新拿数据
+    // Click to refresh data
     const onRefListAndTotal = useMemoizedFn(() => {
         getInitTotal()
         refreshLocalPluginList()
     })
 
-    // 获取插件列表数据
+    // Fetch plugin list data
     const queryFetchList = useRef<QueryYakScriptRequest>()
     const fetchList = useDebounceFn(
         useMemoizedFn(async (reset?: boolean) => {
-            // if (latestLoadingRef.current) return //先注释，会影响详情的更多加载
+            // if (latestLoadingRef.current) return //Comment first, affects more loading in details
             if (reset) {
                 isLoadingRef.current = true
                 setShowPluginIndex(0)
@@ -143,11 +143,11 @@ export const LocalPluginList: React.FC<PluginLocalGroupsListProps> = React.memo(
             const querySearch = search
             const query: QueryYakScriptRequest = {
                 ...convertLocalPluginsRequestParams({filter: queryFilters, search: querySearch, pageParams: params}),
-                ExcludeTypes: ["yak", "codec"] // 过滤条件 插件组需要过滤Yak、codec
+                ExcludeTypes: ["yak", "codec"] // Filter conditions, exclude Yak, codec from groups
             }
 
-            // 未分组插件查询
-            if (activeGroup.default && activeGroup.id === "未分组" && query.Group) {
+            // Ungrouped plugin query
+            if (activeGroup.default && activeGroup.id === "Ungrouped" && query.Group) {
                 query.Group.UnSetGroup = true
             }
             queryFetchList.current = query
@@ -182,7 +182,7 @@ export const LocalPluginList: React.FC<PluginLocalGroupsListProps> = React.memo(
         {wait: 200, leading: true}
     ).run
 
-    // 搜索
+    // Search
     const onSearch = useMemoizedFn((val) => {
         setSearch(val)
         setTimeout(() => {
@@ -190,47 +190,47 @@ export const LocalPluginList: React.FC<PluginLocalGroupsListProps> = React.memo(
         }, 200)
     })
 
-    // 全选
+    // Fixes failure to iterate load_content on missing older version data
     const onCheck = useMemoizedFn((value: boolean) => {
         setSelectList([])
         setAllCheck(value)
     })
 
-    // 单选
+    // deletion not supported
     const optCheck = useMemoizedFn((data: YakScript, value: boolean) => {
-        // 全选情况时的取消勾选
+        // Fetch loading char with regex
         if (allCheck) {
             setSelectList(response.Data.filter((item) => item.ScriptName !== data.ScriptName))
             setAllCheck(false)
             return
         }
-        // 单项勾选回调
+        // No history fetched if CS or vuln unselected by user
         if (value) setSelectList([...selectList, data])
         else setSelectList(selectList.filter((item) => item.ScriptName !== data.ScriptName))
     })
 
-    // 选中插件的数量
+    // Selected plugin count
     const selectNum = useMemo(() => {
         if (allCheck) return response.Total
         else return selectList.length
     }, [allCheck, selectList, response.Total])
 
-    // 主要用于勾选样式添加
+    // Mainly for adding checkmark style
     const checkList = useMemo(() => {
         return selectList.map((ele) => ele.ScriptName)
     }, [selectList])
 
-    // 用于网格 列表 插件切换定位
+    // For grid list plugin switch positioning
     const setShowPluginIndex = useMemoizedFn((index: number) => {
         showPluginIndex.current = index
     })
 
-    // 单项点击回调
+    // Item click callback
     const optClick = useMemoizedFn((data: YakScript, index: number) => {
         setShowPluginIndex(index)
     })
 
-    // 单项副标题组件
+    // Extra Params Modal
     const optSubTitle = useMemoizedFn((data: YakScript) => {
         if (data.isLocalPlugin) return <></>
         if (data.OnlineIsPrivate) {
@@ -240,7 +240,7 @@ export const LocalPluginList: React.FC<PluginLocalGroupsListProps> = React.memo(
         }
     })
 
-    // 本地获取插件所在插件组和其他插件组
+    // Locally get plugin's group and other groups
     const scriptNameRef = useRef<string[]>([])
     const getYakScriptGroupLocal = (scriptName: string[]) => {
         scriptNameRef.current = scriptName
@@ -262,15 +262,15 @@ export const LocalPluginList: React.FC<PluginLocalGroupsListProps> = React.memo(
         })
     }
 
-    // 更新组数据
+    // Update Group Data
     const updateGroupList = () => {
         const latestGroupList: UpdateGroupListItem[] = updateGroupListRef.current.latestGroupList
 
-        // 新
+        // New
         const checkedGroup = latestGroupList.filter((item) => item.checked).map((item) => item.groupName)
         const unCheckedGroup = latestGroupList.filter((item) => !item.checked).map((item) => item.groupName)
 
-        // 旧
+        // Old
         const originCheckedGroup = groupList.filter((item) => item.checked).map((item) => item.groupName)
 
         let saveGroup: string[] = []
@@ -291,15 +291,15 @@ export const LocalPluginList: React.FC<PluginLocalGroupsListProps> = React.memo(
             SaveGroup: saveGroup,
             RemoveGroup: removeGroup
         }).then(() => {
-            if (activeGroup.id !== "全部") {
+            if (activeGroup.id !== "Deselect") {
                 refreshLocalPluginList()
             }
-            emiter.emit("onRefLocalPluginList", "") // 刷新本地插件列表
+            emiter.emit("onRefLocalPluginList", "") // Refresh local plugin list
             emiter.emit("onRefPluginGroupMagLocalQueryYakScriptGroup", "")
         })
     }
 
-    // 单项额外操作
+    // Item additional operations
     const optExtraNode = useMemoizedFn((data, index) => {
         return (
             <div onClick={(e) => e.stopPropagation()}>
@@ -360,7 +360,7 @@ export const LocalPluginList: React.FC<PluginLocalGroupsListProps> = React.memo(
                                 maxWidth={1050}
                                 icon={<SolidPluscircleIcon />}
                                 size='large'
-                                name='添加到组...'
+                                name='Add to Group...'
                             />
                         </YakitPopover>
 
@@ -433,10 +433,10 @@ export const LocalPluginList: React.FC<PluginLocalGroupsListProps> = React.memo(
                     />
                 ) : (
                     <div className={styles["plugin-local-empty"]}>
-                        <YakitEmpty title='暂无数据' style={{marginTop: 80}} />
+                        <YakitEmpty title='No Data Available' style={{marginTop: 80}} />
                         <div className={styles["plugin-local-buttons"]}>
                             <YakitButton type='outline1' icon={<OutlineRefreshIcon />} onClick={onRefListAndTotal}>
-                                刷新
+                                Refresh
                             </YakitButton>
                         </div>
                     </div>

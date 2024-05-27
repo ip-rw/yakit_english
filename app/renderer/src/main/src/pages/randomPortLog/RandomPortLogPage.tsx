@@ -88,10 +88,10 @@ export const RandomPortLogPage: React.FC<RandomPortLogPageProp> = (props) => {
             title={
                 <Space>
                     Random Port Logger
-                    <div className={style["description-text"]}>使用未开放的随机端口来判定 TCP 反连</div>
+                    <div className={style["description-text"]}>Determine TCP back-connect using a closed random port</div>
                     <Divider type={"vertical"} />
                     <div className={style["set-ping-size-wrap"]}>
-                        当前随机端口：
+                        Current random port：
                         <YakitInputNumber
                             disabled={true}
                             value={randomPort}
@@ -99,16 +99,16 @@ export const RandomPortLogPage: React.FC<RandomPortLogPageProp> = (props) => {
                         />
                     </div>
                     <YakitButton disabled={loading} onClick={refreshPort}>
-                        申请随机端口
+                        Request random port
                     </YakitButton>
                     <YakitButton type='text' disabled={loading} icon={<ReloadOutlined />} onClick={update}>
-                        刷新
+                        Refresh
                     </YakitButton>
                 </Space>
             }
         >
             <Row align='middle'>
-                <Col>使用以下随机端口尝试触发记录：</Col>
+                <Col>Use the following random port to attempt to trigger logging：</Col>
                 <Col>
                     {externalAddr !== "" && !loading ? (
                         <>
@@ -122,7 +122,7 @@ export const RandomPortLogPage: React.FC<RandomPortLogPageProp> = (props) => {
                     {externalAddr !== "" && !loading ? (
                         <>
                             <Space>
-                                使用 NC 命令
+                                Use NC command
                                 <YakitTag
                                     enableCopy={true}
                                     color='success'
@@ -152,34 +152,34 @@ export const RandomPortLogPage: React.FC<RandomPortLogPageProp> = (props) => {
                     loading={loading}
                     columns={[
                         {
-                            title: "随机反连端口",
+                            title: "Random back-connect port",
                             dataKey: "LocalPort"
                         },
                         {
-                            title: "远端地址",
+                            title: "Remote Address",
                             dataKey: "RemoteAddr",
                             render: (text) => <YakitCopyText showText={text} />
                         },
                         {
-                            title: "同主机其他连接(一分钟内)",
+                            title: "Other connections on the same host (within 1 min)",
                             dataKey: "CurrentRemoteCachedConnectionCount",
                             render: (text) => <span>{text || 1}</span>
                         },
                         {
-                            title: "同端口历史(一分钟内)",
+                            title: "Same port history (within 1 min)",
                             dataKey: "LocalPortCachedHistoryConnectionCount",
                             render: (text, r) => (
                                 <Tooltip
-                                    title={`对当前端口(${r.LocalPort})来说，除了当前连接，还有${
+                                    title={`To the current port(${r.LocalPort})Besides the current connection, there are${
                                         text || 1
-                                    }个来自其他远端的连接`}
+                                    }Connections from other remotes`}
                                 >
                                     <a
                                         href='#'
                                         onClick={(e) => {
                                             e.preventDefault()
                                             const m = showYakitModal({
-                                                title: "查看历史记录",
+                                                title: "View history",
                                                 width: "40%",
                                                 content: (
                                                     <div style={{height: 500, marginBottom: 5}}>
@@ -199,13 +199,13 @@ export const RandomPortLogPage: React.FC<RandomPortLogPageProp> = (props) => {
                                             })
                                         }}
                                     >
-                                        其他连接：{text || 1}
+                                        Other connections：{text || 1}
                                     </a>
                                 </Tooltip>
                             )
                         },
                         {
-                            title: "触发时间",
+                            title: "Trigger Time",
                             dataKey: "TriggerTimestamp",
                             render: (text) => <YakitTag color={"bluePurple"}>{formatTimestamp(text)}</YakitTag>
                         }

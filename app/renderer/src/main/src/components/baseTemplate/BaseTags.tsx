@@ -12,33 +12,33 @@ export interface TagsListProps extends TagProps {
     size?: "big" | "small"
 }
 
-// Tags展示组件
+// Tags Display Component
 export const TagsList: React.FC<TagsListProps> = React.memo((props) => {
     const {data, ellipsis, className, size, ...otherProps} = props
     const tagListRef = useRef<any>(null)
     const tagEllipsis = useRef<any>(null)
-    // 展示数据源
+    // Display Data Source
     const [dataSource, setDataSource] = useState<string[]>([])
-    // 省略后隐藏项
+    // Hidden Items After Ellipsis
     const [ellipsisTags, setEllipsisTags, getEllipsisTags] = useGetState<string[]>([])
     useEffect(() => {
-        // 省略模式 动态计算
+        // Ellipsis Mode Dynamic Calculation
         if (ellipsis) {
             const {current} = tagListRef
             const boxWidth = current.offsetWidth
             const ellipsisWidth = tagEllipsis.current.offsetWidth
-            let countWidth = 0 //计算当前宽度
-            const lastItem = current.children.length - 1 // 最后一项Index
-            const itemMargin = 8 //每一项的magin
-            // ps: for循环不计入最后...扩展项
+            let countWidth = 0 //Calculate Current Width
+            const lastItem = current.children.length - 1 // Last Item Index
+            const itemMargin = 8 //Item Margin
+            // ps: loop does not account for the final...extension item
             let showTagsArr: string[] = []
             let ellipsisTagsArr: string[] = []
             for (let i = 0; i <= lastItem; i++) {
-                // 当前项完整宽度(包含margin)
+                // Full Width of Current Item (including margin))
                 let nowItemWidth = current.children[i].offsetWidth + itemMargin
-                // 计算当前项后宽度
+                // Calculate Width After Current Item
                 let nowWidth = countWidth + nowItemWidth
-                // 如不是最后一项,则添加...宽度计算
+                // If Not Last Item, Add...for Width Calculation
                 if (i < lastItem && nowWidth + ellipsisWidth < boxWidth) {
                     countWidth += nowItemWidth
                     showTagsArr = [...showTagsArr, data[i]]
@@ -66,7 +66,7 @@ export const TagsList: React.FC<TagsListProps> = React.memo((props) => {
     const tooltipStr = ellipsis && ellipsisTags.join("，")
     return (
         <div className={styles["base-tags-list"]}>
-            {/* 隐藏DOM元素 用于实时计算 */}
+            {/* Hide DOM Elements for Real-time Calculation */}
             <div style={{overflow: "hidden", height: 0}} ref={tagListRef}>
                 {data.map((item) => (
                     <Tag

@@ -7,7 +7,7 @@ import {Uint8ArrayToString} from "../str"
 const {ipcRenderer} = window.require("electron")
 let id = randomString(40)
 
-/**@name 推送是否开启 */
+/**@name Push Enabled */
 export let serverPushStatus = false
 
 export const startupDuplexConn = () => {
@@ -16,19 +16,19 @@ export const startupDuplexConn = () => {
         try {
             const obj = JSON.parse(Uint8ArrayToString(data.Data))
             switch (obj.type) {
-                // 当前引擎支持推送数据库更新(如若不支持则依然使用轮询请求)
+                // Engine Supports Push DB Updates (If not, continue with polling)
                 case "global":
                     serverPushStatus = true
                     break
-                // 通知QueryHTTPFlows轮询更新
+                // Notify QueryHTTPFlows to Poll Updates
                 case "httpflow":
                     emiter.emit("onRefreshQueryHTTPFlows")
                     break
-                // 通知QueryYakScript轮询更新
+                // Notify QueryYakScript to Poll Updates
                 case "yakscript":
                     emiter.emit("onRefreshQueryYakScript")
                     break
-                // 通知QueryNewRisk轮询更新
+                // Notify QueryNewRisk to Poll Updates
                 case "risk":
                     emiter.emit("onRefreshQueryNewRisk")
                     break

@@ -12,24 +12,24 @@ const {ipcRenderer} = window.require("electron");
 // export const showFile = (url: YakURL, content: string, setContent: (value: string) => void, setLoading: (value: boolean) => void) => {
 //     url.Query = url.Query.map(queryItem => {
 //         if (queryItem.Key === 'mode') {
-//             return {...queryItem, Value: 'show'};  // 如果键是 'mode'，则将值改为 'show'
+//             return {...queryItem, Value: 'show'};  // If the key is 'mode'，Then change the value to 'show'
 //         } else {
-//             return queryItem;  // 否则保持原样
+//             return queryItem;  // Otherwise, keep as is
 //         }
 //     });
-//     setLoading(true);  // 开始请求前，设置加载状态为 true
+//     setLoading(true);  // Before starting request, set loading state to true
 //
 //     requestYakURLList({url}).then(
 //         (rsp) => {
 //             content = rsp.Resources[0]?.Extra.find(extra => extra.Key === 'content')?.Value || '';
-//             // 找到回显的结果，并将其值赋给 'content'
+//             // Find the echoed result and assign its value 'content'
 //             console.log(content);
-//             setLoading(false);  // 请求结束后，设置加载状态为 false
+//             setLoading(false);  // After request ends, set loading state to false
 //             const edit = showYakitModal({
-//                 title: "编辑 Shell",
+//                 title: "Edit Shell",
 //                 width: "60%",
-//                 onCancelText: "返回",
-//                 onOkText: "保存",
+//                 onCancelText: "Back",
+//                 onOkText: "Save",
 //                 content: (
 //                     <>
 //                         <div style={{height: 500, overflow: "hidden"}}>
@@ -48,7 +48,7 @@ const {ipcRenderer} = window.require("electron");
 //                         console.log(r);
 //                         edit.destroy();
 //                     }).catch((e) => {
-//                             yakitFailed(`更新失败: ${e}`);
+//                             yakitFailed(`Update Failed: ${e}`);
 //                         }
 //                     );
 //                 },
@@ -66,14 +66,14 @@ const {ipcRenderer} = window.require("electron");
 //
 //     //     rsp => {
 //     //     const content = rsp.Resources[0]?.Extra.find(extra => extra.Key === 'content')?.Value || '';
-//     //     // 找到回显的结果，并将其值赋给 'content'
+//     //     // Find the echoed result and assign its value 'content'
 //     //     console.log(content);
-//     //     setLoading(false);  // 请求结束后，设置加载状态为 false
+//     //     setLoading(false);  // After request ends, set loading state to false
 //     //     const edit = YakitModalConfirm({
-//     //         title: "编辑 Shell",
+//     //         title: "Edit Shell",
 //     //         width: "60%",
-//     //         onCancelText: "返回",
-//     //         onOkText: "保存",
+//     //         onCancelText: "Back",
+//     //         onOkText: "Save",
 //     //         content: (
 //     //             <div style={{height: 500, overflow: "hidden"}}>
 //     //                 <YakitEditor
@@ -88,7 +88,7 @@ const {ipcRenderer} = window.require("electron");
 //     //                 console.log(r);
 //     //                 edit.destroy();
 //     //             }).catch((e) => {
-//     //                     yakitFailed(`更新失败: ${e}`);
+//     //                     yakitFailed(`Update Failed: ${e}`);
 //     //                 }
 //     //             );
 //     //         },
@@ -104,16 +104,16 @@ const {ipcRenderer} = window.require("electron");
 //
 // }
 
-// 返回上一层
+// Return to previous level
 export const goBack = (url: YakURL, setLoading: (value: boolean) => void, setGoBackTree: (data: TreeNode[]) => void) => {
     url.Path = url.Path + "../"
-    setLoading(true);  // 开始请求前，设置加载状态为 true
+    setLoading(true);  // Before starting request, set loading state to true
 
     requestYakURLList({url}, rsp => {
         const resources = rsp.Resources;
-        let indexCounter = 0; // 设置索引计数器
+        let indexCounter = 0; // Set index counter
         const files: TreeNode[] = resources
-            .filter(i => !i.HaveChildrenNodes) // 过滤掉有子节点的项，即文件
+            .filter(i => !i.HaveChildrenNodes) // Filter out items with children, i.e., files
             .map((i, index) => ({
                 title: i.VerboseName,
                 key: `${indexCounter++}`,
@@ -122,7 +122,7 @@ export const goBack = (url: YakURL, setLoading: (value: boolean) => void, setGoB
             }));
 
         const dirs: TreeNode[] = resources
-            .filter(i => i.HaveChildrenNodes) // 过滤掉没有子节点的项，即目录
+            .filter(i => i.HaveChildrenNodes) // Filter out items without children, i.e., directories
             .map((i, index) => ({
                 title: i.VerboseName,
                 key: `${indexCounter++}`,
@@ -130,7 +130,7 @@ export const goBack = (url: YakURL, setLoading: (value: boolean) => void, setGoB
                 isLeaf: !i.HaveChildrenNodes,
             }));
         setGoBackTree(dirs);
-        setLoading(false);  // 请求结束后，设置加载状态为 false
+        setLoading(false);  // After request ends, set loading state to false
     });
 }
 
@@ -138,19 +138,19 @@ export const goBack = (url: YakURL, setLoading: (value: boolean) => void, setGoB
 export const updateFile = (url: YakURL, setLoading: (value: boolean) => void) => {
     url.Query = url.Query.map(queryItem => {
         if (queryItem.Key === 'mode') {
-            return {...queryItem, Value: 'show'};  // 如果键是 'mode'，则将值改为 'show'
+            return {...queryItem, Value: 'show'};  // If the key is 'mode'，Then change the value to 'show'
         } else {
-            return queryItem;  // 否则保持原样
+            return queryItem;  // Otherwise, keep as is
         }
     });
-    setLoading(true);  // 开始请求前，设置加载状态为 true
+    setLoading(true);  // Before starting request, set loading state to true
 
     requestYakURLList({url}, rsp => {
         const content = rsp.Resources[0]?.Extra.find(extra => extra.Key === 'content')?.Value || '';
-        // 找到回显的结果，并将其值赋给 'content'
-        setLoading(false);  // 请求结束后，设置加载状态为 false
+        // Find the echoed result and assign its value 'content'
+        setLoading(false);  // After request ends, set loading state to false
         const edit = showModal({
-            title: "编辑 Shell",
+            title: "Edit Shell",
             width: "60%",
             content: (
                 <div style={{height: 500, overflow: "hidden"}}>

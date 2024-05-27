@@ -5,17 +5,17 @@ import styles from "./YakitRadioButtons.module.scss"
 import classNames from "classnames"
 
 /**
- * 更新说明
- * 1.增加环境变量加载主题色
- * 2.优化solid风格的样式
- * 4.更换颜色变量
- * 5.修改边框的颜色
+ * Update Notes
+ * 1. Load theme color from env var
+ * 2. Optimize Solid Style
+ * 4. Change Color Var
+ * 5. Edit Border Color
  */
 
 /**
- * @description: 按钮单选框Props
- * @param {"small" | "middle" | "large" | "maxLarge"} size  默认middle
- * @augments RadioGroupProps 继承antd的 RadioGroupProps 默认属性
+ * @description: Btn Radio Props
+ * @param {"small" | "middle" | "large" | "maxLarge"} Size (default: middle)
+ * @augments RadioGroupProps Inherit antd RadioGroupProps default
  * @params {string} className RadioGroup  className
  */
 export const YakitRadioButtons: React.FC<YakitRadioButtonsProps> = (props) => {

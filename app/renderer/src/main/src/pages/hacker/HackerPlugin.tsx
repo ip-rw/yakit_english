@@ -110,7 +110,7 @@ export const HackerPlugin: React.FC<HackerPluginProps> = React.memo((props) => {
 
     const startScript = useMemoizedFn(() => {
         if (selected.length === 0) {
-            failed("请选一个插件后在点击执行")
+            failed("Please select a plugin then click to execute")
             return
         }
         setExecting(true)
@@ -184,7 +184,7 @@ export const HackerPlugin: React.FC<HackerPluginProps> = React.memo((props) => {
                 <AutoCard
                     size='small'
                     bordered={false}
-                    title={"数据包扫描插件(暂只支持单选)"}
+                    title={"Plugin Scan (Single selection supported for now)"}
                     bodyStyle={{padding: "0 4px", overflowY: "hidden"}}
                     extra={
                         <Space>
@@ -200,10 +200,10 @@ export const HackerPlugin: React.FC<HackerPluginProps> = React.memo((props) => {
                                 }}
                                 checked={checked}
                             >
-                                全选
+                                Fixes failure to iterate load_content on missing older version data
                             </Checkbox> */}
                             <Popover
-                                title={"额外设置"}
+                                title={"Extra Settings"}
                                 trigger={["click"]}
                                 content={
                                     <div>
@@ -215,14 +215,14 @@ export const HackerPlugin: React.FC<HackerPluginProps> = React.memo((props) => {
                                             }}
                                         >
                                             <InputInteger
-                                                label={"插件展示数量"}
+                                                label={"Plugin Display Qty"}
                                                 value={limit}
                                                 setValue={setLimit}
                                                 formItemStyle={{marginBottom: 4}}
                                             />
                                             <Form.Item colon={false} label={""} style={{marginBottom: 10}}>
                                                 <Button type='primary' htmlType='submit'>
-                                                    刷新
+                                                    Refresh
                                                 </Button>
                                             </Form.Item>
                                         </Form>
@@ -232,7 +232,7 @@ export const HackerPlugin: React.FC<HackerPluginProps> = React.memo((props) => {
                                 <Button size={"small"} icon={<SettingOutlined />} type={"link"} />
                             </Popover>
                             <Popover
-                                title={"搜索插件关键字"}
+                                title={"Search Plugin Keyword"}
                                 trigger={["click"]}
                                 content={
                                     <div>
@@ -251,7 +251,7 @@ export const HackerPlugin: React.FC<HackerPluginProps> = React.memo((props) => {
                                             />
                                             <Form.Item colon={false} label={""} style={{marginBottom: 10}}>
                                                 <Button type='primary' htmlType='submit'>
-                                                    搜索
+                                                    Search
                                                 </Button>
                                             </Form.Item>
                                         </Form>
@@ -313,7 +313,7 @@ export const HackerPlugin: React.FC<HackerPluginProps> = React.memo((props) => {
                     bordered={false}
                     title={
                         <Space>
-                            {"已选插件 / 当页插件 / 插件总量"}
+                            {"Selected Plugin / Current Page Plugins / Total Plugins"}
                             <Tag>{`${selected.length} / ${lists.length} / ${total}`}</Tag>
                         </Space>
                     }

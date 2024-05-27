@@ -18,7 +18,7 @@ export const TracerouteForm: React.FC<TracerouteFormProp> = (props) => {
             }}
         >
             <InputItem
-                label={"主机"}
+                label={"Host"}
                 setValue={(Host) => setParams({...params, Host})}
                 value={params.Host}
                 required={true}
@@ -26,7 +26,7 @@ export const TracerouteForm: React.FC<TracerouteFormProp> = (props) => {
             <Form.Item colon={false} label={" "}>
                 <YakitButton type='primary' htmlType='submit'>
                     {" "}
-                    跟踪网络路径{" "}
+                    TraceNetPath{" "}
                 </YakitButton>
             </Form.Item>
         </Form>

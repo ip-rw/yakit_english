@@ -19,43 +19,43 @@ export function GetPluginLanguage(type: string): string {
     return pluginTypeToName[type]?.language || type
 }
 
-/** 插件类型对应的详细信息 */
+/** Detailed Info for Plugin Type */
 interface PluginTypeInfoProps {
-    /** 插件类型名 */
+    /** Plugin Type Name */
     name: string
-    /** 插件类型描述 */
+    /** Plugin Type Description */
     description: string
-    /** 插件类型icon */
+    /** Plugin Type Icon */
     icon: ReactNode
-    /** 插件类型展示颜色 */
+    /** Plugin Display Color */
     color: string
-    /** 插件类型默认源码 */
+    /** Default Source Code for Plugin Type */
     content: string
-    /** 插件类型使用编程语言 */
+    /** Programming Language for Plugin Type */
     language: string
 }
 
-/** @name 插件类型对应的详细信息 */
+/** @Detailed Info for Plugin Type */
 export const pluginTypeToName: Record<string, PluginTypeInfoProps> = {
     yak: {
-        name: "Yak 原生插件",
-        description: "内置了众多网络安全常用库，可快速编写安全小工具，该原生模块只支持手动调用",
+        name: "Yak Native Plugin",
+        description: "Features many common cyber security libraries for quick security tool scripting, this native module is manual call only",
         icon: <SolidYakitPluginIcon />,
         color: "warning",
         content: "yakit.AutoInitYakit()\n\n# Input your code!\n\n",
         language: "yak"
     },
     mitm: {
-        name: "Yak-MITM 模块",
-        description: "专用于 MITM 模块中的模块，编写 MITM 插件，可以轻松对经过的流量进行修改",
+        name: "Yak-MITM Module",
+        description: "For MITM Module, to easily modify traffic with MITM plugins",
         icon: <SolidPluginYakMitmIcon />,
         color: "blue",
         content: MITMPluginTemplate,
         language: "yak"
     },
     "port-scan": {
-        name: "Yak-端口扫描",
-        description: "该插件会对目标进行端口扫描，再对扫描的指纹结果做进一步的处理，常用场景先指纹识别，再 Poc 检测",
+        name: "Yak Port Scanning",
+        description: "This plugin performs port scanning and processes the scan results for fingerprint recognition followed by Poc detection",
         icon: <SolidPluginProtScanIcon />,
         color: "success",
         content: PortScanPluginTemplate,
@@ -63,30 +63,30 @@ export const pluginTypeToName: Record<string, PluginTypeInfoProps> = {
     },
     codec: {
         name: "Yak-Codec",
-        description: "Yakit 中的编解码模块，可以自定义实现所需要的编解码、加解密",
+        description: "Yakit Codec Module for Custom Codec/Encryption",
         icon: <SolidSparklesPluginIcon />,
         color: "purple",
         content: CodecPluginTemplate,
         language: "yak"
     },
     lua: {
-        name: "Lua 模块",
-        description: "监修中，无法使用",
+        name: "Lua Module",
+        description: "Under Supervision, Unavailable",
         icon: <SolidDocumentSearchPluginIcon />,
         color: "bluePurple",
         content: "",
         language: "lua"
     },
     nuclei: {
-        name: "Nuclei YamI 模块",
-        description: "使用 YakVM 构建了一个沙箱，可以兼容执行 Nuclei DSL ，无感使用 Nuclei 自带的 Yaml 模板",
+        name: "Nuclei YamI Module",
+        description: "Built a sandbox using YakVM that can execute Nuclei DSL seamlessly with Nuclei's own Yaml templates",
         icon: <SolidCollectionPluginIcon />,
         color: "cyan",
         content: "# Add your nuclei formatted PoC!",
         language: "yaml"
     }
 }
-/** @name 类型选择-脚本类型选项信息 */
+/** @Type Selection - Script Type Info */
 export const DefaultTypeList: {icon: ReactNode; name: string; description: string; key: string}[] = [
     {...pluginTypeToName["yak"], key: "yak"},
     {...pluginTypeToName["mitm"], key: "mitm"},
@@ -96,76 +96,76 @@ export const DefaultTypeList: {icon: ReactNode; name: string; description: strin
     {...pluginTypeToName["nuclei"], key: "nuclei"}
 ]
 
-/** @name 插件功能相关-本地缓存数据-键值变量 */
+/** @Plugin Related - Local Cache Data - Key Value Variable */
 export enum PluginGV {
     /**
-     * @name 插件删除是否需要不再提醒的选中状态
-     * @description 适用页面:我的插件
+     * @Plugin Deletion Reminder Toggle
+     * @Applicable Page: My Plugins
      */
     UserPluginRemoveCheck = "user_plugin_remove_check",
     /**
-     * @name 插件删除是否需要不再提醒的选中状态
-     * @description 适用页面:回收站
+     * @Plugin Deletion Reminder Toggle
+     * @Applicable Page: Recycle Bin
      */
     RecyclePluginRemoveCheck = "recycle_plugin_remove_check",
     /**
-     * @name 插件删除是否需要不再提醒的选中状态
-     * @description 适用页面:本地插件
+     * @Plugin Deletion Reminder Toggle
+     * @Applicable Page: Local Plugins
      */
     LocalPluginRemoveCheck = "local_plugin_remove_check",
 
-    /** @name 插件信息-yak类型额外参数(用于自定义DNSLOG)对应tag值 */
+    /** @Plugin Info - Yak Type Extra Params (for custom DNSLOG) Corresponding tag Value */
     PluginYakDNSLogSwitch = "custom-dnslog-platform",
-    /** @name 插件信息-codec类型额外参数(用于自定义HTTP数据包变形)对应tag值 */
+    /** @Plugin Info - Codec Type Extra Params (for custom HTTP packet transformation) Corresponding tag Value */
     PluginCodecHttpSwitch = "allow-custom-http-packet-mutate",
-    /** @name 插件信息-codec类型额外参数(用于自定义右键菜单执行)对应tag值 */
+    /** @Plugin Info - Codec Type Extra Params (for custom context menu execution) Corresponding tag Value */
     PluginCodecContextMenuExecuteSwitch = "allow-custom-context-menu-execute",
 
-    /** @name 审核页左侧筛选条件栏是否关闭 */
+    /** @Audit Page Filter Sidebar Closed? */
     AuditFilterCloseStatus = "audit-filter-close-status",
-    /** @name 商店页左侧筛选条件栏是否关闭 */
+    /** @Store Page Filter Sidebar Closed? */
     StoreFilterCloseStatus = "store-filter-close-status",
-    /** @name 我的页左侧筛选条件栏是否关闭 */
+    /** @My Page Filter Sidebar Closed? */
     OwnerFilterCloseStatus = "owner-filter-close-status",
-    /** @name 本地页左侧筛选条件栏是否关闭 */
+    /** @Local Page Filter Sidebar Closed? */
     LocalFilterCloseStatus = "local-filter-close-status",
-    /**@name 本地插件执行模块,额外参数中,[请求路径]的缓存字段 */
+    /**@Local Plugin Execution Module, Extra Params, [Request Path] Cache Field */
     LocalExecuteExtraPath = "local-execute-extra-path",
-    /**@name 插件批量执行模块,额外参数中,[proxy]的缓存字段 */
+    /**@Plugin Batch Execution Module, Extra Params, [proxy] Cache Field */
     LocalBatchExecuteExtraProxy = "local-batch-execute-extra-proxy"
 }
 
-/** @name 审核状态对应展示名称 */
+/** @Audit Status Display Name */
 export const aduitStatusToName: Record<string, {name: string; icon: ReactNode}> = {
-    "0": {name: "待审核", icon: <SolidFlagIcon className='aduit-status-flag-color' />},
-    "1": {name: "已通过", icon: <SolidBadgecheckIcon className='aduit-status-badge-check-color' />},
-    "2": {name: "未通过", icon: <SolidBanIcon className='aduit-status-ban-color' />}
+    "0": {name: "Pending Review", icon: <SolidFlagIcon className='aduit-status-flag-color' />},
+    "1": {name: "Approved", icon: <SolidBadgecheckIcon className='aduit-status-badge-check-color' />},
+    "2": {name: "Not Approved", icon: <SolidBanIcon className='aduit-status-ban-color' />}
 }
-/** @name 审核状态选择列表 */
+/** @Audit Status Selection List */
 export const DefaultStatusList: TypeSelectOpt[] = [
     {key: "0", ...aduitStatusToName["0"]},
     {key: "1", ...aduitStatusToName["1"]},
     {key: "2", ...aduitStatusToName["2"]}
 ]
 
-/** @name 公开状态对应展示信息 */
+/** @Public Status Display Info */
 export const publicStatusToInfo: Record<string, {name: string; icon: ReactNode}> = {
-    "1": {name: "公开", icon: <SolidCloudpluginIcon />},
-    "2": {name: "私密", icon: <SolidPrivatepluginIcon />}
+    "1": {name: "Public", icon: <SolidCloudpluginIcon />},
+    "2": {name: "Private", icon: <SolidPrivatepluginIcon />}
 }
-/** @name 公开状态选择列表 */
+/** @Public Status Selection List */
 export const DefaultPublicStatusList: TypeSelectOpt[] = [
     {key: "1", ...publicStatusToInfo["1"]},
     {key: "2", ...publicStatusToInfo["2"]}
 ]
 
-/** 搜索过滤条件对应展示名称 */
+/** Search Filter Display Name */
 export const filterToName: Record<string, string> = {
-    type: "插件状态",
+    type: "Plugin Status",
     tags: "TAG",
-    plugin_type: "插件类型",
-    status: "审核状态",
-    group: "插件分组"
+    plugin_type: "Plugin type",
+    status: "Audit Status",
+    group: "Plugin Group"
 }
 
 export const defaultFilter: PluginFilterParams = {
@@ -181,6 +181,6 @@ export const defaultSearch: PluginSearchParams = {
 export const defaultPagemeta: PluginListPageMeta = {page: 1, limit: 20}
 
 export const funcSearchType: {value: string; label: string}[] = [
-    {value: "userName", label: "按作者"},
-    {value: "keyword", label: "关键字"}
+    {value: "userName", label: "By Author"},
+    {value: "keyword", label: "Keyword"}
 ]

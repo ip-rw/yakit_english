@@ -6,9 +6,9 @@ import styles from "./PluginTabs.module.scss"
 const {TabPane} = Tabs
 
 interface PluginTabsProps extends Omit<TabsProps, "size" | "type"> {
-    /** @deprecated 组件无法设置该属性,默认定值为 default */
+    /** @deprecated Component can't set this property, default to default */
     size?: "default"
-    /** @deprecated 组件无法设置该属性,默认定值为 card */
+    /** @deprecated Component can't set this property, default to card */
     type?: "card"
 }
 
@@ -24,5 +24,5 @@ const PluginTabs: React.FC<PluginTabsProps> = (props) => {
     )
 }
 
-/** @name 插件功能页面相关 Tabs 组件 */
+/** @name Plugin Function Page Tabs Component */
 export default Object.assign(PluginTabs, {TabPane})

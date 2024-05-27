@@ -12,8 +12,8 @@ import emiter from "@/utils/eventBus/eventBus"
 const {ipcRenderer} = window.require("electron")
 
 /**
- * @description:YakitDrawer  抽屉 placement === "bottom" heard有背景色
- * @augments DrawerProps 继承antd的 DrawerProps 默认属性
+ * @description:YakitDrawer Placement === "bottom" heard with background color
+ * @augments DrawerProps Inherits antd's DrawerProps default properties
  */
 export const YakitDrawer: React.FC<YakitDrawerProps> = (props) => {
     const {visible} = props
@@ -85,11 +85,11 @@ export const showYakitDrawer = (props: ShowDrawerProps) => {
                         <ErrorBoundary
                             FallbackComponent={({error, resetErrorBoundary}) => {
                                 if (!error) {
-                                    return <div>未知错误</div>
+                                    return <div>Unknown Error</div>
                                 }
                                 return (
                                     <div>
-                                        <p>弹框内逻辑性崩溃，请关闭重试！</p>
+                                        <p>Logic failure within dialog, please close and retry！</p>
                                         <pre>{error?.message}</pre>
                                     </div>
                                 )

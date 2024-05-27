@@ -60,7 +60,7 @@ export interface HTTPFlowDetailProp extends HTTPPacketFuzzable {
     defaultHeight?: number
     Tags?: string
 
-    // 查看前/后一个请求内容
+    // Beautify Cache in Editor/Target File Missing
     isFront?: boolean
     isBehind?: boolean
     fetchRequest?: (kind: number) => any
@@ -107,7 +107,7 @@ export const FuzzerResponseToHTTPFlowDetail = (rsp: FuzzerResponseToHTTPFlowDeta
                 setId(d.Id)
             })
             .catch((e) => {
-                failed(`分析参数失败: ${e}`)
+                failed(`Analyzing Detailed Params: ${e}`)
             })
             .finally(() => setTimeout(() => setLoading(false), 300))
     }, [response])
@@ -126,7 +126,7 @@ export const FuzzerResponseToHTTPFlowDetail = (rsp: FuzzerResponseToHTTPFlowDeta
     }
 
     if (loading) {
-        return <Spin tip={"正在分析详细参数"} />
+        return <Spin tip={"Close Details after Sending webfuzzer"} />
     }
 
     return (
@@ -171,7 +171,7 @@ export const HTTPFlowDetail: React.FC<HTTPFlowDetailProp> = (props) => {
     })
 
     useEffect(() => {
-        // 发送webfuzzer后关闭详情
+        // Copy Request Body (Base64)
         ipcRenderer.on("fetch-send-to-tab", onCloseDetails)
 
         return () => {
@@ -179,14 +179,14 @@ export const HTTPFlowDetail: React.FC<HTTPFlowDetailProp> = (props) => {
         }
     }, [])
 
-    // 编辑器复制Url菜单项
+    // Copy URL Menu in Editor
     const copyUrlMenuItem: OtherMenuListProps = useMemo(() => {
         return {
             copyUrl: {
                 menu: [
                     {
                         key: "copy-url",
-                        label: "复制 URL"
+                        label: "Next Request Data"
                     }
                 ],
                 onRun: (editor, key) => {
@@ -197,7 +197,7 @@ export const HTTPFlowDetail: React.FC<HTTPFlowDetailProp> = (props) => {
         }
     }, [flow?.Url])
 
-    // 编辑器发送到对比器
+    // Failed to Extract Data from Rule
     const {compareState, setCompareLeft, setCompareRight} = useHttpFlowStore()
     const sendCodeCompareMenuItem = (type: string) => {
         return {
@@ -205,16 +205,16 @@ export const HTTPFlowDetail: React.FC<HTTPFlowDetailProp> = (props) => {
                 menu: [
                     {
                         key: "code-compare",
-                        label: "发送到对比器",
+                        label: "Send to Comparator from Editor",
                         children: [
                             {
                                 key: "code-compare-left",
-                                label: "发送到对比器左侧",
+                                label: "Manually Edit",
                                 disabled: [false, true, false][compareState]
                             },
                             {
                                 key: "code-compare-right",
-                                label: "发送到对比器右侧",
+                                label: "Fetch Request?",
                                 disabled: [false, false, true][compareState]
                             }
                         ]
@@ -261,14 +261,14 @@ export const HTTPFlowDetail: React.FC<HTTPFlowDetailProp> = (props) => {
                 <>
                     {props.noHeader ? undefined : (
                         <PageHeader
-                            title={`请求详情`}
+                            title={`Send to Comparator`}
                             subTitle={`${props.id}${
                                 (props.payloads || []).length > 0 ? `  Payload: ${props.payloads?.join(",")}` : ""
                             }`}
                             extra={
                                 props.fetchRequest ? (
                                     <Space>
-                                        <Tooltip title={"上一个请求"}>
+                                        <Tooltip title={"Editor Instance"}>
                                             <Button
                                                 type='link'
                                                 disabled={!!props.isFront}
@@ -278,7 +278,7 @@ export const HTTPFlowDetail: React.FC<HTTPFlowDetailProp> = (props) => {
                                                 }}
                                             ></Button>
                                         </Tooltip>
-                                        <Tooltip title={"下一个请求"}>
+                                        <Tooltip title={"Show originalValue in Editor"}>
                                             <Button
                                                 type='link'
                                                 disabled={!!props.isBehind}
@@ -297,12 +297,12 @@ export const HTTPFlowDetail: React.FC<HTTPFlowDetailProp> = (props) => {
                     )}
                     <Space direction={"vertical"} style={{width: "100%"}}>
                         <Descriptions column={4} bordered={true} size={"small"}>
-                            <Descriptions.Item key={"method"} span={1} label={"HTTP 方法"}>
+                            <Descriptions.Item key={"method"} span={1} label={"Next Request"}>
                                 <Tag color={"geekblue"}>
                                     <Text style={{maxWidth: 500}}>{flow.Method}</Text>
                                 </Tag>
                             </Descriptions.Item>
-                            <Descriptions.Item key={"url"} span={3} label={"请求 URL"}>
+                            <Descriptions.Item key={"url"} span={3} label={"Root-Domains"}>
                                 <Text style={{maxWidth: 500}} copyable={true}>
                                     {flow.Url}
                                 </Text>
@@ -322,7 +322,7 @@ export const HTTPFlowDetail: React.FC<HTTPFlowDetailProp> = (props) => {
                             <Descriptions.Item key={"status"} span={1} label={"StatusCode"}>
                                 <Tag color={"geekblue"}>{flow.StatusCode}</Tag>
                             </Descriptions.Item>
-                            <Descriptions.Item key={"size"} span={1} label={"Body大小"}>
+                            <Descriptions.Item key={"size"} span={1} label={"POST Params"}>
                                 <Tag color={"geekblue"}>
                                     <div style={{maxWidth: 500}}>{flow.BodySizeVerbose}</div>
                                 </Tag>
@@ -337,7 +337,7 @@ export const HTTPFlowDetail: React.FC<HTTPFlowDetailProp> = (props) => {
                             {flow.GetParams.length > 0 || flow.PostParams.length > 0 || flow.CookieParams.length > 0 ? (
                                 <Tabs>
                                     {flow.GetParams.length > 0 && (
-                                        <Tabs.TabPane key={"get"} tab={"GET 参数"}>
+                                        <Tabs.TabPane key={"get"} tab={"Show Raw Data?"}>
                                             <FuzzableParamList
                                                 data={flow.GetParams}
                                                 sendToWebFuzzer={() => {
@@ -347,7 +347,7 @@ export const HTTPFlowDetail: React.FC<HTTPFlowDetailProp> = (props) => {
                                         </Tabs.TabPane>
                                     )}
                                     {flow.PostParams.length > 0 && (
-                                        <Tabs.TabPane key={"post"} tab={"POST 参数"}>
+                                        <Tabs.TabPane key={"post"} tab={"Large Response"}>
                                             <FuzzableParamList
                                                 data={flow.PostParams}
                                                 sendToWebFuzzer={() => {
@@ -357,7 +357,7 @@ export const HTTPFlowDetail: React.FC<HTTPFlowDetailProp> = (props) => {
                                         </Tabs.TabPane>
                                     )}
                                     {flow.CookieParams.length > 0 && (
-                                        <Tabs.TabPane key={"cookie"} tab={"Cookie 参数"}>
+                                        <Tabs.TabPane key={"cookie"} tab={"Solves Invisible Characters Issue"}>
                                             <FuzzableParamList
                                                 data={flow.CookieParams}
                                                 sendToWebFuzzer={() => {
@@ -374,7 +374,7 @@ export const HTTPFlowDetail: React.FC<HTTPFlowDetailProp> = (props) => {
 
                         <Row gutter={8}>
                             <Col span={12}>
-                                <Card title={"原始 HTTP 请求"} size={"small"} bodyStyle={{padding: 0}}>
+                                <Card title={"Select HTTP Record Response to View"} size={"small"} bodyStyle={{padding: 0}}>
                                     <div style={{height: 350}}>
                                         {flow.IsWebsocket ? (
                                             <WebSocketEditor flow={flow} value={Uint8ArrayToString(flow.Request)} />
@@ -400,7 +400,7 @@ export const HTTPFlowDetail: React.FC<HTTPFlowDetailProp> = (props) => {
                                 </Card>
                             </Col>
                             <Col span={12}>
-                                <Card title={"原始 HTTP 响应"} size={"small"} bodyStyle={{padding: 0}}>
+                                <Card title={"Raw HTTP Response"} size={"small"} bodyStyle={{padding: 0}}>
                                     <div style={{height: 350}}>
                                         {flow.IsWebsocket ? (
                                             <WebSocketEditor flow={flow} value={Uint8ArrayToString(flow.Response)} />
@@ -429,10 +429,10 @@ export const HTTPFlowDetail: React.FC<HTTPFlowDetailProp> = (props) => {
                         </Row>
 
                         {/*<Collapse>*/}
-                        {/*    <Collapse.Panel key={"request-raw"} header={"原始 HTTP 请求数据包内容"}>*/}
+                        {/*    <Collapse.Panel key={"request-raw"} header={"Before View"}>*/}
 
                         {/*    </Collapse.Panel>*/}
-                        {/*    <Collapse.Panel key={"response-raw"} header={"原始 HTTP 响应数据包内容"}>*/}
+                        {/*    <Collapse.Panel key={"response-raw"} header={"Original Request"}>*/}
 
                         {/*    </Collapse.Panel>*/}
                         {/*</Collapse>*/}
@@ -595,11 +595,11 @@ export const HTTPFlowDetailMini: React.FC<HTTPFlowDetailProp> = (props) => {
         setFlowRequest(undefined)
         setFlowResponse(undefined)
 
-        // 是否获取Request
+        // HTTP Method
         let isGetRequest: boolean = true
         let isGetResponse: boolean = true
 
-        // 请求不为空直接使用
+        // Send to Comparator Left
         if (Uint8ArrayToString(selectedFlow?.Request as Uint8Array) && !isSkip) {
             isGetRequest = false
             setFlowRequest(selectedFlow?.Request)
@@ -611,7 +611,7 @@ export const HTTPFlowDetailMini: React.FC<HTTPFlowDetailProp> = (props) => {
         if (!isGetRequest && !isGetResponse && !isSkip) {
             queryMITMRuleExtractedData(selectedFlow as HTTPFlow)
         }
-        // 请求或响应只要有一个为0或者为isSkip就走接口拿取数据
+        // Fetch Data if Request/Response is 0/isSkip
         if (isGetRequest || isGetResponse || isSkip) {
             isGetRequest && setFlowRequestLoad(true)
             isGetResponse && setFlowResponseLoad(true)
@@ -661,7 +661,7 @@ export const HTTPFlowDetailMini: React.FC<HTTPFlowDetailProp> = (props) => {
                 }
             })
             .catch((e) => {
-                failed("获取规则提取数据失败")
+                failed("")
             })
             .finally(() => {
                 if ((i.Domains || []).length > 0 || (i.RootDomains || []).length > 0) {
@@ -745,7 +745,7 @@ export const HTTPFlowDetailMini: React.FC<HTTPFlowDetailProp> = (props) => {
                             extraEnd={
                                 <div className={classNames(styles["http-history-fold-box"])}>
                                     <div className={styles["http-history-icon-box"]}>
-                                        <Tooltip placement='top' title='向右收起'>
+                                        <Tooltip placement='top' title=''>
                                             <SideBarOpenIcon
                                                 className={styles["fold-icon"]}
                                                 onClick={() => {
@@ -761,9 +761,9 @@ export const HTTPFlowDetailMini: React.FC<HTTPFlowDetailProp> = (props) => {
                                 switch (infoType) {
                                     case "domains":
                                         return StringToUint8Array(
-                                            "# 根域 (Root-Domains)\r\n" +
+                                            "# Domain Name" +
                                                 (flow?.RootDomains || []).join("\r\n") +
-                                                "\r\n\r\n# 域名 (Domain) \r\n" +
+                                                "\r" +
                                                 (flow?.Domains || []).join("\r\n")
                                         )
                                     case "json":
@@ -801,7 +801,7 @@ export const HTTPFlowDetailMini: React.FC<HTTPFlowDetailProp> = (props) => {
                                     </Button.Group>
                                     <div className={classNames(styles["http-history-fold-box"])}>
                                         <div className={styles["http-history-icon-box"]}>
-                                            <Tooltip placement='top' title='向右收起'>
+                                            <Tooltip placement='top' title=''>
                                                 <SideBarOpenIcon
                                                     className={styles["fold-icon"]}
                                                     onClick={() => {
@@ -823,7 +823,7 @@ export const HTTPFlowDetailMini: React.FC<HTTPFlowDetailProp> = (props) => {
                         <div className={styles["empty-box"]}>
                             <div className={classNames(styles["empty-box-fold-box"])}>
                                 <div className={styles["empty-box-icon-box"]}>
-                                    <Tooltip placement='top' title='向右收起'>
+                                    <Tooltip placement='top' title=''>
                                         <SideBarOpenIcon
                                             className={styles["fold-icon"]}
                                             onClick={() => {
@@ -834,7 +834,7 @@ export const HTTPFlowDetailMini: React.FC<HTTPFlowDetailProp> = (props) => {
                                     </Tooltip>
                                 </div>
                             </div>
-                            <YakitEmpty style={{paddingTop: 48}} title='暂无数据' />
+                            <YakitEmpty style={{paddingTop: 48}} title='No Data' />
                         </div>
                     </Col>
                 )}
@@ -842,7 +842,7 @@ export const HTTPFlowDetailMini: React.FC<HTTPFlowDetailProp> = (props) => {
             {isFold && (
                 <div className={classNames(styles["http-history-fold-box"], styles["http-history-fold-border-box"])}>
                     <div className={classNames(styles["http-history-icon-box"])} style={{height: 32}}>
-                        <Tooltip placement='top' title='向左展开'>
+                        <Tooltip placement='top' title='Expand Left'>
                             <SideBarCloseIcon
                                 className={styles["fold-icon"]}
                                 onClick={() => {
@@ -896,7 +896,7 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
                 menu: [
                     {
                         key: "copy-request-base64-body",
-                        label: "复制请求Body (Base64)"
+                        label: "Editor Scroll to Top)"
                     }
                 ],
                 onRun: () => {
@@ -913,7 +913,7 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
                 menu: [
                     {
                         key: "copy-response-base64-body",
-                        label: "复制响应Body (Base64)"
+                        label: "Previous Request)"
                     }
                 ],
                 onRun: () => {
@@ -923,14 +923,14 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
         }
     }, [flow?.RawResponseBodyBase64])
 
-    // 编辑器复制Url菜单项
+    // Copy URL Menu in Editor
     const copyUrlMenuItem: OtherMenuListProps = useMemo(() => {
         return {
             copyUrl: {
                 menu: [
                     {
                         key: "copy-url",
-                        label: "复制 URL"
+                        label: "Next Request Data"
                     }
                 ],
                 onRun: (editor, key) => {
@@ -941,7 +941,7 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
         }
     }, [flow?.Url])
 
-    // 编辑器发送到对比器
+    // Failed to Extract Data from Rule
     const {compareState, setCompareLeft, setCompareRight} = useHttpFlowStore()
     const sendCodeCompareMenuItem = (type: string) => {
         return {
@@ -949,16 +949,16 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
                 menu: [
                     {
                         key: "code-compare",
-                        label: "发送到对比器",
+                        label: "Send to Comparator from Editor",
                         children: [
                             {
                                 key: "code-compare-left",
-                                label: "发送到对比器左侧",
+                                label: "Manually Edit",
                                 disabled: [false, true, false][compareState]
                             },
                             {
                                 key: "code-compare-right",
-                                label: "发送到对比器右侧",
+                                label: "Fetch Request?",
                                 disabled: [false, false, true][compareState]
                             }
                         ]
@@ -999,26 +999,26 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
         }
     }
 
-    // 是否显示原始数据
+    // Raw HTTP Request
     const [isShowBeforeData, setShowBeforeData] = useState<boolean>(false)
-    // 请求/原始请求
+    // Raw HTTP Request Data/Response Dropped
     const [resType, setResType] = useState<"current" | "request">("current")
-    // 响应/原始响应
+    // Collapse Right/Raw Response
     const [rspType, setRspType] = useState<"current" | "response">("current")
-    // 编辑器展示originValue
+    // Object
     const [originResValue, setOriginResValue] = useState<Uint8Array>(new Uint8Array())
     const [originRspValue, setOriginRspValue] = useState<Uint8Array>(new Uint8Array())
-    // 原始数据
+    // Raw Data
     const [beforeResValue, setBeforeResValue] = useState<Uint8Array>(new Uint8Array())
     const [beforeRspValue, setBeforeRspValue] = useState<Uint8Array>(new Uint8Array())
-    // 编辑器实例
+    // Response
     const [reqEditor, setReqEditor] = useState<IMonacoEditor>()
     const [resEditor, setResEditor] = useState<IMonacoEditor>()
     useUpdateEffect(() => {
         setOriginResValue(fetchSsafeHTTPRequest() || new Uint8Array())
     }, [flowRequestLoad])
 
-    // 获取request内容
+    // History Page
     const fetchSsafeHTTPRequest = useMemoizedFn(() => {
         return (
             (flow && (flow.InvalidForUTF8Request ? new Buffer(flow.SafeHTTPRequest!) : flow.Request)) ||
@@ -1027,16 +1027,16 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
     })
 
     useEffect(() => {
-        // 复原数据
+        // Restore Data
         setResType("current")
         setRspType("current")
         setOriginResValue(fetchSsafeHTTPRequest())
         setOriginRspValue(flow?.Response || new Uint8Array())
-        // 编辑器滚轮回到顶部
+        // Use Request if Not Empty
         reqEditor?.setScrollTop(0)
         resEditor?.setScrollTop(0)
         const existedTags = Tags ? Tags.split("|").filter((i) => !!i && !i.startsWith("YAKIT_COLOR_")) : []
-        if (existedTags.includes("[手动修改]") || existedTags.includes("[响应被丢弃]")) {
+        if (existedTags.includes("[GET Params]") || existedTags.includes("[Request URL]")) {
             setShowBeforeData(true)
             handleGetHTTPFlowBare("request")
             handleGetHTTPFlowBare("response")
@@ -1099,7 +1099,7 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
         }
     })
 
-    // 跳转指定网站树节点
+    // Select HTTP Record Request to View
     const handleJumpWebTree = useMemoizedFn(() => {
         if (flow?.Url) {
             try {
@@ -1120,7 +1120,7 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
         }
     })
 
-    // 编辑器美化缓存
+    // Raw HTTP Response Data
     const [reqTypeOptionVal, setReqTypeOptionVal] = useState<RenderTypeOptionVal>()
     const [resTypeOptionVal, setResTypeOptionVal] = useState<RenderTypeOptionVal>()
     useEffect(() => {
@@ -1146,7 +1146,7 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
         <YakitResizeBox
             firstNode={() => {
                 if (flow === undefined) {
-                    return <Empty description={"选择想要查看的 HTTP 记录请求"} />
+                    return <Empty description={"Cookie Params"} />
                 }
                 if (flow?.IsWebsocket) {
                     return <HTTPFlowForWebsocketViewer flow={flow} historyId={historyId} pageType={pageType} />
@@ -1166,7 +1166,7 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
                                                 }
                                             }}
                                         >
-                                            请求
+                                            Raw HTTP Request Data
                                         </YakitCheckableTag>
                                         <YakitCheckableTag
                                             checked={resType === "request"}
@@ -1176,7 +1176,7 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
                                                 }
                                             }}
                                         >
-                                            原始请求
+                                            Response Dropped
                                         </YakitCheckableTag>
                                     </div>
                                 )
@@ -1192,7 +1192,7 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
                                     id：{id}
                                 </YakitTag>
                             )
-                            // history页面
+                            // Request
                             if (pageType === "History") {
                                 titleEle.push(
                                     <OutlineLog2Icon className={styles["jump-web-tree"]} onClick={handleJumpWebTree} />
@@ -1215,9 +1215,9 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
                             ...copyUrlMenuItem,
                             ...sendCodeCompareMenuItem("request")
                         }}
-                        // 这个为了解决不可见字符的问题
+                        // Request Details
                         defaultPacket={!!flow?.SafeHTTPRequest ? flow.SafeHTTPRequest : undefined}
-                        extra={flow.InvalidForUTF8Request ? <Tag color={"red"}>含二进制流</Tag> : undefined}
+                        extra={flow.InvalidForUTF8Request ? <Tag color={"red"}>Contains Binary</Tag> : undefined}
                         defaultSearchKeyword={search}
                         editorOperationRecord='HTTP_FLOW_DETAIL_REQUEST_AND_REQUEST'
                         extraEditorProps={{
@@ -1226,8 +1226,8 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
                         dataCompare={{
                             rightCode: beforeResValue,
                             leftCode: resType === "request" ? flow?.Request || new Uint8Array() : undefined,
-                            leftTitle: "请求",
-                            rightTitle: "原始请求"
+                            leftTitle: "Raw HTTP Request Data",
+                            rightTitle: "Response Dropped"
                         }}
                         onEditor={(Editor) => {
                             setReqEditor(Editor)
@@ -1249,7 +1249,7 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
             firstMinSize={300}
             secondNode={() => {
                 if (flow === undefined) {
-                    return <Empty description={"选择想要查看的 HTTP 记录响应"} />
+                    return <Empty description={"Copy URL"} />
                 }
                 if (flow?.IsWebsocket) {
                     return <WebsocketFrameHistory websocketHash={flow.WebsocketHash || ""} />
@@ -1281,7 +1281,7 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
                                                 }
                                             }}
                                         >
-                                            响应
+                                            Collapse Right
                                         </YakitCheckableTag>
                                         <YakitCheckableTag
                                             checked={rspType === "response"}
@@ -1291,16 +1291,16 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
                                                 }
                                             }}
                                         >
-                                            原始响应
+                                            Raw Response
                                         </YakitCheckableTag>
                                     </div>
                                 ]
                             }
-                            // 超大响应
+                            // Navigate to Site Tree Node
                             if (flow?.IsTooLargeResponse) {
                                 titleEle.push(
                                     <YakitTag style={{marginLeft: 8}} color='danger'>
-                                        超大响应
+                                        Navigate to Site Tree Node
                                     </YakitTag>
                                 )
                             }
@@ -1318,8 +1318,8 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
                                         <YakitDropdownMenu
                                             menu={{
                                                 data: [
-                                                    {key: "tooLargeResponseHeaderFile", label: "查看Header"},
-                                                    {key: "tooLargeResponseBodyFile", label: "查看Body"}
+                                                    {key: "tooLargeResponseHeaderFile", label: "View Header"},
+                                                    {key: "tooLargeResponseBodyFile", label: "Rule"}
                                                 ],
                                                 onClick: ({key}) => {
                                                     switch (key) {
@@ -1335,7 +1335,7 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
                                                                             flow.TooLargeResponseHeaderFile
                                                                         )
                                                                     } else {
-                                                                        failed("目标文件已不存在!")
+                                                                        failed("Copy Response Body (Base64)!")
                                                                     }
                                                                 })
                                                                 .catch(() => {})
@@ -1349,7 +1349,7 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
                                                                             flow.TooLargeResponseBodyFile
                                                                         )
                                                                     } else {
-                                                                        failed("目标文件已不存在!")
+                                                                        failed("Copy Response Body (Base64)!")
                                                                     }
                                                                 })
                                                                 .catch(() => {})
@@ -1365,7 +1365,7 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
                                             }}
                                         >
                                             <YakitButton type='primary' size='small'>
-                                                完整响应
+                                                Body Size
                                             </YakitButton>
                                         </YakitDropdownMenu>
                                     )
@@ -1400,8 +1400,8 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
                         dataCompare={{
                             rightCode: beforeRspValue,
                             leftCode: rspType === "response" ? flow?.Response || new Uint8Array() : undefined,
-                            leftTitle: "响应",
-                            rightTitle: "原始响应"
+                            leftTitle: "Collapse Right",
+                            rightTitle: "Raw Response"
                         }}
                         onEditor={(Editor) => {
                             setResEditor(Editor)
@@ -1418,11 +1418,11 @@ export const HTTPFlowDetailRequestAndResponse: React.FC<HTTPFlowDetailRequestAnd
 function infoTypeVerbose(i: HTTPFlowInfoType) {
     switch (i) {
         case "domains":
-            return "域名 "
+            return "Send to Comparator Right "
         case "json":
-            return "对象 "
+            return "# Domain "
         case "rules":
-            return "规则 "
+            return "Fetch Request Data "
         default:
             return "-"
     }

@@ -457,7 +457,7 @@ monaco.editor.onDidCreateEditor((editor) => {
         }
         const position = e.position;
 
-        // 如果光标不在函数签名提示的范围内，关闭函数签名提示
+        // Close signature help if cursor is outside signature help range
         if (range.containsPosition(position)) {
             return
         }
@@ -465,7 +465,7 @@ monaco.editor.onDidCreateEditor((editor) => {
         editorToSignatureHelpRangeMap.delete(editor);
     })
     editor.onDidChangeModelContent((e) => {
-        // 修改函数签名提示的范围
+        // Adjust signature help range
         let range = editorToSignatureHelpRangeMap.get(editor);
         if (!range) {
             return
@@ -503,14 +503,14 @@ monaco.languages.registerSignatureHelpProvider(YaklangMonacoSpec, {
         return new Promise(async (resolve, reject) => {
             let newPosition = new monaco.Position(position.lineNumber, position.column - 1)
             const editor = modelToEditorMap.get(model);
-            if (editor) { // 修复在补全后的函数签名提示问题
-                // 补全后一般会选择某些内容
+            if (editor) { // Fix function signature help issue after completion
+                // After completion, some content is typically selected
                 const LParenMatch = model.findPreviousMatch("(", position, false, false, null, false);
                 if (LParenMatch) {
                     newPosition = LParenMatch.range.getStartPosition();
                 }
                 const RParenMatch = model.findNextMatch(")", position, false, false, null, false);
-                // 如果找到了右括号，证明是一个完整的函数调用，可以设置editorToSignatureHelpRangeMap
+                // If a right parenthesis is found, it indicates a complete function call, `editorToSignatureHelpRangeMap` can be set
                 if (RParenMatch) {
                     const RParenPosition = RParenMatch.range.getStartPosition();
                     const rng = new monaco.Range(newPosition.lineNumber, newPosition.column, RParenPosition.lineNumber, RParenPosition.column)
@@ -713,9 +713,9 @@ monaco.languages.registerReferenceProvider(YaklangMonacoSpec, {
 //                         endLineNumber: 2,
 //                         endColumn: 1,
 //                     },
-//                     id: "代码格式化",
+//                     id: "Code formatting",
 //                     command: {
-//                         title: "Yak 代码格式化",
+//                         title: "Yak code formatting",
 //                         id: YAK_FORMATTER_COMMAND_ID,
 //                     }
 //                 }

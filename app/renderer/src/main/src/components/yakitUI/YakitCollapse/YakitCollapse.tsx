@@ -8,8 +8,8 @@ import {SolidChevrondownIcon, SolidChevronrightIcon} from "@/assets/icon/solid"
 const {Panel} = Collapse
 
 /**
- * @description: 折叠面板
- * @augments  继承antd的 CollapseProps 默认属性
+ * @description: Collapsible Panel
+ * @augments  Inherits default CollapseProps from antd
  */
 const YakitCollapse: React.FC<YakitCollapseProps> = (props) => {
     const {expandIcon, bordered, className = "", ...restProps} = props
@@ -34,8 +34,8 @@ const YakitCollapse: React.FC<YakitCollapseProps> = (props) => {
 }
 
 /**
- * @description: 折叠面板
- * @augments  继承antd的CollapsePanelProps 默认属性
+ * @description: Collapsible Panel
+ * @augments  Inherits default CollapsePanelProps from antd
  */
 const YakitPanel: React.FC<YakitPanelProps> = (props) => {
     const {...restProps} = props

@@ -45,61 +45,61 @@ const {TabPane} = PluginTabs
 
 const filter = (arr) => arr.filter((item, index) => arr.indexOf(item) === index)
 
-/** 详情页返回列表页 时的 关联数据 */
+/** Details to List with Linked Data */
 export interface BackInfoProps {
-    /** 是否全选 */
+    /** Select All */
     allCheck: boolean
-    /** 选中插件集合 */
+    /** Selected Plugins */
     selectList: YakitPluginOnlineDetail[]
-    /** 搜索内容条件 */
+    /** Search Conditions */
     search: PluginSearchParams
-    /** 搜索过滤条件 */
+    /** Search Filters */
     filter: PluginFilterParams
 }
 
 export interface DetailRefProps {
     /**
-     * @name 删除的回调
-     * @param value 删除的插件数组
-     * @param isFailed 是否失败
+     * @Delete Callback
+     * @param value Deleted Plugins
+     * @param isFailed
      */
     onDelCallback: (value: YakitPluginOnlineDetail[], isFailed?: boolean) => any
 }
 
 interface PluginManageDetailProps {
     ref?: ForwardedRef<any>
-    /** 列表初始加载状态 */
+    /** Initial Load Status */
     spinLoading: boolean
-    /** 列表更多加载状态 */
+    /** Load More Status */
     listLoading: boolean
-    /** 所有数据 */
+    /** All Data */
     response: YakitPluginListOnlineResponse
-    /** 所有数据操作方法 */
+    /** All Data Ops */
     dispatch: React.Dispatch<OnlinePluginAppAction>
-    /** 初始点击插件数据 */
+    /** Initial Plugin Click Data */
     info: YakitPluginOnlineDetail
-    /** 初始全选状态 */
+    /** Initial Select All */
     defaultAllCheck: boolean
-    /** 初始选中插件集合 */
+    /** Initial Plugin Selection */
     defaultSelectList: YakitPluginOnlineDetail[]
-    /** 初始搜索内容 */
+    /** Initial Search */
     defaultSearch: PluginSearchParams
-    /** 初始过滤条件 */
+    /** Initial Filters */
     defaultFilter: PluginFilterParams
-    /** 批量下载loading状态 */
+    /** Batch Download Loading */
     downloadLoading: boolean
-    /** 批量下载回调 */
+    /** Batch Download Callback */
     onBatchDownload: (data?: BackInfoProps) => any
-    /** 删除功能回调 */
+    /** Delete Callback */
     onPluginDel: (info: YakitPluginOnlineDetail | undefined, data: BackInfoProps) => any
-    /** 当前展示插件的索引 */
+    /** Displayed Plugin Index */
     currentIndex: number
     setCurrentIndex: (index: number) => any
-    /** 返回 */
+    /** Back */
     onBack: (data: BackInfoProps) => any
-    /** 加载更多数据 */
+    /** Load More Data */
     loadMoreData: () => any
-    /** 搜索功能回调 */
+    /** Search Callback */
     onDetailSearch: (searchs: PluginSearchParams, filters: PluginFilterParams) => any
 }
 
@@ -125,7 +125,7 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
             onDetailSearch
         } = props
         const userInfo = useStore((s) => s.userInfo)
-        /**获取传到接口所需的filters*/
+        /**Filters for API*/
         const getRealFilters = (filter: PluginFilterParams, extra: {group: YakFilterRemoteObj[]}) => {
             const realFilters: PluginFilterParams = {
                 ...filter,
@@ -147,7 +147,7 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
             setAllcheck(false)
         })
 
-        /**转换group参数*/
+        /**Convert Group Parameter*/
         const convertGroupParam = (filter: PluginFilterParams, extra: {group: YakFilterRemoteObj[]}) => {
             const realFilters: PluginFilterParams = {
                 ...filter,
@@ -156,7 +156,7 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
             return realFilters
         }
 
-        // 获取插件详情
+        // Get Plugin Details
         const onDetail = useMemoizedFn((info: YakitPluginOnlineDetail) => {
             if (loading) return
 
@@ -164,19 +164,19 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
             apiFetchPluginDetailCheck({uuid: info.uuid, list_type: "check"})
                 .then(async (res) => {
                     if (res) {
-                        // console.log("插件管理的单个插件详情", res)
+                        // console.log("Plugin Detail", res)
                         setPlugin({...res})
                         setOldContent("")
-                        // 源码
+                        // Source Code
                         setContent(res.content)
                         if (+res.status !== 0) return
-                        // 设置修改人
+                        // Set Editor
                         setApply({
                             name: res.apply_user_name || "",
                             img: res.apply_user_head_img || "",
                             description: res.logDescription || ""
                         })
-                        // 设置基础信息
+                        // Set Basic Info
                         let infoData: PluginBaseParamProps = {
                             ScriptName: res.script_name,
                             Help: res.help,
@@ -190,14 +190,14 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
                         const codeInfo =
                             GetPluginLanguage(res.type) === "yak" ? await onCodeToInfo(res.type, res.content) : null
                         if (codeInfo && codeInfo.Tags.length > 0) {
-                            // 去重
+                            // De-duplicate
                             tags = filter([...tags, ...codeInfo.Tags])
                         }
                         infoData.Tags = [...tags]
 
                         setInfoParams({...infoData})
                         setCacheTags(infoData?.Tags || [])
-                        // 设置配置信息
+                        // Set Config Info
                         let settingData: PluginSettingParamProps = {
                             EnablePluginSelector: !!res.enable_plugin_selector,
                             PluginSelectorTypes: res.plugin_selector_types,
@@ -215,20 +215,20 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
                 })
         })
 
-        // 因为组件 RollingLoadList 的定向滚动功能初始不执行，所以设置一个初始变量跳过初始状态
+        // Skip initial state due to non-execution of directional scroll in RollingLoadList
         const [scrollTo, setScrollTo] = useState<number>(0)
 
         useEffect(() => {
             if (info) {
                 onDetail(info)
-                // 必须加上延时，不然本次操作会成为组件(RollingLoadList)的初始数据
+                // Add delay to prevent operation from being initial data for RollingLoadList
                 setTimeout(() => {
                     setScrollTo(currentIndex)
                 }, 100)
             }
         }, [info])
 
-        // 详情页面的loading状态
+        // Loading Detail Page
         const [loading, setLoading] = useState<boolean>(false)
 
         const [allCheck, setAllcheck] = useState<boolean>(defaultAllCheck)
@@ -238,16 +238,16 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
         })
 
         const [selectList, setSelectList, getSelectList] = useGetState<YakitPluginOnlineDetail[]>(defaultSelectList)
-        // 选中插件的uuid集合
+        // Selected Plugin UUIDs
         const selectUUIDs = useMemo(() => {
             return getSelectList().map((item) => item.uuid)
         }, [selectList])
-        // 选中插件的数量
+        // Selected Plugin Count
         const selectNum = useMemo(() => {
             if (allCheck) return response.pagemeta.total
             else return selectList.length
         }, [allCheck, selectList])
-        // 复选框勾选
+        // Checkbox Ticked
         const onOptCheck = useMemoizedFn((data: YakitPluginOnlineDetail, check: boolean) => {
             if (allCheck) {
                 setSelectList(response.data.filter((item) => item.uuid !== data.uuid))
@@ -256,20 +256,20 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
             if (check) setSelectList([...getSelectList(), data])
             else setSelectList(getSelectList().filter((item) => item.uuid !== data.uuid))
         })
-        // 点击插件查看详情
+        // View Plugin Details
         const onOptClick = useMemoizedFn((data: YakitPluginOnlineDetail, index: number) => {
             setCurrentIndex(index)
             onDetail(data)
         })
 
-        // 批量下载|一键下载
+        // Batch Download|One-click download
         const onDownload = useMemoizedFn(() => {
             onBatchDownload({allCheck, selectList, search: searchs, filter: filters})
         })
 
-        // 删除按钮
+        // Delete Button
         const [delLoading, setDelLoading] = useState<boolean>(false)
-        // (批量|单个)删除|清空
+        // (Batch|Single Delete|Clear
         const onBatchDel = useMemoizedFn((info?: YakitPluginOnlineDetail) => {
             onPluginDel(info, {allCheck, selectList, search: searchs, filter: filters})
             setTimeout(() => {
@@ -277,7 +277,7 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
             }, 300)
         })
 
-        // 删除事件的结果回调
+        // Delete Result Callback
         const onDelCallback: DetailRefProps["onDelCallback"] = useMemoizedFn((value, isFailed) => {
             if (!isFailed) {
                 if (value.length > 0) {
@@ -302,16 +302,16 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
 
         const [plugin, setPlugin] = useState<API.PluginsAuditDetailResponse>()
 
-        // 修改者信息
+        // Modifier Info
         const [apply, setApply] = useState<{name: string; img: string; description: string}>()
         const isApply = useMemo(() => !!(apply && apply.name), [apply])
 
-        // 插件基础信息-相关逻辑
+        // Plugin Basics - Logic
         const infoRef = useRef<PluginInfoRefProps>(null)
         const [infoParams, setInfoParams, getInfoParams] = useGetState<PluginBaseParamProps>({
             ScriptName: ""
         })
-        // 获取基础信息组件内的数据(不考虑验证)
+        // Get Basic Data (No Validation)
         const fetchInfoData = useMemoizedFn(() => {
             if (infoRef.current) {
                 return infoRef.current.onGetValue()
@@ -319,11 +319,11 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
             return undefined
         })
         const [cacheTags, setCacheTags] = useState<string[]>()
-        // 删除某些tag 触发  DNSLog和HTTP数据包变形开关的改变
+        // Deleting Tags Triggers DNSLog & HTTP Packet Switch
         const onTagsCallback = useMemoizedFn((v: string[]) => {
             setCacheTags(v || [])
         })
-        // DNSLog和HTTP数据包变形开关的改变 影响 tag的增删
+        // DNSLog & HTTP Packet Switch Impact on Tags
         const onSwitchToTags = useMemoizedFn((value: string[]) => {
             setInfoParams({
                 ...(fetchInfoData() || getInfoParams()),
@@ -332,20 +332,20 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
             setCacheTags(value)
         })
 
-        // 插件配置信息-相关逻辑
+        // Plugin Config Logic
         const settingRef = useRef<PluginSettingRefProps>(null)
         const [settingParams, setSettingParams] = useState<PluginSettingParamProps>({
             Content: ""
         })
 
-        // 强制更新对比器
+        // Force Update Comparator
         const [updateDiff, setUpdateDiff] = useState<boolean>(false)
-        // 插件源码
+        // Plugin Source Code
         const [content, setContent] = useState<string>("")
-        // 旧插件源码
+        // Old Plugin Code
         const [oldContent, setOldContent] = useState<string>("")
 
-        // 将各部分组件内的数据取出并转换
+        // Extract and Convert Component Data
         const convertPluginInfo = useMemoizedFn(async () => {
             if (!plugin) return undefined
 
@@ -359,27 +359,27 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
                 Type: plugin.type,
                 Content: plugin.content
             }
-            // 基础信息
+            // Base Info
             if (!infoRef.current) {
-                yakitNotify("error", "未获取到基础信息，请重试")
+                yakitNotify("error", "Basic Info Unavailable, Retry")
                 return
             }
             const info = await infoRef.current.onSubmit()
             if (!info) {
-                yakitNotify("error", "请完善必填的基础信息")
+                yakitNotify("error", "Complete Required Basic Info")
                 return
             } else {
                 data.Help = info?.Help
                 data.Tags = (info?.Tags || []).join(",") || undefined
             }
-            // 配置信息
+            // Config Info
             if (!settingRef.current) {
-                yakitNotify("error", "未获取到配置信息，请重试")
+                yakitNotify("error", "Config Info Unavailable, Retry")
                 return
             }
             const setting = await settingRef.current.onSubmit()
             if (!setting) {
-                yakitNotify("error", "请完善必填的配置信息")
+                yakitNotify("error", "Complete Required Config Info")
                 return
             } else {
                 data.EnablePluginSelector = setting?.EnablePluginSelector
@@ -391,17 +391,17 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
             let tags: string = data.Tags || ""
             if (codeInfo && codeInfo.Tags.length > 0) {
                 tags += `,${codeInfo.Tags.join(",")}`
-                // 去重
+                // De-duplicate
                 tags = filter(tags.split(",")).join(",")
             }
             data.Tags = tags || undefined
 
-            // yak类型-进行源码分析出参数和风险
+            // yak Type - Analyze Code for Params and Risks
             if (data.Type === "yak" && codeInfo) {
                 data.RiskDetail = codeInfo.RiskInfo.filter((item) => item.Level && item.CVE && item.TypeVerbose)
                 data.Params = codeInfo.CliParameter
             } else {
-                // 非yak类型-排除参数和风险
+                // Non-yak Type - Exclude Params and Risks
                 data.RiskDetail = []
                 data.Params = []
             }
@@ -411,7 +411,7 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
             return obj
         })
 
-        // 通过|不通过请求API
+        // Approved|No API Request
         const onChangeStatus = useMemoizedFn(
             async (
                 param: {
@@ -453,22 +453,22 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
                 }
             }
         )
-        // 更新item后刷新虚拟列表
+        // Refresh List After Item Update
         const [recalculation, setRecalculation] = useState<boolean>(false)
-        // 原因窗口
+        // Reason Window
         const [showReason, setShowReason] = useState<{visible: boolean; type: "nopass" | "del"}>({
             visible: false,
             type: "nopass"
         })
-        // 审核按钮
+        // Approval Button
         const [statusLoading, setStatusLoading] = useState<boolean>(false)
-        // 打开原因窗口
+        // Open Reason Window
         const onOpenReason = useMemoizedFn(() => {
             if (statusLoading) return
             setStatusLoading(true)
             setShowReason({visible: true, type: "nopass"})
         })
-        // 关闭原因窗口
+        // Close Reason Window
         const onCancelReason = useMemoizedFn((loading?: boolean) => {
             setShowReason({visible: false, type: "del"})
             if (typeof loading !== "boolean" || !loading) {
@@ -502,7 +502,7 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
                 })
             }
         })
-        // 审核通过
+        // Approved
         const onPass = useMemoizedFn(() => {
             if (statusLoading) return
             setStatusLoading(true)
@@ -525,7 +525,7 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
             })
         })
 
-        /** --------------- 插件调试 Start --------------- */
+        /** --------------- Plugin Debug Start --------------- */
         const [debugPlugin, setDebugPlugin] = useState<PluginDataProps>()
         const [debugShow, setDebugShow] = useState<boolean>(false)
 
@@ -539,7 +539,7 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
             setDebugPlugin(undefined)
         })
 
-        // 将页面数据转化为插件调试信息
+        // Convert Page to Debug Info
         const convertDebug = useMemoizedFn(() => {
             return new Promise(async (resolve, reject) => {
                 setDebugPlugin(undefined)
@@ -572,19 +572,19 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
             })
         })
 
-        // 调试
+        // Debug
         const onDebug = useMemoizedFn(async () => {
             if (!plugin) return
             if (debugShow) return
 
             const result = await convertDebug()
-            // 获取插件信息错误
+            // Plugin Info Error
             if (result === "false") return
             setDebugShow(true)
         })
-        /** --------------- 插件调试 End --------------- */
+        /** --------------- Plugin Debug End --------------- */
 
-        // 返回
+        // Back
         const onPluginBack = useMemoizedFn(() => {
             onBack({allCheck, selectList, search: searchs, filter: filters})
         })
@@ -593,13 +593,13 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
             return statusTag[`${data.status}`]
         })
 
-        /** 管理分组展示状态 */
+        /** Group Display Management */
         const magGroupState = useMemo(() => {
             if (["admin", "superAdmin"].includes(userInfo.role || "")) return true
             else return false
         }, [userInfo.role])
 
-        /**选中组 */
+        /**Selected Group */
         const selectGroup = useMemo(() => {
             const group: YakFilterRemoteObj[] = cloneDeep(filters).plugin_group?.map((item: API.PluginsSearchData) => ({
                 name: item.value,
@@ -613,7 +613,7 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
         return (
             <PluginDetails<YakitPluginOnlineDetail>
                 pageWrapId='plugin-manage-detail'
-                title='插件管理'
+                title='Plugin Mgmt'
                 spinLoading={spinLoading}
                 search={searchs}
                 setSearch={setSearchs}
@@ -641,7 +641,7 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
                     <div className={"details-filter-extra-wrapper"}>
                         <FilterPopoverBtn defaultFilter={filters} onFilter={onFilter} type='check' />
                         <div style={{height: 12}} className='divider-style'></div>
-                        <Tooltip title={selectNum > 0 ? "批量下载" : "一键下载"} overlayClassName='plugins-tooltip'>
+                        <Tooltip title={selectNum > 0 ? "Batch Download" : "One-click download"} overlayClassName='plugins-tooltip'>
                             <YakitButton
                                 loading={downloadLoading}
                                 type='text2'
@@ -650,7 +650,7 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
                             />
                         </Tooltip>
                         {/* <div style={{height: 12}} className='divider-style'></div>
-                        <Tooltip title='删除插件' overlayClassName='plugins-tooltip'>
+                        <Tooltip title='Delete Plugin' overlayClassName='plugins-tooltip'>
                             <YakitButton
                                 type='text2'
                                 loading={delLoading}
@@ -705,7 +705,7 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
             >
                 <div className={styles["details-content-wrapper"]}>
                     <PluginTabs tabPosition='right'>
-                        <TabPane tab='源 码' key='code'>
+                        <TabPane tab='Source Code' key='code'>
                             <YakitSpin spinning={loading}>
                                 <div className={styles["plugin-info-wrapper"]}>
                                     <PluginDetailHeader
@@ -718,7 +718,7 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
                                                 {+plugin.status !== 0 && (
                                                     <>
                                                         <Tooltip
-                                                            title={+plugin.status === 1 ? "改为未通过" : "改为通过"}
+                                                            title={+plugin.status === 1 ? "Mark as Unapproved" : "Mark as Approved"}
                                                             overlayClassName='plugins-tooltip'
                                                         >
                                                             <YakitButton
@@ -734,7 +734,7 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
                                                         <div style={{height: 12}} className='divider-style'></div>
                                                     </>
                                                 )}
-                                                <Tooltip title='删除插件' overlayClassName='plugins-tooltip'>
+                                                <Tooltip title='Delete Plugin' overlayClassName='plugins-tooltip'>
                                                     <YakitButton
                                                         type='text2'
                                                         icon={<OutlineTrashIcon />}
@@ -755,7 +755,7 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
                                                             colors='danger'
                                                             icon={<SolidBanIcon />}
                                                             loading={statusLoading}
-                                                            name={"不通过"}
+                                                            name={"Bypass"}
                                                             onClick={onOpenReason}
                                                         />
                                                         <FuncBtn
@@ -763,13 +763,13 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
                                                             colors='success'
                                                             icon={<SolidBadgecheckIcon />}
                                                             loading={statusLoading}
-                                                            name={"通过"}
+                                                            name={"Approved"}
                                                             onClick={onPass}
                                                         />
                                                         <FuncBtn
                                                             maxWidth={1100}
                                                             icon={<OutlineCodeIcon />}
-                                                            name={"调试"}
+                                                            name={"Debug"}
                                                             onClick={onDebug}
                                                         />
                                                     </>
@@ -799,7 +799,7 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
                                                         <div className={styles["advice-body"]}>
                                                             <div className={styles["advice-content"]}>
                                                                 <div className={styles["content-title"]}>
-                                                                    修改内容描述
+                                                                    Edit Description
                                                                 </div>
                                                                 <div className={styles["content-style"]}>
                                                                     {apply?.description || ""}
@@ -821,7 +821,7 @@ export const PluginManageDetail: React.FC<PluginManageDetailProps> = memo(
                                                 />
                                             </div>
                                             <div className={styles["plugin-setting-info"]}>
-                                                <div className={styles["setting-header"]}>插件配置</div>
+                                                <div className={styles["setting-header"]}>Plugin Config</div>
                                                 <div className={styles["setting-body"]}>
                                                     <PluginModifySetting
                                                         ref={settingRef}

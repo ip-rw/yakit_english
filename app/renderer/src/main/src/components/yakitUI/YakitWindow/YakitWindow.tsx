@@ -31,11 +31,11 @@ const DefaultCacheSize: YakitWindowCacheSizes = {
 }
 
 /**
- * @name yakit-窗体组件(可拖拽、移动和手动改变尺寸)
- * @description 不建议设置默认初始的停靠位置，因为有保存尺寸的情况
- * @description 暂时不支持别的场景使用，需要用先问问
- * @description 因紧急改动，导致组件业务化，无法适用公共场景
- * @description 目前在向下展示的时候，left不应从0开始，存在左部占据情况
+ * @name yakit-Form Widget (Draggable, Movable, Resizable))
+ * @description Setting a default initial dock position not recommended due to size saving
+ * @description Not supported for other scenarios, ask first
+ * @description Component becomes business-specific due to urgent changes, not suitable for public use
+ * @description When displaying down, left should not start from 0 due to left side occupation
  */
 export const YakitWindow: React.FC<YakitWindowProps> = memo((props) => {
     const {
@@ -54,42 +54,42 @@ export const YakitWindow: React.FC<YakitWindowProps> = memo((props) => {
         ...rest
     } = props
 
-    /** -------------------- 挂靠节点相关逻辑 Start -------------------- */
-    // 窗体挂靠节点，默认为body元素
+    /** -------------------- Docking Logic Start -------------------- */
+    // Default Form Dock Node is body element
     const container = useMemo(() => {
         if (!getContainer) return document.body
         return getContainer
     }, [getContainer])
-    // 窗体挂靠节点的top位置
+    // Form Dock Node Top Position
     const dockSideTop = useMemo(() => {
         return container?.getBoundingClientRect()?.top || 37
     }, [container])
-    // 窗体挂靠节点的left位置
+    // Form Dock Node Left Position
     const dockSideLeft = useMemo(() => {
         return container?.getBoundingClientRect()?.left || 0
     }, [container])
-    // 窗体挂靠节点的可视宽高(用于计算窗体能改变的最大宽高值)
+    // Form Dock Node Visible Width & Height)
     const containerWH = useSize(container)
-    /** 窗体的最大展示宽度和最大改变宽度 */
+    /** Form Max Display Width & Max Width Change */
     const winMaxWidth = useMemo(() => {
         return {
             show: containerWH?.width || "100%",
             change: containerWH?.width ? Math.trunc(containerWH.width * 0.9) : "95%"
         }
     }, [containerWH])
-    /** 窗体的最大展示高度和最大改变高度 */
+    /** Form Max Display Height & Max Height Change */
     const winMaxHeight = useMemo(() => {
         return {
             show: containerWH?.height || "100%",
             change: containerWH?.height ? Math.trunc(containerWH.height * 0.9) : "90%"
         }
     }, [containerWH])
-    /** -------------------- 挂靠节点相关逻辑 End -------------------- */
+    /** -------------------- Docking Logic End -------------------- */
 
-    /** -------------------- 窗体尺寸缓存逻辑 Start -------------------- */
-    /** 窗体缓存的尺寸 */
+    /** -------------------- Form Size Cache Logic Start -------------------- */
+    /** Cached Form Size */
     const cacheSize = useRef<YakitWindowCacheSizes>(cloneDeep(DefaultCacheSize))
-    // 获取缓存尺寸数据
+    // Get Cached Size Data
     useLayoutEffect(() => {
         if (visible) {
             if (cacheSizeKey) {
@@ -116,7 +116,7 @@ export const YakitWindow: React.FC<YakitWindowProps> = memo((props) => {
             }
         }
     }, [visible, cacheSizeKey])
-    // 设置缓存尺寸数据
+    // Set Cached Size Data
     const setCacheSize = useDebounceFn(
         useMemoizedFn((type: WindowPositionType, size: YakitWindowCacheSizeProps) => {
             if (!cacheSizeKey) return
@@ -126,10 +126,10 @@ export const YakitWindow: React.FC<YakitWindowProps> = memo((props) => {
         }),
         {wait: 300}
     ).run
-    /** -------------------- 窗体尺寸缓存逻辑 End -------------------- */
+    /** -------------------- Form Size Cache Logic End -------------------- */
 
-    /** -------------------- 窗体停靠模式及大小改变的相关逻辑 End -------------------- */
-    // 窗体停靠模式
+    /** -------------------- Form Dock Mode & Size Change Logic End -------------------- */
+    // Form Dock Mode
     const [dockSide, setDockSide, getDockSide] = useGetState<WindowPositionType>(firstDockSide)
     const onDockSide = useMemoizedFn((side: WindowPositionType) => {
         if (!defaultDockSide.includes(side)) return
@@ -141,7 +141,7 @@ export const YakitWindow: React.FC<YakitWindowProps> = memo((props) => {
     const bottomRef = useRef<any>(null)
     const shrinkRef = useRef<any>(null)
 
-    // 窗体宽高改变监听事件
+    // Form Size Change Listener
     const onShrinkResize = useThrottleFn(
         useMemoizedFn((type: WindowPositionType) => {
             let windowRef: any = null
@@ -172,7 +172,7 @@ export const YakitWindow: React.FC<YakitWindowProps> = memo((props) => {
         {wait: 100}
     ).run
 
-    // 挂靠节点大小改变时，触发窗体的大小同步改变
+    // Form Size Sync on Dock Node Resize
     useDebounceEffect(
         () => {
             if (getDockSide() === "shrink") return
@@ -200,7 +200,7 @@ export const YakitWindow: React.FC<YakitWindowProps> = memo((props) => {
             wait: 100
         }
     )
-    /** -------------------- 窗体停靠模式及大小改变的相关逻辑 End -------------------- */
+    /** -------------------- Form Dock Mode & Size Change Logic End -------------------- */
 
     const layoutClass = useMemo(() => {
         if (layout === "center") return ""
@@ -273,7 +273,7 @@ export const YakitWindow: React.FC<YakitWindowProps> = memo((props) => {
     const debouncedBounds = useDebounce(bounds, {wait: 500})
     const draggleRef = useRef<HTMLDivElement>(null)
 
-    /** 拖拽热区的触发回调 */
+    /** Drag Area Callback */
     const onActiveDrag = useMemoizedFn((v: boolean) => {
         if (!isDrag) {
             if (!getDisabled()) setDisabled(true)
@@ -281,7 +281,7 @@ export const YakitWindow: React.FC<YakitWindowProps> = memo((props) => {
         }
         if (getDisabled() === v) setDisabled(!v)
     })
-    /** 弹窗拖拽移动触发事件 */
+    /** Window Drag Event */
     const onStart = useMemoizedFn((_event: DraggableEvent, uiData: DraggableData) => {
         const {clientWidth, clientHeight} = window.document.documentElement
         const targetRect = draggleRef.current?.getBoundingClientRect()
@@ -296,7 +296,7 @@ export const YakitWindow: React.FC<YakitWindowProps> = memo((props) => {
         })
     })
 
-    // 停靠左侧
+    // Dock Left
     if (dockSide === "left") {
         return (
             <Resizable
@@ -332,7 +332,7 @@ export const YakitWindow: React.FC<YakitWindowProps> = memo((props) => {
             </Resizable>
         )
     }
-    // 停靠右侧
+    // Dock Right
     if (dockSide === "right") {
         return (
             <Resizable
@@ -368,7 +368,7 @@ export const YakitWindow: React.FC<YakitWindowProps> = memo((props) => {
             </Resizable>
         )
     }
-    // 停靠底部
+    // Dock Bottom
     if (dockSide === "bottom") {
         return (
             <Resizable
@@ -405,7 +405,7 @@ export const YakitWindow: React.FC<YakitWindowProps> = memo((props) => {
         )
     }
 
-    // 停靠模式-浮窗
+    // Dock Mode-Floating
     return ReactDOM.createPortal(
         <Draggable
             defaultClassName={classNames(
@@ -446,7 +446,7 @@ export const YakitWindow: React.FC<YakitWindowProps> = memo((props) => {
     )
 })
 
-/** @name 窗体展示位置-操作组件 */
+/** @name Form Display Pos-Action Widget */
 export const WindowPositionOP: React.FC<WindowPositionOPProps> = memo((props) => {
     const {defaultDockSide = ["shrink", "left", "right", "bottom"], activeDockSide, onDockSide} = props
 
@@ -458,7 +458,7 @@ export const WindowPositionOP: React.FC<WindowPositionOPProps> = memo((props) =>
 
     return (
         <div className={styles["window-position-op-wrapper"]}>
-            <Tooltip title={"浮窗"}>
+            <Tooltip title={"Floating Window"}>
                 {defaultDockSide.includes("shrink") && (
                     <YakitButton
                         type='text2'
@@ -469,7 +469,7 @@ export const WindowPositionOP: React.FC<WindowPositionOPProps> = memo((props) =>
                 )}
             </Tooltip>
 
-            <Tooltip title={"向下"}>
+            <Tooltip title={"Down"}>
                 {defaultDockSide.includes("bottom") && (
                     <YakitButton
                         type='text2'
@@ -480,7 +480,7 @@ export const WindowPositionOP: React.FC<WindowPositionOPProps> = memo((props) =>
                 )}
             </Tooltip>
 
-            <Tooltip title={"向左"}>
+            <Tooltip title={"Left"}>
                 {defaultDockSide.includes("left") && (
                     <YakitButton
                         type='text2'
@@ -491,7 +491,7 @@ export const WindowPositionOP: React.FC<WindowPositionOPProps> = memo((props) =>
                 )}
             </Tooltip>
 
-            <Tooltip title={"向右"}>
+            <Tooltip title={"Right"}>
                 {defaultDockSide.includes("right") && (
                     <YakitButton
                         type='text2'
@@ -504,7 +504,7 @@ export const WindowPositionOP: React.FC<WindowPositionOPProps> = memo((props) =>
         </div>
     )
 })
-/** @name 窗体展示位置-操作组件(小尺寸模式) */
+/** @name Form Display Pos-Action Widget (Small Mode)) */
 export const WindowPositionOPMenu: React.FC<WindowPositionOPProps> = memo((props) => {
     const {defaultDockSide = ["shrink", "left", "right", "bottom"], activeDockSide, onDockSide} = props
 
@@ -527,7 +527,7 @@ export const WindowPositionOPMenu: React.FC<WindowPositionOPProps> = memo((props
         <YakitPopover
             overlayClassName={styles["window-position-op-popover"]}
             overlayStyle={{paddingTop: 2}}
-            title={<span>停靠方位</span>}
+            title={<span>Docking Position</span>}
             placement={"bottomRight"}
             content={content}
             trigger='hover'
@@ -539,7 +539,7 @@ export const WindowPositionOPMenu: React.FC<WindowPositionOPProps> = memo((props
     )
 })
 
-/** @name 窗体内容组件 */
+/** @name Form Content Widget */
 const YakitWindowContent: React.FC<YakitWindowContentProps> = memo((props) => {
     const {
         defaultDockSide = [],
@@ -553,10 +553,10 @@ const YakitWindowContent: React.FC<YakitWindowContentProps> = memo((props) => {
         title,
         subtitle,
         footerExtra,
-        okButtonText = "确定",
+        okButtonText = "Confirm",
         okButtonProps,
         onOk,
-        cancelButtonText = "取消",
+        cancelButtonText = "Cancel",
         cancelButtonProps,
         onCancel
     } = props

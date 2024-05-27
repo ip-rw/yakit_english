@@ -105,21 +105,21 @@ export interface MonacoEditorActions extends IMonacoActionDescriptor {
 }
 
 export const MonacoEditorCodecActions: MonacoEditorActions[] = [
-    {id: "urlencode", label: "URL 编码"},
-    {id: "urlescape", label: "URL 编码(只编码特殊字符)"},
-    {id: "base64", label: "Base64 编码"},
-    {id: "base64-decode", label: "Base64 解码"},
-    {id: "htmlencode", label: "HTML 编码"},
-    {id: "htmldecode", label: "HTML 解码"},
-    {id: "urlunescape", label: "URL 解码"},
-    {id: "double-urlencode", label: "双重 URL 编码"},
-    {id: "unicode-decode", label: "Unicode 解码（\\uXXXX 解码）"},
-    {id: "unicode-encode", label: "Unicode 编码（\\uXXXX 编码）"},
-    {id: "base64-url-encode", label: "先 Base64 后 URL 编码"},
-    {id: "url-base64-decode", label: "先 URL 后 Base64 解码"},
-    {id: "hex-decode", label: "HEX 解码（十六进制解码）"},
-    {id: "hex-encode", label: "HEX 编码（十六进制编码）"},
-    {id: "jwt-parse-weak", label: "JWT 解析（同时测试弱 Key）"}
+    {id: "urlencode", label: "URL Encode"},
+    {id: "urlescape", label: "URL Encode (Special Chars Only))"},
+    {id: "base64", label: "Base64 Encode"},
+    {id: "base64-decode", label: "Base64 Decode"},
+    {id: "htmlencode", label: "HTML Encode"},
+    {id: "htmldecode", label: "HTML Decode"},
+    {id: "urlunescape", label: "URL Decode"},
+    {id: "double-urlencode", label: "Double URL Encode"},
+    {id: "unicode-decode", label: "Unicode Decode (\\uXXXX)）"},
+    {id: "unicode-encode", label: "Unicode Encode (\\uXXXX)）"},
+    {id: "base64-url-encode", label: "Base64 then URL Encode"},
+    {id: "url-base64-decode", label: "URL then Base64 Decode"},
+    {id: "hex-decode", label: "HEX Decode）"},
+    {id: "hex-encode", label: "HEX Encode）"},
+    {id: "jwt-parse-weak", label: "JWT Decode (Weak Key Test)）"}
 ].map((i) => {
     return {id: i.id, label: i.label, contextMenuGroupId: "codec", run: editorCodecHandlerFactory(i.id as CodecType)}
 })
@@ -132,27 +132,27 @@ export const MonacoEditorMutateHTTPRequestActions: {
 }[] = [
     {
         id: "mutate-http-method-get",
-        label: "改变 HTTP 方法成 GET",
+        label: "Change Method to GET",
         params: {FuzzMethods: ["GET"]} as MutateHTTPRequestParams
     },
     {
         id: "mutate-http-method-post",
-        label: "改变 HTTP 方法成 POST",
+        label: "Change Method to POST",
         params: {FuzzMethods: ["POST"]} as MutateHTTPRequestParams
     },
     {
         id: "mutate-http-method-head",
-        label: "改变 HTTP 方法成 HEAD",
+        label: "Change Method to HEAD",
         params: {FuzzMethods: ["HEAD"]} as MutateHTTPRequestParams
     },
     {
         id: "mutate-chunked",
-        label: "HTTP Chunk 编码",
+        label: "HTTP Chunk Encode",
         params: {ChunkEncode: true} as MutateHTTPRequestParams
     },
     {
         id: "mutate-upload",
-        label: "修改为上传数据包",
+        label: "Change to Upload Packet",
         params: {UploadEncode: true} as MutateHTTPRequestParams
     }
 ].map((i) => {
@@ -179,14 +179,14 @@ const AutoDecode: React.FC<{data: AutoDecodeResult[]}> = React.memo((prop: {data
             {result.map((i, index) => {
                 return (
                     <AutoCard
-                        title={`解码步骤[${index + 1}]: ${i.TypeVerbose}(${i.Type})`}
+                        title={`Decoding Steps[${index + 1}]: ${i.TypeVerbose}(${i.Type})`}
                         size={"small"}
                         extra={
                             <Button
                                 size={"small"}
                                 onClick={() => {
                                     showModal({
-                                        title: "原文",
+                                        title: "Original Text",
                                         width: "50%",
                                         content: (
                                             <div style={{height: 280}}>
@@ -201,7 +201,7 @@ const AutoDecode: React.FC<{data: AutoDecodeResult[]}> = React.memo((prop: {data
                                     })
                                 }}
                             >
-                                查看本次编码原文
+                                View Original Encoding Text
                             </Button>
                         }
                     >
@@ -220,7 +220,7 @@ const AutoDecode: React.FC<{data: AutoDecodeResult[]}> = React.memo((prop: {data
                                             setResult(e.Results)
                                         })
                                         .catch((e) => {
-                                            failed(`自动解码失败：${e}`)
+                                            failed(`AutoDecode Failed：${e}`)
                                         })
                                 }}
                             />
@@ -236,13 +236,13 @@ export const execAutoDecode = async (text: string) => {
         .invoke("AutoDecode", {Data: text})
         .then((e: {Results: AutoDecodeResult[]}) => {
             showModal({
-                title: "自动解码（智能解码）",
+                title: "Auto Decode (Smart Decode)）",
                 width: "60%",
                 content: <AutoDecode data={e.Results}></AutoDecode>
             })
         })
         .catch((e) => {
-            failed(`自动解码失败：${e}`)
+            failed(`AutoDecode Failed：${e}`)
         })
 }
 
@@ -265,7 +265,7 @@ export const execCodec = async (
                     width: "50%",
                     content: (
                         <AutoCard
-                            title={"编码结果"}
+                            title={"Encoding Result"}
                             bordered={false}
                             extra={
                                 <Button
@@ -281,7 +281,7 @@ export const execCodec = async (
                                     }}
                                     size={"small"}
                                 >
-                                    替换内容
+                                    Replace Content
                                 </Button>
                             }
                             size={"small"}
@@ -296,7 +296,7 @@ export const execCodec = async (
 
             if (noPrompt) {
                 showModal({
-                    title: "编码结果",
+                    title: "Encoding Result",
                     width: "50%",
                     content: (
                         <div style={{width: "100%"}}>
@@ -312,6 +312,6 @@ export const execCodec = async (
             return result?.Result || ""
         })
         .catch((e: any) => {
-            failed(`CODEC[${typeStr}] 执行失败：${e}`)
+            failed(`CODEC[${typeStr}] Exec Failure：${e}`)
         })
 }

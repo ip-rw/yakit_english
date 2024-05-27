@@ -2,9 +2,9 @@ declare type WithChildren<T> = T & {
     children?: WithChildren<T>[];
 };
 /**
- * 根据 idProp 与 parentIdProp 从对象数组中构建对应的树
- * 当 A[parentIdProp] === B[idProp] 时，对象A会被移动到对象B的children。
- * 当一个对象的 parentIdProp 不与其他对象的 idProp 字段相等时，该对象被作为树的顶层节点
+ * Build tree from objects array using idProp and parentIdProp
+ * When A[parentIdProp] === B[idProp], A moves to B's children。
+ * When an object's parentIdProp doesn't match others' idProp, it's a top-level tree node
  * @example
  * const array = [
  *   { id: 'node-1', parent: 'root' },

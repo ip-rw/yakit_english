@@ -63,7 +63,7 @@ export const defaultXTermOptions = {
 export const EngineConsole: React.FC<EngineConsoleProp> = (props) => {
     const {isMini} = props
     const xtermRef = useRef<any>(null)
-    // 缓存Console日志信息
+    // Cache Console Log Info
     const {consoleLog, setConsoleInfo, isFirst, setIsFirst} = useStore()
     useEffect(() => {
         if (consoleLog.length > 0) {
@@ -95,7 +95,7 @@ export const EngineConsole: React.FC<EngineConsoleProp> = (props) => {
 
         ipcRenderer.invoke("AttachCombinedOutput", {}, token).then(() => {
             if (isFirst) {
-                info(`启动输出监控成功`)
+                info(`Start Output Monitoring Success`)
                 setIsFirst(false)
             }
         })
@@ -168,7 +168,7 @@ export const BaseConsoleTitle: React.FC<BaseConsoleTitleProps> = (props) => {
     const {setConsoleInfo, setIsFirst} = useStore()
     return (
         <div className={styles["base-console-title"]}>
-            <div className={styles["title"]}>引擎 Console</div>
+            <div className={styles["title"]}>Engine Console</div>
             <div className={styles["operation"]}>
                 <WindowPositionOP activeDockSide={direction} onDockSide={callBackSource} />
                 <YakitButton
@@ -270,7 +270,7 @@ export const BaseMiniConsole: React.FC<BaseConsoleMiniProps> = (props) => {
         ipcRenderer.invoke("fetch-system-name").then((type: YakitSystem) => setSystem(type))
     }, [])
 
-    /** 弹窗拖拽移动触发事件 */
+    /** Popup Drag Move Event */
     const onStart = useMemoizedFn((_event: DraggableEvent, uiData: DraggableData) => {
         const {clientWidth, clientHeight} = window.document.documentElement
         const targetRect = draggleRef.current?.getBoundingClientRect()
@@ -326,7 +326,7 @@ export const BaseMiniConsole: React.FC<BaseConsoleMiniProps> = (props) => {
                             >
                                 {system === "Windows_NT" ? (
                                     <div className={styles["header-box"]}>
-                                        <div className={styles["header-center"]}>引擎 Console</div>
+                                        <div className={styles["header-center"]}>Engine Console</div>
                                         <div className={styles["header-right"]}>
                                             {size && size.width > 400 && (
                                                 <WindowPositionOP activeDockSide='shrink' onDockSide={callBackSource} />
@@ -363,7 +363,7 @@ export const BaseMiniConsole: React.FC<BaseConsoleMiniProps> = (props) => {
                                                 }}
                                             ></div>
                                         </div>
-                                        <div className={styles["header-center"]}>引擎 Console</div>
+                                        <div className={styles["header-center"]}>Engine Console</div>
                                         <div className={styles["header-right"]}>
                                             {size && size.width > 400 && (
                                                 <WindowPositionOP activeDockSide='shrink' onDockSide={callBackSource} />

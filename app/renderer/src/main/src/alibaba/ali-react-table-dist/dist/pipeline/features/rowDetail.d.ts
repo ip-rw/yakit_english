@@ -1,27 +1,27 @@
 import React, { ReactNode } from 'react';
 import { TablePipeline } from '../pipeline';
 export interface RowDetailFeatureOptions {
-    /** 非受控用法：是否默认展开所有详情单元格 */
+    /** Uncontrolled: Default Expand All Detail Cells */
     defaultOpenAll?: boolean;
-    /** 非受控用法：默认展开的 keys */
+    /** Uncontrolled: Default Expanded Keys */
     defaultOpenKeys?: string[];
-    /** 受控用法：当前展开的 keys */
+    /** Controlled: Currently Expanded Keys */
     openKeys?: string[];
-    /** 受控用法：openKeys 改变的回调 */
+    /** Controlled: Callback for openKeys Change */
     onChangeOpenKeys?(nextKeys: string[], key: string, action: 'expand' | 'collapse'): void;
-    /** 详情单元格的渲染方法 */
+    /** Render Method for Detail Cell */
     renderDetail?(row: any, rowIndex: number): ReactNode;
-    /** 是否包含详情单元格 */
+    /** Includes Detail Cell */
     hasDetail?(row: any, rowIndex: number): ReactNode;
-    /** 获取详情单元格所在行的 key，默认为 `(row) => row[primaryKey] + '_detail'` */
+    /** Get Key of Row with Detail Cell, Default to `(row) => row[primaryKey] + '_detail'` */
     getDetailKey?(row: any, rowIndex: number): string;
-    /** 详情单元格 td 的额外样式 */
+    /** Extra Styles for Detail Cell (td) */
     detailCellStyle?: React.CSSProperties;
-    /** 点击事件的响应区域 */
+    /** Click Event Response Area */
     clickArea?: 'cell' | 'content' | 'icon';
-    /** 是否对触发展开/收拢的 click 事件调用 event.stopPropagation() */
+    /** Toggle Expand on Trigger/Collapse Click Event Calls event.stopPropagation() */
     stopClickEventPropagation?: boolean;
-    /** 指定表格每一行元信息的记录字段 */
+    /** Record Field for Row Metadata */
     rowDetailMetaKey?: string | symbol;
 }
 export declare function rowDetail(opts?: RowDetailFeatureOptions): (pipeline: TablePipeline) => TablePipeline;

@@ -19,7 +19,7 @@ const MITMAddTLS: React.FC<AddTLSProps> = React.memo((props) => {
     const cerFormRef = useRef<any>()
     return (
         <YakitModal
-            title='添加客户端 TLS'
+            title='Add Client TLS'
             visible={visible}
             onCancel={() => setVisible(false)}
             closable={true}
@@ -35,7 +35,7 @@ const MITMAddTLS: React.FC<AddTLSProps> = React.memo((props) => {
                         KeyPem: StringToUint8Array(values.CrtPem)
                     }
                     if (certs.findIndex((ele) => ele.CerName === params.CerName) !== -1) {
-                        yakitFailed("该名称已存在")
+                        yakitFailed("Name exists")
                         return
                     }
                     setCerts([...certs, params])
@@ -73,10 +73,10 @@ export const InputCertificateForm: React.FC<InputCertificateFormProp> = React.fo
     )
     return (
         <Form className={styles["input-certificate-form"]} form={form} {...formProps}>
-            {isShowCerName&&<Form.Item name='CerName' rules={[{required: true, message: "该项必填"}]}>
-                <YakitInput placeholder='请为你的证书对取一个名字（必填）' />
+            {isShowCerName&&<Form.Item name='CerName' rules={[{required: true, message: "Required field"}]}>
+                <YakitInput placeholder='Name your cert pair (Required）' />
             </Form.Item>}
-            <Form.Item label={"客户端证书(PEM)"} name='CrtPem' rules={[{required: true, message: "该项必填"}]}>
+            <Form.Item label={"Client Cert (PEM)"} name='CrtPem' rules={[{required: true, message: "Required field"}]}>
                 <YakEditor
                     type={"html"}
                     noMiniMap={true}
@@ -88,7 +88,7 @@ export const InputCertificateForm: React.FC<InputCertificateFormProp> = React.fo
                     // value={Uint8ArrayToString(params.CrtPem)}
                 />
             </Form.Item>
-            <Form.Item label={"客户端私钥(PEM)"} name='KeyPem' rules={[{required: true, message: "该项必填"}]}>
+            <Form.Item label={"Client Key (PEM)"} name='KeyPem' rules={[{required: true, message: "Required field"}]}>
                 <YakEditor
                     type={"html"}
                     setValue={(KeyPem) => {
@@ -100,7 +100,7 @@ export const InputCertificateForm: React.FC<InputCertificateFormProp> = React.fo
                     noWordWrap={true}
                 />
             </Form.Item>
-            <Form.Item label={"CA 根证书"} name='CaCertificates' required={false}>
+            <Form.Item label={"CA Root Cert"} name='CaCertificates' required={false}>
                 <YakEditor
                     type={"html"}
                     setValue={(CaCertBytes) => {

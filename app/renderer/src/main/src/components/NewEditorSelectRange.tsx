@@ -7,15 +7,15 @@ import {CountDirectionProps, EditorDetailInfoProps} from "@/pages/fuzzer/HTTPFuz
 import {createRoot} from "react-dom/client"
 
 export interface NewEditorSelectRangeProps extends NewHTTPPacketEditorProp {
-    // 编辑器点击弹窗的唯一Id
+    // Editor’s Unique Popup Click ID
     selectId?: string
-    // 点击弹窗内容
+    // Click Popup Content
     selectNode?: (close: () => void, editorInfo?: EditorDetailInfoProps) => ReactElement
-    // 编辑器选中弹窗的唯一Id
+    // Editor’s Unique Selection Popup ID
     rangeId?: string
-    // 选中弹窗内容
+    // Select Popup Content
     rangeNode?: (close: () => void, editorInfo?: EditorDetailInfoProps) => ReactElement
-    // 超出多少行将弹窗隐藏(默认三行)
+    // Hide Popup After Exceeding Line Limit (Default 3 Lines))
     overLine?: number
 }
 export const NewEditorSelectRange: React.FC<NewEditorSelectRangeProps> = (props) => {
@@ -23,7 +23,7 @@ export const NewEditorSelectRange: React.FC<NewEditorSelectRangeProps> = (props)
     const [reqEditor, setReqEditor] = useState<IMonacoEditor>()
     const downPosY = useRef<number>()
     const upPosY = useRef<number>()
-    // 编辑器信息(长宽等)
+    // Editor Info (Dimensions))
     const editorInfo = useRef<any>()
     useEffect(() => {
         if (reqEditor) {
@@ -31,18 +31,18 @@ export const NewEditorSelectRange: React.FC<NewEditorSelectRangeProps> = (props)
         }
     }, [reqEditor])
 
-    // 编辑器菜单
+    // Editor Menu
     const editerMenuFun = (reqEditor: IMonacoEditor) => { 
-        // 编辑器点击显示的菜单
+        // Menu Displayed on Click in Editor
         const fizzSelectWidget = {
             isOpen: false,
             getId: function () {
                 return selectId || ""
             },
             getDomNode: function () {
-                // 将TSX转换为DOM节点
+                // Convert TSX to DOM Node
                 const domNode = document.createElement("div")
-                // 解决弹窗内鼠标滑轮无法滚动的问题
+                // Solve Mouse Wheel Scrolling Issue in Popup
                 domNode.onwheel = (e) => e.stopPropagation()
                 selectNode && createRoot(domNode).render(selectNode(closeFizzSelectWidget, editorInfo.current))
                 return domNode
@@ -58,21 +58,21 @@ export const NewEditorSelectRange: React.FC<NewEditorSelectRangeProps> = (props)
                 }
             },
             update: function () {
-                // 更新小部件的位置
+                // Update Widget Position
                 this.getPosition()
                 reqEditor.layoutContentWidget(this)
             }
         }
-        // 编辑器选中显示的菜单
+        // Menu Displayed on Selection in Editor
         const fizzRangeWidget = {
             isOpen: false,
             getId: function () {
                 return rangeId || ""
             },
             getDomNode: function () {
-                // 将TSX转换为DOM节点
+                // Convert TSX to DOM Node
                 const domNode = document.createElement("div")
-                // 解决弹窗内鼠标滑轮无法滚动的问题
+                // Solve Mouse Wheel Scrolling Issue in Popup
                 domNode.onwheel = (e) => e.stopPropagation()
                 rangeNode && createRoot(domNode).render(rangeNode(closeFizzRangeWidget, editorInfo.current))
                 return domNode
@@ -89,29 +89,29 @@ export const NewEditorSelectRange: React.FC<NewEditorSelectRangeProps> = (props)
                 }
             },
             update: function () {
-                // 更新小部件的位置
+                // Update Widget Position
                 this.getPosition()
                 reqEditor.layoutContentWidget(this)
             }
         }
-        // 是否展示菜单
+        // Menu Visibility
         // if (false) {
         //     closeFizzSelectWidget()
         //     return
         // }
 
-        // 关闭点击的菜单
+        // Close Clicked Menu
         const closeFizzSelectWidget = () => {
             fizzSelectWidget.isOpen = false
             reqEditor.removeContentWidget(fizzSelectWidget)
         }
-        // 关闭选中的菜单
+        // Close Selected Menu
         const closeFizzRangeWidget = () => {
             fizzRangeWidget.isOpen = false
             reqEditor.removeContentWidget(fizzRangeWidget)
         }
 
-        // 编辑器更新 关闭之前展示
+        // Editor Update Before Close
         closeFizzSelectWidget()
         closeFizzRangeWidget()
 
@@ -121,9 +121,9 @@ export const NewEditorSelectRange: React.FC<NewEditorSelectRangeProps> = (props)
                 // const pos = e.target.position
                 // if (pos?.lineNumber) {
                 //     const lineOffset = pos.lineNumber - (reqEditor.getPosition()?.lineNumber || 0)
-                //     // 超出范围移除菜单
+                //     // Remove Menu if Out of Range
                 //     if (lineOffset > 2 || lineOffset < -2) {
-                //         // console.log("移出两行内");
+                //         // console.log("Within Two Lines");
                 //         closeFizzSelectWidget()
                 //         closeFizzRangeWidget()
                 //     }
@@ -147,14 +147,14 @@ export const NewEditorSelectRange: React.FC<NewEditorSelectRangeProps> = (props)
                             closeFizzSelectWidget()
                         }
                     } else if (fizzRangeWidget.isOpen) {
-                        // 从上到下的选择范围
+                        // Selection Range From Top to Bottom
                         if (
                             downPosY.current < upPosY.current &&
                             (posy < downPosY.current - overHeight || posy > upPosY.current + overHeight)
                         ) {
                             closeFizzRangeWidget()
                         }
-                        // 从下到上的选择范围
+                        // Selection Range From Bottom to Top
                         else if (
                             downPosY.current > upPosY.current &&
                             (posy < upPosY.current - overHeight || posy > downPosY.current + overHeight)
@@ -168,7 +168,7 @@ export const NewEditorSelectRange: React.FC<NewEditorSelectRangeProps> = (props)
             }
         })
 
-        // 移出编辑器时触发
+        // Trigger on Exiting Editor
         // reqEditor.onMouseLeave(() => {
         //     closeFizzSelectWidget()
         //     closeFizzRangeWidget()
@@ -176,9 +176,9 @@ export const NewEditorSelectRange: React.FC<NewEditorSelectRangeProps> = (props)
 
         reqEditor.onMouseDown((e) => {
             const {leftButton, posy} = e.event
-            // 当两者都没有打开时
+            // When Neither are Open
             if (leftButton && !fizzSelectWidget.isOpen && !fizzRangeWidget.isOpen) {
-                // 记录posy位置
+                // Record posy Position
                 downPosY.current = posy
             }
         })
@@ -186,57 +186,57 @@ export const NewEditorSelectRange: React.FC<NewEditorSelectRangeProps> = (props)
         reqEditor.onMouseUp((e) => {
             // @ts-ignore
             const {leftButton, rightButton, posx, posy, editorPos} = e.event
-            // 获取编辑器所处x，y轴,并获取其长宽
+            // Get Editor’s x, y, Dimensions
             const {x, y} = editorPos
             const editorHeight = editorPos.height
             const editorWidth = editorPos.width
 
-            // 计算焦点的坐标位置
+            // Calculate Focus Coordinates
             let a: any = reqEditor.getPosition()
             const position = reqEditor.getScrolledVisiblePosition(a)
             if (position) {
-                // 获取焦点在编辑器中所处位置，height为每行所占高度（随字体大小改变）
+                // Get Focus Position in Editor, Height per Line Varies with Font Size）
                 const {top, left, height} = position
 
-                // 解决方法1
-                // 获取焦点位置判断焦点所处于编辑器的位置（上下左右）从而决定弹出层显示方向
-                // 问题  需要焦点位置进行计算 如何获取焦点位置？  目前仅找到行列号 无法定位到其具体坐标位置
-                // console.log("焦点位置：", e, x, left, y, top, x + left, y + top)
+                // Solution 1
+                // Get Focus Position to Determine Editor Location (Top, Bottom, Left, Right) for Popup Direction
+                // Issue: Need Focus Position to Calculate. How to Get? Only Line and Column Numbers Found, No Exact Coordinates
+                // console.log("Focus Position：", e, x, left, y, top, x + left, y + top)
                 const focusX = x + left
                 const focusY = y + top
 
-                // 焦点与抬起坐标是否超出限制
+                // Focus and Lift-Off Coordinates Within Bounds
                 const isOver: boolean = overLine * height < Math.abs(focusY - posy)
                 if (leftButton && !isOver) {
-                    // 获取编辑器容器的相关信息并判断其处于编辑器的具体方位
+                    // Get Editor Container Info to Determine Specific Position in Editor
                     const editorContainer = reqEditor.getDomNode()
                     if (editorContainer) {
                         const editorContainerInfo = editorContainer.getBoundingClientRect()
                         const {top, bottom, left, right} = editorContainerInfo
-                        // 通过判断编辑器长宽限制是否显示 (宽度小于250或者长度小于200则不展示)
+                        // Display Based on Editor Size (Hide if Width < 250 or Height < 200))
                         const isShowByLimit = ((right-left)>250)&&((bottom-top)>200)
-                        // 判断焦点位置
+                        // Determine Focus Position
                         const isTopHalf = focusY < (top + bottom) / 2
                         const isLeftHalf = focusX < (left + right) / 2
-                        // 行高
+                        // Line Height
                         // const lineHeight = reqEditor.getOption(monaco.editor.EditorOption.lineHeight)
 
                         let countDirection: CountDirectionProps = {}
                         if (isTopHalf) {
-                            // 鼠标位于编辑器上半部分
+                            // Mouse on Top Half of Editor
                             countDirection.y = "top"
                         } else {
-                            // 鼠标位于编辑器下半部分
+                            // Mouse on Bottom Half of Editor
                             countDirection.y = "bottom"
                         }
                         if (Math.abs(focusX - (left + right) / 2) < 50) {
-                            // 鼠标位于编辑器中间部分
+                            // Mouse in Middle of Editor
                             countDirection.x = "middle"
                         } else if (isLeftHalf) {
-                            // 鼠标位于编辑器左半部分
+                            // Mouse on Left Half of Editor
                             countDirection.x = "left"
                         } else {
-                            // 鼠标位于编辑器右半部分
+                            // Mouse on Right Half of Editor
                             countDirection.x = "right"
                         }
                         editorInfo.current = {
@@ -255,18 +255,18 @@ export const NewEditorSelectRange: React.FC<NewEditorSelectRangeProps> = (props)
                         if (selection&&isShowByLimit) {
                             const selectedText = reqEditor.getModel()?.getValueInRange(selection) || ""
                             if (fizzSelectWidget.isOpen && selectedText.length === 0) {
-                                // 更新点击菜单小部件的位置
+                                // Update Clicked Menu Widget Position
                                 fizzSelectWidget.update()
                             } else if (fizzRangeWidget.isOpen && selectedText.length !== 0) {
                                 fizzRangeWidget.update()
                             } else if (selectedText.length === 0) {
                                 closeFizzRangeWidget()
-                                // 展示点击的菜单
+                                // Display Clicked Menu
                                 selectId && reqEditor.addContentWidget(fizzSelectWidget)
                                 fizzSelectWidget.isOpen = true
                             } else {
                                 closeFizzSelectWidget()
-                                // 展示选中的菜单
+                                // Display Selected Menu
                                 rangeId && reqEditor.addContentWidget(fizzRangeWidget)
                                 fizzRangeWidget.isOpen = true
                             }
@@ -283,12 +283,12 @@ export const NewEditorSelectRange: React.FC<NewEditorSelectRangeProps> = (props)
                 }
             }
         })
-        // 监听光标移动
+        // Listen to Cursor Movement
         reqEditor.onDidChangeCursorPosition((e) => {
             closeFizzRangeWidget()
             closeFizzSelectWidget()
             // const { position } = e;
-            // console.log('当前光标位置：', position);
+            // console.log('Current Cursor Position：', position);
         })
     }
     return (

@@ -59,15 +59,15 @@ a=1&b=2 Content-Length: a
             <AutoCard
                 title={
                     <DemoItemSelectOne
-                        label={"调试组件"}
+                        label={"Debug Components"}
                         data={[
-                            {value: "space-engine-operator", label: "空间引擎操作台"},
-                            {value: "hybrid-scan-demo", label: "HybridScan 批量"},
-                            {value: "hybrid-scan-task", label: "HybridScan 任务列表"},
-                            {value: "chaos-maker-rule", label: "流量生成器规则"},
-                            {value: "risk-table", label: "漏洞查询规则"},
-                            {value: "http-monaco-editor", label: "HTTP 数据包编辑器"},
-                            {value: "fs-tree", label: "文件系统树"}
+                            {value: "space-engine-operator", label: "Spatial Engine Console"},
+                            {value: "hybrid-scan-demo", label: "HybridScan Batch"},
+                            {value: "hybrid-scan-task", label: "HybridScan Task List"},
+                            {value: "chaos-maker-rule", label: "Traffic Generator Rules"},
+                            {value: "risk-table", label: "Vulnerability Query Rules"},
+                            {value: "http-monaco-editor", label: "HTTP Packet Editor"},
+                            {value: "fs-tree", label: "File System Tree"}
                         ]}
                         formItemStyle={{margin: 0}}
                         value={mode}

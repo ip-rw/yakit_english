@@ -1,21 +1,21 @@
 export interface YakitDiffEditorProps {
-    /** 左侧代码 */
+    /** Left Code */
     leftDefaultCode: string
     setLeftCode?: (value: string) => any
-    /** 右侧代码 */
+    /** Right Code */
     rightDefaultCode: string
     setRightCode?: (value: string) => any
-    /** 是否触发强制刷新默认值 */
+    /** Force Refresh Default */
     triggerUpdate?: boolean
 
-    /** 语言 */
+    /** Language */
     language?: string
-    /** 展示代码时超出边界是否不换行 */
+    /** Wrap Code */
     noWrap?: boolean
-    /** 左侧是否只读 */
+    /** Left Read-Only */
     leftReadOnly?: boolean
-    /** 右侧是否只读 */
+    /** Right Read-Only */
     rightReadOnly?: boolean
-    /** 字体大小 */
+    /** FontSize */
     fontSize?: number
 }

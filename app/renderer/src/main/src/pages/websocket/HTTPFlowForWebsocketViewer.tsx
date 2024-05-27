@@ -65,15 +65,15 @@ export const HTTPFlowForWebsocketViewer: React.FC<HTTPFlowForWebsocketViewerProp
                         buttonStyle='solid'
                         value={mode}
                         options={[
-                            {value: "request", label: "请求"},
-                            {value: "response", label: "响应"}
+                            {value: "request", label: "Request"},
+                            {value: "response", label: "Response"}
                         ]}
                         onChange={(e) => setMode(e.target.value)}
                     />
                     <YakitTag color={"info"}>
                         {mode === "request"
-                            ? `请求大小：${flow.RequestSizeVerbose}`
-                            : `Body大小: ${flow.BodySizeVerbose}`}
+                            ? `Request Size：${flow.RequestSizeVerbose}`
+                            : `Body Size: ${flow.BodySizeVerbose}`}
                     </YakitTag>
                     {pageType === "History" && (
                         <OutlineLog2Icon className={styles["jump-web-tree"]} onClick={handleJumpWebTree} />
@@ -110,14 +110,14 @@ interface WebSocketEditorProps {
 }
 export const WebSocketEditor: React.FC<WebSocketEditorProps> = (props) => {
     const {flow, value, contextMenu = {}} = props
-    // 编辑器复制Url菜单项
+    // Editor Copy Url Menu Item
     const copyUrlMenuItem: OtherMenuListProps = useMemo(() => {
         return {
             copyUrl: {
                 menu: [
                     {
                         key: "copy-url",
-                        label: "复制 URL"
+                        label: "Copy URL"
                     }
                 ],
                 onRun: (editor, key) => {
@@ -127,23 +127,23 @@ export const WebSocketEditor: React.FC<WebSocketEditorProps> = (props) => {
         }
     }, [flow.Url])
 
-    // 发送到WS Fuzzer
+    // Send to WS Fuzzer
     const sendWebSocketMenuItem: OtherMenuListProps = useMemo(() => {
         return {
             newSocket: {
                 menu: [
                     {
                         key: "new-web-socket-tab",
-                        label: "发送到WS Fuzzer",
+                        label: "Send to WS Fuzzer",
                         children: [
                             {
-                                key: "发送并跳转",
-                                label: "发送并跳转",
+                                key: "Send & Redirect",
+                                label: "Send & Redirect",
                                 keybindings: [YakitEditorKeyCode.Control, YakitEditorKeyCode.KEY_R]
                             },
                             {
-                                key: "仅发送",
-                                label: "仅发送",
+                                key: "Send Only",
+                                label: "Send Only",
                                 keybindings: [
                                     YakitEditorKeyCode.Control,
                                     YakitEditorKeyCode.Shift,
@@ -157,12 +157,12 @@ export const WebSocketEditor: React.FC<WebSocketEditorProps> = (props) => {
                     try {
                         const text = flow.Request
                         if (!Uint8ArrayToString(text)) {
-                            yakitNotify("info", "数据包为空")
+                            yakitNotify("info", "Packet Empty")
                             return
                         }
-                        if (key === "发送并跳转") {
+                        if (key === "Send & Redirect") {
                             newWebsocketFuzzerTab(flow.IsHTTPS, text)
-                        } else if (key === "仅发送") {
+                        } else if (key === "Send Only") {
                             newWebsocketFuzzerTab(flow.IsHTTPS, text, false)
                         }
                     } catch (e) {

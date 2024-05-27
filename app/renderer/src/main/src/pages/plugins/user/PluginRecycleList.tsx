@@ -29,7 +29,7 @@ import styles from "./PluginRecycleList.module.scss"
 export const PluginRecycleList: React.FC<PluginRecycleListProps> = React.memo(
     forwardRef((props, ref) => {
         const {refresh, inViewport, isLogin, setIsSelectRecycleNum, onRefreshUserList, setInitTotalRecycle} = props
-        /** 是否为加载更多 */
+        /** Is load more */
         const [loading, setLoading] = useState<boolean>(false)
         const [response, dispatch] = useReducer(pluginOnlineReducer, initialOnlineState)
         const [selectList, setSelectList] = useState<string[]>([])
@@ -46,8 +46,8 @@ export const PluginRecycleList: React.FC<PluginRecycleListProps> = React.memo(
 
         const [initTotal, setInitTotal] = useState<number>(0)
 
-        const operatePluginRef = useRef<YakitPluginOnlineDetail>() //记录删除或者还原的操作插件
-        /** 是否为初次加载 */
+        const operatePluginRef = useRef<YakitPluginOnlineDetail>() //Log Plugin's Delete or Restore Action
+        /** Is First Load */
         const isLoadingRef = useRef<boolean>(true)
         const latestLoadingRef = useLatest(loading)
 
@@ -67,7 +67,7 @@ export const PluginRecycleList: React.FC<PluginRecycleListProps> = React.memo(
                 getPluginRemoveCheck()
             }
         }, [isLogin, inViewport])
-        // 页面初始化的首次列表请求
+        // Initial List Request on Page Load
         useEffect(() => {
             if (isLogin) {
                 fetchList(true)
@@ -77,7 +77,7 @@ export const PluginRecycleList: React.FC<PluginRecycleListProps> = React.memo(
             setIsSelectRecycleNum(selectList.length > 0)
         }, [selectList.length])
 
-        /**获取插件删除的提醒记录状态 */
+        /**Get Plugin Deletion Reminder State */
         const getPluginRemoveCheck = useMemoizedFn(() => {
             getRemoteValue(PluginGV.RecyclePluginRemoveCheck).then((data) => {
                 setPluginRemoveCheck(data === "true" ? true : false)
@@ -134,15 +134,15 @@ export const PluginRecycleList: React.FC<PluginRecycleListProps> = React.memo(
             }),
             {wait: 200, leading: true}
         ).run
-        /** 单项勾选|取消勾选 */
+        /** Single-Select|Deselect */
         const optCheck = useMemoizedFn((data: YakitPluginOnlineDetail, value: boolean) => {
-            // 全选情况时的取消勾选
+            // Fetch loading char with regex
             if (allCheck) {
                 setSelectList(response.data.map((item) => item.uuid).filter((item) => item !== data.uuid))
                 setAllCheck(false)
                 return
             }
-            // 单项勾选回调
+            // No history fetched if CS or vuln unselected by user
             if (value) {
                 setSelectList([...selectList, data.uuid])
             } else {
@@ -150,34 +150,34 @@ export const PluginRecycleList: React.FC<PluginRecycleListProps> = React.memo(
                 setSelectList(newSelectList)
             }
         })
-        // 滚动更多加载
+        // Scroll for More Loading
         const onUpdateList = useMemoizedFn((reset?: boolean) => {
             fetchList()
         })
-        /**全选 */
+        /**Fixes failure to iterate load_content on missing older version data */
         const onCheck = useMemoizedFn((value: boolean) => {
             setSelectList([])
             setAllCheck(value)
             setIsSelectRecycleNum(value)
         })
 
-        // 当前展示的插件序列
+        // Current plugin display sequence
         const showPluginIndex = useRef<number>(0)
         const setShowPluginIndex = useMemoizedFn((index: number) => {
             showPluginIndex.current = index
         })
 
-        /** 单项点击回调 */
+        /** Single Item Callback */
         const optClick = useMemoizedFn((data: YakitPluginOnlineDetail, index: number) => {
             setShowPluginIndex(index)
         })
-        // 选中插件的数量
+        // Selected Plugin Count
         const selectNum = useMemo(() => {
             if (allCheck) return response.pagemeta.total
             else return selectList.length
         }, [allCheck, selectList, response.pagemeta.total])
         const onSetVisible = useMemoizedFn(() => {})
-        /** 单项额外操作组件 */
+        /** Single item extra operations */
         const optExtraNode = useMemoizedFn((data: YakitPluginOnlineDetail) => {
             return (
                 <OnlineRecycleExtraOperate
@@ -190,7 +190,7 @@ export const PluginRecycleList: React.FC<PluginRecycleListProps> = React.memo(
                 />
             )
         })
-        /** 批量删除插件之前操作 */
+        /** Pre-Operation for Bulk Plugin Deletion */
         const onRemovePluginBatchBefore = useMemoizedFn(() => {
             if (pluginRemoveCheck) {
                 onRemoveOrReductionPluginBatch("true")
@@ -198,24 +198,24 @@ export const PluginRecycleList: React.FC<PluginRecycleListProps> = React.memo(
                 setRemoveCheckVisible(true)
             }
         })
-        /** 批量还原插件之前操作 */
+        /** Pre-Operation for Bulk Plugin Restore */
         const onReductionPluginBatchBefore = useMemoizedFn(() => {
             onRemoveOrReductionPluginBatch("false")
         })
-        /**批量删除和还原 */
+        /**Bulk Delete & Restore */
         const onRemoveOrReductionPluginBatch = useMemoizedFn(async (dumpType: "true" | "false") => {
-            // true 彻底删除, false还原
+            // True for Complete Delete, False for Restore
             setLoading(true)
             try {
                 if (!allCheck && selectList.length === 0) {
-                    // 删除全部，清空
+                    // Delete All, Clear
                     if (dumpType === "true") {
                         await apiRemoveRecyclePlugin()
                     } else {
                         await apiReductionRecyclePlugin()
                     }
                 } else {
-                    // 批量删除
+                    // Batch delete
                     let deleteParams: PluginsRecycleRequest = {}
 
                     if (allCheck) {
@@ -239,12 +239,12 @@ export const PluginRecycleList: React.FC<PluginRecycleListProps> = React.memo(
 
             onBatchRemoveOrReductionPluginAfter()
         })
-        /**当pluginRemoveCheck为true，需要提示的时候，把当前操作的插件记录下来 */
+        /**Log plugin action when pluginRemoveCheck is true and prompt is needed */
         const onRemoveOrReductionBefore = useMemoizedFn((data: YakitPluginOnlineDetail) => {
             operatePluginRef.current = data
             setRemoveCheckVisible(true)
         })
-        /**单个删除 */
+        /**Delete single */
         const onRemoveClick = useMemoizedFn((data: YakitPluginOnlineDetail) => {
             let deleteParams: PluginsRecycleRequest = {
                 uuid: [data.uuid]
@@ -253,7 +253,7 @@ export const PluginRecycleList: React.FC<PluginRecycleListProps> = React.memo(
                 onSingleRemoveOrReductionPluginAfter(data)
             })
         })
-        /**单个还原 */
+        /**Single Restore */
         const onReductionClick = useMemoizedFn((data: YakitPluginOnlineDetail) => {
             let deleteParams: PluginsRecycleRequest = {
                 uuid: [data.uuid]
@@ -262,7 +262,7 @@ export const PluginRecycleList: React.FC<PluginRecycleListProps> = React.memo(
                 onSingleRemoveOrReductionPluginAfter(data)
             })
         })
-        /**单个 彻底删除和还原接口调用后的事件 */
+        /**Single Complete Delete & Restore Event Post-API Call */
         const onSingleRemoveOrReductionPluginAfter = useMemoizedFn((data: YakitPluginOnlineDetail) => {
             dispatch({
                 type: "remove",
@@ -277,10 +277,10 @@ export const PluginRecycleList: React.FC<PluginRecycleListProps> = React.memo(
             operatePluginRef.current = undefined
             getInitTotal()
             setRemoveCheckVisible(false)
-            onRefreshUserList() // 刷新我的插件列表
+            onRefreshUserList() // Refresh My Plugins
             setRemoteValue(PluginGV.RecyclePluginRemoveCheck, `${pluginRemoveCheck}`)
         })
-        /**批量 彻底删除和还原接口调用后的事件 */
+        /**Bulk Complete Delete & Restore Events Post-API Call */
         const onBatchRemoveOrReductionPluginAfter = useMemoizedFn(() => {
             setSelectList([])
             if (allCheck) {
@@ -290,7 +290,7 @@ export const PluginRecycleList: React.FC<PluginRecycleListProps> = React.memo(
             operatePluginRef.current = undefined
             getInitTotal()
             setRemoveCheckVisible(false)
-            onRefreshUserList() // 刷新我的插件列表
+            onRefreshUserList() // Refresh My Plugins
             setRemoteValue(PluginGV.RecyclePluginRemoveCheck, `${pluginRemoveCheck}`)
             setLoading(false)
             fetchList(true)
@@ -307,7 +307,7 @@ export const PluginRecycleList: React.FC<PluginRecycleListProps> = React.memo(
                 } catch (error) {}
             })
         )
-        /**初始数据为空的时候,刷新按钮,刷新列表和初始total */
+        /**Refresh & Reset List when Initial Data is Empty */
         const onRefListAndTotalAndGroup = useMemoizedFn(() => {
             getInitTotal()
             fetchList(true)
@@ -387,14 +387,14 @@ export const PluginRecycleList: React.FC<PluginRecycleListProps> = React.memo(
                             />
                         ) : (
                             <div className={styles["plugin-recycle-empty"]}>
-                                <YakitEmpty title='暂无数据' />
+                                <YakitEmpty title='No Data Available' />
                                 <div className={styles["plugin-recycle-buttons"]}>
                                     <YakitButton
                                         type='outline1'
                                         icon={<OutlineRefreshIcon />}
                                         onClick={onRefListAndTotalAndGroup}
                                     >
-                                        刷新
+                                        Refresh
                                     </YakitButton>
                                 </div>
                             </div>
@@ -403,8 +403,8 @@ export const PluginRecycleList: React.FC<PluginRecycleListProps> = React.memo(
                 </div>
                 <YakitHint
                     visible={removeCheckVisible}
-                    title='是否要删除插件'
-                    content='确认后插件将彻底删除，无法找回'
+                    title='Confirm Plugin Deletion?'
+                    content='Confirmation: Plugin will be permanently deleted and cannot be retrieved'
                     onOk={onPluginRemoveCheckOk}
                     onCancel={() => setRemoveCheckVisible(false)}
                     footerExtra={
@@ -412,7 +412,7 @@ export const PluginRecycleList: React.FC<PluginRecycleListProps> = React.memo(
                             checked={pluginRemoveCheck}
                             onChange={(e) => setPluginRemoveCheck(e.target.checked)}
                         >
-                            下次不再提醒
+                            Do not remind again
                         </YakitCheckbox>
                     }
                 />

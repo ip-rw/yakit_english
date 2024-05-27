@@ -69,11 +69,11 @@ export const showModal = (props: ShowModalProps) => {
                         <ErrorBoundary
                             FallbackComponent={({error, resetErrorBoundary}) => {
                                 if (!error) {
-                                    return <div>未知错误</div>
+                                    return <div>Unknown Error</div>
                                 }
                                 return (
                                     <div>
-                                        <p>弹框内逻辑性崩溃，请关闭重试！</p>
+                                        <p>Popup Logic Crash, Please Close & Retry！</p>
                                         <pre>{error?.message}</pre>
                                     </div>
                                 )

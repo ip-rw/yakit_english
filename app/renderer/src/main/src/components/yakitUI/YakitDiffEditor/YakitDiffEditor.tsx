@@ -6,7 +6,7 @@ import {useDebounceFn, useMemoizedFn, useUpdateEffect} from "ahooks"
 
 import styles from "./YakitDiffEditor.module.scss"
 
-/** @name monaco-editor对比器 */
+/** @Name Monaco-Editor Comparator */
 export const YakitDiffEditor: React.FC<YakitDiffEditorProps> = memo((props) => {
     const {
         leftDefaultCode,
@@ -27,7 +27,7 @@ export const YakitDiffEditor: React.FC<YakitDiffEditorProps> = memo((props) => {
     const leftEditorRef = useRef<monacoEditor.editor.ITextModel>()
     const rightEditorRef = useRef<monacoEditor.editor.ITextModel>()
 
-    // 左侧编辑器更新事件
+    // Left Editor Update Event
     const {run: onLeftChange} = useDebounceFn(
         useMemoizedFn((e: monacoEditor.editor.IModelContentChangedEvent) => {
             if (leftEditorRef.current) {
@@ -36,7 +36,7 @@ export const YakitDiffEditor: React.FC<YakitDiffEditorProps> = memo((props) => {
         }),
         {wait: 500}
     )
-    // 右侧编辑器更新事件
+    // Right Editor Update Event
     const {run: onRightChange} = useDebounceFn(
         useMemoizedFn((e: monacoEditor.editor.IModelContentChangedEvent) => {
             if (rightEditorRef.current) {
@@ -47,25 +47,25 @@ export const YakitDiffEditor: React.FC<YakitDiffEditorProps> = memo((props) => {
     )
 
     useEffect(() => {
-        // 判断对比器实例存在则先进行销毁
+        // Destroy Comparator If Exists
         if (diffEditorRef.current) {
             diffEditorRef.current.dispose()
             diffEditorRef.current = undefined
         }
-        // 判断左侧编辑器实例存在则先进行销毁
+        // Destroy Left Editor If Exists
         if (leftEditorRef.current) {
             leftEditorRef.current.dispose()
             leftEditorRef.current = undefined
         }
-        // 判断右侧编辑器实例存在则先进行销毁
+        // Destroy Right Editor If Exists
         if (rightEditorRef.current) {
             rightEditorRef.current.dispose()
             rightEditorRef.current = undefined
         }
 
-        // 获取不到对比器元素节点
+        // Comparator Element Not Found
         if (!diffDivRef || !diffDivRef.current) {
-            yakitNotify("error", "对比器初始化失败，请关闭重试!")
+            yakitNotify("error", "Comparator Init Failed, Retry by Closing!")
             return
         }
 
@@ -84,9 +84,9 @@ export const YakitDiffEditor: React.FC<YakitDiffEditorProps> = memo((props) => {
             original: leftEditorRef.current,
             modified: rightEditorRef.current
         })
-        // 监听左侧编辑器内容的变化
+        // Monitor Left Editor Changes
         leftEditorRef.current.onDidChangeContent(onLeftChange)
-        // 监听右侧编辑器内容的变化
+        // Monitor Right Editor Changes
         rightEditorRef.current.onDidChangeContent(onRightChange)
 
         return () => {
@@ -96,7 +96,7 @@ export const YakitDiffEditor: React.FC<YakitDiffEditorProps> = memo((props) => {
         }
     }, [])
 
-    // 更新对比器配置信息
+    // Update Comparator Config
     useUpdateEffect(() => {
         if (diffEditorRef.current) {
             diffEditorRef.current.updateOptions({
@@ -108,7 +108,7 @@ export const YakitDiffEditor: React.FC<YakitDiffEditorProps> = memo((props) => {
         }
     }, [noWrap, leftReadOnly, rightReadOnly, fontSize])
 
-    // 强制更新默认值
+    // Force Update Defaults
     useUpdateEffect(() => {
         if (leftEditorRef.current) leftEditorRef.current.setValue(leftDefaultCode)
         if (rightEditorRef.current) rightEditorRef.current.setValue(rightDefaultCode)

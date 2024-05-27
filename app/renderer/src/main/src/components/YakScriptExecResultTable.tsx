@@ -75,10 +75,10 @@ export const YakScriptExecResultTable: React.FC<YakScriptExecResultTableProp> = 
             .invoke("DeleteYakScriptExec", {})
             .then(() => {
                 reload()
-                success("删除成功")
+                success("Delete Successful")
             })
             .catch((err) => {
-                failed("删除失败：" + err)
+                failed("Delete Failed：" + err)
             })
             .finally(() => setTimeout(() => setRemoveLoading(false), 200))
     })
@@ -117,7 +117,7 @@ export const YakScriptExecResultTable: React.FC<YakScriptExecResultTableProp> = 
         /*        })}*/
     }
     {
-        /*        label={"需要查看的插件"} setValue={YakScriptName => setParams({...params, YakScriptName})}*/
+        /*        label={"Plugin to View"} setValue={YakScriptName => setParams({...params, YakScriptName})}*/
     }
     {
         /*        value={params.YakScriptName}*/
@@ -132,7 +132,7 @@ export const YakScriptExecResultTable: React.FC<YakScriptExecResultTableProp> = 
         /*    <Form.Item>*/
     }
     {
-        /*        <Button type="primary" htmlType="submit"> 搜索插件结果 </Button>*/
+        /*        <Button type="primary" htmlType="submit"> Search Plugin Results </Button>*/
     }
     {
         /*    </Form.Item>*/
@@ -150,7 +150,7 @@ export const YakScriptExecResultTable: React.FC<YakScriptExecResultTableProp> = 
                 props.YakScriptName ? (
                     <>
                         <Space>
-                            <span>插件结果：</span>
+                            <span>Plugin Results：</span>
                             <Button
                                 icon={<ReloadOutlined />}
                                 type={"link"}
@@ -171,7 +171,7 @@ export const YakScriptExecResultTable: React.FC<YakScriptExecResultTableProp> = 
                         title={
                             <div className='justify-space-between'>
                                 <div>
-                                    选择插件
+                                    Select Plugin
                                     <Button
                                         type={"link"}
                                         onClick={() => {
@@ -182,7 +182,7 @@ export const YakScriptExecResultTable: React.FC<YakScriptExecResultTableProp> = 
                                     />
                                 </div>
                                 <Popconfirm
-                                    title='是否删除所有插件?'
+                                    title='Delete All Plugins??'
                                     onConfirm={() => onRemoveAll()}
                                     okText='Yes'
                                     cancelText='No'
@@ -233,9 +233,9 @@ export const YakScriptExecResultTable: React.FC<YakScriptExecResultTableProp> = 
                                                                                     })
                                                                             }}
                                                                         >
-                                                                            删除该插件全部输出
+                                                                            Delete All Plugin Outputs
                                                                         </Button>
-                                                                        {/*<Button type={"primary"}>查看插件详情</Button>*/}
+                                                                        {/*<Button type={"primary"}>View Plugin Details</Button>*/}
                                                                     </Space>
                                                                 </Card>
                                                             </>
@@ -269,7 +269,7 @@ export const YakScriptExecResultTable: React.FC<YakScriptExecResultTableProp> = 
                         pageSize: pagination?.Limit || 10,
                         simple: true,
                         total,
-                        showTotal: (i) => <Tag>共{i}条历史记录</Tag>,
+                        showTotal: (i) => <Tag>Total{i}Hist. Records</Tag>,
                         onChange: (page: number, limit?: number) => {
                             update(page, limit)
                         }
@@ -304,7 +304,7 @@ export const YakScriptExecResultTable: React.FC<YakScriptExecResultTableProp> = 
                                                                     })
                                                             }}
                                                         >
-                                                            删除该记录
+                                                            Delete Record
                                                         </Button>
                                                     </Space>
                                                 </>
@@ -316,7 +316,7 @@ export const YakScriptExecResultTable: React.FC<YakScriptExecResultTableProp> = 
                                 }}
                                 // extra={[
                                 //     <Space direction={"vertical"}>
-                                //         <Button type={"link"} danger={true}>删除该记录</Button>
+                                //         <Button type={"link"} danger={true}>Delete Record</Button>
                                 //     </Space>
                                 // ]}
                             >

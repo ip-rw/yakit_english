@@ -5,7 +5,7 @@ import {YakitSwitch} from "@/components/yakitUI/YakitSwitch/YakitSwitch"
 
 const {Item} = Form
 
-/** @name 表单项-开关 */
+/** @name FormItem-Switch */
 export const DemoItemSwitch: React.FC<ItemSwitchProps> = memo((p) => {
     const {label, help, formItemStyle, required, size, disabled, value, setValue} = p
 

@@ -2,8 +2,8 @@ import { CheckboxProps } from "antd";
 
 
 /**
- * @description YakitCheckboxPropsProps 的属性
- * @augments CheckboxProps 继承antd的 CheckboxProps 默认属性
+ * @description YakitCheckboxProps Properties
+ * @augments CheckboxProps Inherits antd's CheckboxProps default properties
  * @param {string} wrapperClassName  
  */
 export interface YakitCheckboxProps extends CheckboxProps{

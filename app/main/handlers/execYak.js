@@ -70,12 +70,12 @@ module.exports = (win, getClient) => {
         return await asyncQueryExecHistory(params)
     })
 
-    // 弹出保存窗口
+    // Popup save dialog
     const asyncSaveFileDialog = async (params) => {
         return new Promise((resolve, reject) => {
             dialog
                 .showSaveDialog(win, {
-                    title: "保存文件",
+                    title: "Save file",
                     defaultPath: params
                 })
                 .then((res) => {
@@ -89,7 +89,7 @@ module.exports = (win, getClient) => {
         return await asyncSaveFileDialog(params)
     })
 
-    // 删除文件
+    // Delete file
     const asyncDeleteCodeFile = (params) => {
         return new Promise((resolve, reject) => {
             FS.unlink(params, function (err) {
@@ -102,7 +102,7 @@ module.exports = (win, getClient) => {
         return await asyncDeleteCodeFile(params)
     })
 
-    //判断文件是否存在
+    //Check file existence
     const asyncIsExistsFile = (params) => {
         return new Promise((resolve, reject) => {
             FS.access(params, FS.constants.F_OK, function (err) {
@@ -115,7 +115,7 @@ module.exports = (win, getClient) => {
         return await asyncIsExistsFile(params)
     })
 
-    //文件重命名
+    //Rename file
     const asyncRenameFile = (params) => {
         return new Promise((resolve, reject) => {
             FS.rename(params.old, params.new, function (err) {
@@ -129,7 +129,7 @@ module.exports = (win, getClient) => {
         return await asyncRenameFile(params)
     })
 
-    // 将内容写入文件,文件未存在则新建文件后再进行写入
+    // Write to file, create if not exists
     const asyncWriteFile = (params) => {
         return new Promise((resolve, reject) => {
             FS.writeFile(params.route, params.data, function (err) {
@@ -143,7 +143,7 @@ module.exports = (win, getClient) => {
         return await asyncWriteFile(params)
     })
 
-    // 批量执行脚本的新接口：通过一个短 Filter 执行
+    // Batch execute scripts with short Filter
     const streamExecutePacketYakScriptMap = new Map()
     ipcMain.handle("cancel-ExecutePacketYakScript", handlerHelper.cancelHandler(streamExecutePacketYakScriptMap))
     ipcMain.handle("ExecutePacketYakScript", (e, params, token) => {
@@ -179,13 +179,13 @@ module.exports = (win, getClient) => {
             })
         })
     }
-    // 删除本地插件,带条件
+    // Delete plugin with condition
     ipcMain.handle("GetYakScriptTags", async (e, params) => {
         return await asyncGetYakScriptTags(params)
     })
 
 
-    /* 追加查看引擎输出的接口 */
+    /* Append view engine output */
     const streamAttachCombinedOutputMap = new Map();
     ipcMain.handle("cancel-AttachCombinedOutput", handlerHelper.cancelHandler(streamAttachCombinedOutputMap));
     ipcMain.handle("AttachCombinedOutput", (e, params, token) => {

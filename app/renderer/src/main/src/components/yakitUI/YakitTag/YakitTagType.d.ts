@@ -3,15 +3,15 @@ import {CheckableTagProps} from "antd/lib/tag"
 import type {YakitSizeType} from "../YakitInputNumber/YakitInputNumberType"
 
 /**
- * @description YakitTagProps 的属性
- * @augments TagProps 继承antd的TagProps默认属性
- * @param {middle|large|small} size 默认middle
- * @param {"danger" | "info" | "success" | "warning" |"serious"|"yellow"| "purple" | "blue" | "cyan" | "bluePurple"|"white"} color 颜色
+ * @description TagProps Attributes
+ * @augments TagProps Inherits antd's Default TagProps
+ * @param {middle|large|small} size Default: Middle
+ * @param {"danger" | "info" | "success" | "warning" |"serious"|"yellow"| "purple" | "blue" | "cyan" | "bluePurple"|"white"} color Color
  * @param {boolean} disable
- * @param {boolean} enableCopy 是否可复制
- * @param {(e:MouseEvent) => void} onAfterCopy 复制文字后得事件 enableCopy为true有效
- * @param {string} copyText 复制文字
- * @param {string} iconColor 复制Icon文字
+ * @param {boolean} enableCopy Copy Enabled
+ * @param {(e:MouseEvent) => void} onAfterCopy Post-Copy Event if enableCopy is true
+ * @param {string} copyText Copy Text
+ * @param {string} iconColor Copy Icon Color
  */
 
 export type YakitTagColor =
@@ -37,11 +37,11 @@ export interface YakitTagProps extends Omit<TagProps, "color"> {
     iconColor?: string
 }
 /**
- * @description: 复制文字
- * @param {string} className 包装器修饰类
- * @param {(e:MouseEvent) => void} onAfterCopy 复制文字后得事件
- * @param {string} copyText 复制文字
- * @param {string} iconColor 复制Icon文字
+ * @description: Copy Text
+ * @param {string} className Wrapper Class
+ * @param {(e:MouseEvent) => void} onAfterCopy Post-Copy Event
+ * @param {string} copyText Copy Text
+ * @param {string} iconColor Copy Icon Color
  */
 export interface CopyComponentsProps {
     className?: string
@@ -51,7 +51,7 @@ export interface CopyComponentsProps {
 }
 
 /**
- * @description: tag 多选
+ * @description: Multi-select Tag
  * @param {ReactNode} children
  * @param {string} wrapClassName
  * @param {boolean} disable

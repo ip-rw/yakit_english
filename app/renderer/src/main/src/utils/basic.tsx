@@ -62,7 +62,7 @@ export const YakVersion: React.FC<YakVersionProp> = (props) => {
     }, [])
 
     if (!version) {
-        return <Spin tip={"正在加载 yak 版本"}/>
+        return <Spin tip={"Loading yak Version"}/>
     }
     const isDev = version.toLowerCase().includes("dev");
 
@@ -83,13 +83,13 @@ export const YakVersion: React.FC<YakVersionProp> = (props) => {
                         }
 
                         showModal({
-                            title: "有新的 Yak 核心引擎可升级！",
+                            title: "New Yak Core Engine Upgrade Available！",
                             content: <>
-                                如果你现在不是很忙
+                                If You're Not Busy
                                 <br/>
-                                我们推荐您退出当前引擎，点击欢迎界面的
+                                We Recommend Exiting Current Engine, Click on Welcome Screen for
                                 <br/>
-                                "安装/升级 Yak 引擎" 来免费升级
+                                "Install/Upgrade Yak Engine" Free Upgrade
                             </>
                         })
                     }}>
@@ -111,7 +111,7 @@ export const YakitVersion: React.FC<YakVersionProp> = (props) => {
     }, [])
 
     if (!version) {
-        return <Spin tip={"正在加载 yakit 版本"}/>
+        return <Spin tip={"Loading yakit Version"}/>
     }
     const isDev = version.toLowerCase().includes("dev");
     const newVersion = latestVersion !== "" && latestVersion !== version
@@ -130,17 +130,17 @@ export const YakitVersion: React.FC<YakVersionProp> = (props) => {
                 }
 
                 showModal({
-                    title: `有新的 ${getReleaseEditionName()} 版本可升级！`,
+                    title: `New ${getReleaseEditionName()} Upgrade Available！`,
                     content: <>
-                        如果你现在不是很忙
+                        If You're Not Busy
                         <br/>
-                        {/* 我们推荐您进入 <Button
+                        {/* We Recommend Entering <Button
                         type={"primary"}
                         onClick={() => {
                             openExternalWebsite("https://github.com/yaklang/yakit/releases")
                         }}
-                    >Yakit Github 发布界面</Button> 下载最新版并升级！ */}
-                        我们推荐您点击右上角退出到启用页升级最新版
+                    >Yakit Github Release Page</Button> Download and Upgrade to Latest！ */}
+                        We Recommend Exiting to Activation Page for Latest Upgrade
                     </>
                 })
             }}>
@@ -188,10 +188,10 @@ export const AutoUpdateYakModuleViewer: React.FC<AutoUpdateYakModuleViewerProp> 
         }
     }, [])
 
-    return <Card title={"自动更新进度"}>
+    return <Card title={"Auto-Update Progress"}>
         <Space direction={"vertical"} style={{width: "100%"}} size={12}>
             {error && <Alert type={"error"} message={error}/>}
-            {end && <Alert type={"info"} message={"更新进程已结束"}/>}
+            {end && <Alert type={"info"} message={"Update Finished"}/>}
             <Timeline pending={!end} style={{marginTop: 20}}>
                 {(msg || []).filter(i => i.type === "log").map(i => i.content as ExecResultLog).map(e => {
                     return <Timeline.Item color={LogLevelToCode(e.level)}>
@@ -212,7 +212,7 @@ export const ConfigGlobalReverse = React.memo(() => {
     const [ifaces, setIfaces] = useState<NetInterface[]>([]);
     const [ok, setOk] = useState(false)
 
-    // dnslog 配置
+    // DNSLog Settings
     const [inheritBridge, setInheritBridge] = useState(false);
     const [dnslogAddr, setDNSLogAddr] = useState("ns1.cybertunnel.run:64333");
     const [dnslogPassword, setDNSLogPassword] = useState("");
@@ -257,9 +257,9 @@ export const ConfigGlobalReverse = React.memo(() => {
                 ipcRenderer.invoke("SetYakBridgeLogServer", {
                     DNSLogAddr: addr, DNSLogSecret: password,
                 }).then(() => {
-                    info("配置全局 DNSLog 生效")
+                    info("Global DNSLog configured")
                 }).catch(e => {
-                    failed(`配置全局 DNSLog 失败：${e}`)
+                    failed(`Global DNSLog configuration failed：${e}`)
                 })
             } else {
                 setRemoteValue(DNSLOG_ADDR, dnslogAddr)
@@ -267,9 +267,9 @@ export const ConfigGlobalReverse = React.memo(() => {
                 ipcRenderer.invoke("SetYakBridgeLogServer", {
                     DNSLogAddr: dnslogAddr, DNSLogSecret: dnslogPassword,
                 }).then(() => {
-                    info("配置全局 DNSLog 生效")
+                    info("Global DNSLog configured")
                 }).catch(e => {
-                    failed(`配置全局 DNSLog 失败：${e}`)
+                    failed(`Global DNSLog configuration failed：${e}`)
                 })
             }
         }).catch(e => {
@@ -277,7 +277,7 @@ export const ConfigGlobalReverse = React.memo(() => {
         })
     })
 
-    // 设置 Bridge
+    // Configure Bridge
     useEffect(() => {
         getRemoteValue(BRIDGE_ADDR).then((data: string) => {
             if (!!data) {
@@ -317,9 +317,9 @@ export const ConfigGlobalReverse = React.memo(() => {
         }
     }, [])
 
-    // // 如果 addr 和 password 都存在，且没有连接，则马上连接一次
+    // // Connect Immediately if Both addr and password Exist and Not Yet Connected
     // useEffect(() => {
-    //     // 如果已经连上就退出
+    //     // Exit if Already Connected
     //     if (ok) {
     //         return
     //     }
@@ -350,7 +350,7 @@ export const ConfigGlobalReverse = React.memo(() => {
 
     useEffect(() => {
         ipcRenderer.on("global-reverse-error", (e, data) => {
-            failed(`全局反连配置失败：${data}`)
+            failed(`Global Reverse Connection Failed：${data}`)
         })
         return () => {
             ipcRenderer.removeAllListeners("global-reverse-error")
@@ -367,7 +367,7 @@ export const ConfigGlobalReverse = React.memo(() => {
                 setRemoteValue(DNSLOG_INHERIT_BRIDGE, `${inheritBridge}`)
             }} labelCol={{span: 5}} wrapperCol={{span: 14}}>
             <InputItem
-                label={"本地反连 IP"}
+                label={"Local Reverse Connection IP"}
                 value={localIP} disable={ok}
                 setValue={setLocalIP}
                 autoComplete={ifaces.filter((item) => !!item.IP).map((item) => item.IP)}
@@ -375,54 +375,54 @@ export const ConfigGlobalReverse = React.memo(() => {
                     <Button type={"link"} size={"small"} onClick={() => {
                         updateIface()
                     }} icon={<ReloadOutlined/>}>
-                        更新 yak 引擎本地 IP
+                        Update yak Engine Local IP
                     </Button>
                 </div>}
             />
-            <Divider orientation={"left"}>公网反连配置</Divider>
+            <Divider orientation={"left"}>Public Reverse Connection Settings</Divider>
             <Form.Item label={" "} colon={false}>
                 <Alert message={<Space direction={"vertical"}>
-                    <div>在公网服务器上运行</div>
+                    <div>Run on Public Server</div>
                     <Text code={true} copyable={true}>yak bridge --secret [your-password]</Text>
-                    <div>或</div>
+                    <div>or</div>
                     <Text code={true} copyable={true}>
                         docker run -it --rm --net=host v1ll4n/yak-bridge yak bridge --secret
                         [your-password]
                     </Text>
-                    <div>已配置</div>
+                    <div>Configured</div>
                 </Space>}/>
             </Form.Item>
             <InputItem
-                label={"Yak Bridge 地址"} value={addr}
+                label={"Yak Bridge Address"} value={addr}
                 setValue={setAddr} disable={ok}
-                help={"格式 host:port, 例如 cybertunnel.run:64333"}
+                help={"Format host:port, e.g., cybertunnel.run:64333"}
             />
             <InputItem
-                label={"Yak Bridge 密码"}
+                label={"Yak Bridge Password"}
                 setValue={setPassword} value={password}
                 type={"password"} disable={ok}
-                help={`yak bridge 命令的 --secret 参数值`}
+                help={`--secret Value for yak bridge Command`}
             />
-            <Divider orientation={"left"}>{isCommunityEdition()&&'Yakit'} 全局 DNSLog 配置</Divider>
+            <Divider orientation={"left"}>{isCommunityEdition()&&'Yakit'} Global DNSLog Settings</Divider>
             <SwitchItem
-                label={"复用 Yak Bridge 配置"} disabled={ok}
+                label={"Reuse Yak Bridge Settings"} disabled={ok}
                 value={inheritBridge} setValue={setInheritBridge}/>
             {!inheritBridge && <InputItem
-                label={"DNSLog 配置"} disable={ok}
+                label={"DNSLog Settings"} disable={ok}
                 value={dnslogAddr}
-                help={"配置好 Yak Bridge 的 DNSLog 系统的地址：[ip]:[port]"}
+                help={"Set Yak Bridge's DNSLog Address: [ip]:[port]"}
                 setValue={setDNSLogAddr}
             />}
             {!inheritBridge && <InputItem
-                label={"DNSLog 密码"} disable={ok}
+                label={"DNSLog Password"} disable={ok}
                 value={dnslogPassword}
                 setValue={setDNSLogPassword}
             />}
             <Form.Item colon={false} label={" "}>
-                <Button type="primary" htmlType="submit" disabled={ok}> 配置反连 </Button>
+                <Button type="primary" htmlType="submit" disabled={ok}> Setup Reverse Connection </Button>
                 {ok && <Button type="primary" danger={true} onClick={() => {
                     cancel()
-                }}> 停止 </Button>}
+                }}> Exec Plugin Names Array </Button>}
             </Form.Item>
         </Form>
     </div>
@@ -464,7 +464,7 @@ export const StartExecYakCodeModal: React.FC<StartExecYakCodeModalProps> = (prop
             width="60%"
             maskClosable={false}
             destroyOnClose={true}
-            title={`正在执行：${verbose}`}
+            title={`Executing：${verbose}`}
             onCancel={onCancel}
             closable={true}
             footer={null}
@@ -507,9 +507,9 @@ const StartToExecYakScriptViewer = React.forwardRef((props: {
         token, () => setTimeout(() => setLoading(false), 300),
         () => {
             ipcRenderer.invoke("ExecYakCode", script, token).then(() => {
-                successInfo && info(`执行 ${verbose} 成功`)
+                successInfo && info(`Risk Items ${verbose} Success`)
             }).catch(e => {
-                failed(`执行 ${verbose} 遇到问题：${e}`)
+                failed(`Risk Items ${verbose} Encountered an Issue：${e}`)
             })
         }
     )
@@ -527,7 +527,7 @@ const StartToExecYakScriptViewer = React.forwardRef((props: {
                     return
                 }
             }
-            // 导入日志都没有错误
+            // All Logs Imported Without Errors
             if (!checkErrorsFlagRef.current && !loading && messageState.length) {
                 noErrorsLogCallBack && noErrorsLogCallBack()
                 onCancel()

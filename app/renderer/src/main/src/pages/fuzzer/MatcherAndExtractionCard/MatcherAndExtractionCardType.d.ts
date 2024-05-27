@@ -26,7 +26,7 @@ export interface MatcherAndExtractionValueProps {
 
 export interface MatcherValueProps {
     filterMode: FilterMode
-    /**@name filterMode为onlyMatch,才会设置该值*/
+    /**@Set only if name filterMode is onlyMatch*/
     hitColor: string
     matchersCondition: "and" | "or"
     matchersList: HTTPResponseMatcher[]
@@ -51,7 +51,7 @@ export interface ExtractorCollapseProps extends MatcherAndExtractorProps {
 interface MatcherAndExtractorProps {
     isSmallMode: boolean
     type: MatchingAndExtraction
-    /**@name 不可编辑状态，不展示删除等相关操作按钮;且默认打开所有的Panel,不可点击关闭/打开等操作 */
+    /**@No edit mode, no delete or related action buttons;Also, opens all Panels by default, no click to close/Open and others */
     notEditable?: boolean
     defActiveKey: string
 }
@@ -97,7 +97,7 @@ export interface ExtractorItemProps extends MatcherItemAndExtractorItemProps {
 
 interface MatcherItemAndExtractorItemProps {
     isSmallMode?: boolean
-    /**@name 不可编辑状态，不展示删除等相关操作按钮;且默认打开所有的Panel,不可点击关闭/打开等操作 */
+    /**@No edit mode, no delete or related action buttons;Also, opens all Panels by default, no click to close/Open and others */
     notEditable?: boolean
     onEdit: (f: string, v: any) => void
 }
@@ -117,7 +117,7 @@ export interface ColorSelectProps {
 }
 
 export interface MatcherAndExtractionValueListProps {
-    /**@name 是否显示正则表达式icon */
+    /**@Show regex icon for name */
     showRegex: boolean
     group: string[]
     notEditable?: boolean

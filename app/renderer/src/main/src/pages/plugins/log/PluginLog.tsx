@@ -34,33 +34,33 @@ import emiter from "@/utils/eventBus/eventBus"
 
 import styles from "./PluginLog.module.scss"
 
-/** 日志类型-对应展示信息 */
+/** Log Type-Display Info */
 const LogTypeToInfo: Record<string, {content: string; className: string; icon: ReactNode}> = {
-    submit: {content: "创建插件", className: styles["log-type"], icon: <PluginLogNewIcon />},
-    applyMerge: {content: "申请修改插件", className: styles["log-type"], icon: <PluginLogModifyIcon />},
+    submit: {content: "Create Plugin", className: styles["log-type"], icon: <PluginLogNewIcon />},
+    applyMerge: {content: "Request Plugin Edit", className: styles["log-type"], icon: <PluginLogModifyIcon />},
     mergePass: {
-        content: "已合并",
+        content: "Merged",
         className: classNames(styles["log-type"], styles["log-type-pass"]),
         icon: <PluginLogPassIcon />
     },
     mergeNoPass: {
-        content: "驳回",
+        content: "Reject",
         className: classNames(styles["log-type"], styles["log-type-no-pass"]),
         icon: <PluginLogNoPassIcon />
     },
-    update: {content: "修改插件", className: styles["log-type"], icon: <PluginLogModifyIcon />},
+    update: {content: "Edit Plugin", className: styles["log-type"], icon: <PluginLogModifyIcon />},
     checkPass: {
-        content: "审核通过",
+        content: "Approved",
         className: classNames(styles["log-type"], styles["log-type-pass"]),
         icon: <PluginLogPassIcon />
     },
     checkNoPass: {
-        content: "审核不通过",
+        content: "Not Approved",
         className: classNames(styles["log-type"], styles["log-type-no-pass"]),
         icon: <PluginLogNoPassIcon />
     },
-    delete: {content: "删除插件", className: styles["log-type"], icon: <PluginLogDelIcon />},
-    recover: {content: "恢复插件", className: styles["log-type"], icon: <PluginLogRestoreIcon />}
+    delete: {content: "Delete Plugin", className: styles["log-type"], icon: <PluginLogDelIcon />},
+    recover: {content: "Restore Plugin", className: styles["log-type"], icon: <PluginLogRestoreIcon />}
 }
 const handleToLogInfo = (info: API.PluginsLogsDetail) => {
     const status = info.checkStatus
@@ -119,7 +119,7 @@ export const PluginLog: React.FC<PluginLogProps> = memo((props) => {
     })
     const hasMore = useRef<boolean>(true)
 
-    // 获取插件详情
+    // Fetch Plugin Details
     const fetchPluginDetail = useDebounceFn(
         useMemoizedFn((onlineId) => {
             setPluginLoading(true)
@@ -142,14 +142,14 @@ export const PluginLog: React.FC<PluginLogProps> = memo((props) => {
         }),
         {wait: 300}
     ).run
-    // 获取插件日志
+    // Fetch Plugin Logs
     const fetchLogs = useMemoizedFn((page: number) => {
         if (resLoading) return
 
         if (page === 1) {
             /**
-             * 因为不定高虚拟列表自身无法计算传入数据的数量由多变少时的逻辑
-             * 所以需要使用者手动清空虚拟列表的位置状态信息
+             * Indef-H VirtualList Can't Auto-Calc Data Qty Reduction
+             * Manual Clearing of Virtual List State Required
              */
             handleClearTimeList()
         }
@@ -178,13 +178,13 @@ export const PluginLog: React.FC<PluginLogProps> = memo((props) => {
             })
     })
 
-    // 初始化请求日志列表数据
+    // Init Log List Fetch
     const resetFetchLogs = useMemoizedFn(() => {
         hasMore.current = true
         pageRef.current = 1
         fetchLogs(pageRef.current)
     })
-    // 重置日志列表数据
+    // Reset Log List Data
     const resetResponse = useMemoizedFn(() => {
         hasMore.current = false
         setResponse({
@@ -202,7 +202,7 @@ export const PluginLog: React.FC<PluginLogProps> = memo((props) => {
         return inViewport
     })
 
-    // 控制日志列表展示时的loading状态和重置列表数据
+    // Control Log List Display Loading & Reset Data
     useEffect(() => {
         if (inViewport) {
             if (uuid) {
@@ -210,7 +210,7 @@ export const PluginLog: React.FC<PluginLogProps> = memo((props) => {
                     setPluginLoading(true)
                     fetchPluginDetail(uuid)
                 } else {
-                    // 减少切换页面场景下的重复请求
+                    // Reduce Duplicate Fetches On Page Switch
                     if (latestPlugin.current.uuid !== uuid) {
                         setPluginLoading(true)
                         fetchPluginDetail(uuid)
@@ -222,7 +222,7 @@ export const PluginLog: React.FC<PluginLogProps> = memo((props) => {
             }
         }
     }, [inViewport, uuid])
-    // uuid变化时的信息重新请求获取
+    // Re-fetch On UUID Change
     // useEffect(() => {
     //     console.log(`uuid`, uuid, new Date().getTime())
     //     if (uuid) {
@@ -231,7 +231,7 @@ export const PluginLog: React.FC<PluginLogProps> = memo((props) => {
     //         if (!latestPlugin.current) {
     //             fetchPluginDetail(uuid)
     //         } else {
-    //             // 减少切换页面场景下的重复请求
+    //             // Reduce Duplicate Fetches On Page Switch
     //             if (latestPlugin.current.uuid !== uuid) fetchPluginDetail(uuid)
     //         }
     //     } else {
@@ -247,8 +247,8 @@ export const PluginLog: React.FC<PluginLogProps> = memo((props) => {
         fetchLogs(pageRef.current)
     })
 
-    /** ---------- 认证状态改变时的触发事件 Start ---------- */
-    // 切换私有域后的信息请求
+    /** ---------- Auth Status Changed Event Start ---------- */
+    // Switch Private Domain Fetch
     const onSwitchHost = useMemoizedFn(() => {
         if (mergeShow.visible) onCancelMerge()
         setPlugin(undefined)
@@ -267,8 +267,8 @@ export const PluginLog: React.FC<PluginLogProps> = memo((props) => {
         resetFetchLogs()
         if (mergeShow.visible) onCancelMerge()
     }, [userInfo])
-    /** ---------- 认证状态改变时的触发事件 End ---------- */
-    /** ---------- 合并功能 Start ---------- */
+    /** ---------- Auth Status Changed Event End ---------- */
+    /** ---------- Merge Start ---------- */
     const [mergeShow, setMergeShow] = useState<{visible: boolean; info?: API.PluginsLogsDetail; index: number}>({
         visible: false,
         info: undefined,
@@ -296,7 +296,7 @@ export const PluginLog: React.FC<PluginLogProps> = memo((props) => {
             index: -1
         })
     })
-    /** ---------- 合并功能 End ---------- */
+    /** ---------- Merge End ---------- */
 
     return (
         <div
@@ -325,7 +325,7 @@ export const PluginLog: React.FC<PluginLogProps> = memo((props) => {
 
                             <div className={styles["plugin-online-log-list"]}>
                                 <div className={styles["log-header"]}>
-                                    <span className={styles["header-title"]}>插件日志</span>
+                                    <span className={styles["header-title"]}>Plugin Logs</span>
                                     <div className={styles["header-tag"]}>{response.pagemeta.total}</div>
                                 </div>
                                 <div className={styles["log-content"]}>
@@ -380,27 +380,27 @@ export const PluginLog: React.FC<PluginLogProps> = memo((props) => {
 const PluginLogOpt: React.FC<PluginLogOptProps> = memo((props) => {
     const {uuid, info, onMerge} = props
 
-    /** 角色tag */
+    /** Role Tag */
     const roleTag = useMemo(() => {
         const isAuthirs = info.isAuthors
         const role = info.userRole
 
         if (isAuthirs) {
-            return <YakitRoundCornerTag>作者</YakitRoundCornerTag>
+            return <YakitRoundCornerTag>Author</YakitRoundCornerTag>
         }
         if (role === "admin") {
-            return <YakitRoundCornerTag color='blue'>管理员</YakitRoundCornerTag>
+            return <YakitRoundCornerTag color='blue'>Admin</YakitRoundCornerTag>
         }
         if (role === "trusted") {
-            return <YakitRoundCornerTag color='green'>信任用户</YakitRoundCornerTag>
+            return <YakitRoundCornerTag color='green'>Trusted User</YakitRoundCornerTag>
         }
         if (role === "auditor") {
-            return <YakitRoundCornerTag color='blue'>管理员</YakitRoundCornerTag>
+            return <YakitRoundCornerTag color='blue'>Admin</YakitRoundCornerTag>
         }
 
         return null
     }, [info])
-    /** 日志类型 */
+    /** Log Type */
     const type = useMemo(() => {
         return handleToLogInfo(info)
     }, [info.checkStatus, info.logType])
@@ -417,10 +417,10 @@ const PluginLogOpt: React.FC<PluginLogOptProps> = memo((props) => {
                 {roleTag}
                 {type && <div className={type.className}>{type.content}</div>}
                 <div className={styles["log-time"]}>{` · ${formatTimestamp(info.updated_at)}`}</div>
-                {type?.content === "申请修改插件" && info.loginIsPluginUser && (
+                {type?.content === "Request Plugin Edit" && info.loginIsPluginUser && (
                     <div className={styles["log-operate"]}>
                         <YakitButton type='text' size='large' onClick={onModify}>
-                            去合并
+                            Merge
                         </YakitButton>
                         <div className={styles["divider-style"]}></div>
                         <YakitPopover
@@ -472,13 +472,13 @@ const PluginLogDiffCode: React.FC<PluginLogDiffCodeProps> = memo((props) => {
             .then(async (res) => {
                 if (res) {
                     language.current = GetPluginLanguage(res.type)
-                    // 获取对比器-修改源码
+                    // Get Comparator-Modify Source
                     newCode.current = res.content
-                    // 获取对比器-源码
+                    // Get Comparator-Source
                     if (res.merge_before_plugins) oldCode.current = res.merge_before_plugins.content || ""
                     setUpdate(!update)
                 } else {
-                    yakitNotify("error", `获取失败，返回数据为空!`)
+                    yakitNotify("error", `Fetch Failed, No Data Returned!`)
                     setVisible(false)
                 }
             })
@@ -500,8 +500,8 @@ const PluginLogDiffCode: React.FC<PluginLogDiffCodeProps> = memo((props) => {
         <div className={styles["plugin-log-diff-code-wrapper"]}>
             <YakitSpin spinning={loading}>
                 <div className={styles["diff-code-header"]}>
-                    <div className={styles["header-body"]}>插件源码</div>
-                    <div className={classNames(styles["header-body"], styles["header-right-body"])}>申请人提交源码</div>
+                    <div className={styles["header-body"]}>Plugin Source Code</div>
+                    <div className={classNames(styles["header-body"], styles["header-right-body"])}>Submitter Supplied Source Code</div>
                 </div>
                 <div className={styles["diff-code-content"]}>
                     <YakitDiffEditor

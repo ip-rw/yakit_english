@@ -23,7 +23,7 @@ export const RiskTableDemo: React.FC<RiskTableDemoProp> = (props) => {
             <DemoVirtualTable<Risk>
                 columns={[
                     {headerTitle: "ID", key: "Id", width: 80, colRender: i => i.Id},
-                    {headerTitle: "漏洞名称", key: "Title", width: 300, colRender: i => i.TitleVerbose || i.Title},
+                    {headerTitle: "Vulnerability Name", key: "Title", width: 300, colRender: i => i.TitleVerbose || i.Title},
                 ]}
                 rowClick={data => {
                     setSelected(data)
@@ -31,7 +31,7 @@ export const RiskTableDemo: React.FC<RiskTableDemoProp> = (props) => {
                 loadMore={(data: Risk | undefined) => {
                     return new Promise((resolve, reject) => {
                         if (!data) {
-                            // info("加载初始化数据")
+                            // info("Load Init Data")
                             ipcRenderer.invoke("QueryRisks", {
                                 Pagination: {Limit: 10, Page: 1, OrderBy: 'id', Order: "asc"}, // genDefaultPagination(),
                                 FromId: 0,

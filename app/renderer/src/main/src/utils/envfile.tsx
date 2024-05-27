@@ -4,9 +4,9 @@ import {RemoteGV} from "@/yakitGV";
 
 enum PRODUCT_RELEASE_EDITION {
     Yakit = 0,
-    /**@name 企业版 */
+    /**@name Enterprise Edition */
     EnpriTrace = 1,
-    /**@name 便携版/简易版 */
+    /**@name Portable Edition/Basic Edition */
     EnpriTraceAgent = 2,
     BreachTrace = 3,
 }
@@ -88,16 +88,16 @@ const fetchEnv = () => {
 }
 
 /*
-* 在导入的时候，就马上设置，不用等到组件加载
+* Set immediately upon import, no need to wait for component loading
 * */
 const {ipcRenderer} = window.require("electron");
 ipcRenderer.invoke("set-release-edition-raw", fetchEnv() || "").then(() => {
     if (isEnpriTraceAgent()) {
-        info(`设置 ${getReleaseEditionName()} 发行版成功`)
+        info(`Settings ${getReleaseEditionName()} Release successful`)
     }
 })
 
-/** 是否展示开发者工具 */
+/** Show Developer Tools? */
 export const showDevTool = () => {
     const devTool = process.env?.REACT_APP_DEVTOOL || ""
     return devTool && devTool === "true"

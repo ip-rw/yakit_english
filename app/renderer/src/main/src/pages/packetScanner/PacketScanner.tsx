@@ -35,7 +35,7 @@ export const execPacketScanWithNewTab = (params: {
     verbose: string
 }) => {
     const {httpFlowIds, https, request = new Uint8Array(), keyword, verbose} = params
-    // keyword为undefined的时候去批量执行页面，有值去poc页面并需选中关键词组
+    // When keyword is undefined, batch execute pages. If exists, go to POC page and select keyword group.
     if (keyword) {
         emiter.emit(
             "openPage",

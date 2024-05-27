@@ -60,7 +60,7 @@ export const WebShellCreatorForm: React.FC<WebShellCreatorFormProp> = (props) =>
     const createOrUpdateWebShell = useMemoizedFn(() => {
         setCreateLoading(true)
         ipcRenderer.invoke(props.isCreate ? "CreateWebShell" : "UpdateWebShell", params).then((data: WebShellDetail) => {
-            success(props.isCreate ? "创建" : "编辑" + " 网站管理 成功")
+            success(props.isCreate ? "Create" : "Edit" + " Site Management Success")
             setParams(data)
             if (data) {
                 props.onCreated && props.onCreated(data)
@@ -68,7 +68,7 @@ export const WebShellCreatorForm: React.FC<WebShellCreatorFormProp> = (props) =>
             }
             props.closeModal && props.closeModal()
         }).catch((err) => {
-            failed(props.isCreate ? "创建" : "编辑" + ` 网站管理 失败: ${err}`)
+            failed(props.isCreate ? "Create" : "Edit" + ` Site Management Failed: ${err}`)
         }).finally(() => {
             setTimeout(() => {
                 setCreateLoading(false)
@@ -87,7 +87,7 @@ export const WebShellCreatorForm: React.FC<WebShellCreatorFormProp> = (props) =>
                 <Form.Item colon={false} label={" "}>
                     <Space>
                         <YakitButton onClick={createOrUpdateWebShell} loading={createLoading}>
-                            {props.isCreate ? "添加" : "修改"}
+                            {props.isCreate ? "Add" : "Edit"}
                         </YakitButton>
                     </Space>
                 </Form.Item>
@@ -113,7 +113,7 @@ const WebShellFormContent: React.FC<WebShellFormContentProps> = (props) => {
     const [headersStr, setHeadersStr] = useState<string>("")
     const [shellScript, setShellScript] = useState<string>("")
     useEffect(() => {
-        // 如果 params.ShellScript 是空的，那么就设置它为 "jsp"
+        // Set if params.ShellScript is empty "jsp"
         if (!params.ShellScript) {
             setParams({...params, ShellScript: ShellScript.JSP});
             setShellScript(ShellScript.JSP)
@@ -137,18 +137,18 @@ const WebShellFormContent: React.FC<WebShellFormContentProps> = (props) => {
     }, []);
     useDebounceEffect(() => {
         if (params.Url === '') {
-            // 如果 URL 是空字符串，那么就直接更新 params
+            // Update params directly if URL is empty
             return;
         }
 
         try {
-            // 尝试解析 URL
+            // Try parsing URL
             const url = new URL(params.Url);
-            // 获取 URL 的文件扩展名
+            // Get file extension from URL
             const urlPath = url.pathname;
             const extension = urlPath.split('.').pop();
 
-            // 如果文件扩展名是我们支持的脚本类型之一，那么就更新 ShellScript 的值
+            // Update ShellScript if file extension is a supported script type
             const scriptTypes = Object.values(ShellScript);
             if (extension) {
                 const upperCaseExtension = extension.toUpperCase();
@@ -158,7 +158,7 @@ const WebShellFormContent: React.FC<WebShellFormContentProps> = (props) => {
                 }
             }
         } catch (error) {
-            // 如果解析 URL 失败，那么就处理错误
+            // Handle errors if URL parsing fails
             console.error(`Invalid URL: ${params.Url}`);
         }
     }, [params.Url]);
@@ -203,7 +203,7 @@ const WebShellFormContent: React.FC<WebShellFormContentProps> = (props) => {
     }, [shellScript])
     return (
         <>
-            <Form.Item label={"网站类型"} required={true} rules={[{required: true, message: "该项为必填"}]}>
+            <Form.Item label={"Site Type"} required={true} rules={[{required: true, message: "Required Field"}]}>
                 <YakitSelect
                     value={params.ShellType || ShellType.Behinder}
                     onSelect={(val) => {
@@ -223,7 +223,7 @@ const WebShellFormContent: React.FC<WebShellFormContentProps> = (props) => {
                 value={params.Url}
                 disable={disabled}
             />
-            <Form.Item label={"脚本类型"}>
+            <Form.Item label={"Script Type"}>
                 <YakitSelect
                     value={params.ShellScript || ShellScript.JSP}
                     onSelect={(val) => {
@@ -239,7 +239,7 @@ const WebShellFormContent: React.FC<WebShellFormContentProps> = (props) => {
                 </YakitSelect>
             </Form.Item>
             <InputItem
-                label={"密钥"}
+                label={"Key"}
                 setValue={(SecretKey) => setParams({...params, SecretKey})}
                 value={params.SecretKey}
                 disable={disabled}
@@ -247,12 +247,12 @@ const WebShellFormContent: React.FC<WebShellFormContentProps> = (props) => {
             {showSecret && (
                 <>
                     <InputItem
-                        label={"密码"}
+                        label={"Password"}
                         setValue={(Pass) => setParams({...params, Pass})}
                         value={params.Pass}
                         disable={disabled}
                     />
-                    <Form.Item label={"加密模式"}>
+                    <Form.Item label={"Encryption Mode"}>
                         <YakitSelect
                             value={params.EncMode || ""}
                             onSelect={(val) => {
@@ -267,11 +267,11 @@ const WebShellFormContent: React.FC<WebShellFormContentProps> = (props) => {
             )}
             {showCodec && (
                 <>
-                    <Form.Item label={"数据包编解码器"}>
+                    <Form.Item label={"Packet Codec"}>
                         <YakitSelect
                             showSearch
                             options={packetScriptList}
-                            placeholder='请选择数据包编解码器...'
+                            placeholder='Please select packet codec...'
                             value={params.PacketCodecName}
                             onChange={(PacketCodecName) => {
                                 setParams({...params, PacketCodecName})
@@ -280,11 +280,11 @@ const WebShellFormContent: React.FC<WebShellFormContentProps> = (props) => {
                         />
                     </Form.Item>
 
-                    <Form.Item label={"回显编解码器"}>
+                    <Form.Item label={"Echo Codec"}>
                         <YakitSelect
                             showSearch
                             options={payloadScriptList}
-                            placeholder='请选择回显编解码器...'
+                            placeholder='Please select echo codec...'
                             value={params.PayloadCodecName}
                             onChange={(PayloadCodecName) => {
                                 setParams({...params, PayloadCodecName})
@@ -311,7 +311,7 @@ const WebShellFormContent: React.FC<WebShellFormContentProps> = (props) => {
                                 setParams({...params, Headers: newHeaders});
                             }}
                             spellCheck={false}
-                            placeholder={"自定义请求头,例如: User-Agent: Yakit/1.0.0"}
+                            placeholder={"Custom headers, e.g.: User-Agent: Yakit/1.0.0"}
                         />
                         <div className={styles["input-textarea-copy"]}>
                             <CopyComponents
@@ -325,14 +325,14 @@ const WebShellFormContent: React.FC<WebShellFormContentProps> = (props) => {
             </Form.Item>
 
             <InputItem
-                label={"设置代理"}
+                label={"Set Proxy"}
                 setValue={(Proxy) => setParams({...params, Proxy})}
                 value={params.Proxy}
                 disable={disabled}
             />
 
             <InputItem
-                label={"备注"}
+                label={"Note"}
                 setValue={(Remark) => setParams({...params, Remark})}
                 value={params.Remark}
                 disable={disabled}

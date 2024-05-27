@@ -12,7 +12,7 @@ module.exports = (win, getClient) => {
             }
         })
     }
-    // 获取通过文件路径获取文件信息
+    // Fetch File Info by Path
     ipcMain.handle("fetch-file-info-by-path", async (e, path) => {
         return await asyncFetchFileInfoByPath(path)
     })

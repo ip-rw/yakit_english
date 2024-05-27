@@ -1,7 +1,7 @@
 import React from "react";
 
 export const PortScanPluginTemplate: string = `/*
-端口扫描插件在每一次端口扫描的时候将会执行
+runOnPortScan Executes on each port scan
 
 port-scan plugin is working on anytime a port scanned.
 */
@@ -10,30 +10,30 @@ handle = result => {
 }
 
 /*
-// 判断端口是否开放？check if the port open
+// checkPortOpen Checks if the port is open
 if result.IsOpen() {
     // do sth
 }
 
-// 如果端口大概是个 Web 服务的话，查看 Html Title？check html title for port(if website existed)
+// checkHtmlTitle For port(if website exists)
 if result.GetHtmlTitle().Contains("login") {
     // do sth
 }
 
-// 如果端口是一个 web 服务，获取他的数据包信息? get the packet info for port(if website existed)
+// getPacketInfo For port(if website exists)
 isHttps, request := result.GetRequestRaw()
 response := result.GetResponseRaw()
 result.Get
 
 
 type *MatchResult struct {
-  Fields(可用字段): 
+  Fields(Available Fields): 
       Target: string  
       Port: int  
       State: fp.PortState  
       Reason: string  
       Fingerprint: *fp.FingerprintInfo  
-  Methods(可用方法): 
+  Methods(Available Methods): 
       func GetBanner() return(string) 
       func GetCPEs() return([]string) 
       func GetDomains() return([]string) 
@@ -51,27 +51,27 @@ type *MatchResult struct {
 
 export const MITMPluginTemplate: string = `
 
-# mirrorHTTPFlow 会镜像所有的流量到这里，包括 .js / .css / .jpg 这类一般会被劫持程序过滤的请求
+# mirrorHTTPFlow Mirrors all traffic here, including .js,  / .css / .jpg Requests typically filtered by hijacking programs
 mirrorHTTPFlow = func(isHttps /*bool*/, url /*string*/, req /*[]byte*/, rsp /*[]byte*/, body /*[]byte*/) {
     
 }
 
-# mirrorFilteredHTTPFlow 劫持到的流量为 MITM 自动过滤出的可能和 "业务" 有关的流量，会自动过滤掉 js / css 等流量
+# mirrorFilteredHTTPFlow Traffic hijacked and filtered by MITM as potentially related "Business" filterJsTraffic Automatically filters out js traffic / css traffic
 mirrorFilteredHTTPFlow = func(isHttps /*bool*/, url /*string*/, req /*[]byte*/, rsp /*[]byte*/, body /*[]byte*/) {
     
 }
 
-# mirrorNewWebsite 每新出现一个网站，这个网站的第一个请求，将会在这里被调用！
+# mirrorNewWebsite Invokes the first request for a newly surfaced website！
 mirrorNewWebsite = func(isHttps /*bool*/, url /*string*/, req /*[]byte*/, rsp /*[]byte*/, body /*[]byte*/) {
     
 }
 
-# mirrorNewWebsitePath 每新出现一个网站路径，关于这个网站路径的第一个请求，将会在这里被传入回调
+# mirrorNewWebsitePath Callback for the first request of a newly surfaced website path
 mirrorNewWebsitePath = func(isHttps /*bool*/, url /*string*/, req /*[]byte*/, rsp /*[]byte*/, body /*[]byte*/) {
     
 }
 
-# mirrorNewWebsitePathParams 每新出现一个网站路径且带有一些参数，参数通过常见位置和参数名去重，去重的第一个 HTTPFlow 在这里被调用
+# mirrorNewWebsitePathParams Invokes the first HTTPFlow for newly surfaced website paths with parameters, deduped by common locations and names
 mirrorNewWebsitePathParams = func(isHttps /*bool*/, url /*string*/, req /*[]byte*/, rsp /*[]byte*/, body /*[]byte*/) {
     
 }

@@ -32,7 +32,7 @@ export const PluginDebuggerExec: React.FC<PluginDebuggerExecProp> = (props) => {
     }, xtermRef] = useHoldingIPCRStream("debug-plugin", "DebugPlugin", getToken(), () => {
         setTimeout(() => setLoading(false), 300)
     }, undefined, undefined, rId => {
-        info(`调试任务启动成功，运行时 ID: ${rId}`)
+        info(`Debug Task ID on Start: ${rId}`)
         setRuntimeId(rId)
     })
 
@@ -46,13 +46,13 @@ export const PluginDebuggerExec: React.FC<PluginDebuggerExecProp> = (props) => {
             Input: copyBuilder.IsRawHTTPRequest ? "" : props.targets,
             HTTPRequestTemplate: copyBuilder,
         }, getToken()).then(() => {
-            info("启动任务成功")
+            info("Task Started Successfully")
         })
     })
 
     const cancel = useMemoizedFn(() => {
         ipcRenderer.invoke("cancel-DebugPlugin", getToken(), {}).then(() => {
-            info("取消任务")
+            info("Cancel Task")
         }).finally(() => {
             setToken(randomString(40))
         })

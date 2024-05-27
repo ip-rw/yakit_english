@@ -611,7 +611,7 @@ const OutlineArrowscollapse = () => (
     </svg>
 )
 /**
- * @description  Icon/Outline/Outlinearrows-收起
+ * @description  Icon/Outline/Outline Arrows-Collapse
  */
 export const OutlineArrowscollapseIcon = (props: Partial<IconProps>) => {
     return <Icon component={OutlineArrowscollapse} {...props} />
@@ -4779,7 +4779,7 @@ const OutlineLoading = () => (
     </svg>
 )
 /**
- * @description  Icon/Outline/Outline加载
+ * @description  Icon/Outline/Outline Load
  */
 export const OutlineLoadingIcon = (props: Partial<IconProps>) => {
     return <Icon component={OutlineLoading} {...props} />
@@ -4801,7 +4801,7 @@ const OutlineBigview = () => (
     </svg>
 )
 /**
- * @description  Icon/Outline/Outline大窗口
+ * @description  Icon/Outline/Outline Large Window
  */
 export const OutlineBigviewIcon = (props: Partial<IconProps>) => {
     return <Icon component={OutlineBigview} {...props} />
@@ -4839,7 +4839,7 @@ const OutlineStorage = () => (
     </svg>
 )
 /**
- * @description  Icon/Outline/Outline存储
+ * @description  Icon/Outline/Outline Save
  */
 export const OutlineStorageIcon = (props: Partial<IconProps>) => {
     return <Icon component={OutlineStorage} {...props} />
@@ -4871,7 +4871,7 @@ const OutlineImport = () => (
     </svg>
 )
 /**
- * @description  Icon/Outline/Outline导入
+ * @description  Icon/Outline/Outline Import
  */
 export const OutlineImportIcon = (props: Partial<IconProps>) => {
     return <Icon component={OutlineImport} {...props} />
@@ -4889,7 +4889,7 @@ const OutlineExport = () => (
     </svg>
 )
 /**
- * @description  Icon/Outline/Outline导出
+ * @description  Icon/Outline/Outline Export
  */
 export const OutlineExportIcon = (props: Partial<IconProps>) => {
     return <Icon component={OutlineExport} {...props} />
@@ -4907,7 +4907,7 @@ const OutlineEngine = () => (
     </svg>
 )
 /**
- * @description  Icon/Outline/Outline引擎
+ * @description  Icon/Outline/Outline Engine
  */
 export const OutlineEngineIcon = (props: Partial<IconProps>) => {
     return <Icon component={OutlineEngine} {...props} />
@@ -4924,7 +4924,7 @@ const OutlineScreenshot = () => (
     </svg>
 )
 /**
- * @description  Icon/Outline/Outline截图
+ * @description  Icon/Outline/Outline Screenshot
  */
 export const OutlineScreenshotIcon = (props: Partial<IconProps>) => {
     return <Icon component={OutlineScreenshot} {...props} />
@@ -4945,7 +4945,7 @@ const OutlineWarp = () => (
     </svg>
 )
 /**
- * @description  Icon/Outline/Outline换行
+ * @description  Icon/Outline/Newline
  */
 export const OutlineWarpIcon = (props: Partial<IconProps>) => {
     return <Icon component={OutlineWarp} {...props} />
@@ -4963,7 +4963,7 @@ const OutlineFilterate = () => (
     </svg>
 )
 /**
- * @description  Icon/Outline/Outline筛选
+ * @description  Icon/Outline/Outline Filter
  */
 export const OutlineFilterateIcon = (props: Partial<IconProps>) => {
     return <Icon component={OutlineFilterate} {...props} />
@@ -4993,7 +4993,7 @@ const OutlineRemote = () => (
     </svg>
 )
 /**
- * @description  Icon/Outline/Outline远程
+ * @description  Icon/Outline/Outline Remote
  */
 export const OutlineRemoteIcon = (props: Partial<IconProps>) => {
     return <Icon component={OutlineRemote} {...props} />
@@ -5010,7 +5010,7 @@ const OutlineExit = () => (
     </svg>
 )
 /**
- * @description  Icon/Outline/Outline退出
+ * @description  Icon/Outline/Outline Exit
  */
 export const OutlineExitIcon = (props: Partial<IconProps>) => {
     return <Icon component={OutlineExit} {...props} />
@@ -5046,7 +5046,7 @@ const OutlinePayload = () => (
 )
 /**
  * @description  Icon/Outline/Payload
- * WebFuzzer 页面中下载下来的，图标库中没有这个图标  2023.8.28
+ * Downloaded from WebFuzzer, icon missing in library 8/28/2023
  */
 export const OutlinePayloadIcon = (props: Partial<IconProps>) => {
     return <Icon component={OutlinePayload} {...props} />
@@ -5150,7 +5150,7 @@ const OutlineStore = () => (
 )
 
 /**
- * @description  Icon/Outline/存储
+ * @description  Icon/Outline/Save
  */
 export const OutlineStoreIcon = (props: Partial<IconProps>) => {
     return <Icon component={OutlineStore} {...props} />

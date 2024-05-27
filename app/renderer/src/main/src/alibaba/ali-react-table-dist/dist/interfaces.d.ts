@@ -2,43 +2,43 @@ import React, { ReactNode } from 'react';
 export declare type ArtColumnAlign = 'left' | 'center' | 'right';
 export declare type CellProps = React.TdHTMLAttributes<HTMLTableCellElement>;
 export interface ArtColumnStaticPart {
-    /** 列的名称 */
+    /** Column Name */
     name: string;
-    /** 在数据中的字段 code */
+    /** Field Code in Data */
     code?: string;
-    /** 列标题的展示名称；在页面中进行展示时，该字段将覆盖 name 字段 */
+    /** Column Display Name; Overrides name field on display */
     title?: ReactNode;
-    /** 列的宽度，如果该列是锁定的，则宽度为必传项 */
+    /** Column Width, mandatory if locked */
     width?: number;
-    /** 单元格中的文本或内容的 对其方向 */
+    /** Text or Content Alignment */
     align?: ArtColumnAlign;
-    /** @deprecated 是否隐藏 */
+    /** @Deprecated Hide */
     hidden?: boolean;
-    /** 是否锁列 */
+    /** Lock Column */
     lock?: boolean;
-    /** 表头单元格的 props */
+    /** Header Cell Props */
     headerCellProps?: CellProps;
-    /** 功能开关 */
+    /** Feature Toggle */
     features?: {
         [key: string]: any;
     };
 }
 export interface ArtColumnDynamicPart {
-    /** 自定义取数方法 */
+    /** Custom Fetch Method */
     getValue?(row: any, rowIndex: number): any;
-    /** 自定义渲染方法 */
+    /** Custom Render Method */
     render?(value: any, row: any, rowIndex: number): ReactNode;
-    /** 自定义的获取单元格 props 的方法 */
+    /** Custom Get Cell Props Method */
     getCellProps?(value: any, row: any, rowIndex: number): CellProps;
-    /** 自定义的获取单元格 SpanRect 方法 */
+    /** Custom Get Cell SpanRect Method */
     getSpanRect?(value: any, row: any, rowIndex: number): SpanRect;
 }
 export interface ArtColumn extends ArtColumnStaticPart, ArtColumnDynamicPart {
-    /** 该列的子节点 */
+    /** Column's Children */
     children?: ArtColumn[];
 }
-/** SpanRect 用于描述合并单元格的边界
- * 注意 top/left 为 inclusive，而 bottom/right 为 exclusive */
+/** SpanRect for Merged Cells Boundary
+ * Note top/left inclusive, bottom/right exclusive */
 export interface SpanRect {
     top: number;
     bottom: number;

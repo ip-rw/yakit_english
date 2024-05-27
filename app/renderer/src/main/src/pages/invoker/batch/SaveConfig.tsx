@@ -34,17 +34,17 @@ export const SaveConfig: React.FC<SaveConfigProp> = (props) => {
                 }
             }}
         >
-            <InputItem required={true} label={"一级菜单组"} setValue={Group => setParams({...params, group: Group})}
+            <InputItem required={true} label={"Menu Group"} setValue={Group => setParams({...params, group: Group})}
                        value={params.group}/>
-            <InputItem required={true} label={"二级菜单"} setValue={Name => setParams({...params, name: Name})}
+            <InputItem required={true} label={"Submenu"} setValue={Name => setParams({...params, name: Name})}
                        value={params.name}/>
-            <Form.Item label={"内容"}>
+            <Form.Item label={"Content"}>
                 <div style={{height: 300}}>
                     <YakEditor type={"http"} readOnly={true} value={JSON.stringify(params.query)}/>
                 </div>
             </Form.Item>
             <Form.Item colon={false} label={" "}>
-                <Button type="primary" htmlType="submit"> 保存到本地 </Button>
+                <Button type="primary" htmlType="submit"> Save Locally </Button>
             </Form.Item>
         </Form>
     </div>
@@ -64,7 +64,7 @@ export const ImportConfig: React.FC<ImportConfigProp> = (props) => {
             Params={ImportMenuConfig.Params} primaryParamsOnly={true}
             onParamsConfirm={params => {
                 setStartExecYakCodeModalVisible(true)
-                setStartExecYakCodeVerbose("导入配置")
+                setStartExecYakCodeVerbose("Import Config")
                 setStartExecYakCodeParams({
                     Script: ImportMenuConfig.Code,
                     Params: params,

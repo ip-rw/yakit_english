@@ -43,9 +43,9 @@ const SelectUpload: React.FC<SelectUploadProps> = (props) => {
 
     const [data, setData, getData] = useGetState<FileProjectInfoProps[]>([])
 
-    /** @name 导出实体项目文件过程是否产生错误(如果产生错误，阻止通道结束后的上传操作) */
+    /** @name Export Entity File Error? (Block post-channel upload if error) */
     const hasErrorRef = useRef<boolean>(false)
-    // 是否取消
+    // Cancel?
     const isCancle = useRef<boolean>(false)
 
     const uploadFile = useMemoizedFn(async () => {
@@ -57,16 +57,16 @@ const SelectUpload: React.FC<SelectUploadProps> = (props) => {
                 if (isCancle.current) return
                 if (TaskStatus) {
                     setPercent(1)
-                    success("上传数据成功")
+                    success("Upload Data Success")
                     setTimeout(() => {
                         onCancel()
                     }, 200)
                 } else {
-                    failed(`项目上传失败`)
+                    failed(`Project Upload Failed`)
                 }
             })
             .catch((err) => {
-                failed(`项目上传失败:${err}`)
+                failed(`Project Upload Failed:${err}`)
             })
             .finally(() => {
                 if (isCancle.current) return
@@ -103,7 +103,7 @@ const SelectUpload: React.FC<SelectUploadProps> = (props) => {
     const cancleUpload = () => {
         ipcRenderer.invoke("cancel-ExportProject", token)
         ipcRenderer.invoke("cancle-split-upload").then(() => {
-            warn("取消上传成功")
+            warn("Cancel Upload Success")
             setLoading(false)
             setPercent(0)
             isCancle.current = true
@@ -146,7 +146,7 @@ const SelectUpload: React.FC<SelectUploadProps> = (props) => {
         setLoading(true)
         isCancle.current = false
         if (allowPassword === "2") {
-            // 直接上传 不走ExportProject 直接读取项目 default-yakit.db
+            // Direct Upload Skip ExportProject Read project default-yakit.db directly
             filePath.current = cascaderValue.DatabasePath
             uploadFile()
             return
@@ -174,7 +174,7 @@ const SelectUpload: React.FC<SelectUploadProps> = (props) => {
                 try {
                     setTimeout(() => {
                         if (rsp.Projects.length === 0) {
-                            targetOption.children = [] // 为空数组
+                            targetOption.children = [] // Empty Array
                         } else {
                             targetOption.children = [...rsp.Projects].map((item) => {
                                 const info: FileProjectInfoProps = {...item}
@@ -190,11 +190,11 @@ const SelectUpload: React.FC<SelectUploadProps> = (props) => {
                         setData([...getData()])
                     }, 300)
                 } catch (e) {
-                    failed("处理项目数据失败: " + `${e}`)
+                    failed("Process Project Data Failed: " + `${e}`)
                 }
             })
             .catch((e) => {
-                failed(`查询 Projects 失败：${e}`)
+                failed(`Query Projects Failed：${e}`)
             })
     })
 
@@ -219,11 +219,11 @@ const SelectUpload: React.FC<SelectUploadProps> = (props) => {
                         })
                     )
                 } catch (e) {
-                    failed("处理项目数据失败: " + `${e}`)
+                    failed("Process Project Data Failed: " + `${e}`)
                 }
             })
             .catch((e) => {
-                failed(`查询 Projects 失败：${e}`)
+                failed(`Query Projects Failed：${e}`)
             })
     })
 
@@ -233,23 +233,23 @@ const SelectUpload: React.FC<SelectUploadProps> = (props) => {
 
     return (
         <Form {...layout} form={form} onFinish={onFinish}>
-            <Form.Item name='allow_password' label='上传方式' rules={[{required: true, message: "该项为必填"}]}>
-                <YakitSelect disabled={loading} placeholder='请选择加密方式' onChange={setAllowPassword}>
-                    <YakitSelect.Option value='1'>加密上传</YakitSelect.Option>
-                    <YakitSelect.Option value='0'>压缩上传</YakitSelect.Option>
-                    <YakitSelect.Option value='2'>直接上传</YakitSelect.Option>
+            <Form.Item name='allow_password' label='Upload Mode' rules={[{required: true, message: "Required Field"}]}>
+                <YakitSelect disabled={loading} placeholder='Select Encryption Mode' onChange={setAllowPassword}>
+                    <YakitSelect.Option value='1'>Encrypt Upload</YakitSelect.Option>
+                    <YakitSelect.Option value='0'>Compress Upload</YakitSelect.Option>
+                    <YakitSelect.Option value='2'>Direct Upload</YakitSelect.Option>
                 </YakitSelect>
             </Form.Item>
             {allowPassword === "1" && (
-                <Form.Item name='password' label='密码' rules={[{required: true, message: "该项为必填"}]}>
-                    <YakitInput disabled={loading} placeholder='请输入密码' />
+                <Form.Item name='password' label='Password' rules={[{required: true, message: "Required Field"}]}>
+                    <YakitInput disabled={loading} placeholder='Enter Password' />
                 </Form.Item>
             )}
-            <Form.Item name='name' label='项目' rules={[{required: true, message: "该项为必填"}]}>
+            <Form.Item name='name' label='Project' rules={[{required: true, message: "Required Field"}]}>
                 <Cascader
                     disabled={loading}
                     options={data}
-                    placeholder='请选择项目'
+                    placeholder='Select Project'
                     fieldNames={{label: "ProjectName", value: "Id", children: "children"}}
                     loadData={(selectedOptions) => fetchChildNode(selectedOptions as any)}
                     showCheckedStrategy='SHOW_CHILD'
@@ -273,11 +273,11 @@ const SelectUpload: React.FC<SelectUploadProps> = (props) => {
             <div style={{textAlign: "center"}}>
                 {loading ? (
                     <YakitButton style={{width: 200}} type='primary' onClick={cancleUpload}>
-                        取消
+                        Cancel
                     </YakitButton>
                 ) : (
                     <YakitButton style={{width: 200}} type='primary' htmlType='submit'>
-                        确定
+                        Confirm
                     </YakitButton>
                 )}
             </div>

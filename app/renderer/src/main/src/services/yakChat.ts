@@ -62,7 +62,7 @@ function http({prompt, is_bing, token, history, signal, onDownloadProgress}: Yak
             history: history
         },
         signal: signal,
-        // 浏览器专属
+        // Browser-Specific
         onDownloadProgress: onDownloadProgress
     })
 }
@@ -72,7 +72,7 @@ export const chatCS = ({prompt, is_bing, token, history, signal, onDownloadProgr
 }
 
 function httpPlugin({prompt, is_bing, token,plugin_scope, scripts, history,signal,onDownloadProgress}:YakChatPluginOptions){
-    // console.log("参数-请求接口chat-plugin",{
+    // console.log("Param-RequestAPI chat-plugin",{
     //         prompt,
     //         user_token: token,
     //         plugin_scope,
@@ -95,7 +95,7 @@ function httpPlugin({prompt, is_bing, token,plugin_scope, scripts, history,signa
             history
         },
         signal: signal,
-        // 浏览器专属
+        // Browser-Specific
         onDownloadProgress: onDownloadProgress
     })
 }

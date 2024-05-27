@@ -45,10 +45,10 @@ import emiter from "@/utils/eventBus/eventBus"
 const {ipcRenderer} = window.require("electron")
 
 /**
- * @name Route信息(用于打开页面)
- * @property route-页面的路由
- * @property pluginId-插件id(本地)
- * @property pluginName-插件名称
+ * @name Route info (to open page))
+ * @property route-Page route
+ * @property pluginId-plugin id(local))
+ * @property pluginName-Plugin name
  */
 export interface RouteToPageProps {
     route: YakitRoute
@@ -63,17 +63,17 @@ interface PublicMenuProps {
 
 const PublicMenu: React.FC<PublicMenuProps> = React.memo((props) => {
     const {onMenuSelect, setRouteToLabel, defaultExpand} = props
-    // 登录用户状态信息
+    // User login state
     const {userInfo} = useStore()
-    // 本地菜单数据
+    // Local menu data
     const defaultMenu = useMemo(() => publicExchangeProps(PublicRouteMenu), [])
-    // 本地常用插件数据
+    // Local common plugins data
     const defaultPluginMenu = useMemo(() => publicExchangeProps(PublicCommonPlugins), [])
 
-    // 组件初始化的标志位
+    // Component initialization flag
     const isInitRef = useRef<boolean>(true)
 
-    // 基础工具内4个插件的对应插件id
+    // Four plugins' corresponding plugin ids in Basic Tools
     const [pluginToId, setPluginToId] = useState<Record<ResidentPluginName, number>>({
         [ResidentPluginName.SubDomainCollection]: 0,
         [ResidentPluginName.BasicCrawler]: 0,
@@ -81,7 +81,7 @@ const PublicMenu: React.FC<PublicMenuProps> = React.memo((props) => {
     })
 
     const [loading, setLoading] = useState<boolean>(false)
-    // 常用插件菜单
+    // Common plugins menu
     const [pluginMenu, setPluginMenu] = useState<EnhancedPublicRouteMenuProps[]>([...defaultPluginMenu])
 
     const [activeMenu, setActiveMenu] = useState<number>(0)
@@ -95,7 +95,7 @@ const PublicMenu: React.FC<PublicMenuProps> = React.memo((props) => {
     useEffect(() => {
         getRouteToName()
     }, [defaultMenu, pluginMenu])
-    /** 记录菜单项对应的展示名(供外界使用) */
+    /** Record menu item display names (for external use)) */
     const getRouteToName = useMemoizedFn(() => {
         const names = menusConvertKey(defaultMenu)
         names.forEach((value, key) => routeToName.current.set(key, value))
@@ -111,9 +111,9 @@ const PublicMenu: React.FC<PublicMenuProps> = React.memo((props) => {
         emiter.emit("menuExpandSwitch", value)
     })
 
-    // 获取 基础工具菜单下的4个插件 是否存在于本地库内
+    // Check if four plugins under Basic Tools menu are in local storage
     const fetchPluginToolInfo = useMemoizedFn(() => {
-        /** 基础工具菜单下的4个插件 */
+        /** Four plugins under Basic Tools menu */
         const pluginTool = [
             ResidentPluginName.SubDomainCollection,
             ResidentPluginName.BasicCrawler,
@@ -143,29 +143,29 @@ const PublicMenu: React.FC<PublicMenuProps> = React.memo((props) => {
             ipcRenderer.removeAllListeners("refresh-public-menu-callback")
         }
     }, [])
-    /** 获取数据库保存的常用插件列表数据 */
+    /** Retrieve commonly used plugin list from database */
     const fetchCommonPlugins = useMemoizedFn(() => {
         setLoading(true)
         ipcRenderer
             .invoke("GetAllNavigationItem", {Mode: CodeGV.PublicMenuModeValue})
             .then((res: {Data: DatabaseFirstMenuProps[]}) => {
-                // 没有考虑过滤系统删除的内定页面，因为public版本的可自定义菜单均为插件
+                // Unfiltered pages deleted by system, since public version allows custom menus via plugins
                 const database = databaseConvertData(res.Data || [])
                 const caches: DatabaseMenuItemProps[] = []
                 for (let item of database) {
-                    // 过滤代码中无效的一级菜单项
+                    // Filter invalid top-level menu items
                     if (InvalidFirstMenuItem.indexOf(item.menuName) > -1) continue
 
                     const menus: DatabaseMenuItemProps = {...item}
                     if (item.children && item.children.length > 0) {
                         menus.children = item.children.filter(
-                            // 过滤代码中无效的二级菜单项
+                            // Filter invalid submenu items
                             (item) => InvalidPageMenuItem.indexOf(item.menuName) === -1
                         )
                     }
                     caches.push(menus)
                 }
-                // 过滤掉用户删除的系统内定菜单
+                // Filter out user-deleted system menus
                 let filterLocal: PublicRouteMenuProps[] = []
                 getRemoteValue(RemoteGV.UserDeleteMenu)
                     .then((val) => {
@@ -198,7 +198,7 @@ const PublicMenu: React.FC<PublicMenuProps> = React.memo((props) => {
                         filterLocal = [...PublicCommonPlugins]
                     })
                     .finally(() => {
-                        // menus-前端渲染使用的数据;isUpdate-是否需要更新数据库;pluginName-需要下载的插件名
+                        // menus-Data for frontend rendering;isUpdate-Need to update database;pluginName-Plugin to download
                         const {menus, isUpdate, pluginName} = publicUnionMenus(filterLocal, caches)
 
                         if (isInitRef.current) {
@@ -217,14 +217,14 @@ const PublicMenu: React.FC<PublicMenuProps> = React.memo((props) => {
                     })
             })
             .catch((e) => {
-                yakitNotify("error", `获取用户菜单失败: ${e}`)
+                yakitNotify("error", `User menu retrieval failed: ${e}`)
                 setTimeout(() => setLoading(false), 300)
             })
     })
     /**
-     * @name 批量下载插件
-     * @param menus 常用插件数据
-     * @param pluginName 需要下载的插件名合集
+     * @name Download plugins in bulk
+     * @param menus Common plugins data
+     * @param pluginName Plugin names to download
      */
     const batchDownloadPlugin = useMemoizedFn((menus: EnhancedPublicRouteMenuProps[], pluginName: string[]) => {
         ipcRenderer
@@ -234,11 +234,11 @@ const PublicMenu: React.FC<PublicMenuProps> = React.memo((props) => {
             })
             .then((rsp: DownloadOnlinePluginByScriptNamesResponse) => {
                 if (rsp.Data.length > 0) {
-                    // 整理插件名和插件内容的对应关系
+                    // Map plugin names and contents
                     const pluginToinfo: Record<string, {ScriptName: string; Id: string; HeadImg: string}> = {}
                     for (let item of rsp.Data) pluginToinfo[item.ScriptName] = item
 
-                    // 更新菜单数据里的id和头像
+                    // Update menu data id and avatar
                     menus.forEach((item) => {
                         if (item.children && item.children.length > 0) {
                             item.children.forEach((subItem) => {
@@ -258,14 +258,14 @@ const PublicMenu: React.FC<PublicMenuProps> = React.memo((props) => {
                 }
             })
             .catch((err) => {
-                yakitNotify("error", "下载菜单插件失败：" + err)
+                yakitNotify("error", "Download menu plugin failed：" + err)
             })
             .finally(() => {
                 setTimeout(() => setLoading(false), 300)
             })
     })
 
-    /** 更新数据库菜单数据(全部) */
+    /** Update database menu data (all)) */
     const updateMenus = useMemoizedFn((data: EnhancedPublicRouteMenuProps[]) => {
         const menus = publicConvertDatabase(data)
 
@@ -276,19 +276,19 @@ const PublicMenu: React.FC<PublicMenuProps> = React.memo((props) => {
                     .invoke("AddToNavigation", {Data: menus})
                     .then((rsp) => {})
                     .catch((e) => {
-                        yakitNotify("error", `保存菜单失败：${e}`)
+                        yakitNotify("error", `Menu save failed：${e}`)
                     })
                     .finally(() => {
                         setTimeout(() => setLoading(false), 300)
                     })
             })
             .catch((e: any) => {
-                yakitNotify("error", `更新菜单失败:${e}`)
+                yakitNotify("error", `Menu update failed:${e}`)
                 setTimeout(() => setLoading(false), 300)
             })
     })
 
-    /** 插件菜单-检查插件的可用性 */
+    /** Plugin menu-Check plugin availability */
     const onCheckPlugin = useMemoizedFn((info: RouteToPageProps, source: string) => {
         if (!info.pluginName) return
         if (info.pluginId === 0) {
@@ -300,25 +300,25 @@ const PublicMenu: React.FC<PublicMenuProps> = React.memo((props) => {
             .invoke("GetYakScriptByName", {Name: info.pluginName})
             .then((i: YakScript) => {
                 const lastId = +i.Id || 0
-                // 插件不存在于本地数据库中
+                // Plugin not in local database
                 if (lastId === 0) {
                     updateSingleMenu({pluginName: i.ScriptName, pluginId: 0, headImg: ""}, source)
                     onOpenDownModal(info, source)
                     return
                 }
-                // 打开页面
+                // Open page
                 onMenuSelect({
                     ...info,
                     pluginId: info.pluginId !== lastId ? lastId : info.pluginId
                 })
-                // 插件id被更新，需同步更新前端菜单数据里的id和headimg
+                // Plugin id updated, sync frontend menu data id and headimg
                 if (info.pluginId !== lastId) {
                     updateSingleMenu({pluginName: i.ScriptName, pluginId: lastId, headImg: i.HeadImg || ""}, source)
                 }
             })
             .catch((err) => onOpenDownModal(info, source))
     })
-    /** 更新前端菜单数据(单项) */
+    /** Update frontend menu data (single item)) */
     const updateSingleMenu = useMemoizedFn(
         (info: {pluginName: string; pluginId: number; headImg: string}, source: string) => {
             if (source === "route") {
@@ -339,7 +339,7 @@ const PublicMenu: React.FC<PublicMenuProps> = React.memo((props) => {
             }
         }
     )
-    /** 下载单个插件菜单 */
+    /** Download single plugin menu */
     const singleDownloadPlugin = useMemoizedFn((menuItem: RouteToPageProps, source: string, callback?: () => any) => {
         ipcRenderer
             .invoke("DownloadOnlinePluginByPluginName", {
@@ -349,7 +349,7 @@ const PublicMenu: React.FC<PublicMenuProps> = React.memo((props) => {
             .then((rsp: DownloadOnlinePluginByScriptNamesResponse) => {
                 if (rsp.Data.length > 0) {
                     const info = rsp.Data[0]
-                    // 打开页面
+                    // Open page
                     onMenuSelect({
                         route: YakitRoute.Plugin_OP,
                         pluginName: info.ScriptName || menuItem.pluginName,
@@ -362,9 +362,9 @@ const PublicMenu: React.FC<PublicMenuProps> = React.memo((props) => {
                     if (callback) setTimeout(() => callback(), 200)
                 }
             })
-            .catch((err) => yakitNotify("error", "下载菜单插件失败：" + err))
+            .catch((err) => yakitNotify("error", "Download menu plugin failed：" + err))
     })
-    /** 插件菜单未下载提示框 */
+    /** Plugin menu not downloaded alert */
     const onOpenDownModal = useMemoizedFn((menuItem: RouteToPageProps, source: string) => {
         if (!menuItem.pluginName) return
         const showName =
@@ -372,27 +372,27 @@ const PublicMenu: React.FC<PublicMenuProps> = React.memo((props) => {
         const m = YakitModalConfirm({
             width: 420,
             closable: false,
-            title: "插件加载失败",
+            title: "Plugin load failed",
             showConfirmLoading: true,
             type: "white",
             content: (
                 <div className={styles["modal-content"]}>
-                    {showName}菜单丢失，需点击重新下载，如仍无法下载，请前往插件商店查找
+                    {showName}Menu missing, click to redownload, if unable to download, check Plugin Store
                     <span className={styles["menuItem-yakScripName"]}>{menuItem.pluginName}</span>
-                    插件
+                    Plugin
                 </div>
             ),
-            onOkText: "重新下载",
+            onOkText: "Redownload",
             onOk: () => {
                 singleDownloadPlugin(menuItem, source, () => {
-                    // 下载插件成功，自动销毁弹框
+                    // Plugin downloaded successfully, alert auto-dismiss
                     m.destroy()
                 })
             }
         })
     })
 
-    // 收起菜单的点击回调
+    // Menu collapse click callback
     const onNoExpandClickMenu = useMemoizedFn((key: string, keyPath: string[]) => {
         setNoExpandMenu(-1)
         const data = keyToRouteInfo(key)
@@ -406,7 +406,7 @@ const PublicMenu: React.FC<PublicMenuProps> = React.memo((props) => {
             }
         }
     })
-    // 展开菜单的点击回调
+    // Expand menu click callback
     const onClickMenu = useMemoizedFn((route: RouteToPageProps, source: string) => {
         if (route.route !== YakitRoute.Plugin_OP) onMenuSelect(route)
         else {
@@ -416,7 +416,7 @@ const PublicMenu: React.FC<PublicMenuProps> = React.memo((props) => {
     })
 
     const [noExpandMenu, setNoExpandMenu] = useState<number>(-1)
-    // 收起状态下的菜单组件
+    // Collapsed menu component
     const noExpand = useMemo(() => {
         const plugins: EnhancedPublicRouteMenuProps[] = []
         for (let item of pluginMenu) {
@@ -429,7 +429,7 @@ const PublicMenu: React.FC<PublicMenuProps> = React.memo((props) => {
             <>
                 {defaultMenu.map((item, index) => {
                     const data =
-                        item.label === "插件"
+                        item.label === "Plugin"
                             ? routeToMenu(
                                   (item.children || []).concat(
                                       plugins.length === 0
@@ -437,8 +437,8 @@ const PublicMenu: React.FC<PublicMenuProps> = React.memo((props) => {
                                           : [
                                                 {
                                                     page: undefined,
-                                                    label: "常用插件",
-                                                    menuName: "常用插件",
+                                                    label: "Common plugins",
+                                                    menuName: "Common plugins",
                                                     children: plugins
                                                 }
                                             ]
@@ -531,13 +531,13 @@ const PublicMenu: React.FC<PublicMenuProps> = React.memo((props) => {
                         />
                     )}
 
-                    {defaultMenu[activeMenu]?.label !== "插件" ? (
+                    {defaultMenu[activeMenu]?.label !== "Plugin" ? (
                         <div className={styles["divider-style"]}></div>
                     ) : (
                         <div></div>
                     )}
                     <div className={styles["tool-wrapper"]}>
-                        {defaultMenu[activeMenu]?.label === "插件" && (
+                        {defaultMenu[activeMenu]?.label === "Plugin" && (
                             <MenuPlugin
                                 loading={loading}
                                 pluginList={pluginMenu}
@@ -550,7 +550,7 @@ const PublicMenu: React.FC<PublicMenuProps> = React.memo((props) => {
 
                         <div
                             className={
-                                defaultMenu[activeMenu]?.label !== "插件"
+                                defaultMenu[activeMenu]?.label !== "Plugin"
                                     ? styles["tool-body"]
                                     : styles["hide-tool-body"]
                             }

@@ -34,7 +34,7 @@ export const HTTPFlowRiskViewer: React.FC<HTTPFlowRiskViewerProp> = (props) => {
             <Divider type={"vertical"}/>
             {
                 highlight !== "" && (fragment || []).length > 0 ?
-                    <span style={{color: "#999"}}>详情：<Switch size={"small"} checked={showFragment}
+                    <span style={{color: "#999"}}>Details：<Switch size={"small"} checked={showFragment}
                                                                onChange={setShowFragment}/></span> : undefined
             }
         </>}

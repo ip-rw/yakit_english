@@ -10,7 +10,7 @@ import { YakitInput } from "../yakitUI/YakitInput/YakitInput"
 
 /**
  *
- * @description select 组合搜索
+ * @description select Combo Search
  */
 export const YakitCombinationSearch: React.FC<YakitCombinationSearchProps> = (props) => {
     const {

@@ -25,14 +25,14 @@ interface DownloadYakitProps {
     setVisible: (flag: boolean) => any
 }
 
-/** @name Yakit软件更新下载弹窗 */
+/** @name Yakit Update Download Prompt */
 export const DownloadYakit: React.FC<DownloadYakitProps> = React.memo((props) => {
     const {system, visible, setVisible} = props
 
-    /** 常见问题弹窗是否展示 */
+    /** Show FAQ Modal? */
     const [qsShow, setQSShow] = useState<boolean>(false)
 
-    /** 是否置顶 */
+    /** Pin to Top? */
     const [isTop, setIsTop] = useState<0 | 1 | 2>(0)
 
     const [disabled, setDisabled] = useState(true)
@@ -40,16 +40,16 @@ export const DownloadYakit: React.FC<DownloadYakitProps> = React.memo((props) =>
     const debouncedBounds = useDebounce(bounds, {wait: 500})
     const draggleRef = useRef<HTMLDivElement>(null)
 
-    /** 下载进度条数据 */
+    /** Download Progress Data */
     const [downloadProgress, setDownloadProgress, getDownloadProgress] = useGetState<DownloadingState>()
 
-    // 是否中断下载进程
+    // Abort Download?
     const isBreakRef = useRef<boolean>(false)
 
     /**
-     * 1. 获取最新软件版本号，并下载
-     * 2. 监听本地下载软件进度数据
-     * @returns 删除监听事件2
+     * 1. Fetch Latest Software Version and Download
+     * 2. Monitor Local Download Progress
+     * @returns Remove Listener 2
      */
     useEffect(() => {
         if (visible) {
@@ -66,7 +66,7 @@ export const DownloadYakit: React.FC<DownloadYakitProps> = React.memo((props) =>
                             .invoke("download-latest-yakit", version, isEnterpriseEdition())
                             .then(() => {
                                 if (!isBreakRef.current) return
-                                success("下载完毕")
+                                success("Download Complete")
                                 if (!getDownloadProgress()?.size) return
                                 setDownloadProgress({
                                     time: {
@@ -83,7 +83,7 @@ export const DownloadYakit: React.FC<DownloadYakitProps> = React.memo((props) =>
                             })
                             .catch((e: any) => {
                                 if (!isBreakRef.current) return
-                                failed(`下载失败: ${e}`)
+                                failed(`Download Failed: ${e}`)
                             })
                             .finally(() => setVisible(false))
                     })
@@ -93,7 +93,7 @@ export const DownloadYakit: React.FC<DownloadYakitProps> = React.memo((props) =>
                         setVisible(false)
                     })
             }
-            // 如需编写 Yakit-EE 下载功能，可在此处添加
+            // To add Yakit-EE download feature, insert here
 
             ipcRenderer.on("download-yakit-engine-progress", (e: any, state: DownloadingState) => {
                 if (!isBreakRef.current) return
@@ -107,7 +107,7 @@ export const DownloadYakit: React.FC<DownloadYakitProps> = React.memo((props) =>
         }
     }, [visible])
 
-    /** 弹窗拖拽移动触发事件 */
+    /** Modal Drag Event */
     const onStart = useMemoizedFn((_event: DraggableEvent, uiData: DraggableData) => {
         const {clientWidth, clientHeight} = window.document.documentElement
         const targetRect = draggleRef.current?.getBoundingClientRect()
@@ -121,7 +121,7 @@ export const DownloadYakit: React.FC<DownloadYakitProps> = React.memo((props) =>
         })
     })
 
-    /** 取消下载事件 */
+    /** Cancel Download */
     const onCancel = useMemoizedFn(() => {
         isBreakRef.current = false
         setVisible(false)
@@ -171,7 +171,7 @@ export const DownloadYakit: React.FC<DownloadYakitProps> = React.memo((props) =>
                             <div className={styles["hint-right-wrapper"]}>
                                 <div className={styles["hint-right-download"]}>
                                     <div className={styles["hint-right-title"]}>
-                                        {getReleaseEditionName()} 软件下载中...
+                                        {getReleaseEditionName()} Downloading Software...
                                     </div>
                                     <div className={styles["download-progress"]}>
                                         <Progress
@@ -181,19 +181,19 @@ export const DownloadYakit: React.FC<DownloadYakitProps> = React.memo((props) =>
                                         />
                                     </div>
                                     <div className={styles["download-info-wrapper"]}>
-                                        <div>剩余时间 : {(downloadProgress?.time.remaining || 0).toFixed(2)}s</div>
+                                        <div>Remaining Time : {(downloadProgress?.time.remaining || 0).toFixed(2)}s</div>
                                         <div className={styles["divider-wrapper"]}>
                                             <div className={styles["divider-style"]}></div>
                                         </div>
-                                        <div>耗时 : {(downloadProgress?.time.elapsed || 0).toFixed(2)}s</div>
+                                        <div>Duration : {(downloadProgress?.time.elapsed || 0).toFixed(2)}s</div>
                                         <div className={styles["divider-wrapper"]}>
                                             <div className={styles["divider-style"]}></div>
                                         </div>
-                                        <div>下载速度 : {((downloadProgress?.speed || 0) / 1000000).toFixed(2)}M/s</div>
+                                        <div>Download Speed : {((downloadProgress?.speed || 0) / 1000000).toFixed(2)}M/s</div>
                                     </div>
                                     <div style={{marginTop: 24}}>
                                         <YakitButton size='max' type='outline2' onClick={onCancel}>
-                                            取消
+                                            Cancel
                                         </YakitButton>
                                     </div>
                                 </div>
@@ -214,7 +214,7 @@ export const DownloadYakit: React.FC<DownloadYakitProps> = React.memo((props) =>
 })
 
 interface AgrAndQSModalProps {
-    /** 窗口置顶 */
+    /** Pin Window */
     isTop: 0 | 1 | 2
     setIsTop: (type: 0 | 1 | 2) => any
     system: YakitSystem
@@ -222,7 +222,7 @@ interface AgrAndQSModalProps {
     setVisible: (flag: boolean) => any
 }
 
-/** @name Yakit-常见问题弹窗 */
+/** @name Yakit-FAQ Modal */
 const YakitQuestionModal: React.FC<AgrAndQSModalProps> = React.memo((props) => {
     const {isTop, setIsTop, system, visible, setVisible} = props
 
@@ -282,7 +282,7 @@ const YakitQuestionModal: React.FC<AgrAndQSModalProps> = React.memo((props) => {
                                         </div>
                                     )}
                                 </div>
-                                <span>Yakit 软件官网下载链接</span>
+                                <span>Yakit Official Download Link</span>
                             </div>
                         ) : (
                             <div
@@ -293,17 +293,17 @@ const YakitQuestionModal: React.FC<AgrAndQSModalProps> = React.memo((props) => {
                                 onMouseOut={() => setDisabled(true)}
                                 onMouseDown={() => setIsTop(2)}
                             >
-                                <span className={styles["header-title"]}>Yakit 软件官网下载链接</span>
+                                <span className={styles["header-title"]}>Yakit Official Download Link</span>
                                 <div className={styles["close-wrapper"]} onClick={() => setVisible(false)}>
                                     <WinUIOpCloseSvgIcon className={styles["icon-style"]} />
                                 </div>
                             </div>
                         )}
                         <div className={styles["modal-body"]}>
-                            <div className={styles["yakit-update-hint"]}>如遇网络问题无法下载，可到官网下载安装：</div>
+                            <div className={styles["yakit-update-hint"]}>If unable to download due to network issues, visit official website to download：</div>
 
                             <div className={styles["yakit-update-link"]}>
-                                官网地址
+                                Official Website Address
                                 <div className={styles["link-wrapper"]}>
                                     {CodeGV.HomeWebsite}
                                     <CopyComponents className={styles["copy-icon"]} copyText={CodeGV.HomeWebsite} />

@@ -82,37 +82,37 @@ export const ICMPSizeLoggerPage: React.FC<ICMPSizeLoggerPageProp> = (props) => {
             title={
                 <Space>
                     ICMP Size Logger
-                    <div className={style["description-text"]}>使用 ping 携带特定长度数据包判定 ICMP 反连</div>
+                    <div className={style["description-text"]}>Use ping with specific packet length to determine ICMP back connections</div>
                     <Divider type={"vertical"} />
                     <div className={style["set-ping-size-wrap"]}>
-                        设置 Ping 包大小：
+                        Set Ping Packet Size：
                         <YakitInputNumber disabled={true} value={size} className={style["ping-size-input-number"]} />
                     </div>
                     <YakitButton disabled={loading} onClick={refresh}>
-                        随机生成可用长度
+                        Generate Random Usable Length
                     </YakitButton>
                     <YakitButton type='text' disabled={loading} icon={<ReloadOutlined />} onClick={update}>
-                        刷新
+                        Refresh
                     </YakitButton>
                 </Space>
             }
         >
             <Row align="middle">
-                <Col>ICMP Size Logger 是一个通过 Ping 包大小来判断 ICMP 反连的 ICMP 记录器：</Col>
+                <Col>ICMP Size Logger is an ICMP recorder that uses Ping packet size to determine ICMP back connections：</Col>
                 <Col>
                     <Space>
-                        在 Windows 系统中，使用
+                        In Windows systems, using
                         {host === "" || sizeNow <= 0 ? (
                             <YakitSpin />
                         ) : (
                             <YakitTag enableCopy={true} color='blue' copyText={`ping -l ${sizeNow} ${host}`}></YakitTag>
                         )}
-                        <div>命令，&nbsp;&nbsp;</div>
+                        <div>Command,&nbsp;&nbsp;</div>
                     </Space>
                 </Col>
                 <Col>
                     <Space>
-                        在 MacOS/Linux/*nix 系统中，使用
+                        On MacOS/Linux/*in nix systems, using
                         {host === "" || sizeNow <= 0 ? (
                             <YakitSpin />
                         ) : (
@@ -122,7 +122,7 @@ export const ICMPSizeLoggerPage: React.FC<ICMPSizeLoggerPageProp> = (props) => {
                                 copyText={`ping -c 4 -s ${sizeNow} ${host}`}
                             ></YakitTag>
                         )}
-                        <div>命令</div>
+                        <div>Command</div>
                     </Space>
                 </Col>
             </Row>
@@ -136,16 +136,16 @@ export const ICMPSizeLoggerPage: React.FC<ICMPSizeLoggerPageProp> = (props) => {
                     loading={loading}
                     columns={[
                         {
-                            title: "ICMP/Ping 长度",
+                            title: "ICMP/Ping Length",
                             dataKey: "Size",
                             render: (text) => <YakitTag color={"bluePurple"}>{text}</YakitTag>
                         },
                         {
-                            title: "远端IP",
+                            title: "Remote IP",
                             dataKey: "CurrentRemoteAddr"
                         },
                         {
-                            title: "触发时间",
+                            title: "Trigger Time",
                             dataKey: "TriggerTimestamp",
                             render: (text) => <YakitTag color={"bluePurple"}>{formatTimestamp(text)}</YakitTag>
                         }

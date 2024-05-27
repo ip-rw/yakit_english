@@ -38,7 +38,7 @@ const formatCode = async (rsp: PacketPrettifyHelperResponse, option, callback) =
         const formattedCode = await prettier.format(Uint8ArrayToString(rsp.Body), option)
         callback(formattedCode)
     } catch (error) {
-        // 处理错误
+        // Handle Errors
         callback()
     }
 }
@@ -54,7 +54,7 @@ const formatPacket = (packet: string, onFormatted: (packet: Uint8Array, body: st
                 formatCode(
                     rsp,
                     {
-                        parser: "babel", // JavaScript代码使用 "babel" 解析器
+                        parser: "babel", // Use JavaScript Code "babel" Parser
                         printWidth: 80,
                         tabWidth: 2,
                         plugins: plugins,
@@ -67,7 +67,7 @@ const formatPacket = (packet: string, onFormatted: (packet: Uint8Array, body: st
                     },
                     (formattedCode) => {
                         if (formattedCode) {
-                            // 处理格式化后的代码
+                            // Process Formatted Code
                             ipcRenderer
                                 .invoke("PacketPrettifyHelper", {
                                     Packet: rsp.Packet,
@@ -89,7 +89,7 @@ const formatPacket = (packet: string, onFormatted: (packet: Uint8Array, body: st
                 formatCode(
                     rsp,
                     {
-                        parser: "json", // JavaScript代码使用 "babel" 解析器
+                        parser: "json", // Use JavaScript Code "babel" Parser
                         printWidth: 80,
                         tabWidth: 2,
                         plugins: plugins,
@@ -123,7 +123,7 @@ const formatPacket = (packet: string, onFormatted: (packet: Uint8Array, body: st
                 formatCode(
                     rsp,
                     {
-                        parser: "html", // HTML代码使用 "html" 解析器
+                        parser: "html", // Use HTML Code "html" Parser
                         printWidth: 80,
                         tabWidth: 2,
                         useTabs: false,
@@ -161,7 +161,7 @@ const formatPacket = (packet: string, onFormatted: (packet: Uint8Array, body: st
                 formatCode(
                     rsp,
                     {
-                        parser: "xml", // HTML代码使用 "html" 解析器
+                        parser: "xml", // Use HTML Code "html" Parser
                         printWidth: 80,
                         tabWidth: 2,
                         useTabs: false,
@@ -227,7 +227,7 @@ export const prettifyPacketCode = (text: string) => {
     })
 }
 
-// 渲染功能(Html + Image)
+// Render Function (Html + Image))
 export const formatPacketRender = (packet: Uint8Array, onFormatted: (packet?: string) => any) => {
     if(packet.length>0){
         ipcRenderer

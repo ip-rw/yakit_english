@@ -13,10 +13,10 @@ export interface BuildRecordMatrixConfig {
     prebuiltLeftTree?: DrillNode[];
     prebuiltTopTree?: DrillNode[];
 }
-/** 根据表格左侧与上方的下钻树，从全量明细数据中计算对应的数据立方 */
+/** Calculates the corresponding data cube from the full detail data based on the drill-down trees on the left and top of the table */
 export declare function buildRecordMatrix({ data, leftCodes, topCodes, aggregate, encode, isLeftExpand, isTopExpand, prebuiltLeftTree, prebuiltTopTree, }: BuildRecordMatrixConfig): RecordMatrix;
-/** buildRecordMatrix 的简化版本，只能处理一个维度序列，返回一个 Map。
- * 相当于只处理 matrix 的第一行（汇总行） */
+/** Simplified version of buildRecordMatrix, can only process one dimension sequence, returns a Map。
+ * Equivalent to processing only the first row of matrix (Summary row） */
 export declare function buildRecordMap({ codes, encode, data, aggregate, isExpand, }: {
     codes: string[];
     data: any[];

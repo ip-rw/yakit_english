@@ -131,7 +131,7 @@ const SolidCloudplugin = () => {
     )
 }
 /**
- * @description  Icon/Solid/Solid云端插件
+ * @description  Icon/Solid/Solid Cloud Plugins
  */
 export const SolidCloudpluginIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidCloudplugin} {...props} />
@@ -166,7 +166,7 @@ const SolidOfficialplugin = () => {
     )
 }
 /**
- * @description  Icon/Solid/Solid官方插件
+ * @description  Icon/Solid/Solid Official Plugins
  */
 export const SolidOfficialpluginIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidOfficialplugin} {...props} />
@@ -215,7 +215,7 @@ const SolidPrivateplugin = () => {
     )
 }
 /**
- * @description  Icon/Solid/Solid私密插件
+ * @description  Icon/Solid/Solid Private Plugins
  */
 export const SolidPrivatepluginIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidPrivateplugin} {...props} />
@@ -232,7 +232,7 @@ const CheckCircleIcon = () => (
     </svg>
 )
 /**
- * @description  Icon/Solid/Check-circle 圆勾
+ * @description  Icon/Solid/Check-circle Check
  */
 export const SolidCheckCircleIcon = (props: Partial<IconProps>) => {
     return <Icon component={CheckCircleIcon} {...props} />
@@ -249,7 +249,7 @@ const SolidLockClosed = () => (
     </svg>
 )
 /**
- * @description  Icon/Solid/lock-closed 锁
+ * @description  Icon/Solid/lock-closed Lock
  */
 export const SolidLockClosedIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidLockClosed} {...props} />
@@ -281,7 +281,7 @@ const SolidPluginYak = () => (
     </svg>
 )
 /**
- * @description  Icon/Solid/yak 原生插件
+ * @description  Icon/Solid/yak Native Plugins
  */
 export const SolidPluginYakIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidPluginYak} {...props} />
@@ -319,7 +319,7 @@ const SolidPluginYakMitm = () => (
     </svg>
 )
 /**
- * @description  Icon/Solid/yak-mitm 模块
+ * @description  Icon/Solid/yak-mitm Module
  */
 export const SolidPluginYakMitmIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidPluginYakMitm} {...props} />
@@ -340,7 +340,7 @@ const SolidPluginProtScan = () => (
     </svg>
 )
 /**
- * @description  Icon/Solid/yak-端口扫描
+ * @description  Icon/Solid/yak-Port Scan
  */
 export const SolidPluginProtScanIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidPluginProtScan} {...props} />
@@ -490,7 +490,7 @@ const SolidYakCattleNoBackColor = () => (
     </svg>
 )
 /**
- * @description  logo/Yak 牛牛/无底色
+ * @description  logo/Yak Bull/No Background
  */
 export const SolidYakCattleNoBackColorIcon = (props: Partial<IconProps>) => {
     return <Icon component={SolidYakCattleNoBackColor} {...props} />
@@ -619,7 +619,7 @@ const FolderColor = () => {
     )
 }
 /**
- * @description  文件夹 icons8-folder 1
+ * @description Folder icons8-folder 1
  */
 export const FolderColorIcon = (props: Partial<IconProps>) => {
     return <Icon component={FolderColor} {...props} />

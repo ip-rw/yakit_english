@@ -140,7 +140,7 @@ module.exports = (win, getClient) => {
         stream && stream.cancel()
         streamMap.delete(token)
     })
-    // 老版插件批量
+    // Old plugin batch
     ipcMain.handle("exec-batch-yak-script", async (e, params, token) => {
         let stream = getClient().ExecBatchYakScript(params)
         streamMap.set(token, stream)
@@ -166,8 +166,8 @@ module.exports = (win, getClient) => {
     })
 
     /*
-     * 这个接口用于控制批量执行 Yak 模块
-     *    不仅可用在批量执行 nuclei 脚本，也可以用于批量执行 yak 脚本
+     * Interface for batch executing Yak modules
+     *    Usable for batch nuclei scripts and yak scripts
      * */
     const handlerHelper = require("./handleStreamWithContext")
     const streamExecBatchYakScriptMap = new Map()
@@ -341,7 +341,7 @@ module.exports = (win, getClient) => {
                     resolve(result)
                 }
                 else{
-                    reject("获取文件失败")
+                    reject("Failed to get file")
                 }
             })
         })
@@ -415,7 +415,7 @@ module.exports = (win, getClient) => {
         return await asyncDeleteYakScriptExec(params)
     })
 
-    // 获取传入插件名集合在本地插件的详细信息
+    // Get detail of plugins locally
     const asyncQueryYakScriptByNames = (params) => {
         return new Promise((resolve, reject) => {
             getClient().QueryYakScriptByNames(params, (err, data) => {

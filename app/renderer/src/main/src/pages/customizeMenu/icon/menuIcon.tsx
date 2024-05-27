@@ -27,7 +27,7 @@ const PortScanning = () => (
 )
 
 /**
- * @description:  端口/指纹扫描
+ * @description: Port/description: Fingerprint Scan
  */
 export const MenuPortScanningIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={PortScanning} {...props} />
@@ -75,7 +75,7 @@ const BasicCrawler = () => (
 )
 
 /**
- * @description:  基础爬虫
+ * @description: Basic Crawler
  */
 export const MenuBasicCrawlerIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={BasicCrawler} {...props} />
@@ -107,7 +107,7 @@ const ComprehensiveCatalogScanningAndBlasting = () => (
 )
 
 /**
- * @description:  综合目录扫描与爆破
+ * @description: Comprehensive Directory Scan & Brute Force
  */
 export const MenuComprehensiveCatalogScanningAndBlastingIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={ComprehensiveCatalogScanningAndBlasting} {...props} />
@@ -141,7 +141,7 @@ const SpecialVulnerabilityDetection = () => (
 )
 
 /**
- * @description:  专项漏洞检测
+ * @description: Specialized Vulnerability Detection
  */
 export const MenuSpecialVulnerabilityDetectionIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={SpecialVulnerabilityDetection} {...props} />
@@ -171,7 +171,7 @@ const BatchVulnerabilityDetection = () => (
 )
 
 /**
- * @description:  批量漏洞检测
+ * @description: Batch Vulnerability Detection
  */
 export const MenuBatchVulnerabilityDetectionIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={BatchVulnerabilityDetection} {...props} />
@@ -225,7 +225,7 @@ const PluginWarehouse = () => (
 )
 
 /**
- * @description:  插件仓库
+ * @description: Plugin Repository
  */
 export const MenuPluginWarehouseIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={PluginWarehouse} {...props} />
@@ -265,7 +265,7 @@ const MITMInteractiveHijacking = () => (
 )
 
 /**
- * @description:  MITM 交互式劫持
+ * @description: MITM Interactive Hijack
  */
 export const MenuMITMInteractiveHijackingIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={MITMInteractiveHijacking} {...props} />
@@ -373,7 +373,7 @@ const BlastingAndUnauthorizedTesting = () => (
 )
 
 /**
- * @description:爆破与未授权检测
+ * @description: Brute Force & Unauthorized Detection
  */
 export const MenuBlastingAndUnauthorizedTestingIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={BlastingAndUnauthorizedTesting} {...props} />
@@ -465,7 +465,7 @@ const DataComparison = () => (
 )
 
 /**
- * @description:数据对比
+ * @description: Data Comparison
  */
 export const MenuDataComparisonIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={DataComparison} {...props} />
@@ -508,7 +508,7 @@ const PortListener = () => (
 )
 
 /**
- * @description:端口监听器
+ * @description: Port Listener
  */
 export const MenuPortListenerIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={PortListener} {...props} />
@@ -546,7 +546,7 @@ const ReverseConnectionServer = () => (
 )
 
 /**
- * @description:反连服务器
+ * @description: Callback Server
  */
 export const MenuReverseConnectionServerIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={ReverseConnectionServer} {...props} />
@@ -793,7 +793,7 @@ const PluginBatchExecution = () => (
 )
 
 /**
- * @description:插件批量执行
+ * @description: Batch Plugin Execution
  */
 export const MenuPluginBatchExecutionIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={PluginBatchExecution} {...props} />
@@ -832,7 +832,7 @@ const DefaultPlugin = () => (
 )
 
 /**
- * @description:默认的插件菜单图标
+ * @description: Default Plugin Menu Icon
  */
 export const MenuDefaultPluginIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={DefaultPlugin} {...props} />
@@ -865,7 +865,7 @@ const SpaceEngineHunter = () => (
 )
 
 /**
- * @description:空间引擎集成版本
+ * @description: Spatial Engine Integrated Version
  */
 export const MenuSpaceEngineHunterIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={SpaceEngineHunter} {...props} />
@@ -1032,7 +1032,7 @@ const SubDomainCollection = () => (
 )
 
 /**
- * @description:子域名收集
+ * @description: Subdomain Collection
  */
 export const MenuSubDomainCollectionIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={SubDomainCollection} {...props} />
@@ -1070,7 +1070,7 @@ const Report = () => (
 )
 
 /**
- * @description:报告
+ * @description: Report
  */
 export const MenuReportIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={Report} {...props} />
@@ -1119,7 +1119,7 @@ const PlugExecutionResults = () => (
 )
 
 /**
- * @description:插件执行结果
+ * @description: Plugin Execution Result
  */
 export const MenuPlugExecutionResultsIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={PlugExecutionResults} {...props} />
@@ -1170,7 +1170,7 @@ const PortAssets = () => (
 )
 
 /**
- * @description:端口资产
+ * @description: Port Assets
  */
 export const MenuPortAssetsIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={PortAssets} {...props} />
@@ -1216,7 +1216,7 @@ const VulnerabilityRisk = () => (
 )
 
 /**
- * @description:漏洞与风险
+ * @description: Vulnerabilities & Risks
  */
 export const MenuVulnerabilityRiskIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={VulnerabilityRisk} {...props} />
@@ -1288,7 +1288,7 @@ const DomainAssets = () => (
 )
 
 /**
- * @description:域名资产
+ * @description: Domain Assets
  */
 export const MenuDomainAssetsIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={DomainAssets} {...props} />

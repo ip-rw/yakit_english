@@ -118,7 +118,7 @@ export const PortAssetTable: React.FC<PortAssetTableProp> = (props) => {
     const [inViewport] = useInViewport(portAssetRef)
 
     useUpdateEffect(() => {
-        // params.ComplexSelect 此条件搜索点击频繁
+        // params.ComplexSelect Search Condition Frequency Click
         const query = onGetQueryProcessing()
         setParams({...query})
         setIsRefresh(!isRefresh)
@@ -182,10 +182,10 @@ export const PortAssetTable: React.FC<PortAssetTableProp> = (props) => {
         <div ref={portAssetRef} className={styles["portAsset-content"]} style={{display: "flex", flexDirection: "row"}}>
             <div className={styles["portAsset"]}>
                 <div className={styles["portAsset-head"]}>
-                    <div className={styles["head-title"]}>端口资产列表</div>
+                    <div className={styles["head-title"]}>Port Asset List</div>
                     <div className={styles["head-extra"]}>
                         <YakitInput.Search
-                            placeholder='请输入网络地址、端口、服务指纹、title关键词搜索'
+                            placeholder='Enter net address, port, service fingerprint, title keywords to search'
                             style={{width: 320}}
                             onSearch={onSearch}
                             onPressEnter={() => onSearch(keywords)}
@@ -200,11 +200,11 @@ export const PortAssetTable: React.FC<PortAssetTableProp> = (props) => {
                                 data: [
                                     {
                                         key: "noResetRefresh",
-                                        label: "仅刷新"
+                                        label: "Refresh Only"
                                     },
                                     {
                                         key: "resetRefresh",
-                                        label: "重置查询条件刷新"
+                                        label: "Reset Filters & Refresh"
                                     }
                                 ],
                                 onClick: ({key}) => {
@@ -239,7 +239,7 @@ export const PortAssetTable: React.FC<PortAssetTableProp> = (props) => {
                         {!advancedConfig && (
                             <>
                                 <Divider type='vertical' style={{margin: "0 8px", marginRight: 12}} />
-                                <span style={{marginRight: 4}}>高级筛选</span>
+                                <span style={{marginRight: 4}}>Advanced Filter</span>
                                 <YakitSwitch checked={advancedConfig} onChange={setAdvancedConfig} />
                             </>
                         )}
@@ -255,14 +255,14 @@ export const PortAssetTable: React.FC<PortAssetTableProp> = (props) => {
                     tableTitleExtraOperate={
                         <>
                             <YakitPopconfirm
-                                title={selectNumber > 0 ? "确定删除勾选数据吗？" : "确定清空列表数据吗?"}
+                                title={selectNumber > 0 ? "Confirm delete selected data?？" : "Confirm clear list data??"}
                                 onConfirm={() => {
                                     onRemove()
                                 }}
                                 placement='bottomRight'
                             >
                                 <YakitButton type='outline1' colors='danger' icon={<TrashIcon />}>
-                                    {selectNumber > 0 ? "删除" : "清空"}
+                                    {selectNumber > 0 ? "Delete" : "Clear"}
                                 </YakitButton>
                             </YakitPopconfirm>
                         </>
@@ -337,10 +337,10 @@ interface PortAssetQueryProps {
     setQueryList: (s: QueryListProps) => void
 }
 
-/**@description 资产高级查询 */
+/**@Asset Advanced Search */
 const PortAssetQuery: React.FC<PortAssetQueryProps> = React.memo((props) => {
     const {loading, portsGroupList, visible, setVisible, queryList, setQueryList} = props
-    const [activeKey, setActiveKey] = useState<string[]>([]) // Collapse打开的key
+    const [activeKey, setActiveKey] = useState<string[]>([]) // Collapse opened key
 
     useEffect(() => {
         const keys = portsGroupList.map((l) => l.GroupName)
@@ -367,12 +367,12 @@ const PortAssetQuery: React.FC<PortAssetQueryProps> = React.memo((props) => {
     return (
         <div className={classNames(styles["portAsset-query"])} style={{display: visible ? "" : "none"}}>
             <div className={styles["query-head"]}>
-                <span>高级筛选</span>
+                <span>Advanced Filter</span>
                 <YakitSwitch checked={visible} onChange={setVisible} />
             </div>
             <YakitSpin spinning={loading} wrapperClassName={styles["portAsset-query-loading"]}>
                 {portsGroupList.length === 0 ? (
-                    <YakitEmpty style={{paddingTop: 48}} title='暂无指纹信息' />
+                    <YakitEmpty style={{paddingTop: 48}} title='No Fingerprint Info' />
                 ) : (
                     <YakitCollapse
                         activeKey={activeKey}
@@ -394,7 +394,7 @@ const PortAssetQuery: React.FC<PortAssetQueryProps> = React.memo((props) => {
                                             setQueryList({...queryList})
                                         }}
                                     >
-                                        清空
+                                        Clear
                                     </YakitButton>
                                 }
                             >
@@ -436,8 +436,8 @@ export const PortAssetDescription: React.FC<PortAssetDescriptionProp> = (props) 
     const {port} = props
     return (
         <>
-            <Descriptions size={"small"} bordered={true} column={!port.ServiceType ? 1 : 2} title={"端口资产详情"}>
-                <Descriptions.Item label='状态'>
+            <Descriptions size={"small"} bordered={true} column={!port.ServiceType ? 1 : 2} title={"Port Asset Details"}>
+                <Descriptions.Item label='Status'>
                     <YakitCopyText showText={port.State} />
                 </Descriptions.Item>
                 {port.HtmlTitle && (
@@ -446,12 +446,12 @@ export const PortAssetDescription: React.FC<PortAssetDescriptionProp> = (props) 
                     </Descriptions.Item>
                 )}
                 {port.ServiceType && (
-                    <Descriptions.Item span={2} label='应用'>
+                    <Descriptions.Item span={2} label='Application'>
                         <YakitCopyText showText={port.ServiceType} />
                     </Descriptions.Item>
                 )}
                 {port.Reason && (
-                    <Descriptions.Item span={2} label='失败原因'>
+                    <Descriptions.Item span={2} label='Failure Reason'>
                         <YakitCopyText showText={port.Reason} />
                     </Descriptions.Item>
                 )}
@@ -465,14 +465,14 @@ export const PortAssetDescription: React.FC<PortAssetDescriptionProp> = (props) 
                     </Descriptions.Item>
                 ) : undefined}
                 {port.Fingerprint && (
-                    <Descriptions.Item span={2} label='指纹信息'>
+                    <Descriptions.Item span={2} label='Fingerprint Info'>
                         <div style={{height: 200}}>
                             <YakEditor value={port.Fingerprint} noLineNumber={true} noMiniMap={true} />
                         </div>
                     </Descriptions.Item>
                 )}
             </Descriptions>
-            <div className='descriptions-no-more'>暂无更多</div>
+            <div className='descriptions-no-more'>No More</div>
         </>
     )
 }

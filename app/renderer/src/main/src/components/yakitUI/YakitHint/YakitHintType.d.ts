@@ -2,63 +2,63 @@ import {ReactNode} from "react"
 import {YakitButtonProp} from "../YakitButton/YakitButton"
 
 export interface YakitHintProps extends YakitHintModalTypes {
-    /** 是否展示遮罩 */
+    /** Show overlay */
     mask?: boolean
-    /** 遮罩层背景色(需要自带透明度的颜色) */
+    /** Overlay background color (requires color with transparency)) */
     maskColor?: string
-    /** 多弹窗时的副窗口组 */
+    /** Sub-window group for multiple popups */
     childModal?: ChildModalProps[]
-    /** 指定弹窗挂载的节点，默认为body节点 */
+    /** Specified popup mount node, defaults to body */
     getContainer?: HTMLElement
 }
 
 interface ChildModalProps {
-    /** 副窗口标识符(组内唯一) */
+    /** Sub-window identifier (unique within group)) */
     key: string
-    /** 副窗口组件属性 */
+    /** Sub-window component props */
     content: YakitHintModalTypes
 }
 
 type YakitHintModalTypes = Omit<YakitHintModalProps, "isTop" | "setTop" | "isMask">
 
 export interface YakitHintModalProps {
-    /** 是否存在遮罩层 */
+    /** Overlay exists */
     isMask?: boolean
-    /** 是否可以拖拽 */
+    /** Draggable */
     isDrag?: boolean
-    /** 是否展示弹窗 */
+    /** Show popup */
     visible: boolean
-    /** 弹窗宽度，默认为448px */
+    /** Popup width, default 448px */
     width?: number
-    /** 是否弹窗置顶 */
+    /** Popup is on top */
     isTop?: boolean
-    /** 设置弹窗置顶 */
+    /** Set popup to top */
     setTop?: () => any
-    /** 弹窗修饰-样式类 */
+    /** Popup decor - style class */
     wrapClassName?: string
-    /** 左上侧区域提示性图标 */
+    /** Top left area tip icon */
     heardIcon?: ReactNode
-    /** 左下侧区域拓展图标 */
+    /** Bottom left area expand icon */
     extraIcon?: ReactNode
-    /** 弹窗标题 */
+    /** Popup title */
     title?: ReactNode
-    /** 弹窗文字内容 */
+    /** Popup text content */
     content?: ReactNode
-    /** 弹窗操作底部，设置为{null}则不展示底部区域 */
+    /** Popup action bottom, set to{null}Do not show bottom area */
     footer?: ReactNode | null
-    /** 弹窗操作底部拓展区(左边),当footer={null}时该属性无效 */
+    /** Popup action bottom extension (left), when footer={null}This property is invalid */
     footerExtra?: ReactNode
-    /** 确认按钮的文案 */
+    /** Confirm button text */
     okButtonText?: ReactNode
-    /** 确认按钮的props */
+    /** Confirm button props */
     okButtonProps?: YakitButtonProp
-    /** 确认按钮的回调 */
+    /** Confirm button callback */
     onOk?: () => any
-    /** 取消按钮的文案 */
+    /** Cancel button text */
     cancelButtonText?: ReactNode
-    /** 取消按钮的props */
+    /** Cancel button props */
     cancelButtonProps?: YakitButtonProp
-    /** 取消按钮的回调 */
+    /** Cancel button callback */
     onCancel?: () => any
     children?: ReactNode
 }

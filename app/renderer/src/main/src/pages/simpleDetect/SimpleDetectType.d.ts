@@ -7,7 +7,7 @@ export interface SimpleDetectProps {
 
 export interface SimpleDetectForm {
     Targets: string
-    scanType: "基础扫描" | "专项扫描"
+    scanType: "Basic Scan" | "Targeted Scan"
     scanDeep: number
     SkippedHostAliveScan: boolean
     pluginGroup: string[]

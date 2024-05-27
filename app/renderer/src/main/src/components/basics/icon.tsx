@@ -39,7 +39,7 @@ const YakitThemeLoadingSvg = () => (
         </defs>
     </svg>
 )
-/** @name 加载组件主题色图标 */
+/** @name Load Theme Icon */
 export const YakitThemeLoadingSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={YakitThemeLoadingSvg} {...props} />
 }
@@ -52,7 +52,7 @@ const YakitLoadingSvg = () => (
         />
     </svg>
 )
-/** @name 加载组件底色图标 */
+/** @name Load Bkgd Icon */
 export const YakitLoadingSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={YakitLoadingSvg} {...props} />
 }
@@ -68,7 +68,7 @@ const YakitCloseSvg = () => (
         />
     </svg>
 )
-/** @name 关闭图标 */
+/** @name Close Icon */
 export const YakitCloseSvgIcon = (props: Partial<CustomIconComponentProps>) => {
     return <Icon component={YakitCloseSvg} {...props} />
 }

@@ -53,7 +53,7 @@ export const HTTPFlowMiniTable: React.FC<HTTPFlowMiniTableProp> = React.memo((pr
                 width: 60, lock: true,
             },
             {
-                code: "Hash", name: "状态", render: (i: any) => {
+                code: "Hash", name: "Status", render: (i: any) => {
                     const flow: HTTPFlow | undefined = findHTTPFlowById(i)
 
                     return <div style={{overflow: "hidden"}}>
@@ -84,7 +84,7 @@ export const HTTPFlowMiniTable: React.FC<HTTPFlowMiniTableProp> = React.memo((pr
                 width: 700,
             },
             {
-                code: "Hash", name: "Body大小", render: (i: any) => {
+                code: "Hash", name: "Body Size", render: (i: any) => {
                     const flow: HTTPFlow | undefined = findHTTPFlowById(i)
 
                     return <div style={{overflow: "hidden"}}>
@@ -94,7 +94,7 @@ export const HTTPFlowMiniTable: React.FC<HTTPFlowMiniTableProp> = React.memo((pr
                 width: 100, lock: true,
             },
             {
-                code: "Hash", name: "操作", render: (i: any) => {
+                code: "Hash", name: "Operation", render: (i: any) => {
                     return <>
                         <Space>
                             <Button
@@ -108,7 +108,7 @@ export const HTTPFlowMiniTable: React.FC<HTTPFlowMiniTableProp> = React.memo((pr
                                         ),
                                     })
                                 }}
-                            >详情</Button>
+                            >Details</Button>
                         </Space>
                     </>
                 },
@@ -128,14 +128,14 @@ export const HTTPFlowMiniTable: React.FC<HTTPFlowMiniTableProp> = React.memo((pr
             },
             {
                 code: "GetParamsTotal",
-                name: "Get 参数",
-                render: (i: any) => i > 0 ? <Tag color={"orange"}>{i}个</Tag> : "-",
+                name: "Get Parameters",
+                render: (i: any) => i > 0 ? <Tag color={"orange"}>{i}Qty</Tag> : "-",
                 width: 60
             },
             {
                 code: "PostParamsTotal",
-                name: "Post 参数",
-                render: (i: any) => i > 0 ? <Tag color={"orange"}>{i}个</Tag> : "-",
+                name: "Post Parameters",
+                render: (i: any) => i > 0 ? <Tag color={"orange"}>{i}Qty</Tag> : "-",
                 width: 60, lock: true,
             },
             {
@@ -145,7 +145,7 @@ export const HTTPFlowMiniTable: React.FC<HTTPFlowMiniTableProp> = React.memo((pr
                 width: 450, features: {sortable: true}
             },
             {
-                code: "Hash", name: "操作", render: (i: any) => {
+                code: "Hash", name: "Operation", render: (i: any) => {
                     return <>
                         <Space>
                             {props.onSendToWebFuzzer && <Button
@@ -162,7 +162,7 @@ export const HTTPFlowMiniTable: React.FC<HTTPFlowMiniTableProp> = React.memo((pr
                                         })
                                     }
                                 }}
-                            >发送到Fuzzer</Button>}
+                            >Send to Fuzzer</Button>}
                             <Button
                                 type={"link"} size={"small"}
                                 onClick={() => {
@@ -174,7 +174,7 @@ export const HTTPFlowMiniTable: React.FC<HTTPFlowMiniTableProp> = React.memo((pr
                                         )
                                     })
                                 }}
-                            >详情</Button>
+                            >Details</Button>
                         </Space>
                     </>
                 },

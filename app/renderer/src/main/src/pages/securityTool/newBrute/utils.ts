@@ -12,12 +12,12 @@ export interface Tree {
     Children: Tree[]
 }
 export interface GetAvailableBruteTypesResponse {
-    /**@deprecated 新版弱口令后，该字段废弃 */
+    /**@deprecated After new weak password, this field deprecated */
     Types: string[]
     TypesWithChild: Tree[]
 }
 /**
- * @description 获取弱口令的类型
+ * @description Get weak password type
  */
 export const apiGetAvailableBruteTypes: () => Promise<DataNode[]> = () => {
     return new Promise((resolve, reject) => {
@@ -35,7 +35,7 @@ export const apiGetAvailableBruteTypes: () => Promise<DataNode[]> = () => {
                 resolve(tree)
             })
             .catch((e: any) => {
-                yakitNotify("error", "获取弱口令的类型出错:" + e)
+                yakitNotify("error", "Error getting weak password type:" + e)
                 reject(e)
             })
     })
@@ -52,7 +52,7 @@ export const apiGetAllPayloadGroup: () => Promise<PayloadGroupNodeProps[]> = () 
                 resolve(res.Nodes || [])
             })
             .catch((e: any) => {
-                yakitNotify("error", "获取弱口令的类型出错:" + e)
+                yakitNotify("error", "Error getting weak password type:" + e)
                 reject(e)
             })
     })
@@ -64,7 +64,7 @@ export interface CodecResponse {
 }
 
 /**
- * @description 处理字典内容
+ * @description Process dictionary content
  */
 export const apiPayloadByType: (value: string) => Promise<string> = (value) => {
     return new Promise((resolve, reject) => {
@@ -74,12 +74,12 @@ export const apiPayloadByType: (value: string) => Promise<string> = (value) => {
                 resolve(res?.Result || "")
             })
             .catch((err) => {
-                yakitNotify("error", `获取字典内容失败：${err.details}`)
+                yakitNotify("error", `Failed to get dictionary content：${err.details}`)
             })
     })
 }
 /**
- * @name StartBrute 接口参数转换(前端数据转接口参数)
+ * @name StartBrute Interface parameter conversion (frontend data to interface parameters)
  * @description StartBrute
  */
 export const convertStartBruteParams = (params: BruteExecuteExtraFormValue): StartBruteParams => {
@@ -105,7 +105,7 @@ export const convertStartBruteParams = (params: BruteExecuteExtraFormValue): Sta
 }
 
 /**
- * @description StartBrute 弱口令检测
+ * @description StartBrute Weak password check
  */
 export const apiStartBrute: (params: StartBruteParams, token: string) => Promise<null> = (params, token) => {
     return new Promise((resolve, reject) => {
@@ -115,18 +115,18 @@ export const apiStartBrute: (params: StartBruteParams, token: string) => Promise
         ipcRenderer
             .invoke("StartBrute", executeParams, token)
             .then(() => {
-                yakitNotify("info", `启动成功,任务ID: ${token}`)
+                yakitNotify("info", `Launch successful, task ID: ${token}`)
                 resolve(null)
             })
             .catch((error) => {
-                yakitNotify("error", "弱口令检测执行出错:" + error)
+                yakitNotify("error", "Weak password check execution error:" + error)
                 reject(error)
             })
     })
 }
 
 /**
- * @description 取消 StartBrute
+ * @description Cancel StartBrute
  */
 export const apiCancelStartBrute: (token: string) => Promise<null> = (token) => {
     return new Promise((resolve, reject) => {
@@ -136,7 +136,7 @@ export const apiCancelStartBrute: (token: string) => Promise<null> = (token) => 
                 resolve(null)
             })
             .catch((e: any) => {
-                yakitNotify("error", "取消弱口令检测执行出错:" + e)
+                yakitNotify("error", "Weak password check execution error:" + e)
                 reject(e)
             })
     })

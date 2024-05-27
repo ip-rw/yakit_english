@@ -28,7 +28,7 @@ export const MITMYakScriptLoader = React.memo((p: MITMYakScriptLoaderProps) => {
         }
     })
     /**
-     * @description 劫持未开启前,勾选默认插件
+     * @description Before hijacking enabled, check default plugin
      */
     const onSelectDefaultPlugins = useMemoizedFn(() => {
         if (!defaultPlugins || !setDefaultPlugins) return
@@ -41,7 +41,7 @@ export const MITMYakScriptLoader = React.memo((p: MITMYakScriptLoaderProps) => {
         }
     })
     /**
-     * @description 劫持未开启后,勾选启动插件
+     * @description Hijacking not enabled, check to enable plugin
      */
     const onLaunchPlugin = useMemoizedFn(() => {
         const checked = !!hooks.get(i.ScriptName)
@@ -98,7 +98,7 @@ export const MITMYakScriptLoader = React.memo((p: MITMYakScriptLoaderProps) => {
             {status !== "idle" && (
                 <YakitPopconfirm
                     disabled={!p.onSendToPatch}
-                    title='发送到【热加载】中调试代码？'
+                    title='Send for debugging in [Hot Reload]？'
                     onConfirm={() => {
                         if (!i.Content) {
                             getScriptInfo(i, true)
@@ -139,11 +139,11 @@ export interface MITMYakScriptLoaderProps {
     onSubmitYakScriptId?: (id: number, params: YakExecutorParam[]) => any
     onRemoveHook?: (name: string) => void
     /**
-     * @param 是否劫持启动前/未开启劫持启动
+     * @param Before hijacking enabled/Hijacking not enabled at startup
      */
     isBeforeHijacking?: boolean
     /**
-     * @param 是否劫持启动前 勾选默认插件
+     * @param Before hijacking enabled, check default plugin
      */
     defaultPlugins?: string[]
     setDefaultPlugins?: (p: string[]) => void
@@ -151,6 +151,6 @@ export interface MITMYakScriptLoaderProps {
 
 export function clearMITMPluginCache() {
     ipcRenderer.invoke("mitm-clear-plugin-cache").catch((e) => {
-        failed(`清除插件缓存失败: ${e}`)
+        failed(`Failed to clear plugin cache: ${e}`)
     })
 }

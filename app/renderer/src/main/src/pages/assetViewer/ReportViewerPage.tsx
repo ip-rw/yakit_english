@@ -82,7 +82,7 @@ export const ReportList: React.FC<ReportListProp> = (props) => {
             })
             .then((rsp: QueryGeneralResponse<Report>) => {
                 if (rsp) {
-                    // console.log("列表",rsp)
+                    // console.log("List",rsp)
                     setResponse(rsp)
                     setSelectedRowKeys([])
                 }
@@ -124,9 +124,9 @@ export const ReportList: React.FC<ReportListProp> = (props) => {
         setLoading(true)
         onRemoveToolFC(transferParams)
             .then(() => {
-                // 当为全部删除时 直接详情页置空
+                // If deleting all, clear details page directly
                 selectedRowKeys.length===0&&onClick(undefined)
-                // 当存在选中项时 如若选中项被删除则详情页置空
+                // If selection exists, clear details page if selected are deleted
                 if(selectedId&&selectedRowKeys.length!==0){
                     if(selectedRowKeys.includes(selectedId)){
                         onClick(undefined)
@@ -143,14 +143,14 @@ export const ReportList: React.FC<ReportListProp> = (props) => {
 
     return (
         <AutoCard
-            title={<Space>报告列表</Space>}
+            title={<Space>Report list</Space>}
             size={"small"}
             loading={loading}
             bordered={false}
             bodyStyle={{overflowY: "auto"}}
             extra={
                 <Space>
-                    <Tooltip title={<>{`点击列表中的报告检查内容`}</>}>
+                    <Tooltip title={<>{`Click a report in the list to check its contents`}</>}>
                         <a href='#'>
                             <QuestionOutlined/>
                         </a>
@@ -166,8 +166,8 @@ export const ReportList: React.FC<ReportListProp> = (props) => {
                     <Popconfirm
                         title={
                             selectedRowKeys.length > 0
-                                ? "确定删除选择的报告吗？不可恢复"
-                                : "确定删除所有报告吗? 不可恢复"
+                                ? "Confirm to delete selected reports? Irreversible"
+                                : "Confirm delete all reports? Irreversible"
                         }
                         onConfirm={onRemove}
                     >
@@ -193,7 +193,7 @@ export const ReportList: React.FC<ReportListProp> = (props) => {
                             extra={<Tag>{formatTimestamp(item.PublishedAt)}</Tag>}
                             hoverable={true}
                         >
-                            <Tooltip title='点击选中后，可删除'>
+                            <Tooltip title='Click to select, then delete'>
                                 <SelectIcon
                                     //  @ts-ignore
                                     className={`icon-select  ${
@@ -209,8 +209,8 @@ export const ReportList: React.FC<ReportListProp> = (props) => {
 
                             <Space wrap={true}>
                                 {item.Id && <Tag color={"red"}>ID:{item.Id}</Tag>}
-                                {item.Owner && <Tag color={"green"}>发起人:{item.Owner}</Tag>}
-                                {item.From && <Tag color={"orange"}>来源:{item.From}</Tag>}
+                                {item.Owner && <Tag color={"green"}>Initiator:{item.Owner}</Tag>}
+                                {item.From && <Tag color={"orange"}>Source:{item.From}</Tag>}
                             </Space>
                         </AutoCard>
                     )
@@ -222,7 +222,7 @@ export const ReportList: React.FC<ReportListProp> = (props) => {
                     current:typeof response.Pagination.Page === "number"? response.Pagination.Page:parseInt(response.Pagination.Page) ,
                     simple: true,
                     total,
-                    showTotal: (i) => <Tag>共{i}条历史记录</Tag>,
+                    showTotal: (i) => <Tag>Total{i}History records</Tag>,
                     onChange: (page: number, limit?: number) => {
                         update(page, limit)
                     }

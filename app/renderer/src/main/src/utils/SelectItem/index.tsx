@@ -33,7 +33,7 @@ export const SelectItem: React.FC<SelectItemProps> = (props) => {
                 setLists(data.Groups || [])
             })
             .catch((e: any) => {
-                failed(e?.details || "获取字典列表失败！")
+                failed(e?.details || "Failed to Get Dictionary List！")
             })
             .finally()
     }
@@ -65,7 +65,7 @@ export const SelectItem: React.FC<SelectItemProps> = (props) => {
                                     if (props.onChange) props.onChange(value, res?.Result || "")
                                 })
                                 .catch((err) => {
-                                    failed(`获取字典内容失败：${err.details}`)
+                                    failed(`Fetch Dictionary Content Failed：${err.details}`)
                                 })
                                 .finally(() => {
                                     setTimeout(() => {

@@ -28,7 +28,7 @@ function sheet_from_array_of_arrays(data, optsSingleCellSetting) {
                 t: "s"
             }
             if (cell.v == null) continue
-            // 根据单元格内容设置单元格样式
+            // Set cell style based on content
             if (optsSingleCellSetting && R > 0 && C === optsSingleCellSetting.c) {
                 if (typeof cell.v === "string" || typeof cell.v === "number") {
                     cell.s = optsSingleCellSetting.colorObj[cell.v]
@@ -78,8 +78,8 @@ export function export_json_to_excel({
     filename = "",
     autoWidth = true,
     bookType = "xlsx",
-    optsSingleCellSetting, //  单个单元格样式
-    optsUnifiedCellSetting // 整列或者整行的单元格样式，这个暂时没有做，因为没有需求
+    optsSingleCellSetting, //  Single cell style
+    optsUnifiedCellSetting // Column/Row cell style, not implemented yet, no demand
 }: ExcelJsonProps) {
     /* original data */
     filename = filename || "excel-list"
@@ -94,16 +94,16 @@ export function export_json_to_excel({
         ws = sheet_from_array_of_arrays(data, optsSingleCellSetting)
 
     if (autoWidth) {
-        /*设置worksheet每列的最大宽度*/
+        /*Set max width for each column in worksheet*/
         const colWidth = data.map((row) =>
             row.map((val) => {
-                /*先判断是否为null/undefined*/
+                /*Check if null/undefined*/
                 if (val == null) {
                     return {
                         wch: 10
                     }
                 } else if (val.toString().charCodeAt(0) > 255) {
-                    /*再判断是否为中文*/
+                    /*Check if Chinese*/
                     return {
                         wch: val.toString().length * 2 > 60 ? 60 : val.toString().length * 2
                     }
@@ -114,7 +114,7 @@ export function export_json_to_excel({
                 }
             })
         )
-        /*以第一行为初始值*/
+        /*Use first row as init value*/
         let result = colWidth[0]
         for (let i = 1; i < colWidth.length; i++) {
             for (let j = 0; j < colWidth[i].length; j++) {
@@ -143,6 +143,6 @@ export function export_json_to_excel({
             `${filename}(${moment().valueOf()}).${bookType}`
         )
     } catch (error) {
-        yakitNotify("error", `xlsx过大:${error}`)
+        yakitNotify("error", `XLSX too large:${error}`)
     }
 }

@@ -108,7 +108,7 @@ export const DomainAssetPage: React.FC<DomainAssetPageProps> = (props: DomainAss
             })
     })
 
-    // 单个删除
+    // Delete single
     const delDomainSingle = useMemoizedFn((host: string) => {
         const newParams = {
             DomainKeyword: host
@@ -131,7 +131,7 @@ export const DomainAssetPage: React.FC<DomainAssetPageProps> = (props: DomainAss
     }, [])
     const columns = [
         {
-            title: "域名",
+            title: "Domain",
             dataIndex: "DomainName",
             filteredValue: (getParams()["DomainKeyword"] && ["DomainName"]) || null,
             width: 400,
@@ -148,7 +148,7 @@ export const DomainAssetPage: React.FC<DomainAssetPageProps> = (props: DomainAss
                     params &&
                     setParams && (
                         <TableFilterDropdownString
-                            label={"搜索关键字"}
+                            label={"Search keyword"}
                             params={params}
                             setParams={setParams}
                             filterName={"DomainKeyword"}
@@ -178,7 +178,7 @@ export const DomainAssetPage: React.FC<DomainAssetPageProps> = (props: DomainAss
                     params &&
                     setParams && (
                         <TableFilterDropdownString
-                            label={"搜索IP"}
+                            label={"Search IP"}
                             params={params}
                             setParams={setParams}
                             filterName={"Network"}
@@ -208,7 +208,7 @@ export const DomainAssetPage: React.FC<DomainAssetPageProps> = (props: DomainAss
                     params &&
                     setParams && (
                         <TableFilterDropdownString
-                            label={"搜索关键字"}
+                            label={"Search keyword"}
                             params={params}
                             setParams={setParams}
                             filterName={"Title"}
@@ -221,7 +221,7 @@ export const DomainAssetPage: React.FC<DomainAssetPageProps> = (props: DomainAss
             }
         },
         {
-            title: "操作",
+            title: "Action",
             dataIndex: "Action",
             render: (_, i: Domain) => (
                 <Space>
@@ -236,7 +236,7 @@ export const DomainAssetPage: React.FC<DomainAssetPageProps> = (props: DomainAss
                             setCheckedAll(false)
                         }}
                     >
-                        删除
+                        Delete
                     </Button>
                 </Space>
             )
@@ -253,7 +253,7 @@ export const DomainAssetPage: React.FC<DomainAssetPageProps> = (props: DomainAss
                 })
                 .then((res: QueryGeneralResponse<any>) => {
                     const {Data} = res
-                    //    数据导出
+                    //    Data Export
                     let exportData: any = []
                     const header: string[] = []
                     const filterVal: string[] = []
@@ -271,7 +271,7 @@ export const DomainAssetPage: React.FC<DomainAssetPageProps> = (props: DomainAss
                     })
                 })
                 .catch((e) => {
-                    failed("数据导出失败 " + `${e}`)
+                    failed("Data export failed " + `${e}`)
                 })
         })
     })
@@ -314,7 +314,7 @@ export const DomainAssetPage: React.FC<DomainAssetPageProps> = (props: DomainAss
                 pageSize: Pagination?.Limit || 10,
                 showSizeChanger: true,
                 total: Total,
-                showTotal: (i) => <Tag>共{i}条历史记录</Tag>,
+                showTotal: (i) => <Tag>Total{i}History records</Tag>,
                 onChange: (page: number, limit?: number) => {
                     update(page, limit)
                 }
@@ -324,8 +324,8 @@ export const DomainAssetPage: React.FC<DomainAssetPageProps> = (props: DomainAss
                     <>
                         <div style={{display: "flex", justifyContent: "space-between"}}>
                             <Space>
-                                <div>域名资产</div>
-                                <Tooltip title='刷新会重置所有查询条件'>
+                                <div>Domain assets</div>
+                                <Tooltip title='Refresh will reset all search conditions'>
                                     <Button
                                         type={"link"}
                                         onClick={() => {
@@ -351,41 +351,41 @@ export const DomainAssetPage: React.FC<DomainAssetPageProps> = (props: DomainAss
                                     }}
                                     disabled={allResponse.Data.length === 0}
                                 >
-                                    全选
+                                    Select all
                                 </Checkbox>
                                 {selectedRowKeys.length > 0 && (
                                     <Tag color='blue'>
-                                        已选{checkedAll ? allResponse.Total : selectedRowKeys?.length}条
+                                        Selected{checkedAll ? allResponse.Total : selectedRowKeys?.length}Items
                                     </Tag>
                                 )}
                             </Col>
                             <Col span={12} style={{textAlign: "right"}}>
                                 <Space>
-                                    <ExportExcel getData={getData} btnProps={{size: "small"}} fileName='域名资产' />
+                                    <ExportExcel getData={getData} btnProps={{size: "small"}} fileName='Domain assets' />
                                     <Popconfirm
                                         title={
                                             checkedAll
-                                                ? "确定删除所有域名资产吗? 不可恢复"
-                                                : "确定删除选择的域名资产吗？不可恢复"
+                                                ? "Confirm delete all domain assets? Irreversible"
+                                                : "Confirm delete selected domain assets? Irreversible"
                                         }
                                         onConfirm={onRemove}
                                         disabled={selectedRowKeys.length === 0}
                                     >
                                         <Button size='small' danger={true} disabled={selectedRowKeys.length === 0}>
-                                            删除资产
+                                            Delete asset
                                         </Button>
                                     </Popconfirm>
                                     <DropdownMenu
                                         menu={{
                                             data: [
-                                                {key: "bug-test", title: "发送到漏洞检测"},
-                                                {key: "brute", title: "发送到爆破"}
+                                                {key: "bug-test", title: "Send to vulnerability scan"},
+                                                {key: "brute", title: "Send to brute force"}
                                             ]
                                         }}
                                         dropdown={{placement: "bottomRight"}}
                                         onClick={(key) => {
                                             if (checkedURL.length === 0) {
-                                                failed("请最少选择一个选项再进行操作")
+                                                failed("Select at least one option before proceeding")
                                                 return
                                             }
                                             switch (key) {

@@ -20,10 +20,10 @@ import {OutlineCheckIcon, OutlineXIcon} from "@/assets/icon/outline"
 const {Option, OptGroup} = Select
 
 /**
- * @description: 下拉选择
- * @augments SwitchProps 继承antd的 SelectProps 默认属性
- * @param {string} wrapperClassName Switch装饰div的className
- * @param {CSSProperties} wrapperStyle Switch装饰div的style
+ * @Dropdown Select
+ * @augments SwitchProps: Inherits SelectProps from antd
+ * @param {string} wrapperClassName: Switch wrapper className
+ * @param {CSSProperties} Single-select
  */
 export const YakitSelectCustom = <ValueType, OptionType>(
     {
@@ -41,7 +41,7 @@ export const YakitSelectCustom = <ValueType, OptionType>(
 ) => {
     const selectRef = useRef<HTMLDivElement>(null)
     const [inViewport = true] = useInViewport(selectRef)
-    // 鼠标移入项 用于判断是否显示 ×
+    // Label Mode: Label = Value ×
     const [mouseEnterItem, setMouseEnterItem] = useState<string>("")
     const [show, setShow] = useState<boolean>(false)
     const [cacheHistoryData, setCacheHistoryData] = useState<YakitSelectCacheDataHistoryProps>({
@@ -64,11 +64,11 @@ export const YakitSelectCustom = <ValueType, OptionType>(
         }),
         [cacheHistoryData, props.value]
     )
-    /**@description 缓存 cacheHistoryDataKey 对应的数据 */
+    /**@Cache data getter */
     const onSetRemoteValues = useMemoizedFn((newValue: string[]) => {
         if (!cacheHistoryDataKey) return
         if (props.mode === "tags") {
-            // tag模式 一般情况下 label和value是一样的
+            // Cache not supported
             const cacheHistoryDataValues: string[] = cacheHistoryData.options.map((ele) => ele.value)
             const addValue = newValue.filter((ele) => !cacheHistoryDataValues.includes(ele))
             const newOption = [
@@ -92,12 +92,12 @@ export const YakitSelectCustom = <ValueType, OptionType>(
                     })
                 })
                 .catch((e) => {
-                    yakitNotify("error", `${cacheHistoryDataKey}缓存字段保存数据出错:` + e)
+                    yakitNotify("error", `${cacheHistoryDataKey}Cache save error:` + e)
                 })
         } else if (props.mode === "multiple") {
-            // 多选;该情况下label和value 大多数时候不一样;暂不支持缓存
+            // Multi-select;Due to menuItemSelectedIcon property;Mainly renders props.label including forced icon
         } else {
-            //  单选
+            //  deletion not supported
             onSetRemoteValuesBase({cacheHistoryDataKey, newValue: newValue.join(","), isCacheDefaultValue}).then(
                 (value: CacheDataHistoryProps) => {
                     // onGetRemoteValues()
@@ -109,13 +109,13 @@ export const YakitSelectCustom = <ValueType, OptionType>(
             )
         }
     })
-    /**@description 获取 cacheHistoryDataKey 对应的数据 */
+    /**@Get cached data */
     const onGetRemoteValues = useMemoizedFn(() => {
         if (!cacheHistoryDataKey) return
         onGetRemoteValuesBase(cacheHistoryDataKey).then((cacheData) => {
             const value = cacheData.defaultValue ? cacheData.defaultValue.split(",") : []
             let newOption: YakitDefaultOptionType[] = getNewOption(cacheData.options, !!cacheData.firstUse)
-            //非form表单时,设置value
+            //SetValue outside form
             if (isCacheDefaultValue) {
                 if (props.onChange) props.onChange(value, newOption)
             }
@@ -133,7 +133,7 @@ export const YakitSelectCustom = <ValueType, OptionType>(
         }
         return newOption || []
     })
-    /**@description 删除缓存项 */
+    /**@Delete cache item */
     const delCatchOptionItem = (e: React.MouseEvent<Element, MouseEvent>, item: YakitDefaultOptionType) => {
         e.stopPropagation()
         if (cacheHistoryDataKey) {
@@ -155,24 +155,24 @@ export const YakitSelectCustom = <ValueType, OptionType>(
                         })
                     })
                     .catch((e) => {
-                        yakitNotify("error", `${cacheHistoryDataKey}缓存字段保存数据出错:` + e)
+                        yakitNotify("error", `${cacheHistoryDataKey}Cache save error:` + e)
                     })
             } else if (props.mode === "multiple") {
-                // 暂不支持删除缓存项
+                // Cache deletion not supported
             } else {
-                // 暂不支持删除缓存项
+                // Cache deletion not supported
             }
         }
     }
 
     const renderItem = (item: YakitDefaultOptionType) => {
         const copyItem = {...item}
-        // 主要是tag部分直接渲染props.label的话会将下面强制塞进去的icon一起渲染
+        // wrapperStyle: Switch wrapper style
         copyItem.tabLable = item.label
 
         let showClose = false
         const newValue = props.value ?? ""
-        // input框里面选中了这个值，应该是由于antd本身的限制，就算过滤掉了该项的options选项，但是下拉列表还是存在该项
+        // Label and value often differ here
         if (mouseEnterItem === item.value && !newValue.includes(item.value)) {
             showClose = true
         }
@@ -211,16 +211,16 @@ export const YakitSelectCustom = <ValueType, OptionType>(
         return copyItem
     }
 
-    // 是否支持删除缓存 目前只有tags支持
+    // Support cache deletion? Only tags supported
     const supportDelCache = useMemo(() => {
         if (cacheHistoryDataKey) {
             if (props.mode === "tags") {
                 return true
             } else if (props.mode === "multiple") {
-                // 多选 暂不支持删除缓存项
+                // Multi-select: cache deletion not supported
                 return false
             } else {
-                // 单选 暂不支持删除缓存项
+                // Single-select: cache
                 return false
             }
         } else {
@@ -231,7 +231,7 @@ export const YakitSelectCustom = <ValueType, OptionType>(
     let extraProps: {defaultValue?: string[]; options?: YakitDefaultOptionType[]} = {}
     if (!props.children) {
         const renderNewOptions = [...cacheHistoryData.options]
-        // 此处是由于属性menuItemSelectedIcon被设置为<></>, 勾是在label中处理的，当手动输入选项值后，点击选项，处理没有勾显示的问题
+        // Hover item: to display or not<></>, input value selected, due to antd limit, filtered option still in dropdown
         if (supportDelCache && Array.isArray(props.value)) {
             props.value.forEach((value) => {
                 const exists = renderNewOptions.some((item) => item.value === value)

@@ -34,16 +34,16 @@ export const DiagnoseNetworkForm: React.FC<DiagnoseNetworkFormProp> = (props) =>
             props.onSubmit(params)
         }}
     >
-        <InputItem label={"目标地址"}
+        <InputItem label={"Destination"}
                    setValue={ConnectTarget => setParams({...params, ConnectTarget})}
                    value={params.ConnectTarget} required={true}
         />
-        <InputInteger label={"超时时间"} setValue={NetworkTimeout => setParams({...params, NetworkTimeout})}
+        <InputInteger label={"Timeout"} setValue={NetworkTimeout => setParams({...params, NetworkTimeout})}
                       value={params.NetworkTimeout}/>
-        <InputItem label={"代理地址"} help={"可选，如果填写的话则需要补充代理测试的目标"} setValue={Proxy => setParams({...params, Proxy})} value={params.Proxy}/>
-        {!!params.Proxy && <InputItem label={"测试地址"} help={"填入需要测试的代理地址，例如 www.google.com"} setValue={ProxyToAddr => setParams({...params, ProxyToAddr})} value={params.ProxyToAddr}/>}
+        <InputItem label={"Proxy Addr"} help={"Optional, if filled, specify the proxy test target"} setValue={Proxy => setParams({...params, Proxy})} value={params.Proxy}/>
+        {!!params.Proxy && <InputItem label={"Test URL"} help={"Enter the proxy address to test, e.g., www.google.com"} setValue={ProxyToAddr => setParams({...params, ProxyToAddr})} value={params.ProxyToAddr}/>}
         <Form.Item colon={false} label={" "}>
-            <YakitButton type="primary" htmlType="submit"> 诊断基础网络配置 </YakitButton>
+            <YakitButton type="primary" htmlType="submit"> Diagnose Network Config </YakitButton>
         </Form.Item>
     </Form>
 };

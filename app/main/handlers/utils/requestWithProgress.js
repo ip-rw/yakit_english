@@ -2,15 +2,15 @@ const axios = require('axios');
 const fs = require('fs');
 const {throttle} = require('throttle-debounce');
 
-// 函数用于编码URL中的中文字符
+// Encode Chinese characters in URL
 function encodeChineseCharacters(url) {
-    // 实现URL中中文字符的编码逻辑
+    // Implement logic to encode Chinese characters in URL
     return encodeURI(url);
 }
 
 
 function requestWithProgress(downloadUrl, dest, options = {}, onProgress = undefined, onFinished = undefined, onError = undefined) {
-    // 设置axios请求配置
+    // Set axios request config
     const config = {
         ...options, responseType: 'stream'
     };
@@ -52,7 +52,7 @@ function requestWithProgress(downloadUrl, dest, options = {}, onProgress = undef
 
         const updateProgress = throttle(options.throttle || 1000, () => {
             const percentage = (downloadedLength / totalLength) * 100;
-            // 你可以替换这里的逻辑来更新进度，例如发送到前端
+            // Replace the logic here to update progress, e.g., send to frontend
             const state = getProgressState();
             console.log(`Downloaded: `, state.percent);
             onProgress && onProgress(state)
@@ -74,10 +74,10 @@ function requestWithProgress(downloadUrl, dest, options = {}, onProgress = undef
         });
 
     }).then(() => {
-        // 下载完成后的处理
+        // Post-download processing
         onFinished && onFinished();
     }).catch(error => {
-        // 错误处理
+        // Error handling
         console.info(error.message);
         onError && onError(error)
     });

@@ -11,7 +11,7 @@ const {
     watchAll
 } = require('customize-cra')
 const path = require('path')
-const ProgressBarPlugin = require('progress-bar-webpack-plugin'); // 打包进度
+const ProgressBarPlugin = require('progress-bar-webpack-plugin'); // Pack Progress
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin")
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
@@ -31,7 +31,7 @@ module.exports = {
         addWebpackAlias({
             '@': path.resolve(__dirname, 'src')
         }),
-        // 打包进度条
+        // Pack Progress Bar
         addWebpackPlugin(new ProgressBarPlugin()),
         addWebpackPlugin(new MonacoWebpackPlugin({
             languages: ["json", "javascript", "go", "markdown", "html", "yaml", "java"],
@@ -49,7 +49,7 @@ module.exports = {
         })),
         addWebpackModuleRule(
             {
-                test: [/\.css$/, /\.scss$/], // 可以打包后缀为scss/css的文件
+                test: [/\.css$/, /\.scss$/], // Pack SCSS Suffix/CSS File
                 exclude: [/\.module\.(css|scss)/],
                 use: [
                     devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
@@ -99,7 +99,7 @@ module.exports = {
                 config.output.path = OUTPUT_PATH
                 config.output.publicPath = "./"
             }
-            // 去掉打包生产map 文件
+            // Remove Pack Prod Map File
             config.devtool = config.mode === 'development' ? 'cheap-module-source-map' : false;
             config.ignoreWarnings = [/Failed to parse source map/]
             // console.log('config-webpack', config)
@@ -127,7 +127,7 @@ module.exports = {
         watchAll()
     ),
     paths: function (paths, env) {
-        // 修改build下的输出目录
+        // Change Build Output Dir
         paths.appBuild = OUTPUT_PATH
         return paths
     }

@@ -45,10 +45,10 @@ export const ChaosMakerRulesDemo: React.FC<ChaosMakerRulesDemoProp> = (props) =>
             <DemoVirtualTable<ChaosMakerRule>
                 columns={[
                     {headerTitle: "ID", key: "Id", width: 80, colRender: i => i.Id},
-                    {headerTitle: "规则", key: "Name", width: 300, colRender: i => i.NameZh || i.Name},
-                    {headerTitle: "类型", key: "RuleType", width: 100, colRender: i => i.RuleType},
+                    {headerTitle: "Rules", key: "Name", width: 300, colRender: i => i.NameZh || i.Name},
+                    {headerTitle: "Type", key: "RuleType", width: 100, colRender: i => i.RuleType},
                     {headerTitle: "CVE", key: "CVE", width: 110, colRender: i => i.CVE},
-                    {headerTitle: "协议", key: "Protocol", width: 50, colRender: i => i.Protocol},
+                    {headerTitle: "Protocol", key: "Protocol", width: 50, colRender: i => i.Protocol},
                 ]}
                 rowClick={data => {
                     setSelected(data)
@@ -56,7 +56,7 @@ export const ChaosMakerRulesDemo: React.FC<ChaosMakerRulesDemoProp> = (props) =>
                 loadMore={(data: ChaosMakerRule | undefined) => {
                     return new Promise((resolve, reject) => {
                         if (!data) {
-                            // info("加载初始化数据")
+                            // info("Load Init Data")
                             ipcRenderer.invoke("QueryChaosMakerRules", {
                                 Pagination: {Limit: 10, Page: 1, OrderBy: 'id', Order: "asc"}, // genDefaultPagination(),
                                 FromId: 0,

@@ -150,7 +150,7 @@ export const DiagnoseNetworkPage: React.FC<DiagnoseNetworkPageProp> = (props) =>
         <AutoCard
             title={
                 <Space>
-                    网络诊断
+                    Network Diagnostics
                     {loading && <AutoSpin size={"small"} />}
                     <YakitButton
                         type={"text"}

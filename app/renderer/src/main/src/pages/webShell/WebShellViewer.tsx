@@ -32,7 +32,7 @@ export const WebShellViewer: React.FC<WebShellManagerViewerProp> = (props) => {
     const [advancedQuery, setAdvancedQuery] = useState<boolean>(true)
     const [loading, setLoading] = useState(false)
     const [available, setAvailable] = useState(false)
-    // 第一次进入
+    // First Enter
     const [isFirstEnter, setFirstEnter] = useState<boolean>(false)
     const WebShellFirstViewer = "WebShellFirstViewer"
     useEffect(() => {
@@ -45,7 +45,7 @@ export const WebShellViewer: React.FC<WebShellManagerViewerProp> = (props) => {
     })
 
     useEffect(() => {
-        // 页面初次进入时
+        // On Page Enter
         getRemoteValue(WebShellFirstViewer).then((res) => {
             if (!res) {
                 setFirstEnter(true)
@@ -72,10 +72,10 @@ export const WebShellViewer: React.FC<WebShellManagerViewerProp> = (props) => {
             />
             <YakitHint
                 visible={isFirstEnter}
-                title='使用协议'
+                title='Users must comply with all applicable laws and ethical standards when using this tool. It should not be used for unauthorized testing, illegal infiltration, data theft, or any other illegal activities. All user actions must be legal, compliant, and properly authorized.'
                 content={<>
-                <div>本工具是一款开源的跨平台网站管理工具，旨在为合法授权的安全研究人员、渗透测试专家以及网站管理员提供支持。它的设计目的是为了进行安全评估、教育目的以及帮助网站管理员进行日常管理工作。</div>
-                <div>请用户在使用本工具时遵守所有适用的法律和道德准则。本工具不应用于任何未经授权的测试、非法入侵、数据盗窃或任何其他非法活动。用户使用本工具进行的任何行为都应当是合法、合规且具有正当授权的。</div>
+                <div>I'm here to assist with translations. Please provide the text you need translated..。</div>
+                <div>Its purpose is for security assessments, educational purposes, and assisting web admins with daily management tasks.。</div>
                 </>
                 }
                 onOk={() => {
@@ -86,8 +86,8 @@ export const WebShellViewer: React.FC<WebShellManagerViewerProp> = (props) => {
                     setFirstEnter(false)
                     emiter.emit("closePage", JSON.stringify({route: YakitRoute.Beta_WebShellManager}))
                 }}
-                okButtonText='同意'
-                cancelButtonText='不同意'
+                okButtonText='Agree'
+                cancelButtonText='Terms of Use'
             />
         </div>
     )
@@ -105,7 +105,7 @@ export const defQueryWebShellRequest: QueryWebShellRequest = {
 interface WebShellQueryProp {
     defaultParams?: QueryWebShellRequest
     onChange?: (req: QueryWebShellRequest) => any
-    advancedQuery: boolean //是否开启高级查询
+    advancedQuery: boolean //Enable Advanced Search?
     setAdvancedQuery: (b: boolean) => void
 }
 
@@ -119,7 +119,7 @@ const WebShellQuery: React.FC<WebShellQueryProp> = (props) => {
         props.onChange(params)
     }, [params])
 
-    const [activeKey, setActiveKey] = useState<string[]>() // Collapse打开的key
+    const [activeKey, setActiveKey] = useState<string[]>() // Collapse opened key
     const onSwitchCollapse = useMemoizedFn((key) => {
         setActiveKey(key)
     })
@@ -200,7 +200,7 @@ const WebShellQuery: React.FC<WebShellQueryProp> = (props) => {
         <>
             <div className={fuzzerStyles["http-query-advanced-config"]}>
                 <div className={fuzzerStyles["advanced-config-heard"]}>
-                    <span>高级设置</span>
+                    <span>Advanced settings</span>
                     <YakitSwitch wrapperClassName={fuzzerStyles["btn-padding-right-0"]} checked={advancedQuery}
                                  onChange={setAdvancedQuery}/>
                 </div>
@@ -219,11 +219,11 @@ const WebShellQuery: React.FC<WebShellQueryProp> = (props) => {
                         <YakitPanel
                             header={
                                 <div className={fuzzerStyles["matchers-panel"]}>
-                                    数据包编解码器
+                                    Packet Codec
                                     <div className={fuzzerStyles["matchers-number"]}>{packetCodecs?.length}</div>
                                 </div>
                             }
-                            key='数据包编解码器'
+                            key='Packet Codec'
                             extra={
                                 <>
                                     <Divider type='vertical' style={{margin: 0}}/>
@@ -232,11 +232,11 @@ const WebShellQuery: React.FC<WebShellQueryProp> = (props) => {
                                         size='small'
                                         onClick={(e) => {
                                             e.stopPropagation()
-                                            setTitle("数据包编解码器")
+                                            setTitle("Packet Codec")
                                             setEditAction(false)
                                             setResultMode(false)
-                                            if (activeKey?.findIndex((ele) => ele === "数据包编解码器") === -1) {
-                                                onSwitchCollapse([...activeKey, "数据包编解码器"])
+                                            if (activeKey?.findIndex((ele) => ele === "Packet Codec") === -1) {
+                                                onSwitchCollapse([...activeKey, "Packet Codec"])
                                             }
                                             setAddAction(true)
                                             setPacketMode(true)
@@ -246,7 +246,7 @@ const WebShellQuery: React.FC<WebShellQueryProp> = (props) => {
                                         }}
                                         className={fuzzerStyles["btn-padding-right-0"]}
                                     >
-                                        添加
+                                        Add
                                         <SMViewGridAddIcon/>
                                     </YakitButton>
                                 </>
@@ -258,7 +258,7 @@ const WebShellQuery: React.FC<WebShellQueryProp> = (props) => {
                                 onEdit={(index) => {
                                     setResultMode(false)
                                     setAddAction(false)
-                                    setTitle("数据包编解码器")
+                                    setTitle("Packet Codec")
                                     setCurrCodec(packetCodecs[index])
                                     setVisibleDrawer(true)
                                     setPacketMode(true)
@@ -270,11 +270,11 @@ const WebShellQuery: React.FC<WebShellQueryProp> = (props) => {
                         <YakitPanel
                             header={
                                 <div className={fuzzerStyles["matchers-panel"]}>
-                                    回显编解码器
+                                    Echo Codec
                                     <div className={fuzzerStyles["matchers-number"]}>{payloadCodecs?.length}</div>
                                 </div>
                             }
-                            key='回显编解码器'
+                            key='Echo Codec'
                             extra={
                                 <>
                                     <Divider type='vertical' style={{margin: 0}}/>
@@ -283,11 +283,11 @@ const WebShellQuery: React.FC<WebShellQueryProp> = (props) => {
                                         size='small'
                                         onClick={(e) => {
                                             e.stopPropagation()
-                                            setTitle("回显编解码器")
+                                            setTitle("Echo Codec")
                                             setEditAction(false)
                                             setPacketMode(false)
-                                            if (activeKey?.findIndex((ele) => ele === "回显编解码器") === -1) {
-                                                onSwitchCollapse([...activeKey, "回显编解码器"])
+                                            if (activeKey?.findIndex((ele) => ele === "Echo Codec") === -1) {
+                                                onSwitchCollapse([...activeKey, "Echo Codec"])
                                             }
                                             setResultMode(true)
                                             setAddAction(true)
@@ -296,7 +296,7 @@ const WebShellQuery: React.FC<WebShellQueryProp> = (props) => {
                                         }}
                                         className={fuzzerStyles["btn-padding-right-0"]}
                                     >
-                                        添加
+                                        Add
                                         <SMViewGridAddIcon/>
                                     </YakitButton>
                                 </>
@@ -308,7 +308,7 @@ const WebShellQuery: React.FC<WebShellQueryProp> = (props) => {
                                 onEdit={(index) => {
                                     setPacketMode(false)
                                     setAddAction(false)
-                                    setTitle("回显编解码器")
+                                    setTitle("Echo Codec")
                                     setCurrCodec(payloadCodecs[index])
                                     setEditAction(true)
                                     setResultMode(true)

@@ -18,7 +18,7 @@ const PluginLogNew = () => (
         />
     </svg>
 )
-/** 创建插件 */
+/** Create Plugin */
 export const PluginLogNewIcon = (props: Partial<IconProps>) => {
     return <Icon component={PluginLogNew} {...props} />
 }
@@ -32,7 +32,7 @@ const PluginLogModify = () => (
         />
     </svg>
 )
-/** 修改插件 */
+/** Edit Plugin */
 export const PluginLogModifyIcon = (props: Partial<IconProps>) => {
     return <Icon component={PluginLogModify} {...props} />
 }
@@ -48,7 +48,7 @@ const PluginLogPass = () => (
         />
     </svg>
 )
-/** 审核通过 */
+/** Approve */
 export const PluginLogPassIcon = (props: Partial<IconProps>) => {
     return <Icon component={PluginLogPass} {...props} />
 }
@@ -64,7 +64,7 @@ const PluginLogNoPass = () => (
         />
     </svg>
 )
-/** 审核不通过 */
+/** Reject */
 export const PluginLogNoPassIcon = (props: Partial<IconProps>) => {
     return <Icon component={PluginLogNoPass} {...props} />
 }
@@ -80,7 +80,7 @@ const PluginLogDel = () => (
         />
     </svg>
 )
-/** 删除插件 */
+/** Delete Plugin */
 export const PluginLogDelIcon = (props: Partial<IconProps>) => {
     return <Icon component={PluginLogDel} {...props} />
 }
@@ -96,7 +96,7 @@ const PluginLogRestore = () => (
         />
     </svg>
 )
-/** 回复插件 */
+/** Reply Plugin */
 export const PluginLogRestoreIcon = (props: Partial<IconProps>) => {
     return <Icon component={PluginLogRestore} {...props} />
 }

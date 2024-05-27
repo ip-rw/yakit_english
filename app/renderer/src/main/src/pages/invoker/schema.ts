@@ -102,11 +102,11 @@ export interface YakScript {
     OnlineGroup?: string
     IsCorePlugin?: boolean
     UpdatedAt?: number
-    // RiskType?: string 废弃
-    // RiskDetail?: YakRiskInfoProps[] 废弃
-    // RiskAnnotation?: string 废弃
+    // RiskType?: string Deprecated
+    // RiskDetail?: YakRiskInfoProps[] Deprecated
+    // RiskAnnotation?: string Deprecated
     CollaboratorInfo?: Collaborator[]
-    /**前端判断使用，该插件是否为本地插件，OnlineBaseUrl与当前最新的私有域不一样则为本地插件 */
+    /**Frontend determination, if the plugin is a local plugin if OnlineBaseUrl is different from the current latest private domain */
     isLocalPlugin?: boolean
     RiskInfo?: YakRiskInfoProps[]
 }
@@ -133,10 +133,10 @@ export interface QueryYakScriptRequest extends QueryGeneralRequest {
     UserId?: number
     UserName?: string
 
-    // 展示信息中，插件商店的顺序和本地顺序不应该一样
+    // In display info, the order of plugin store should not be the same as local order
     IgnoreGeneralModuleOrder?: boolean
     UUID?: string
-    // 插件组
+    // Plugin Group
     Group?: { UnSetGroup: boolean, Group: string[] }
     ExcludeTypes?: string[]
 }

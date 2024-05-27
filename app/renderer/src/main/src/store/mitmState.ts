@@ -5,7 +5,7 @@
 import {create} from "zustand"
 
 interface StoreProps {
-    /**@name MITM缓存信息 */
+    /**@name MITM Cache Info */
     isRefreshHistory: boolean
     setIsRefreshHistory: (info: boolean) => void
 }

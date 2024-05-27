@@ -4,13 +4,13 @@ import {memo, ReactNode, useMemo} from "react"
 import {YakitMenu, YakitMenuProp} from "../YakitMenu/YakitMenu"
 import styles from "./YakitDropdownMenu.module.scss"
 
-/** 可能准备写成基础组件 */
+/** May be prepared as Basic Components */
 interface YakitDropdownMenuProps {
     dropdown?: Omit<DropdownProps, "overlay">
     menu: YakitMenuProp
     children?: ReactNode
 }
-/** 可能准备写成基础组件 */
+/** May be prepared as Basic Components */
 export const YakitDropdownMenu: React.FC<YakitDropdownMenuProps> = memo((props) => {
     const {dropdown: {overlayClassName, ...restProps} = {}, menu, children} = props
 

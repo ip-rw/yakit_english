@@ -44,7 +44,7 @@ export const StringFuzzer: React.FC<StringFuzzerProp> = (props) => {
     const [random, _] = useState(randomString(20))
     const token = `client-string-fuzzer-${random}`
 
-    // 高级配置选项
+    // Advanced Config Options
     const [advanced, setAdvanced] = useState(props.advanced ? "advanced" : "ordinary")
     const [buildTemp, setBuildTemp] = useState<string>()
     const [encodeTemp, setEncodeTemp] = useState<string>()
@@ -83,12 +83,12 @@ export const StringFuzzer: React.FC<StringFuzzerProp> = (props) => {
 
         ipcRenderer.on(token, (e, data: {error: any; data: {Results: string[]}}) => {
             if (data.error) {
-                failed(data.error?.details || data.error?.detail || "未知错误")
+                failed(data.error?.details || data.error?.detail || "Unknown Error")
                 return
             }
             const {Results} = data.data
             let m = showYakitDrawer({
-                title: "Payload 测试结果",
+                title: "Payload Test Results",
                 content: (
                     <div style={{height: "100%", overflow: "auto"}}>
                         <div style={{height: "80%"}}>
@@ -99,7 +99,7 @@ export const StringFuzzer: React.FC<StringFuzzerProp> = (props) => {
                                 pagination={{
                                     pageSize: 15,
                                     showTotal: (r) => {
-                                        return <YakitTag>总量:{r}</YakitTag>
+                                        return <YakitTag>Total:{r}</YakitTag>
                                     },
                                     size: "small"
                                 }}
@@ -136,10 +136,10 @@ export const StringFuzzer: React.FC<StringFuzzerProp> = (props) => {
                 newTemp = newTemp.substr(0, index) + newTemp.substr(index + 3)
                 setTemplate(newTemp)
             } else {
-                warn("移除编码标签失败（标签结构已被破坏，请重构）")
+                warn("Failed to Remove Encode Tag (Tag Structure Corrupted, Please Rebuild）")
             }
         } else {
-            warn("移除编码标签失败: 找不到标签内容（标签类型）")
+            warn("Failed to Remove Encode Tag: Tag Content Not Found (Tag Type）")
         }
         setEncodeTemp(undefined)
     }
@@ -148,7 +148,7 @@ export const StringFuzzer: React.FC<StringFuzzerProp> = (props) => {
         const t = getCurrentBuildTemplate()
         if (t && template) {
             if (!t.tag) {
-                warn("不支持移除带参数的基础标签")
+                warn("Removing Parameterized Basic Tags Not Supported")
                 setBuildTemp(undefined)
                 return
             }
@@ -158,17 +158,17 @@ export const StringFuzzer: React.FC<StringFuzzerProp> = (props) => {
                 newTemp = newTemp.substr(0, index) + newTemp.substr(index + 2)
                 setTemplate(newTemp)
             } else {
-                warn("移除基础标签失败（标签结构已被破坏，请重构）")
+                warn("Failed to Remove Basic Tag (Tag Structure Corrupted, Please Rebuild）")
             }
         } else {
-            warn("移除基础标签失败，空 Payload 或找不到标签数据")
+            warn("Failed to Remove Basic Tag, Empty Payload or Tag Data Not Found")
         }
         setBuildTemp(undefined)
     }
 
     const submit = () => {
         if (!template) {
-            notification["warning"]({message: "Fuzz模版为空"})
+            notification["warning"]({message: "Empty Fuzz Template"})
             return
         }
 
@@ -178,7 +178,7 @@ export const StringFuzzer: React.FC<StringFuzzerProp> = (props) => {
 
     const addToCommonTag = () => {
         if (!template) {
-            notification["warning"]({message: "Fuzz模版为空"})
+            notification["warning"]({message: "Empty Fuzz Template"})
             return
         }
         getRemoteValue(FUZZER_LABEL_LIST_NUMBER).then((data) => {
@@ -191,7 +191,7 @@ export const StringFuzzer: React.FC<StringFuzzerProp> = (props) => {
                     Data: [
                         {
                             Label: template,
-                            Description: `标签${count + 1}`,
+                            Description: `Tag${count + 1}`,
                             DefaultDescription: `${uuidv4()}`
                         }
                     ]
@@ -199,7 +199,7 @@ export const StringFuzzer: React.FC<StringFuzzerProp> = (props) => {
                 .then(() => {
                     setRemoteValue(FUZZER_LABEL_LIST_NUMBER, JSON.stringify({number: count + 1}))
                     close&&close()
-                    success("标签添加成功")
+                    success("Tag Added Successfully")
                 }).catch((err)=>{
                     failed(err.toString())
                 })
@@ -221,7 +221,7 @@ export const StringFuzzer: React.FC<StringFuzzerProp> = (props) => {
                     labelCol={{span: 7}}
                     wrapperCol={{span: 14}}
                 >
-                    <Form.Item label={`选择基础 Fuzz 标签`}>
+                    <Form.Item label={`Select Basic Fuzz Tag`}>
                         <YakitSelect
                             value={buildTemp}
                             onChange={(v) => {
@@ -237,7 +237,7 @@ export const StringFuzzer: React.FC<StringFuzzerProp> = (props) => {
                         <Form.Item label={" "} colon={false}>
                             <Card
                                 bordered={true}
-                                title={"基础标签"}
+                                title={"Basic Tag"}
                                 size={"small"}
                                 extra={[
                                     <YakitButton
@@ -247,7 +247,7 @@ export const StringFuzzer: React.FC<StringFuzzerProp> = (props) => {
                                             removeBuildTemplateTag()
                                         }}
                                     >
-                                        移除编码标签
+                                        Remove Encode Tag
                                     </YakitButton>
                                 ]}
                             >
@@ -264,7 +264,7 @@ export const StringFuzzer: React.FC<StringFuzzerProp> = (props) => {
                             </Card>
                         </Form.Item>
                     )}
-                    <Form.Item label={"Payload 编码 / 编码标签"}>
+                    <Form.Item label={"Payload Encoding / Encode Tag"}>
                         <YakitSelect
                             disabled={!!encodeTemp}
                             value={encodeTemp}
@@ -292,7 +292,7 @@ export const StringFuzzer: React.FC<StringFuzzerProp> = (props) => {
                     <Form.Item label={" "} colon={false}>
                         <Space>
                             <YakitButton type='outline2' htmlType={"submit"}>
-                                查看生成后的 Payload
+                                View Generated Payload
                             </YakitButton>
                             {props.insertCallback && (
                                 <YakitButton
@@ -303,11 +303,11 @@ export const StringFuzzer: React.FC<StringFuzzerProp> = (props) => {
                                         }
                                     }}
                                 >
-                                    插入标签所在位置
+                                    Insert Tag Position
                                 </YakitButton>
                             )}
                             <YakitPopconfirm
-                                title={"确认要重置你的 Payload 吗？"}
+                                title={"Confirm to Reset Your Payload?？"}
                                 onConfirm={() => {
                                     setBuildTemp("")
                                     setEncodeTemp("")
@@ -315,10 +315,10 @@ export const StringFuzzer: React.FC<StringFuzzerProp> = (props) => {
                                 }}
                                 placement='top'
                             >
-                                <YakitButton type='outline2'>重置</YakitButton>
+                                <YakitButton type='outline2'>Reset</YakitButton>
                             </YakitPopconfirm>
                             <YakitButton type='outline2' onClick={() => addToCommonTag()}>
-                                添加到常用标签
+                                Add to Common Tags
                             </YakitButton>
                         </Space>
                     </Form.Item>

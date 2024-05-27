@@ -42,7 +42,7 @@ export const WebFuzzerNewEditor: React.FC<WebFuzzerNewEditorProps> = React.memo(
         } = props
         const [reqEditor, setReqEditor] = useState<IMonacoEditor>()
 
-        const [newRequest, setNewRequest] = useState<string>(request) // 由于传过来的request是ref 值变化并不会导致重渲染 这里拿到的request还是旧值
+        const [newRequest, setNewRequest] = useState<string>(request) // Request passed by ref, changes won't rerender, old request value obtained
 
         useImperativeHandle(
             ref,
@@ -57,7 +57,7 @@ export const WebFuzzerNewEditor: React.FC<WebFuzzerNewEditorProps> = React.memo(
                     return
                 }
             } catch (e) {
-                yakitNotify("error", "初始化 EOL CRLF 失败")
+                yakitNotify("error", "Init EOL CRLF Failed")
             }
         }, [reqEditor])
         const hotPatchTrigger = useMemoizedFn(() => {
@@ -98,13 +98,13 @@ export const WebFuzzerNewEditor: React.FC<WebFuzzerNewEditorProps> = React.memo(
                         {type: "divider"},
                         {
                             key: "insert-label-tag",
-                            label: "插入标签/字典",
+                            label: "Insert Tag/Dictionary",
                             children: [
-                                {key: "insert-nullbyte", label: "插入空字节标签: {{hexd(00)}}"},
-                                {key: "insert-temporary-file-tag", label: "插入临时字典"},
-                                {key: "insert-intruder-tag", label: "插入模糊测试字典标签"},
-                                {key: "insert-hotpatch-tag", label: "插入热加载标签"},
-                                {key: "insert-fuzzfile-tag", label: "插入文件标签"}
+                                {key: "insert-nullbyte", label: "Insert Null Byte Tag: {{hexd(00)}}"},
+                                {key: "insert-temporary-file-tag", label: "Insert Temp Dictionary"},
+                                {key: "insert-intruder-tag", label: "Insert Fuzzing Dictionary Tag"},
+                                {key: "insert-hotpatch-tag", label: "Insert Hot Reload Tag"},
+                                {key: "insert-fuzzfile-tag", label: "Insert File Tag"}
                             ]
                         }
                     ],
@@ -135,8 +135,8 @@ export const WebFuzzerNewEditor: React.FC<WebFuzzerNewEditorProps> = React.memo(
                 },
                 copyURL: {
                     menu: [
-                        {key: "copy-as-url", label: "复制为 URL"},
-                        {key: "copy-as-curl", label: "复制 curl 命令"}
+                        {key: "copy-as-url", label: "Copy as URL"},
+                        {key: "copy-as-curl", label: "Copy curl Command"}
                     ],
                     onRun: (editor, key) => {
                         switch (key) {
@@ -148,7 +148,7 @@ export const WebFuzzerNewEditor: React.FC<WebFuzzerNewEditorProps> = React.memo(
                                     {Key: "https", Value: isHttps ? "true" : ""}
                                 ]).then((data) => {
                                     callCopyToClipboard(data)
-                                    yakitNotify("info", "复制到剪贴板")
+                                    yakitNotify("info", "Copy to Clipboard")
                                 })
                                 return
                             default:

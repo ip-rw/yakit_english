@@ -28,14 +28,14 @@ export const PluginGroups: React.FC<PluginGroupsProps> = React.memo((props) => {
     const [pluginGroupType, setPluginGroupType] = useState<PluginGroupType>(groupType)
     const [onlineGroupLen, setOnlineGroupLen] = useState<number>(0)
     const [localGroupLen, setLocalGroupLen] = useState<number>(0)
-    const [activeLocalGroup, setActiveLocalGroup] = useState<GroupListItem>() // 当前选中本地插件组
-    const [activeOnlineGroup, setActiveOnlineGroup] = useState<GroupListItem>() // 当前选中线上插件组
+    const [activeLocalGroup, setActiveLocalGroup] = useState<GroupListItem>() // Selected local group
+    const [activeOnlineGroup, setActiveOnlineGroup] = useState<GroupListItem>() // Selected online group
 
     useEffect(() => {
         setPluginGroupType(groupType)
     }, [groupType])
 
-    // 判断是否是 管理员或者超级管理员权限
+    // Check if admin or superadmin
     const judgeOnlineStatus = useMemo(() => {
         const flag = ["admin", "superAdmin"].includes(userInfo.role || "")
         return flag
@@ -49,12 +49,12 @@ export const PluginGroups: React.FC<PluginGroupsProps> = React.memo((props) => {
 
     return (
         <div className={styles["plugin-groups-wrapper"]} ref={pluginsGroupsRef}>
-            {/* 左侧插件组 */}
+            {/* Left-side groups */}
             <div className={styles["plugin-groups-left-wrap"]}>
                 <div className={styles["plugin-groups-left-header"]}>
                     <div className={styles["plugin-groups-left-header-info"]}>
-                        <span className={styles["plugin-groups-left-header-text"]}>插件组管理</span>
-                        <Tooltip title='插件组只能管理除Yak和Codec类型以外的插件' placement='bottomLeft'>
+                        <span className={styles["plugin-groups-left-header-text"]}>Plugin group management</span>
+                        <Tooltip title='Only manage plugins except Yak and Codec' placement='bottomLeft'>
                             <InformationCircleIcon className={styles["pligin-group-mag-icon"]} />
                         </Tooltip>
                         {judgeOnlineStatus && (
@@ -66,11 +66,11 @@ export const PluginGroups: React.FC<PluginGroupsProps> = React.memo((props) => {
                                 options={[
                                     {
                                         value: "online",
-                                        label: "线上"
+                                        label: "Online"
                                     },
                                     {
                                         value: "local",
-                                        label: "本地"
+                                        label: "Local"
                                     }
                                 ]}
                                 size={"small"}
@@ -82,14 +82,14 @@ export const PluginGroups: React.FC<PluginGroupsProps> = React.memo((props) => {
                     </div>
                     <div className={styles["plugin-groups-opt-btns"]}>
                         {pluginGroupType === "local" && (
-                            <Tooltip title='重置将把插件分组全部删除，并重新下载线上分组'>
+                            <Tooltip title='Reset deletes all groups and redownloads'>
                                 <YakitButton
                                     type='text'
                                     colors='danger'
                                     onClick={() => {
                                         const m = showYakitModal({
-                                            title: "重置",
-                                            onOkText: "确认",
+                                            title: "Reset",
+                                            onOkText: "Confirm",
                                             onOk: () => {
                                                 m.destroy()
                                                 apiFetchResetYakScriptGroup({Token: userInfo.token}).then(() => {
@@ -98,7 +98,7 @@ export const PluginGroups: React.FC<PluginGroupsProps> = React.memo((props) => {
                                             },
                                             content: (
                                                 <div style={{margin: 15}}>
-                                                    重置将删除本地所有分组，并重新下载所有线上插件，是否重置？
+                                                    Reset local groups and redownload all, proceed?？
                                                 </div>
                                             ),
                                             onCancel: () => {
@@ -107,7 +107,7 @@ export const PluginGroups: React.FC<PluginGroupsProps> = React.memo((props) => {
                                         })
                                     }}
                                 >
-                                    重置
+                                    Reset
                                 </YakitButton>
                             </Tooltip>
                         )}
@@ -144,7 +144,7 @@ export const PluginGroups: React.FC<PluginGroupsProps> = React.memo((props) => {
                     </div>
                 </div>
             </div>
-            {/* 右侧插件列表 */}
+            {/* Right-side plugin list */}
             <div className={styles["plugin-groups-right-wrap"]}>
                 <div
                     style={{

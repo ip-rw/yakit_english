@@ -68,7 +68,7 @@ interface NewCodecRightEditorBoxProps {
     outputEditor: string
     runLoading: boolean
 }
-// codec右边编辑器
+// Codec Right Editor
 export const NewCodecRightEditorBox: React.FC<NewCodecRightEditorBoxProps> = (props) => {
     const {isExpand, setExpand, outputEditorByte, inputEditor, setInputEditor, outputEditor, runLoading} = props
     const [noInputWordwrap, setNoInputWordwrap] = useState<boolean>(false)
@@ -90,22 +90,22 @@ export const NewCodecRightEditorBox: React.FC<NewCodecRightEditorBoxProps> = (pr
     )
 
     const judgeStringSize = useMemoizedFn((str: string) => {
-        // 将字符串转换为字节数
+        // Convert String to Bytes
         const bytes = new Blob([str]).size
-        // 将字节数转换为KB
+        // Convert Bytes to KB
         const kilobytes = bytes / 1024
-        // 如果字符串大小大于500KB，则截取到500KB大小
+        // Truncate to 500KB if size > 500KB
         if (kilobytes > 500) {
-            // 计算截取的字符数
-            const charactersToKeep = Math.floor((500 * 1024) / 2) // 一个字符占用2字节
-            // 截取字符串
+            // Calculate Truncated Characters
+            const charactersToKeep = Math.floor((500 * 1024) / 2) // 2 Bytes per Character
+            // Substring
             const truncatedString = str.substring(0, charactersToKeep)
             return {
                 hidden: true,
                 value: truncatedString
             }
         } else {
-            // 字符串大小不大于500KB，返回原始字符串
+            // Return Original String if Size <= 500KB
             return {
                 hidden: false,
                 value: str
@@ -121,7 +121,7 @@ export const NewCodecRightEditorBox: React.FC<NewCodecRightEditorBoxProps> = (pr
         return judgeStringSize(outputEditor)
     }, [outputEditor])
 
-    // 导入
+    // Import
     const onImport = useMemoizedFn((path: string) => {
         ipcRenderer
             .invoke("importCodecByPath", path)
@@ -134,20 +134,20 @@ export const NewCodecRightEditorBox: React.FC<NewCodecRightEditorBoxProps> = (pr
             .finally(() => {})
     })
 
-    // 清空
+    // Clear
     const onClear = useMemoizedFn(() => {
         setInputEditor("")
     })
 
-    // 保存
+    // Save
     const onSave = useMemoizedFn(() => {
         if (!outputEditorByte) {
-            warn("暂无保存内容")
+            warn("No Saved Content")
             return
         }
         ipcRenderer
             .invoke("openDialog", {
-                title: "请选择文件夹",
+                title: "Choose Folder",
                 properties: ["openDirectory"]
             })
             .then((data: {filePaths: string[]}) => {
@@ -162,7 +162,7 @@ export const NewCodecRightEditorBox: React.FC<NewCodecRightEditorBoxProps> = (pr
                         })
                         .then((r) => {
                             if (r?.ok) {
-                                success("保存成功")
+                                success("Save Successful")
                                 r?.outputDir && openABSFileLocated(r.outputDir)
                             }
                         })
@@ -174,15 +174,15 @@ export const NewCodecRightEditorBox: React.FC<NewCodecRightEditorBoxProps> = (pr
             })
     })
 
-    // 替换
+    // Replace
     const onReplace = useMemoizedFn(() => {
         setInputEditor(outputEditor)
     })
 
-    // 复制
+    // Copy
     const onCopy = useMemoizedFn(() => {
         ipcRenderer.invoke("set-copy-clipboard", outputEditor)
-        success("复制成功")
+        success("Copy Success")
     })
 
     const suffixFun = (file_name: string) => {
@@ -197,7 +197,7 @@ export const NewCodecRightEditorBox: React.FC<NewCodecRightEditorBoxProps> = (pr
                 label: (
                     <div className={styles["extra-menu"]}>
                         <OutlineImportIcon />
-                        <div className={styles["menu-name"]}>导入</div>
+                        <div className={styles["menu-name"]}>Import</div>
                     </div>
                 )
             },
@@ -206,7 +206,7 @@ export const NewCodecRightEditorBox: React.FC<NewCodecRightEditorBoxProps> = (pr
                 label: (
                     <div className={classNames(styles["extra-menu"], styles["menu-menu-size"])}>
                         <EnterOutlined />
-                        <div className={styles["menu-name"]}>{noInputWordwrap ? "自动换行" : "不自动换行"}</div>
+                        <div className={styles["menu-name"]}>{noInputWordwrap ? "Word Wrap" : "No Wrap"}</div>
                     </div>
                 )
             }
@@ -220,7 +220,7 @@ export const NewCodecRightEditorBox: React.FC<NewCodecRightEditorBoxProps> = (pr
                 label: (
                     <div className={styles["extra-menu"]}>
                         <OutlineStorageIcon />
-                        <div className={styles["menu-name"]}>保存</div>
+                        <div className={styles["menu-name"]}>Save</div>
                     </div>
                 )
             },
@@ -229,7 +229,7 @@ export const NewCodecRightEditorBox: React.FC<NewCodecRightEditorBoxProps> = (pr
                 label: (
                     <div className={classNames(styles["extra-menu"], styles["menu-menu-stroke"])}>
                         <OutlineArrowBigUpIcon />
-                        <div className={styles["menu-name"]}>将Output替换至Input</div>
+                        <div className={styles["menu-name"]}>Replace Output with Input</div>
                     </div>
                 )
             },
@@ -238,7 +238,7 @@ export const NewCodecRightEditorBox: React.FC<NewCodecRightEditorBoxProps> = (pr
                 label: (
                     <div className={styles["extra-menu"]}>
                         <OutlineDocumentduplicateIcon />
-                        <div className={styles["menu-name"]}>复制</div>
+                        <div className={styles["menu-name"]}>Copy</div>
                     </div>
                 )
             },
@@ -247,7 +247,7 @@ export const NewCodecRightEditorBox: React.FC<NewCodecRightEditorBoxProps> = (pr
                 label: (
                     <div className={classNames(styles["extra-menu"], styles["menu-menu-size"])}>
                         <EnterOutlined />
-                        <div className={styles["menu-name"]}>{noOutputWordwrap ? "自动换行" : "不自动换行"}</div>
+                        <div className={styles["menu-name"]}>{noOutputWordwrap ? "Word Wrap" : "No Wrap"}</div>
                     </div>
                 )
             }
@@ -269,18 +269,18 @@ export const NewCodecRightEditorBox: React.FC<NewCodecRightEditorBoxProps> = (pr
                             <div className={styles["title"]}>
                                 <span className={styles["text"]}>Input</span>
                                 {inputObj.hidden && (
-                                    <Tooltip title={size && size.width > 450 ? null : "超大输入"}>
+                                    <Tooltip title={size && size.width > 450 ? null : "Super Large Input"}>
                                         <YakitTag style={{marginLeft: 8}} color='danger'>
                                             <div className={styles["tag-box"]}>
                                                 <ExclamationIcon className={styles["icon-style"]} />
-                                                {size && size.width > 450 && <span>超大输入</span>}
+                                                {size && size.width > 450 && <span>Super Large Input</span>}
                                             </div>
                                         </YakitTag>
                                     </Tooltip>
                                 )}
                             </div>
                             <div className={styles["extra"]}>
-                                <Tooltip title={"导入"}>
+                                <Tooltip title={"Import"}>
                                     <Upload
                                         className={classNames(styles["upload-box"], {
                                             [styles["upload-box-hidden"]]: size && size.width <= 300
@@ -293,7 +293,7 @@ export const NewCodecRightEditorBox: React.FC<NewCodecRightEditorBoxProps> = (pr
                                             const file_name = f.name
                                             const suffix = suffixFun(file_name)
                                             if (![".txt"].includes(suffix)) {
-                                                warn("导入文件格式错误，请重新导入")
+                                                warn("Invalid file format, please re-import")
                                                 return false
                                             }
                                             // @ts-ignore
@@ -310,7 +310,7 @@ export const NewCodecRightEditorBox: React.FC<NewCodecRightEditorBoxProps> = (pr
                                     </Upload>
                                 </Tooltip>
                                 {size && size.width > 300 && (
-                                    <Tooltip title={"不自动换行"}>
+                                    <Tooltip title={"No Wrap"}>
                                         <YakitButton
                                             size={"small"}
                                             type={noInputWordwrap ? "text" : "primary"}
@@ -357,7 +357,7 @@ export const NewCodecRightEditorBox: React.FC<NewCodecRightEditorBoxProps> = (pr
                                 )}
                                 <Divider type={"vertical"} style={{margin: "4px 0px 0px"}} />
                                 <div className={styles["clear"]} onClick={onClear}>
-                                    清空
+                                    Clear
                                 </div>
                             </div>
                         </div>
@@ -382,13 +382,13 @@ export const NewCodecRightEditorBox: React.FC<NewCodecRightEditorBoxProps> = (pr
                                     <span className={styles["text"]}>Output</span>
                                     {outPutObj.hidden && (
                                         <Tooltip
-                                            title={size && size.width > 450 ? null : "超大输出，请点击保存下载文件查看"}
+                                            title={size && size.width > 450 ? null : "Super Large Output, click save to download"}
                                         >
                                             <YakitTag style={{marginLeft: 8}} color='danger'>
                                                 <div className={styles["tag-box"]}>
                                                     <ExclamationIcon className={styles["icon-style"]} />
                                                     {size && size.width > 450 && (
-                                                        <span>超大输出，请点击保存下载文件查看</span>
+                                                        <span>Super Large Output, click save to download</span>
                                                     )}
                                                 </div>
                                             </YakitTag>
@@ -398,22 +398,22 @@ export const NewCodecRightEditorBox: React.FC<NewCodecRightEditorBoxProps> = (pr
                                 <div className={styles["extra"]}>
                                     {size && size.width > 300 ? (
                                         <>
-                                            <Tooltip title={"保存"}>
+                                            <Tooltip title={"Save"}>
                                                 <div className={styles["extra-icon"]} onClick={onSave}>
                                                     <OutlineStorageIcon />
                                                 </div>
                                             </Tooltip>
-                                            <Tooltip title={"将Output替换至Input"}>
+                                            <Tooltip title={"Replace Output with Input"}>
                                                 <div className={styles["extra-icon"]} onClick={onReplace}>
                                                     <OutlineArrowBigUpIcon />
                                                 </div>
                                             </Tooltip>
-                                            <Tooltip title={"复制"}>
+                                            <Tooltip title={"Copy"}>
                                                 <div className={styles["extra-icon"]} onClick={onCopy}>
                                                     <OutlineDocumentduplicateIcon />
                                                 </div>
                                             </Tooltip>
-                                            <Tooltip title={"不自动换行"}>
+                                            <Tooltip title={"No Wrap"}>
                                                 <YakitButton
                                                     size={"small"}
                                                     type={noOutputWordwrap ? "text" : "primary"}
@@ -511,7 +511,7 @@ export const NewCodecMiddleTypeItem: React.FC<NewCodecMiddleTypeItemProps> = (pr
             setItemStatus(itemArr[0].status || "run")
         }
     }, [rightItems, outerKey])
-    // 屏蔽
+    // Block
     const onShieldFun = useMemoizedFn(() => {
         const newRightItems = rightItems.map((item) => {
             if (item.key === outerKey) {
@@ -523,7 +523,7 @@ export const NewCodecMiddleTypeItem: React.FC<NewCodecMiddleTypeItemProps> = (pr
         setRightItems(newRightItems)
     })
 
-    // 中止
+    // Abort
     const onSuspendFun = useMemoizedFn(() => {
         const newRightItems = rightItems.map((item) => {
             if (item.key === outerKey) {
@@ -535,13 +535,13 @@ export const NewCodecMiddleTypeItem: React.FC<NewCodecMiddleTypeItemProps> = (pr
         setRightItems(newRightItems)
     })
 
-    // 删除
+    // Delete
     const onDeleteFun = useMemoizedFn(() => {
         const newRightItems = rightItems.filter((item) => item.key !== outerKey)
         setRightItems(newRightItems)
     })
 
-    // 更改控件值
+    // Change Control Value
     const setValueByUI = useMemoizedFn((obj: ValueByUIProps) => {
         const {val, index, type} = obj
         const itemArr = rightItems.filter((item) => item.key === outerKey)
@@ -549,7 +549,7 @@ export const NewCodecMiddleTypeItem: React.FC<NewCodecMiddleTypeItemProps> = (pr
         if (Array.isArray(newNode)) {
             if (newNode[index].type !== "flex") {
                 if (newNode[index].type === "inputSelect") {
-                    // 联合控件 - Input/Select
+                    // Combined Control - Input/Select
                     const initNode = newNode as RightItemsTypeProps[]
                     initNode[index][type].value = val
                     const newRightItems = rightItems.map((item) => {
@@ -576,7 +576,7 @@ export const NewCodecMiddleTypeItem: React.FC<NewCodecMiddleTypeItemProps> = (pr
         }
     })
 
-    // 控件
+    // Control
     const onShowUI = useMemoizedFn((item: RightItemsTypeProps, index: number, direction?: "left" | "right") => {
         const params = {
             index,
@@ -584,7 +584,7 @@ export const NewCodecMiddleTypeItem: React.FC<NewCodecMiddleTypeItemProps> = (pr
         }
         switch (item.type) {
             case "input":
-                // 输入框模块
+                // Input Module
                 return (
                     <NewCodecInputUI
                         title={item.title}
@@ -597,7 +597,7 @@ export const NewCodecMiddleTypeItem: React.FC<NewCodecMiddleTypeItemProps> = (pr
                     />
                 )
             case "text":
-                // 文本域模块
+                // Textarea Module
                 return (
                     <NewCodecTextAreaUI
                         title={item.title}
@@ -609,7 +609,7 @@ export const NewCodecMiddleTypeItem: React.FC<NewCodecMiddleTypeItemProps> = (pr
                     />
                 )
             case "checkbox":
-                // 多选框模块
+                // Checkbox Module
                 return (
                     <NewCodecCheckUI
                         disabled={itemStatus === "shield" || item.disabled}
@@ -619,7 +619,7 @@ export const NewCodecMiddleTypeItem: React.FC<NewCodecMiddleTypeItemProps> = (pr
                     />
                 )
             case "select":
-                // 下拉框模块
+                // Dropdown Module
                 return (
                     <NewCodecSelectUI
                         disabled={itemStatus === "shield" || item.disabled}
@@ -634,7 +634,7 @@ export const NewCodecMiddleTypeItem: React.FC<NewCodecMiddleTypeItemProps> = (pr
                     />
                 )
             case "editor":
-                // 编辑器模块
+                // Editor Module
                 return (
                     <NewCodecEditor
                         disabled={itemStatus === "shield" || item.disabled}
@@ -651,11 +651,11 @@ export const NewCodecMiddleTypeItem: React.FC<NewCodecMiddleTypeItemProps> = (pr
     return (
         <div
             className={classNames(styles["new-codec-middle-type-item"], {
-                // 运行
+                // Run
                 [styles["type-item-run"]]: itemStatus === "run",
-                // 中止
+                // Abort
                 [styles["type-item-suspend"]]: itemStatus === "suspend",
-                // 屏蔽
+                // Block
                 [styles["type-item-shield"]]: itemStatus === "shield"
             })}
         >
@@ -674,7 +674,7 @@ export const NewCodecMiddleTypeItem: React.FC<NewCodecMiddleTypeItemProps> = (pr
                     </div>
                 </div>
                 <div className={styles["type-extra"]}>
-                    <Tooltip title={itemStatus !== "shield" ? "禁用" : "启用"}>
+                    <Tooltip title={itemStatus !== "shield" ? "Disable" : "Enable"}>
                         <div
                             className={classNames(styles["extra-icon"], {
                                 [styles["extra-icon-default"]]: itemStatus !== "shield",
@@ -685,7 +685,7 @@ export const NewCodecMiddleTypeItem: React.FC<NewCodecMiddleTypeItemProps> = (pr
                             <OutlineBanIcon />
                         </div>
                     </Tooltip>
-                    <Tooltip title={itemStatus !== "suspend" ? "开启断点" : "关闭断点"}>
+                    <Tooltip title={itemStatus !== "suspend" ? "Enable Breakpoints" : "Disable Breakpoints"}>
                         <div
                             className={classNames(styles["extra-icon"], {
                                 [styles["extra-icon-default"]]: itemStatus !== "suspend",
@@ -704,18 +704,18 @@ export const NewCodecMiddleTypeItem: React.FC<NewCodecMiddleTypeItemProps> = (pr
             {node?.map((item, index) => {
                 switch (item.type) {
                     case "flex":
-                        // 左右布局
+                        // Left-Right Layout
                         return (
                             <div
                                 style={{display: "flex", flexDirection: "row", gap: 8, marginTop: 8}}
                                 key={`${data.key}-${index}`}
                             >
                                 <div style={{flex: item.leftFlex || 3}}>
-                                    {/* 左 */}
+                                    {/* Left */}
                                     {onShowUI(item.leftNode, index)}
                                 </div>
                                 <div style={{flex: item.rightFlex || 2}}>
-                                    {/* 右 */}
+                                    {/* Right */}
                                     {onShowUI(item.rightNode, index)}
                                 </div>
                             </div>
@@ -727,11 +727,11 @@ export const NewCodecMiddleTypeItem: React.FC<NewCodecMiddleTypeItemProps> = (pr
                                 key={`${data.key}-${index}`}
                             >
                                 <div style={{flex: 3}}>
-                                    {/* 左 */}
+                                    {/* Left */}
                                     {onShowUI(item.input, index, "left")}
                                 </div>
                                 <div style={{flex: 2, borderLeft: "1px solid #EAECF3"}}>
-                                    {/* 右 */}
+                                    {/* Right */}
                                     {onShowUI(item.select, index, "right")}
                                 </div>
                             </div>
@@ -797,7 +797,7 @@ export const CodecRunListHistoryStore: React.FC<CodecRunListHistoryStoreProps> =
     return (
         <div className={styles["codec-run-list-history-store"]}>
             <div className={styles["header"]}>
-                <div className={styles["title"]}>历史存储</div>
+                <div className={styles["title"]}>History Store</div>
                 {mitmSaveData.length !== 0 && (
                     <YakitButton
                         type='text'
@@ -806,7 +806,7 @@ export const CodecRunListHistoryStore: React.FC<CodecRunListHistoryStoreProps> =
                             setMitmSaveData([])
                         }}
                     >
-                        清空
+                        Clear
                     </YakitButton>
                 )}
             </div>
@@ -838,7 +838,7 @@ export const CodecRunListHistoryStore: React.FC<CodecRunListHistoryStoreProps> =
                     ))}
                 </div>
             ) : (
-                <div className={classNames(styles["no-data"])}>暂无数据</div>
+                <div className={classNames(styles["no-data"])}>No Data Available</div>
             )}
         </div>
     )
@@ -886,7 +886,7 @@ const getMiddleItemStyle = (isDragging, draggableStyle) => {
 }
 
 const CodecAutoRun = "CodecAutoRun"
-// codec中间可执行列表
+// Codec Middle Executable List
 export const NewCodecMiddleRunList: React.FC<NewCodecMiddleRunListProps> = (props) => {
     const {
         id,
@@ -903,7 +903,7 @@ export const NewCodecMiddleRunList: React.FC<NewCodecMiddleRunListProps> = (prop
 
     const [popoverVisible, setPopoverVisible] = useState<boolean>(false)
     const [_, setFilterName, getFilterName] = useGetState<string>("")
-    // 是否自动执行
+    // Auto-Run
     const [autoRun, setAutoRun] = useState<boolean>(false)
     useDebounceEffect(
         () => {
@@ -925,7 +925,7 @@ export const NewCodecMiddleRunList: React.FC<NewCodecMiddleRunListProps> = (prop
         })
     }, [])
     useUpdateEffect(() => {
-        // 缓存勾选项
+        // Cache Selected Options
         setRemoteValue(
             CodecAutoRun,
             JSON.stringify({
@@ -934,7 +934,7 @@ export const NewCodecMiddleRunList: React.FC<NewCodecMiddleRunListProps> = (prop
         )
     }, [autoRun])
 
-    // 检查元素是否有滚动条
+    // Check for Scrollbar
     const isScrollbar = useMemoizedFn((element: HTMLElement) => {
         return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth
     })
@@ -943,29 +943,29 @@ export const NewCodecMiddleRunList: React.FC<NewCodecMiddleRunListProps> = (prop
         if (runScrollToRef && isClickToRunList.current) {
             isClickToRunList.current = false
             if (isScrollbar(runScrollToRef)) {
-                // 滚动条触底
+                // Scrollbar Reached Bottom
                 runScrollToRef.scrollTop = runScrollToRef.scrollHeight - runScrollToRef.clientHeight - 16
             }
         }
     }, [rightItems, isClickToRunList])
 
-    // 历史选取项
+    // History Options
     const onMenuSelect = useMemoizedFn((v: SaveObjProps) => {
         setRightItems(v.rightItems)
     })
 
-    // 保存至历史
+    // Save to History
     const onSaveCodecRunListHistory = useMemoizedFn(() => {
         if (rightItems.length === 0) {
-            warn("请从左侧列表拖入要使用的 Codec 工具")
+            warn("Drag Codec Tool from Left List to Use")
             return
         }
         const m = showYakitModal({
-            title: "保存编解码顺序",
+            title: "Save Codec Order",
             content: (
                 <div className={styles["codec-save-modal"]}>
                     <YakitInput.TextArea
-                        placeholder='请为编解码顺序取个名字...'
+                        placeholder='Name your codec order...'
                         showCount
                         maxLength={50}
                         onChange={(e) => {
@@ -980,13 +980,13 @@ export const NewCodecMiddleRunList: React.FC<NewCodecMiddleRunListProps> = (prop
                                 m.destroy()
                             }}
                         >
-                            取消
+                            Cancel
                         </YakitButton>
                         <YakitButton
                             type='primary'
                             onClick={() => {
                                 if (getFilterName().length === 0) {
-                                    warn("请输入名字")
+                                    warn("Please Enter Name")
                                     return
                                 }
                                 const saveObj: SaveObjProps = {
@@ -996,7 +996,7 @@ export const NewCodecMiddleRunList: React.FC<NewCodecMiddleRunListProps> = (prop
                                 getRemoteValue(CodecRunListHistory).then((data) => {
                                     if (!data) {
                                         setRemoteValue(CodecRunListHistory, JSON.stringify([saveObj]))
-                                        info("存储成功")
+                                        info("Save Successful")
                                         m.destroy()
                                         return
                                     }
@@ -1005,17 +1005,17 @@ export const NewCodecMiddleRunList: React.FC<NewCodecMiddleRunListProps> = (prop
                                         if (
                                             cacheData.filter((item) => item.historyName === getFilterName()).length > 0
                                         ) {
-                                            warn("此名字重复")
+                                            warn("Duplicate Name")
                                         } else {
                                             setRemoteValue(CodecRunListHistory, JSON.stringify([saveObj, ...cacheData]))
-                                            info("存储成功")
+                                            info("Save Successful")
                                             m.destroy()
                                         }
                                     } catch (error) {}
                                 })
                             }}
                         >
-                            保存
+                            Save
                         </YakitButton>
                     </div>
                 </div>
@@ -1029,7 +1029,7 @@ export const NewCodecMiddleRunList: React.FC<NewCodecMiddleRunListProps> = (prop
         })
     })
 
-    // 执行函数
+    // Execute Function
     const runCodecFun = useMemoizedFn((runItems: RightItemsProps[]) => {
         let newCodecParams: {Text: string; WorkFlow: CodecWorkProps[]} = {
             Text: inputEditor,
@@ -1077,7 +1077,7 @@ export const NewCodecMiddleRunList: React.FC<NewCodecMiddleRunListProps> = (prop
         ipcRenderer
             .invoke("NewCodec", newCodecParams)
             .then((data: {Result: string; RawResult: Uint8Array}) => {
-                // 执行完成后 更改Output值
+                // Change Output after Execution
                 setOutputEditorByte(data.RawResult)
                 setOutputEditor(data.Result)
             })
@@ -1089,19 +1089,19 @@ export const NewCodecMiddleRunList: React.FC<NewCodecMiddleRunListProps> = (prop
             })
     })
 
-    // 执行校验
+    // Execute Validation
     const runCodec = useMemoizedFn(() => {
-        // 筛选掉跳过项
+        // Filter Skipped Items
         const rightItemsSkip = rightItems.filter((item) => item.status !== "shield")
-        // 获取中止项及其前面内容
+        // Get Abort Item and Items Before
         const rightItemsStop: RightItemsProps[] = []
         rightItemsSkip.some((item) => {
             rightItemsStop.push(item)
             return item.status === "suspend"
         })
-        // 校验不通过项
+        // Validation Failure Items
         const checkFail: CheckFailProps[] = []
-        // 根据条件校验是否满足(例如：必选/正则)
+        // Validate Conditionally (e.g., Required)/Regex)
         rightItemsStop.forEach((item) => {
             const {key, title} = item
             if (Array.isArray(item.node)) {
@@ -1109,47 +1109,47 @@ export const NewCodecMiddleRunList: React.FC<NewCodecMiddleRunListProps> = (prop
                     if (itemIn.type === "input" || itemIn.type === "text") {
                         const rightItem = itemIn as RightItemsInputProps
                         const {require, value, regex} = rightItem
-                        // 校验是否必填
+                        // Check if required
                         if (require && !value) {
                             checkFail.push({
                                 key,
                                 index: indexIn,
-                                message: `${title}-${rightItem.title}:为必填项`
+                                message: `${title}-${rightItem.title}:Required Field`
                             })
                         }
-                        // 校验正则
+                        // Validate Regex
                         if (regex && value) {
                             const regexp = new RegExp(regex)
                             if (!regexp.test(value)) {
                                 checkFail.push({
                                     key,
                                     index: indexIn,
-                                    message: `${title}-${rightItem.title}-${regexp}:校验不通过`
+                                    message: `${title}-${rightItem.title}-${regexp}:Validation Failed`
                                 })
                             }
                         }
                     } else if (itemIn.type === "checkbox") {
-                        // checkbox无需校验 如若没有则数据转换时为false
+                        // Checkboxes as false if unchecked, no validation needed
                     } else if (itemIn.type === "select") {
                         const rightItem = itemIn as RightItemsSelectProps
                         const {require, value} = rightItem
-                        // 校验是否必填
+                        // Check if required
                         if (require && !value) {
                             checkFail.push({
                                 key,
                                 index: indexIn,
-                                message: `${title}-${rightItem.title}:为必填项`
+                                message: `${title}-${rightItem.title}:Required Field`
                             })
                         }
                     } else if (itemIn.type === "editor") {
                         const rightItem = itemIn as RightItemsEditorProps
                         const {require, value} = rightItem
-                        // 校验是否必填
+                        // Check if required
                         if (require && !value) {
                             checkFail.push({
                                 key,
                                 index: indexIn,
-                                message: `${title}-${rightItem.title}:为必填项`
+                                message: `${title}-${rightItem.title}:Required Field`
                             })
                         }
                     } 
@@ -1158,50 +1158,50 @@ export const NewCodecMiddleRunList: React.FC<NewCodecMiddleRunListProps> = (prop
                         const inputItem = rightItem.input
                         const selectItem = rightItem.select
                         const {require, value, regex} = inputItem
-                        // 校验input是否必填
+                        // Validate Input Required
                         if (require && !value) {
                             checkFail.push({
                                 key,
                                 index: indexIn,
-                                message: `${title}-${inputItem.title}:为必填项`
+                                message: `${title}-${inputItem.title}:Required Field`
                             })
                         }
-                        // 校验input正则
+                        // Validate Input Regex
                         if (regex && value) {
                             const regexp = new RegExp(regex)
                             if (!regexp.test(value)) {
                                 checkFail.push({
                                     key,
                                     index: indexIn,
-                                    message: `${title}-${inputItem.title}-${regexp}:校验不通过`
+                                    message: `${title}-${inputItem.title}-${regexp}:Validation Failed`
                                 })
                             }
                         }
-                        // 校验select是否必填
+                        // Validate Select Required
                         if (selectItem.require && !selectItem.value) {
                             checkFail.push({
                                 key,
                                 index: indexIn,
-                                message: `${title}-${selectItem.title}:为必填项`
+                                message: `${title}-${selectItem.title}:Required Field`
                             })
                         }
                     }
                     else if (itemIn.type === "flex") {
-                        // 此处为布局预留
+                        // Reserved for Layout
                     }
                 })
             }
         })
         if (checkFail.length > 0) {
-            // 提示
+            // Notice
             warn(checkFail[0].message)
         } else {
-            // 执行函数
+            // Execute Function
             runCodecFun(rightItemsStop)
         }
     })
 
-    // 清空
+    // Clear
     const onClear = useMemoizedFn(() => {
         setRightItems([])
     })
@@ -1211,7 +1211,7 @@ export const NewCodecMiddleRunList: React.FC<NewCodecMiddleRunListProps> = (prop
             <div className={styles["header"]}>
                 <div className={styles["title"]}>
                     {!fold && (
-                        <Tooltip placement='right' title='展开Codec分类'>
+                        <Tooltip placement='right' title='Expand Codec Category'>
                             <SideBarOpenIcon
                                 className={styles["fold-icon"]}
                                 onClick={() => {
@@ -1220,11 +1220,11 @@ export const NewCodecMiddleRunList: React.FC<NewCodecMiddleRunListProps> = (prop
                             />
                         </Tooltip>
                     )}
-                    <span>编解码顺序</span>
+                    <span>Codec Order</span>
                     <span className={styles["count"]}>{rightItems.length}</span>
                 </div>
                 <div className={styles["extra"]}>
-                    <Tooltip title={"保存"}>
+                    <Tooltip title={"Save"}>
                         <div className={styles["extra-icon"]} onClick={onSaveCodecRunListHistory}>
                             <OutlineStorageIcon />
                         </div>
@@ -1243,7 +1243,7 @@ export const NewCodecMiddleRunList: React.FC<NewCodecMiddleRunListProps> = (prop
                         onVisibleChange={setPopoverVisible}
                         visible={popoverVisible}
                     >
-                        <Tooltip title={"历史存储"}>
+                        <Tooltip title={"History Store"}>
                             <div className={styles["extra-icon"]}>
                                 <OutlineClockIcon />
                             </div>
@@ -1251,12 +1251,12 @@ export const NewCodecMiddleRunList: React.FC<NewCodecMiddleRunListProps> = (prop
                     </YakitPopover>
                     <Divider type={"vertical"} style={{margin: "4px 0px 0px"}} />
                     <div className={styles["clear"]} onClick={onClear}>
-                        清空
+                        Clear
                     </div>
                 </div>
             </div>
             <div className={styles["run-list"]}>
-                {/* 右边拖放目标 */}
+                {/* Drop Target on Right */}
                 <Droppable droppableId='right' direction='vertical'>
                     {(provided) => (
                         <div
@@ -1304,7 +1304,7 @@ export const NewCodecMiddleRunList: React.FC<NewCodecMiddleRunListProps> = (prop
                                 </>
                             ) : (
                                 <div className={styles["no-data"]}>
-                                    <YakitEmpty title='请从左侧列表拖入要使用的 Codec 工具' />
+                                    <YakitEmpty title='Drag Codec Tool from Left List to Use' />
                                 </div>
                             )}
 
@@ -1319,7 +1319,7 @@ export const NewCodecMiddleRunList: React.FC<NewCodecMiddleRunListProps> = (prop
                     checked={autoRun}
                     onChange={(e) => setAutoRun(e.target.checked)}
                 >
-                    自动执行
+                    Auto-Execute
                 </YakitCheckbox>
                 <YakitButton
                     disabled={rightItems.length === 0 || inputEditor.length === 0}
@@ -1328,7 +1328,7 @@ export const NewCodecMiddleRunList: React.FC<NewCodecMiddleRunListProps> = (prop
                     icon={<SolidPlayIcon />}
                     onClick={runCodec}
                 >
-                    立即执行
+                    Execute Now
                 </YakitButton>
             </div>
         </div>
@@ -1348,15 +1348,15 @@ const getLeftItemStyle = (isDragging, draggableStyle) => {
     let transform: string = draggableStyle["transform"] || ""
     // console.log("transform---",transform,isDragging);
     if (isDragging) {
-        // 使用正则表达式匹配 translate 函数中的两个参数
+        // Regex Match two args in translate function
         const match = transform.match(/translate\((-?\d+)px, (-?\d+)px\)/)
         if (match) {
             lastIsDragging = true
-            // 提取匹配到的两个值，并将它们转换为数字
+            // Extract & Convert Two Values to Numbers
             const [value1, value2] = match.slice(1).map(Number)
-            // 判断值是否小于 0
+            // Check if Value < 0
             if (value1 < 0) {
-                // 修改值为 0
+                // Set Value to 0
                 const modifiedString = transform.replace(
                     /translate\((-?\d+)px, (-?\d+)px\)/,
                     `translate(0px, ${value2}px)`
@@ -1365,7 +1365,7 @@ const getLeftItemStyle = (isDragging, draggableStyle) => {
             }
         } else {
             if (!lastIsDragging) {
-                // 解决拖拽送松开时,样式溢出（屏蔽异常样式）
+                // Handle Drag-Drop Style Overflow）
                 transform = `translate(0px, 0px)`
             }
         }
@@ -1378,7 +1378,7 @@ const getLeftItemStyle = (isDragging, draggableStyle) => {
     }
 }
 
-// 左边拖拽源
+// Drag Source on Left
 export const NewCodecLeftDragListItem: React.FC<NewCodecLeftDragListItemProps> = (props) => {
     const {node, collectList, parentItem, getCollectData, onClickToRunList} = props
 
@@ -1531,7 +1531,7 @@ interface LeftDataProps {
     node: CodecMethod[]
 }
 
-// codec左边拖拽列表
+// Codec Left Drag List
 export const NewCodecLeftDragList: React.FC<NewCodecLeftDragListProps> = (props) => {
     const {
         fold,
@@ -1556,9 +1556,9 @@ export const NewCodecLeftDragList: React.FC<NewCodecLeftDragListProps> = (props)
             })}
         >
             <div className={styles["header"]}>
-                <div className={styles["title"]}>Codec 分类</div>
+                <div className={styles["title"]}>Codec Category</div>
                 <div className={classNames(styles["extra"], styles["fold-icon"])}>
-                    <Tooltip placement='top' title='收起Codec分类'>
+                    <Tooltip placement='top' title='Collapse Codec Category'>
                         <SideBarCloseIcon
                             className={styles["fold-icon"]}
                             onClick={() => {
@@ -1576,7 +1576,7 @@ export const NewCodecLeftDragList: React.FC<NewCodecLeftDragListProps> = (props)
                         </div>
                     }
                     style={{width: "100%"}}
-                    placeholder='请输入关键词搜索'
+                    placeholder='Keyword Search Prompt'
                     value={searchValue}
                     onChange={(e) => {
                         setSearchValue && setSearchValue(e.target.value)
@@ -1585,7 +1585,7 @@ export const NewCodecLeftDragList: React.FC<NewCodecLeftDragListProps> = (props)
             </div>
             <div className={styles["left-drag-list"]}>
                 <YakitSpin spinning={false}>
-                    {/* 左边列表 */}
+                    {/* Left List */}
                     <>
                         {isShowSearchList ? (
                             <div className={styles["left-drag-list-collapse"]}>
@@ -1595,7 +1595,7 @@ export const NewCodecLeftDragList: React.FC<NewCodecLeftDragListProps> = (props)
                                     getCollectData={getCollectData}
                                     onClickToRunList={onClickToRunList}
                                 />
-                                <div className={styles["to-end"]}>已经到底啦～</div>
+                                <div className={styles["to-end"]}>Reached Bottom～</div>
                             </div>
                         ) : (
                             <YakitCollapse
@@ -1620,7 +1620,7 @@ export const NewCodecLeftDragList: React.FC<NewCodecLeftDragListProps> = (props)
                                             }
                                             key={item.title}
                                             extra={
-                                                item.title === "我收藏的工具" ? (
+                                                item.title === "My Favorited Tools" ? (
                                                     <>
                                                         {/* <div className={classNames(styles['star-icon'],styles['star-icon-default'])} onClick={(e) => {
                                                         e.stopPropagation()
@@ -1655,7 +1655,7 @@ export const NewCodecLeftDragList: React.FC<NewCodecLeftDragListProps> = (props)
                                         </YakitPanel>
                                     )
                                 })}
-                                <div className={styles["to-end"]}>已经到底啦～</div>
+                                <div className={styles["to-end"]}>Reached Bottom～</div>
                             </YakitCollapse>
                         )}
                     </>
@@ -1664,107 +1664,107 @@ export const NewCodecLeftDragList: React.FC<NewCodecLeftDragListProps> = (props)
         </div>
     )
 }
-// 输入框
+// InputBox
 interface RightItemsInputProps {
-    // 标题
+    // Title
     title?: string
-    // 参数名
+    // Parameter Name
     name: string
-    // 是否必传
+    // Mandatory
     require?: boolean
-    // 是否禁用
+    // Disabled
     disabled?: boolean
-    // 默认值
+    // Default Value
     defaultValue?: string
-    // 值
+    // Value
     value?: string
-    // 正则校验
+    // Regex Validation
     regex?: string
-    // 控件类型
+    // Control Type
     type: "input" | "text"
 }
 
-// 多选框
+// Checkbox
 interface RightItemsCheckProps {
-    // 可选值
+    // Optional Value
     checkArr: {label: string; value: string}[]
-    // 参数名
+    // Parameter Name
     name: string
-    // 选中值
+    // Selected Value
     value?: string[]
-    // 控件类型
+    // Control Type
     type: "checkbox"
-    // 是否禁用
+    // Disabled
     disabled?: boolean
-    // 是否必传
+    // Mandatory
     require?: boolean
 }
 
-// 下拉选择框
+// Dropdown Selector
 interface RightItemsSelectProps {
-    // 标题
+    // Title
     title?: string
-    // 参数名
+    // Parameter Name
     name: string
-    // 可选值
+    // Optional Value
     selectArr: {label: string; value: string}[]
-    // 选中值
+    // Selected Value
     value?: string
-    // 是否禁用
+    // Disabled
     disabled?: boolean
-    // 是否必传
+    // Mandatory
     require?: boolean
-    // 是否可以搜索
+    // Searchable
     showSearch?: boolean
-    // 控件类型
+    // Control Type
     type: "select"
-    // 是否启用社区插件查询
+    // Enable Plugin Search from Community
     isPlugin?: boolean
 }
 
-// 编辑器
+// Editor
 interface RightItemsEditorProps {
-    // 标题
+    // Title
     title?: string
-    // 参数名
+    // Parameter Name
     name: string
-    // 是否禁用
+    // Disabled
     disabled?: boolean
-    // 是否必传
+    // Mandatory
     require?: boolean
-    // 编辑器值
+    // Editor Value
     value?: string
-    // 控件类型
+    // Control Type
     type: "editor"
 }
 
-// 联合控件 - Input/Select
+// Combined Control - Input/Select
 interface RightItemsInputSelectProps {
     input: RightItemsInputProps
     select: RightItemsSelectProps
-    // 控件类型
+    // Control Type
     type: "inputSelect"
 }
 
-// 除去联合控件
+// Remove Combined Control
 type RightItemsTypeNoUniteProps =
     | RightItemsInputProps
     | RightItemsCheckProps
     | RightItemsSelectProps
     | RightItemsEditorProps
 
-// 所有控件
+// All Controls
 type RightItemsTypeProps = RightItemsTypeNoUniteProps | RightItemsInputSelectProps
 
-// 左右布局
+// Left-Right Layout
 interface RightItemsFlexProps {
-    // 左右占据宽度的比值(默认3:2)
+    // Width Ratio Left-Right (default 3:2))
     leftFlex?: number
     rightFlex?: number
-    // 左右内容
+    // Left-Right Content
     leftNode: RightItemsTypeProps
     rightNode: RightItemsTypeProps
-    // 控件类型
+    // Control Type
     type: "flex"
 }
 interface RightItemsProps {
@@ -1772,7 +1772,7 @@ interface RightItemsProps {
     codecType: string
     key: string
     node?: (RightItemsTypeProps | RightItemsFlexProps)[]
-    // 屏蔽/中止
+    // Block/Abort
     status?: "shield" | "suspend" | "run"
 }
 const initialRightItems: RightItemsProps[] = [
@@ -1815,31 +1815,31 @@ export interface NewCodecProps {
 }
 export const NewCodec: React.FC<NewCodecProps> = (props) => {
     const {id} = props
-    // codec分类展开收起
+    // Toggle Codec Category
     const [fold, setFold] = useState<boolean>(true)
-    // 是否全部展开
+    // Expand All
     const [isExpand, setExpand] = useState<boolean>(false)
     const [rightItems, setRightItems] = useState<RightItemsProps[]>(initialRightItems)
     const [leftData, setLeftData] = useState<LeftDataProps[]>([])
-    // 我的收藏
+    // My Favorites
     const [leftCollectData, setLeftCollectData] = useState<LeftDataProps[]>([])
     const [collectList, setCollectList] = useState<string[]>([])
 
     const [leftSearchData, setLeftSearchData] = useState<CodecMethod[]>([])
     const [searchValue, setSearchValue] = useState<string>()
-    // 是否显示搜索列表
+    // Show Search List
     const [isShowSearchList, setShowSearchList] = useState<boolean>(false)
     const cacheCodecRef = useRef<CodecMethod[]>([])
-    // Input/Output编辑器内容
+    // Input/Output Editor Content
     const [inputEditor, setInputEditor] = useState<string>("")
     const [outputEditor, setOutputEditor] = useState<string>("")
     const [outputEditorByte, setOutputEditorByte] = useState<Uint8Array>()
-    // 是否正在执行
+    // Executing
     const [runLoading, setRunLoading] = useState<boolean>(false)
-    // 是否为点击添加至执行列表
+    // Add to Run List on Click
     const isClickToRunList = useRef<boolean>(false)
 
-    // 计算编码值总和
+    // Calculate Total Encoding Value
     const differentiate = useMemoizedFn((str: string) => {
         let sum = 0
         for (let i = 0; i < str.length; i++) {
@@ -1848,12 +1848,12 @@ export const NewCodec: React.FC<NewCodecProps> = (props) => {
         return sum
     })
 
-    // 构造页面左边列表数据
+    // Build Left List Data
     const initLeftData = useMemoizedFn((Methods: CodecMethod[]) => {
-        // 分类的类名
+        // Category ClassName
         let tagList: string[] = []
         let data: LeftDataProps[] = []
-        // 固定顺序
+        // Fixed Order
         const NewMethods = Methods.sort((a, b) => differentiate(a.CodecName) - differentiate(b.CodecName))
         NewMethods.forEach((item) => {
             if (tagList.includes(item.Tag)) {
@@ -1877,9 +1877,9 @@ export const NewCodec: React.FC<NewCodecProps> = (props) => {
             }
         })
 
-        // 找到 title 为 "其他" 的项的索引
-        const index = data.findIndex((item) => item.title === "其他")
-        // 如果找到了，则将该项移动到数组尾部
+        // Find title as "Other" Index of item
+        const index = data.findIndex((item) => item.title === "Other")
+        // Move item to end of array if found
         if (index !== -1) {
             const otherItem = data.splice(index, 1)[0]
             data.push(otherItem)
@@ -1888,11 +1888,11 @@ export const NewCodec: React.FC<NewCodecProps> = (props) => {
         setLeftData(data)
     })
 
-    // 获取codec收藏列表
+    // Get Favorites List
     const getCollectData = useMemoizedFn((star?: string[]) => {
         const setStar = (starList: string[]) => {
             const filterCodec = cacheCodecRef.current.filter((item) => starList.includes(item.CodecName))
-            /* 此处需要收藏的工具有顺序 则需要根据starList排列filterCodec */
+            /* Order required for Favorites, filterCodec by starList */
             filterCodec.sort((a, b) => {
                 const indexA = starList.indexOf(a.CodecName)
                 const indexB = starList.indexOf(b.CodecName)
@@ -1902,7 +1902,7 @@ export const NewCodec: React.FC<NewCodecProps> = (props) => {
             if (filterCodec.length > 0) {
                 setLeftCollectData([
                     {
-                        title: "我收藏的工具",
+                        title: "My Favorited Tools",
                         node: filterCodec
                     }
                 ])
@@ -1914,7 +1914,7 @@ export const NewCodec: React.FC<NewCodecProps> = (props) => {
             setStar(star)
         } else {
             getRemoteValue(SaveCodecMethods).then((res) => {
-                // 如果存在收藏
+                // If Favorites Exist
                 if (res) {
                     try {
                         const cacheList: string[] = JSON.parse(res)
@@ -1928,7 +1928,7 @@ export const NewCodec: React.FC<NewCodecProps> = (props) => {
         }
     })
 
-    // 获取codec列表
+    // Get codec list
     const getLeftData = useMemoizedFn(() => {
         ipcRenderer.invoke("GetAllCodecMethods").then((res: CodecMethods) => {
             const {Methods} = res
@@ -1993,7 +1993,7 @@ export const NewCodec: React.FC<NewCodecProps> = (props) => {
                             value: pluginTypeToName["codec"]?.content
                         } as RightItemsEditorProps
                     case "search":
-                        // search控件的selectArr来源于接口请求
+                        // SelectArr for search control from API
                         return {
                             type: "select",
                             selectArr: [],
@@ -2003,7 +2003,7 @@ export const NewCodec: React.FC<NewCodecProps> = (props) => {
                             isPlugin: true,
                             showSearch: true
                         } as RightItemsSelectProps
-                    // 联合控件 - Input/Select
+                    // Combined Control - Input/Select
                     case "inputSelect":
                         return {
                             type: "inputSelect",
@@ -2025,14 +2025,14 @@ export const NewCodec: React.FC<NewCodecProps> = (props) => {
                         } as RightItemsInputSelectProps
                     default:
                         return {
-                            title: "未识别数据",
+                            title: "Unrecognized Data",
                             require: false,
                             type: "input"
                         } as RightItemsInputProps
                 }
             } catch (error) {
                 return {
-                    title: "未识别数据",
+                    title: "Unrecognized Data",
                     require: false,
                     type: "input"
                 } as RightItemsInputProps
@@ -2041,7 +2041,7 @@ export const NewCodec: React.FC<NewCodecProps> = (props) => {
     })
 
     /**
-     * @description: 点击后添加至运行列表
+     * @description: Click to add to run list
      */
     const onClickToRunList = useMemoizedFn((item: CodecMethod) => {
         const node = initNode(item)
@@ -2052,18 +2052,18 @@ export const NewCodec: React.FC<NewCodecProps> = (props) => {
     })
 
     /**
-     * @description: 拖拽结束后的计算
+     * @description: Calculation after Drag End
      */
     const onDragEnd = useMemoizedFn((result: DropResult, provided: ResponderProvided) => {
         const {source, destination, draggableId} = result
         // console.log("onDragEnd", result)
 
-        // 左边向右边拖拽
+        // Drag from Left to Right
         if (source.droppableId === "left" && destination && destination.droppableId === "right") {
             const firstDashIndex = draggableId.indexOf("-")
-            // 组来源或者搜索来源
+            // Source for Group/Search
             const sourceType = draggableId.substring(0, firstDashIndex)
-            // 获取拖拽项
+            // Get Drag Item
             const CodecName = draggableId.substring(firstDashIndex + 1)
             const codecArr = cacheCodecRef.current.filter((item) => item.CodecName === CodecName)
             if (codecArr.length > 0) {
@@ -2080,7 +2080,7 @@ export const NewCodec: React.FC<NewCodecProps> = (props) => {
             }
         }
 
-        // 右边内部排序
+        // Inner Sorting on Right
         if (source.droppableId === "right" && destination && destination.droppableId === "right") {
             const newRightItems: RightItemsProps[] = JSON.parse(JSON.stringify(rightItems))
             const [removed] = newRightItems.splice(source.index, 1)
@@ -2090,7 +2090,7 @@ export const NewCodec: React.FC<NewCodecProps> = (props) => {
     })
 
     /**
-     * @description: 计算移动的范围是否在目标范围类
+     * @description: Calculates if movement is within target range
      */
     const onDragUpdate = useThrottleFn(
         (result: DragUpdate, provided: ResponderProvided) => {

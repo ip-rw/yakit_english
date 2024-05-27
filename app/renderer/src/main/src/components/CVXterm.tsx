@@ -13,17 +13,17 @@ export interface CVXtermProps extends IProps {
 }
 
 export const TERMINAL_INPUT_KEY = {
-    BACK: 8, // 退格删除键
-    ENTER: 13, // 回车键
-    UP: 38, // 方向盘上键
-    DOWN: 40, // 方向盘键
-    LEFT: 37, // 方向盘左键
-    RIGHT: 39, // 方向盘右键
-    CHAR_C: 67 // 字符C
+    BACK: 8, // Backspace
+    ENTER: 13, // Enter Key
+    UP: 38, // Up Wheel
+    DOWN: 40, // Wheel Key
+    LEFT: 37, // Left Wheel
+    RIGHT: 39, // Right Wheel
+    CHAR_C: 67 // Char C
 }
 
 /**
- * @deprecated 建议使用 YakitCVXterm 调试
+ * @deprecated Use YakitCVXterm for debugging
  */
 export const CVXterm = forwardRef((props: CVXtermProps, ref) => {
     const {isWrite = false, write: rewrite, maxHeight = 400, ...rest} = props

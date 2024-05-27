@@ -68,7 +68,7 @@ const InputHTTPCookieForm: React.FC<InputHTTPCookieFormProp> = (props) => {
                        value={params.Value}/>
             <Divider orientation={"left"}>
                 <Space>
-                    高级配置
+                    Advanced Config
                     <SwitchItem
                         value={advanced} setValue={setAdvanced} formItemStyle={{marginBottom: 0, width: 100}}
                         size={"small"}
@@ -82,21 +82,21 @@ const InputHTTPCookieForm: React.FC<InputHTTPCookieFormProp> = (props) => {
                             value={params.HttpOnly}/>
                 <SwitchItem
                     label={"Secure"} setValue={Secure => setParams({...params, Secure})} value={params.Secure}
-                    help={"仅允许 Cookie 在 HTTPS 生效"}
+                    help={"Cookies Only Over HTTPS"}
                 />
-                <SelectOne label={"SameSite 策略"} data={[
-                    {value: "default", text: "默认策略"},
-                    {value: "lax", text: "Lax 策略"},
-                    {value: "strict", text: "Strict 策略"},
-                    {value: "none", text: "不设置"},
+                <SelectOne label={"SameSite Policy"} data={[
+                    {value: "default", text: "Default Policy"},
+                    {value: "lax", text: "Lax Policy"},
+                    {value: "strict", text: "Strict Policy"},
+                    {value: "none", text: "Not Set"},
                 ]} setValue={SameSiteMode => setParams({...params, SameSiteMode})} value={params.SameSiteMode}/>
-                <InputInteger label={"Expires 时间戳"} setValue={Expires => setParams({...params, Expires})}
+                <InputInteger label={"Expires Timestamp"} setValue={Expires => setParams({...params, Expires})}
                               value={params.Expires}/>
                 <InputInteger label={"MaxAge"} setValue={MaxAge => setParams({...params, MaxAge})}
                               value={params.MaxAge}/>
             </>}
             <Form.Item colon={false} label={" "}>
-                <Button type="primary" htmlType="submit"> 添加该 Cookie </Button>
+                <Button type="primary" htmlType="submit"> Add Cookie </Button>
             </Form.Item>
         </Form>
     </>
@@ -167,7 +167,7 @@ const InputHTTPHeaderForm: React.FC<InputHTTPHeaderFormProps> = (props) => {
                 setValue={Value => setHeader({...header, Value})} value={header.Value}
             />
             <Form.Item colon={false} label={" "}>
-                <Button type="primary" htmlType="submit"> 设置该 Header </Button>
+                <Button type="primary" htmlType="submit"> Set Header </Button>
             </Form.Item>
         </Form>
     </>
@@ -190,7 +190,7 @@ export const InputHTTPHeader: React.FC<InputHTTPHeaderProp> = (props) => {
         <Button.Group size={"small"}>
             <Button type={"primary"} onClick={() => {
                 const m = showModal({
-                    title: "输入新的 HTTP Header",
+                    title: "Enter New HTTP Header",
                     width: "50%",
                     content: (
                         <InputHTTPHeaderForm onChange={a => {
@@ -199,14 +199,14 @@ export const InputHTTPHeader: React.FC<InputHTTPHeaderProp> = (props) => {
                         }}/>
                     )
                 })
-            }}>新增 HTTP Header </Button>
+            }}>Add HTTP Header </Button>
         </Button.Group>
-        <div>新增额外 HTTP Header，强制覆盖或新增</div>
+        <div>Add Extra HTTP Header, Force Overwrite or Add</div>
     </Space>}>
         <Space>
             <Tag color={"green"} onClick={() => {
                 alert(JSON.stringify(headers))
-            }}>已设置{headers.length}个额外 Header</Tag>
+            }}>Set{headers.length}Extra Headers</Tag>
             {loading ? <Spin/> : headers.map((i, index) => {
                 return <Tag
                     color={"geekblue"}
@@ -244,7 +244,7 @@ export const InputHTTPCookie: React.FC<InputHTTPCookieProp> = (props) => {
         <Button.Group size={"small"}>
             <Button type={"primary"} onClick={() => {
                 const m = showModal({
-                    title: "输入新的 Cookie 值",
+                    title: "Enter New Cookie Value",
                     width: "50%",
                     content: (
                         <InputHTTPCookieForm onChange={(e) => {
@@ -253,14 +253,14 @@ export const InputHTTPCookie: React.FC<InputHTTPCookieProp> = (props) => {
                         }}/>
                     )
                 })
-            }}>新增 HTTP Cookie </Button>
+            }}>Add HTTP Cookie </Button>
         </Button.Group>
-        <div>新增额外 HTTP Cookie，有较高优先级，覆盖现有设置或新增</div>
+        <div>Add Extra HTTP Cookie, Higher Priority, Overwrites or Adds</div>
     </Space>}>
         <Space>
             <Tag color={"orange"} onClick={() => {
                 alert(JSON.stringify(cookies))
-            }}>已设置{cookies.length}个额外 Cookie</Tag>
+            }}>Set{cookies.length}Extra Cookies</Tag>
             {loading ? <Spin/> : cookies.map((i, index) => {
                 return <Tag
                     closable={true}

@@ -3,46 +3,46 @@ export interface YakitTimeLineListProps<T> {
     loading?: boolean
     data: T[]
     icon?: (info: T) => ReactNode
-    /** 渲染节点的函数 */
+    /** Render Node Fn */
     renderItem: (info: T, index: number) => ReactNode
-    /** 是否还有可加载的数据 */
+    /** More Data To Load? */
     hasMore?: boolean
-    /** 加载更多 */
+    /** Load More */
     loadMore?: () => any
 }
 export interface YakitTimeLineListRefProps {
-    /** 全局数据重置清空 */
+    /** Global Data Reset */
     onClear: () => any
-    /** 跳转到索引的位置(已实现，未验证功能是否正常) */
+    /** Scroll To Index (Implemented, Unverified)) */
     onScrollToIndex: (index: number) => any
 }
 
-/** 不定高虚拟列表的信息 */
+/** Dynamic Virt List Info */
 export interface YakitVirtualListProps {
-    /** 容器高度 */
+    /** Container Height */
     viewHeight: number
-    /** 列表高度 */
+    /** List Height */
     listHeight: number
-    /** 起始索引 */
+    /** Start Index */
     startIndex: number
-    /** 最大容纳量 */
+    /** Max Capacity */
     maxCount: number
-    /** 缓存已初始化的数据长度 */
+    /** Cached Data Length */
     preLen: number
 }
-/** 不定高虚拟列表的位置计算 */
+/** Dynamic List Position Calc */
 export interface YakitVirtualListPositionProps {
-    // 当前pos对应的元素索引
+    // Current pos Index
     key: number
-    /** 元素顶部所处位置 */
+    /** Element Top Position */
     top: number
-    /** 元素底部所处位置 */
+    /** Element Bottom Position */
     bottom: number
-    /** 元素高度 */
+    /** Element Height */
     height: number
     /**
-     * 自身对比高度差：判断是否需要更新
-     * 这里的高度差是预设高度和实际渲染高度的差值
+     * Self Height Diff: Update Needed?
+     * Height Difference Explained
      */
     dHeight: number
 }

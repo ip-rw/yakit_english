@@ -23,19 +23,19 @@ module.exports = (win, getClient) => {
     ipcMain.handle("cancel-global-reverse-server-status", (e) => {
         if (globalConfigServer) {
             globalConfigServer.cancel()
-            console.info("取消全局反连配置")
+            console.info("Cancel Global Reverse Conn Config")
             globalConfigServer = null
         }
     })
     ipcMain.handle("ConfigGlobalReverse", (e, params) => {
         if (globalConfigServer) {
-            console.info("已经存在全局反连配置")
-            // 一般就配置本地 IP
+            console.info("Global Reverse Conn Config Exists")
+            // Config Local IP Usually
             let stream = getClient().ConfigGlobalReverse(params)
             setTimeout(() => stream.cancel(), 3000)
             return
         }
-        console.info("开始配置全局反连")
+        console.info("Start Global Reverse Conn Config")
         globalConfigServer = getClient().ConfigGlobalReverse(params)
         globalConfigServer.on("data", (data) => {
             if (!win) {
@@ -47,13 +47,13 @@ module.exports = (win, getClient) => {
             if (!win) {
                 return
             }
-            console.info("配置全局反连失败")
-            /** 关闭或意外关闭都会触发此监听事件 */
+            console.info("Global Reverse Conn Config Failed")
+            /** Closure or Unexpected Shutdown Triggers This Listener Event */
             // console.info(error)
             win.webContents.send(`global-reverse-error`, error && error.details)
         })
         globalConfigServer.on("end", () => {
-            console.info("配置全局反连结束，清除缓存")
+            console.info("Global Reverse Conn Config Done, Cache Cleared")
             globalConfigServer = null
             if (!win) {
                 return

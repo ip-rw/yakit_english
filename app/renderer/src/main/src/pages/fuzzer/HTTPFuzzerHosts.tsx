@@ -12,7 +12,7 @@ interface HTTPFuzzerHostInputProp {
 
 export const inputHTTPFuzzerHostConfigItem = (handler: (obj: {Key: string; Value: string}) => any) => {
     const m = showYakitModal({
-        title: "输入 DNS Hosts 配置",
+        title: "Enter DNS Hosts config",
         width: "500px",
         footer: null,
         content: (
@@ -40,7 +40,7 @@ const HTTPFuzzerHostInput: React.FC<HTTPFuzzerHostInputProp> = (props) => {
                 e.preventDefault()
 
                 if (params.Key === "" || params.Value === "") {
-                    yakitFailed("域名不能为空")
+                    yakitFailed("Domain cannot be empty")
                     return
                 }
 
@@ -48,10 +48,10 @@ const HTTPFuzzerHostInput: React.FC<HTTPFuzzerHostInputProp> = (props) => {
                 props.onClose()
             }}
         >
-            <Form.Item label={"域名"} required={true}>
+            <Form.Item label={"Domain"} required={true}>
                 <YakitInput
                     size={"small"}
-                    placeholder={"例如：oa.com"}
+                    placeholder={"E.g.: oa.com"}
                     value={params.Key}
                     onChange={(e) => {
                         setParams({...params, Key: e.target.value})
@@ -61,7 +61,7 @@ const HTTPFuzzerHostInput: React.FC<HTTPFuzzerHostInputProp> = (props) => {
             <Form.Item label={"IP"} required={true}>
                 <YakitInput
                     size={"small"}
-                    placeholder={"例如：10.0.0.1"}
+                    placeholder={"E.g.: 10.0.0.1"}
                     value={params.Value}
                     onChange={(e) => {
                         setParams({...params, Value: e.target.value})
@@ -70,7 +70,7 @@ const HTTPFuzzerHostInput: React.FC<HTTPFuzzerHostInputProp> = (props) => {
             </Form.Item>
             <Form.Item label={" "} colon={false}>
                 <Space>
-                    <YakitButton htmlType={"submit"}>添加</YakitButton>
+                    <YakitButton htmlType={"submit"}>Add</YakitButton>
                     <YakitButton
                         type="primary"
                         colors="danger"
@@ -78,7 +78,7 @@ const HTTPFuzzerHostInput: React.FC<HTTPFuzzerHostInputProp> = (props) => {
                             props.onClose()
                         }}
                     >
-                        取消
+                        Cancel
                     </YakitButton>
                 </Space>
             </Form.Item>

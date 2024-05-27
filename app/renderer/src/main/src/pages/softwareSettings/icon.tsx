@@ -20,7 +20,7 @@ const DocumentTextSvg = () => (
         <rect x='10' y='21' width='12' height='2' rx='1' fill='white' />
     </svg>
 )
-/** @name 文档图标 */
+/** @name Doc Icon */
 export const DocumentTextSvgIcon = (props: Partial<IconProps>) => {
     return <Icon component={DocumentTextSvg} {...props} />
 }
@@ -39,7 +39,7 @@ const DocumentAddSvg = () => (
         <rect x='15' y='11' width='2' height='12' rx='1' fill='white' />
     </svg>
 )
-/** @name 文档添加图标 */
+/** @name Doc Add Icon */
 export const DocumentAddSvgIcon = (props: Partial<IconProps>) => {
     return <Icon component={DocumentAddSvg} {...props} />
 }
@@ -60,7 +60,7 @@ const FolderOpenSvg = () => (
         />
     </svg>
 )
-/** @name 文件夹打开图标 */
+/** @name Folder Open Icon */
 export const FolderOpenSvgIcon = (props: Partial<IconProps>) => {
     return <Icon component={FolderOpenSvg} {...props} />
 }
@@ -85,7 +85,7 @@ const DocumentDownloadSvg = () => (
         />
     </svg>
 )
-/** @name 文档下载图标 */
+/** @name Doc Download Icon */
 export const DocumentDownloadSvgIcon = (props: Partial<IconProps>) => {
     return <Icon component={DocumentDownloadSvg} {...props} />
 }
@@ -100,7 +100,7 @@ const ProjectDocumentTextSvg = () => (
         />
     </svg>
 )
-/** @name 项目文档图标 */
+/** @name Project Doc Icon */
 export const ProjectDocumentTextSvgIcon = (props: Partial<IconProps>) => {
     return <Icon component={ProjectDocumentTextSvg} {...props} />
 }
@@ -119,7 +119,7 @@ const ProjectFolderOpenSvg = () => (
         />
     </svg>
 )
-/** @name 项目文件夹打开图标 */
+/** @name Project Folder Open Icon */
 export const ProjectFolderOpenSvgIcon = (props: Partial<IconProps>) => {
     return <Icon component={ProjectFolderOpenSvg} {...props} />
 }
@@ -144,7 +144,7 @@ const ProjectViewGridSvg = () => (
         />
     </svg>
 )
-/** @name 项目四格布局图标 */
+/** @name Project Quad Layout Icon */
 export const ProjectViewGridSvgIcon = (props: Partial<IconProps>) => {
     return <Icon component={ProjectViewGridSvg} {...props} />
 }
@@ -159,7 +159,7 @@ const ProjectExportSvg = () => (
         />
     </svg>
 )
-/** @name 项目导出图标 */
+/** @name Project Export Icon */
 export const ProjectExportSvgIcon = (props: Partial<IconProps>) => {
     return <Icon component={ProjectExportSvg} {...props} />
 }
@@ -174,7 +174,7 @@ const ProjectImportSvg = () => (
         />
     </svg>
 )
-/** @name 项目导入图标 */
+/** @name Project Import Icon */
 export const ProjectImportSvgIcon = (props: Partial<IconProps>) => {
     return <Icon component={ProjectImportSvg} {...props} />
 }
@@ -208,7 +208,7 @@ const SoftwareRemoteSvg = () => (
         />
     </svg>
 )
-/** @name 软件设置-远程连接图标 */
+/** @name Software Settings-Remote Connect Icon */
 export const SoftwareRemoteSvgIcon = (props: Partial<IconProps>) => {
     return <Icon component={SoftwareRemoteSvg} {...props} />
 }
@@ -223,7 +223,7 @@ const TemporaryProjectSvg = () => (
         />
     </svg>
 )
-/** @name 临时项目图标 */
+/** @name Temp Project Icon */
 export const TemporaryProjectSvgIcon = (props: Partial<IconProps>) => {
     return <Icon component={TemporaryProjectSvg} {...props} />
 }

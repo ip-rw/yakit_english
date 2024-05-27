@@ -17,25 +17,25 @@ const {ipcRenderer} = window.require("electron")
 interface MenuCodecProps {}
 
 const CodeMenuInfo: YakitMenuItemProps[] = [
-    {key: "base64", label: "Base64 编码"},
-    {key: "htmlencode", label: "HTML 实体编码（强制）"},
-    {key: "htmlencode-hex", label: "HTML 实体编码（强制十六进制模式）"},
-    {key: "htmlescape", label: "HTML 实体编码（只编码特殊字符）"},
-    {key: "urlencode", label: "URL 编码（强制）"},
-    {key: "urlescape", label: "URL 编码（只编码特殊字符）"},
-    {key: "urlescape-path", label: "URL 路径编码（只编码特殊字符）"},
-    {key: "double-urlencode", label: "双重 URL 编码"},
-    {key: "hex-encode", label: "十六进制编码"},
-    {key: "json-unicode", label: "Unicode 中文编码"}
+    {key: "base64", label: "Base64 Encode"},
+    {key: "htmlencode", label: "HTML Entity Encoding (Forced)）"},
+    {key: "htmlencode-hex", label: "HTML Entity Encoding (Forced Hex Mode)）"},
+    {key: "htmlescape", label: "HTML Entity Encoding (Special Chars Only)）"},
+    {key: "urlencode", label: "URL Encoding (Forced)）"},
+    {key: "urlescape", label: "URLEncodeSpecialCharsOnly）"},
+    {key: "urlescape-path", label: "URL Path Encoding (Special Chars Only)）"},
+    {key: "double-urlencode", label: "Double URL Encode"},
+    {key: "hex-encode", label: "Hex Encoding"},
+    {key: "json-unicode", label: "Unicode Chinese Encoding"}
 ]
 const DecodeMenuInfo: YakitMenuItemProps[] = [
-    {key: "base64-decode", label: "Base64 解码"},
-    {key: "htmldecode", label: "HTML 解码"},
-    {key: "urlunescape", label: "URL 解码"},
-    {key: "urlunescape-path", label: "URL 路径解码"},
-    {key: "double-urldecode", label: "双重 URL 解码"},
-    {key: "hex-decode", label: "十六进制解码"},
-    {key: "json-unicode-decode", label: "Unicode 中文解码"}
+    {key: "base64-decode", label: "Base64 Decode"},
+    {key: "htmldecode", label: "HTML Decode"},
+    {key: "urlunescape", label: "URL Decode"},
+    {key: "urlunescape-path", label: "URL Path Decoding"},
+    {key: "double-urldecode", label: "Double URL Decoding"},
+    {key: "hex-decode", label: "Hex Decoding"},
+    {key: "json-unicode-decode", label: "Unicode Chinese Decoding"}
 ]
 
 export const MenuCodec: React.FC<MenuCodecProps> = React.memo((props) => {
@@ -84,15 +84,15 @@ export const MenuCodec: React.FC<MenuCodecProps> = React.memo((props) => {
     const isExec = useRef<boolean>(false)
     const onCodec = useMemoizedFn((key: string) => {
         if (isExec.current) {
-            yakitNotify("error", "请等待上次编解码执行完后再次尝试")
+            yakitNotify("error", "Wait for Last Encode/Decode to Finish")
             return
         }
         if (!question) {
-            yakitNotify("error", "请输入需要编解码的内容后再次尝试")
+            yakitNotify("error", "Enter Content to Encode/Decode")
             return
         }
         if (!key) {
-            yakitNotify("error", "BUG: 空的编解码类型")
+            yakitNotify("error", "BUG: No Codec Type")
             return
         }
         isExec.current = true
@@ -105,7 +105,7 @@ export const MenuCodec: React.FC<MenuCodecProps> = React.memo((props) => {
                     setAnswer(res?.Result || "")
                 })
                 .catch((err) => {
-                    yakitNotify("error", `CODEC 解码失败：${err}`)
+                    yakitNotify("error", `CODEC Decode Failed：${err}`)
                 })
                 .finally(() => (isExec.current = false))
         }
@@ -149,7 +149,7 @@ export const MenuCodec: React.FC<MenuCodecProps> = React.memo((props) => {
                         type={avtiveKey === "decode" ? "primary" : "outline2"}
                         onClick={(e) => e.preventDefault()}
                     >
-                        解码
+                        Decode
                         {codeShow ? <ChevronUpIcon /> : <ChevronDownIcon />}
                     </YakitButton>
                 </YakitPopover>
@@ -165,7 +165,7 @@ export const MenuCodec: React.FC<MenuCodecProps> = React.memo((props) => {
                         type={avtiveKey === "code" ? "primary" : "outline2"}
                         onClick={(e) => e.preventDefault()}
                     >
-                        编码
+                        Encode
                         {decodeShow ? <ChevronUpIcon /> : <ChevronDownIcon />}
                     </YakitButton>
                 </YakitPopover>

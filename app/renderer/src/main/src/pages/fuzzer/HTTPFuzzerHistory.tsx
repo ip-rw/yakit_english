@@ -122,7 +122,7 @@ export const HTTPFuzzerHistorySelector: React.FC<HTTPFuzzerHistorySelectorProp> 
                         }}
                     />
                     <YakitPopconfirm
-                        title={"确定删除吗？"}
+                        title={"Confirm delete?？"}
                         onConfirm={() => {
                             deleteAll()
                         }}
@@ -146,7 +146,7 @@ export const HTTPFuzzerHistorySelector: React.FC<HTTPFuzzerHistorySelectorProp> 
                     label={
                         <div style={{display: "flex", alignItems: "center"}}>
                             
-                            <Tooltip title={"快速搜索 Host 与 Request 中的内容"}>
+                            <Tooltip title={"Quick Search in Host & Request"}>
                                 <YakitButton type='text' size={"small"} icon={<QuestionOutlined />} />
                             </Tooltip>
                         </div>
@@ -160,7 +160,7 @@ export const HTTPFuzzerHistorySelector: React.FC<HTTPFuzzerHistorySelectorProp> 
                 </Form.Item>
             </Form> */}
             <div style={{display: "flex", alignItems: "center", gap: 8}}>
-                <span>快速搜索：</span>
+                <span>Quick Search：</span>
                 <YakitInput.Search
                     value={keyword}
                     onChange={(e) => setKeyword(e.target.value)}
@@ -168,7 +168,7 @@ export const HTTPFuzzerHistorySelector: React.FC<HTTPFuzzerHistorySelectorProp> 
                     onPressEnter={() => reload(1, limit)}
                 />
                 <span>
-                    查看全部
+                    View All
                     <YakitSwitch checked={showAll} onChange={onSwitchShowAll} />
                 </span>
             </div>
@@ -255,9 +255,9 @@ export const HTTPFuzzerHistorySelector: React.FC<HTTPFuzzerHistorySelectorProp> 
                                                 </YakitTag>
                                             </div>
 
-                                            <YakitTag>共{i.HTTPFlowTotal}个</YakitTag>
+                                            <YakitTag>Total{i.HTTPFlowTotal}Item</YakitTag>
                                             {i.HTTPFlowSuccessCount != i.HTTPFlowTotal && (
-                                                <YakitTag>成功:{i.HTTPFlowSuccessCount}个</YakitTag>
+                                                <YakitTag>Success:{i.HTTPFlowSuccessCount}Item</YakitTag>
                                             )}
                                             {currentSelectId == i.Id && <CheckIcon className={styles["check-icon"]} />}
                                         </div>

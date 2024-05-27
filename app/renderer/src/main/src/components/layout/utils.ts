@@ -1,9 +1,9 @@
 import {DownloadingState} from "@/yakitGVDefine"
 
-/** @name 处理进度条数据(防止异常数据) */
+/** @name Process Progress Bar Data (Prevent abnormal data)) */
 export const safeFormatDownloadProcessState = (state: DownloadingState) => {
     try {
-        // 使用可选链操作符来安全地访问深层次属性，如果不存在，则默认为0
+        // Use optional chaining to safely access deep properties, defaulting to 0 if nonexistent
         const total = state.size?.total || 0
         const transferred = state.size?.transferred || 0
         const elapsed = state.time?.elapsed || 0
