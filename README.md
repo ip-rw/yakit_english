@@ -1,15 +1,16 @@
-Yakit translated to English (with absolutely no mercy).
+# Yakit Translated to English 
+## (With Absolutely No Mercy)
 
-Yak is a seriously cool concept (https://github.com/yaklang/yaklang), it's a DSL/scripting language designed for (offensive) security and along with a serious arsenal of an stdlib already solidly in place, it's actually usable and _portable_ in ways things like NSE/MSF won't ever be. I could say nice things about Yak all day, go through the code yourself and look at the treasure trove of tidy, loosely coupled libs. It's impressive already and yet the project still feels basically unknown outside of the devs and a few interested spectators.
+**Yak** is an impressively cool concept ([https://github.com/yaklang/yaklang](https://github.com/yaklang/yaklang)). It's a DSL/scripting language tailored for (offensive) security, equipped with a substantial standard library already and a VM and design that makes it usable and _portable_ in ways that things like NSE/MSF struggled to. I could praise Yak all day, but go and look through the code yourself, it's already impressive, yet somehow the thing still feels largely unknown outside of its developers and a few intrigued observers.
 
-Yakit is a part GUI part ICBM and 100% Chinese. The idea seems to want to be all security tools at once with the bulk of the functionality being implemented in Yak. Very cool. I've used https://github.com/ip-rw/translate_code/ to translate it. It compiles and doesn't immediately explode at runtime, beyond that everything's a bonus. This readme probably took longer than the translation and few repairs so it's not all bad. 
+**Yakit** is part GUI part ICBM and 100% Chinese. The aim appears to be consolidating all security tools ever created into one, with the majority of functionality implemented in Yak. It's quite remarkable. I used [https://github.com/ip-rw/translate_code/](https://github.com/ip-rw/translate_code/) for the translation. The software compiles and runs without immediatly exploding; anything beyond that is a bonus. This readme likely took longer to create than the translation and few repairs, so overall, it's not too shabby.
 
-Theres an AppImage and an exe (untested) in the releases (assuming github will accept files 100mb+)
+Available are an AppImage and an untested exe in the releases here: [https://github.com/ip-rw/yakit_english/releases/tag/en](https://github.com/ip-rw/yakit_english/releases/tag/en)
 
-Roughly speaking the build involves:
-- yarn install-render
-- yarn build-render
-- yarn install
-- yarn pack-linux (or -win, or whatever, who knows might work)
+**The build process roughly involves:**
+- `yarn install-render`
+- `yarn build-render`
+- `yarn install`
+- `yarn pack-linux` (or `-win`, or whatever—might work, who knows)
 
-Yak is awesome guys, Thank you for keeping it free.
+Yak is awesome, guys. Thank you for keeping it free.
